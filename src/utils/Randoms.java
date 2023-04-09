@@ -23,7 +23,7 @@ public class Randoms
         password[0] = (char) (random.nextInt(26) + 'A');
         password[1] = (char) (random.nextInt(26) + 'a');
         password[2] = (char) (random.nextInt(10) + '0');
-        password[3] = specialCharacters.charAt(random.nextInt(12));
+        password[3] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
 
         for (int i = 4; i < length; i++) {
             password[i] = (char) (random.nextInt(90) + 33);
