@@ -13,7 +13,7 @@ public class LookoutTower extends Building {
     public static final ArrayList<MaterialInstance> cost = new ArrayList<>(
             List.of(new MaterialInstance(Material.STONE, 10)));
 
-    public static final String name = "lookout tower";
+    public static final String name = "Lookout Tower";
     public static final int hitpoint = 1;
     public static final int fireRange = 1;
     public static final int defendRage = 1; // TODO

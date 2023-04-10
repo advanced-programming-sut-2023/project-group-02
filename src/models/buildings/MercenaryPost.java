@@ -8,13 +8,11 @@ import models.MaterialInstance;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PerimeterTower extends Building {
+public class MercenaryPost extends Building {
     public static final BuildingType type = BuildingType.CASTLE_BUILDINGS;
     public static final ArrayList<MaterialInstance> cost = new ArrayList<>(
-            List.of(new MaterialInstance(Material.STONE, 10)));
+            List.of(new MaterialInstance(Material.WOOD,10)));
 
-    public static final String name = "Perimeter Tower";
-    public static final int hitpoint = 1;
-    public static final int fireRange = 1;
-    public static final int defendRange = 1; // TODO
+    public static final String name = "Mercenary Post";
+    public static final int troopCost = 1; //TODO
 }

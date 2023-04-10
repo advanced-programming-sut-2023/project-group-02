@@ -12,6 +12,6 @@ public class BigStoneGatehouse extends Building {
     public static final BuildingType type = BuildingType.CASTLE_BUILDINGS;
     public static ArrayList<MaterialInstance> cost = new ArrayList<>(List.of(new MaterialInstance(Material.STONE, 20)));
 
-    public final String name = "Big stone gatehouse";
+    public final String name = "Big Stone Gatehouse";
     public final int hitpoint = 1; // TODO
 }
