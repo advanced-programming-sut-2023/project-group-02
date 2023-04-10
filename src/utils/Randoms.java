@@ -2,8 +2,7 @@ package utils;
 
 import java.util.Random;
 
-public class Randoms
-{
+public class Randoms {
     static String[] slogans = {
             "I shall have my revenge, in this life or the next",
             "I can do whatever I want",
@@ -14,7 +13,7 @@ public class Randoms
             "A liar is enemy of God"
     };
 
-    public static String getPassword(){
+    public static String getPassword() {
         String specialCharacters = "!@#$%^&*()_+";
         Random random = new Random();
         int length = random.nextInt(14) + 6;
@@ -32,7 +31,7 @@ public class Randoms
         return new String(password);
     }
 
-    public static String getSlogan(){
+    public static String getSlogan() {
         Random random = new Random();
         return slogans[random.nextInt(slogans.length)];
     }
