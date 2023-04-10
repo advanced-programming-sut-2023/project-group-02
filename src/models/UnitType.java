@@ -1,0 +1,24 @@
+package models;
+
+public enum UnitType {
+    //  EUROPEAN TROOPS
+    ARCHER,
+    CROSSBOWMEN,
+    SPEARMEN,
+    PIKEMEN,
+    MACEMEN,
+    SWORDSMEN,
+    KNIGHT,
+    TUNNELER,
+    LADDERMEN,
+    ENGINEER,
+    BLACK_MONK,
+    // ARABIAN TROOPS
+    ARCHER_BOW,
+    SLAVES,
+    SLINGERS,
+    ASSASSINS,
+    HORSE_ARCHERS,
+    ARABIAN_SWORDSMEN,
+    FIRE_THROWERS;
+}
