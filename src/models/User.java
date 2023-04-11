@@ -5,6 +5,8 @@ public class User {
   private SecurityQuestion securityQuestion;
   private String securityAnswer;
 
+  private int highScore;
+
   public User(String username, String password, String nickname, String email, String slogan,
       SecurityQuestion securityQuestion, String securityAnswer) {
     this.username = username;
@@ -42,6 +44,14 @@ public class User {
 
   public String getSecurityAnswer() {
     return securityAnswer;
+  }
+
+  public int getHighScore() {
+    return highScore;
+  }
+
+  public void setHighScore(int highScore) {
+    this.highScore = highScore;
   }
 
   public void setSecurityQuestion(SecurityQuestion securityQuestion) {

@@ -10,4 +10,8 @@ public class Map {
     this.height = height;
     this.map = new Cell[width][height];
   }
+
+  public Cell findCellWithXAndY(int x, int y){
+    return map[x][y];
+  }
 }
