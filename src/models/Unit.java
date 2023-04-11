@@ -7,4 +7,12 @@ public abstract class Unit {
     private static UnitQuantity pace;
 
     private UnitState state;
+
+    public UnitState getState() {
+        return state;
+    }
+
+    public void setState(UnitState state) {
+        this.state = state;
+    }
 }
