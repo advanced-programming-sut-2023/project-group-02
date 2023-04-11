@@ -8,9 +8,5 @@ public class ProfileMenu {
 
     }
 
-    private static void changeUsername(Matcher matcher) {
-
-    }
-
 
 }
