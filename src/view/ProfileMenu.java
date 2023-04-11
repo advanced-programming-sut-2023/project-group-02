@@ -8,5 +8,27 @@ public class ProfileMenu {
 
     }
 
+    public static void changeUsername(Matcher matcher) {
 
+    }
+
+    public static void changeNickname(Matcher matcher) {
+
+    }
+
+    public static void changePassword(Matcher matcher) {
+
+    }
+
+    public static void changeEmail(Matcher matcher) {
+
+    }
+
+    public static void changeSlogan(Matcher matcher) {
+
+    }
+
+    public static void removeSlogan(Matcher matcher) {
+
+    }
 }

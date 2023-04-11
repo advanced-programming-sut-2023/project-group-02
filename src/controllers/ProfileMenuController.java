@@ -1,35 +1,10 @@
 package controllers;
 
 import java.util.regex.*;
-import models.*;
 
 public class ProfileMenuController {
-    public static void changeUsername(Matcher matcher) {
-
-    }
-
-    public static void changeNickname(Matcher matcher) {
-
-    }
-
-    public static void changePassword(Matcher matcher) {
-
-    }
-
-    public static void changeEmail(Matcher matcher) {
-
-    }
-
-    public static void changeSlogan(Matcher matcher) {
-
-    }
-
-    public static void removeSlogan(Matcher matcher) {
-
-    }
-
     public static int showHighScore() {
-        return 0; //TODO after creating the main controller
+        return MainMenuController.getCurrentUser().getHighScore();
     }
 
     public static int showRank() {
@@ -41,6 +16,9 @@ public class ProfileMenuController {
     }
 
     public static String showSlogan() {
-        return ""; //TODO
+        String slogan;
+        if ((slogan = MainMenuController.getCurrentUser().getSlogan()).equals(null))
+            return "Slogan is empty!";
+        return slogan;
     }
 }
