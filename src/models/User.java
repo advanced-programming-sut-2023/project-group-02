@@ -81,4 +81,14 @@ public class User {
   public void setUsername(String username) {
     this.username = username;
   }
+
+  @Override
+  public String toString() {
+    return "Username: " + username + "\n" +
+            "Password: " + password + "\n" +
+            "Nickname: " + nickname + "\n" +
+            "Email: " + email + "\n" +
+            "Slogan: " + slogan + "\n" +
+            "HighScore: " + highScore + "\n";
+  }
 }

@@ -12,7 +12,7 @@ public class ProfileMenuController {
     }
 
     public static String displayInformation() {
-        return ""; //TODO
+        return MainMenuController.getCurrentUser().toString();
     }
 
     public static String showSlogan() {
