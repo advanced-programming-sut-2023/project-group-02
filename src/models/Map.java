@@ -15,6 +15,10 @@ public class Map {
     return map[x][y]; //TODO thinking about changing x and y
   }
 
+  public Building findBuildingWithXAndY(int x, int y) {
+    return null;
+  }
+
   public Cell[][] getMiniMap(int x, int y) {
       //TODO a method to return a mini map (20 x 20)
     return null;

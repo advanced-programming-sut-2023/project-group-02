@@ -4,7 +4,7 @@ import models.User;
 
 import java.util.ArrayList;
 
-public class MainMenuController {
+public class MainController {
     private static User currentUser;
     private static ArrayList<User> allUsers;
     private static ArrayList<User> allUsersSorted;
@@ -14,7 +14,7 @@ public class MainMenuController {
     }
 
     public static void setCurrentUser(User currentUser) {
-        MainMenuController.currentUser = currentUser;
+        MainController.currentUser = currentUser;
     }
 
     public static void addUser(User user) {
@@ -27,4 +27,14 @@ public class MainMenuController {
     public static void updateSortedList() {
 
     }
+
+    public static User findUserByUsername(String username) {
+        return null;
+    }
+
+    public static boolean emailExists(String email) {
+        return true;
+    }
+
+
 }
