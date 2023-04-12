@@ -31,4 +31,9 @@ public class Cell {
     ArrayList<Unit> getUnits() {
         return units;
     }
+
+    @Override
+    public String toString() {
+        return null; //TODO the details for showing map
+    }
 }

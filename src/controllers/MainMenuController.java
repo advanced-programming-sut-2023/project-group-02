@@ -16,4 +16,15 @@ public class MainMenuController {
     public static void setCurrentUser(User currentUser) {
         MainMenuController.currentUser = currentUser;
     }
+
+    public static void addUser(User user) {
+
+    }
+    public static void addToSortedList(User user) {
+
+    }
+
+    public static void updateSortedList() {
+
+    }
 }
