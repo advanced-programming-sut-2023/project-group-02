@@ -19,7 +19,7 @@ public abstract class Building {
     this.effectOnPopularity = effectOnPopularity;
   }
 
-  String getName() {
+  public String getName() {
     return name;
   }
 
