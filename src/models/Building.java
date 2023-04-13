@@ -10,7 +10,7 @@ public abstract class Building {
     return name;
   }
 
-  int getHitpoint() {
+  public int getHitpoint() {
     return hitpoint;
   }
 
