@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Map {
   public final int width;
   public final int height;
@@ -16,6 +18,10 @@ public class Map {
   }
 
   public Building findBuildingWithXAndY(int x, int y) {
+    return null;
+  }
+
+  public ArrayList<Unit> findUnitsWithXAndY(int x, int y) {
     return null;
   }
 

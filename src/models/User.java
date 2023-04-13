@@ -1,11 +1,14 @@
 package models;
 
+import java.util.ArrayList;
+
 public class User {
   private String username, password, nickname, email, slogan;
   private SecurityQuestion securityQuestion;
   private String securityAnswer;
-
   private int highScore;
+  private ArrayList<Trade> usersAllTrades = new ArrayList<>();
+  private ArrayList<Trade> usersNewTrades = new ArrayList<>();
 
   public User(String username, String password, String nickname, String email, String slogan,
       SecurityQuestion securityQuestion, String securityAnswer) {
@@ -80,6 +83,14 @@ public class User {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public ArrayList<Trade> getUsersAllTrades() {
+    return usersAllTrades;
+  }
+
+  public ArrayList<Trade> getUsersNewTrades() {
+    return usersNewTrades;
   }
 
   @Override

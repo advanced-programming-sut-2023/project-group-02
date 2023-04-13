@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public abstract class Building {
   private String name;
   private int hitpoint;
-  private Unit unit;
 
   String getName() {
     return name;

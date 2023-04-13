@@ -1,26 +1,18 @@
 package models;
 
 public class Rock {
-    public enum Direction {
-        NORTH,
-        EAST,
-        WEST,
-        SOUTH,
-        RANDOM,
-    }
-
-    private final Direction direction;
+    private final Directions direction;
     private final int x;
     private final int y;
 
-    public Rock(int x, int y, Direction direction){
+    public Rock(int x, int y, Directions direction){
         this.x = x;
         this.y = y;
         this.direction = direction;
         //TODO changing the texture of the cell using a function which finds the cell with x and y
     }
 
-    public Direction getDirection() {
+    public Directions getDirection() {
         return direction;
     }
 

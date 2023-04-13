@@ -4,7 +4,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    public static void run(Scanner scanner) {
+    public static void runPreGameMenu(Scanner scanner) {
+
+    }
+
+    public static void runGameMenu(Scanner scanner) {
 
     }
 
@@ -12,13 +16,6 @@ public class GameMenu {
 
     }
 
-    public static void moveMap(Matcher matcher) {
-
-    }
-
-    public static void showMapDetails(Matcher matcher) {
-
-    }
 
     public static void showPopularity() {
 
@@ -55,4 +52,30 @@ public class GameMenu {
     public static void selectBuilding(Matcher matcher) {
 
     }
+
+    public static void dropUnit(Matcher matcher) {
+
+    }
+
+    public static void selectUnit(Matcher matcher) {
+
+    }
+
+    public static void setTexture(Matcher matcher) {
+        //handling both small and big parts
+    }
+
+    public static void clearBlock(Matcher matcher) {
+
+    }
+
+    public static void dropRock(Matcher matcher) {
+
+    }
+
+    public static void dropTree(Matcher matcher) {
+
+    }
+
+
 }
