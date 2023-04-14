@@ -1,5 +1,7 @@
 package models;
 
+import models.units.Unit;
+
 public abstract class Building extends MapObject {
   protected String name;
   protected BuildingType type;
