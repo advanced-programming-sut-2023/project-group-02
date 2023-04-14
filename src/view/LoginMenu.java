@@ -16,5 +16,7 @@ public class LoginMenu {
 
     }
 
+    private static void logout() {
 
+    }
 }

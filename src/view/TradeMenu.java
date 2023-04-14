@@ -23,5 +23,4 @@ public class TradeMenu {
     public static void showTradeHistory() {
 
     }
-
 }
