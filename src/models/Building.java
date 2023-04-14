@@ -1,13 +1,13 @@
 package models;
 
 public abstract class Building {
-  private String name;
-  private BuildingType type;
-  private MaterialInstance[] buildingMaterials;
-  private int hitpoint;
-  private int workerCount = 0;
-  private int effectOnPopularity = 0;
-  private Unit unit;
+  protected String name;
+  protected BuildingType type;
+  protected MaterialInstance[] buildingMaterials;
+  protected int hitpoint;
+  protected int workerCount = 0;
+  protected int effectOnPopularity = 0;
+  protected Unit unit;
 
   public Building(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
       int workerCount, int effectOnPopularity) {
