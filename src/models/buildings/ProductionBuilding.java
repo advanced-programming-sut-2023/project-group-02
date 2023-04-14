@@ -18,7 +18,7 @@ public class ProductionBuilding<T, R> extends Building {
 
   public ProductionBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
       int workerCount, int effectOnPopularity, int rate, T product, R material) {
-    super(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity);
+    this(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity, rate, product);
     this.material = material;
   }
 
