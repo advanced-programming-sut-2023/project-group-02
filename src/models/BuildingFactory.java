@@ -64,6 +64,13 @@ public class BuildingFactory {
         new Food[] { Food.FLOUR }, Food.WHEAT);
   }
 
+  public static ProductionBuilding<Object, Food> inn() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
+        new MaterialInstance(Material.GOLD, 100) };
+    return new ProductionBuilding<>("Inn", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0, 1, 0, 0, null,
+        Food.BEER);
+  }
+
   public static ProductionBuilding<Material, Object> ironMine() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20) };
     return new ProductionBuilding<>("Iron Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 2, 0, 0,
