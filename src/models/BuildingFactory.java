@@ -150,6 +150,11 @@ public class BuildingFactory {
     return new ProductionBuilding<>("Oil Smelter", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0, null);
   }
 
+  public static PlainBuilding pitchDitch() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.TAR, 0.4) };
+    return new PlainBuilding("Pitch Ditch", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
+  }
+
   public static ProductionBuilding<Object, MartialEquipment> stable() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new ProductionBuilding<>("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
