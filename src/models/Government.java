@@ -7,8 +7,9 @@ public class Government {
     private int foodRate = -2;
     private int taxRate = 0;
     private int fearRate = 0;
-    private int[] foodStock = new int[4];
-    private final ArrayList<People> people = new ArrayList();
+    private final int[] foodStock = new int[4];
+    private final ArrayList<People> people = new ArrayList<>();
+
 
     public int getPopularity() {
         return popularity;
@@ -46,6 +47,9 @@ public class Government {
         return foodStock;
     }
 
+    public int getPopulation() {
+        return people.size();
+    }
     public void addToFoodStock(int foodType, int value) {
         this.foodStock[foodType] += value;
     }
