@@ -77,5 +77,7 @@ public class GameMenu {
 
     }
 
+    public static void nextTurn() {
 
+    }
 }

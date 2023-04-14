@@ -8,30 +8,36 @@ public class Cell {
     private Texture texture;
     private MapObject object; // a building, a tree, a rock, ...
     private ArrayList<Unit> units;
+    private boolean hasLadder;
 
     public Cell(Texture texture) {
         this.texture = texture;
         this.units = new ArrayList<>();
     }
 
-    Texture getTexture() {
+    public Texture getTexture() {
         return texture;
     }
 
-    void setTexture(Texture texture) {
+    public void setTexture(Texture texture) {
         this.texture = texture;
     }
 
-    MapObject getBuilding() {
+    public MapObject getBuilding() {
         return object;
     }
 
-    boolean isOccupied() {
+    public boolean isOccupied() {
         return object != null;
     }
 
-    ArrayList<Unit> getUnits() {
+    public ArrayList<Unit> getUnits() {
         return units;
+    }
+
+    public boolean isPassable() {
+        // some ifs
+        return true;
     }
 
     @Override
