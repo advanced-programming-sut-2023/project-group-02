@@ -1,6 +1,9 @@
 package models.units;
 
 import models.Building;
+import models.MartialEquipment;
+
+import java.util.ArrayList;
 
 public class Unit {
 
@@ -13,8 +16,8 @@ public class Unit {
     private boolean isLongRange;
     private boolean canDigMoat;
     private boolean canClimbLadder;
-    // private Building whereCanBeTrained; // Barracks, Engineer guild or cathedral.
-    // private Arraylist<Equipments> ---> weapons, armory and horse, if they ride them.
+    private String whereCanBeTrained; // Barracks, Engineer guild or cathedral.
+    private ArrayList<MartialEquipment> equipments = new ArrayList<>();
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
                 boolean isLongRange, boolean canDigMoat, boolean canClimbLadder) {

@@ -6,6 +6,7 @@ import models.buildings.InventoryBuilding;
 import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
 import models.buildings.ProductionBuilding;
+import models.buildings.RatedBuilding;
 
 public class BuildingFactory {
   public static PlainBuilding smallStoneGate() {
@@ -63,6 +64,13 @@ public class BuildingFactory {
         new Food[] { Food.FLOUR }, Food.WHEAT);
   }
 
+  public static ProductionBuilding<Object, Food> inn() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
+        new MaterialInstance(Material.GOLD, 100) };
+    return new ProductionBuilding<>("Inn", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0, 1, 0, 0, null,
+        Food.BEER);
+  }
+
   public static ProductionBuilding<Material, Object> ironMine() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20) };
     return new ProductionBuilding<>("Iron Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 2, 0, 0,
@@ -72,6 +80,11 @@ public class BuildingFactory {
   public static PlainBuilding shop() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new PlainBuilding("Shop", BuildingType.INDUSTRY, buildingMaterials, 0, 1, 0);
+  }
+
+  public static RatedBuilding oxTether() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
+    return new RatedBuilding("Ox Tether", BuildingType.INDUSTRY, buildingMaterials, 0, 1, 0, 0);
   }
 
   public static ProductionBuilding<Material, Object> pitchRig() {
@@ -135,6 +148,28 @@ public class BuildingFactory {
     // TODO: enforce the worker to be an engineer
     // TODO: how are we going to specify a pot of oil?
     return new ProductionBuilding<>("Oil Smelter", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0, null);
+  }
+
+  public static PlainBuilding pitchDitch() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.TAR, 0.4) };
+    return new PlainBuilding("Pitch Ditch", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
+  }
+
+  public static PlainBuilding cagedWarDogs() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 10),
+        new MaterialInstance(Material.GOLD, 100) };
+    return new PlainBuilding("Caged War Dogs", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
+  }
+
+  public static PlainBuilding siegeTent() {
+    // TODO: enforce the worker to be an engineer
+    return new PlainBuilding("Siege Tent", BuildingType.CASTLE_BUILDINGS, new MaterialInstance[0], 0, 1, 0);
+  }
+
+  public static ProductionBuilding<Object, MartialEquipment> stable() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
+    return new ProductionBuilding<>("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
+        new MartialEquipment[] { MartialEquipment.HORSE });
   }
 
   public static ProductionBuilding<Food, Object> appleGarden() {
