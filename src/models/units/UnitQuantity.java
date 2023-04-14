@@ -1,4 +1,4 @@
-package models;
+package models.units;
 
 public enum UnitQuantity {
     VERY_HIGH,

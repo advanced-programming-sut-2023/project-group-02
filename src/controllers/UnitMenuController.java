@@ -1,6 +1,5 @@
 package controllers;
 
-import models.UnitState;
 import view.enums.UnitMenuMessages;
 
 public class UnitMenuController {
