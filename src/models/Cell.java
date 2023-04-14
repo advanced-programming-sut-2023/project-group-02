@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Cell {
     private Texture texture;
-    private Building building;
+    private MapObject object; // a building, a tree, a rock, ...
     private ArrayList<Unit> units;
 
     public Cell(Texture texture) {
@@ -20,12 +20,12 @@ public class Cell {
         this.texture = texture;
     }
 
-    Building getBuilding() {
-        return building;
+    MapObject getBuilding() {
+        return object;
     }
 
     boolean isOccupied() {
-        return building != null;
+        return object != null;
     }
 
     ArrayList<Unit> getUnits() {
@@ -34,6 +34,6 @@ public class Cell {
 
     @Override
     public String toString() {
-        return null; //TODO the details for showing map
+        return null; // TODO the details for showing map
     }
 }

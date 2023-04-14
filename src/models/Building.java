@@ -1,6 +1,6 @@
 package models;
 
-public abstract class Building {
+public abstract class Building extends MapObject {
   protected String name;
   protected BuildingType type;
   protected MaterialInstance[] buildingMaterials;
