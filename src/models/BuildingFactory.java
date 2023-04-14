@@ -155,6 +155,12 @@ public class BuildingFactory {
     return new PlainBuilding("Pitch Ditch", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
   }
 
+  public static PlainBuilding cagedWarDogs() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 10),
+        new MaterialInstance(Material.GOLD, 100) };
+    return new PlainBuilding("Caged War Dogs", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
+  }
+
   public static ProductionBuilding<Object, MartialEquipment> stable() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new ProductionBuilding<>("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
