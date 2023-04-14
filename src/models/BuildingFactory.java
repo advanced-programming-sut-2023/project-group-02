@@ -150,6 +150,12 @@ public class BuildingFactory {
     return new ProductionBuilding<>("Oil Smelter", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0, null);
   }
 
+  public static ProductionBuilding<Object, MartialEquipment> stable() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
+    return new ProductionBuilding<>("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
+        new MartialEquipment[] { MartialEquipment.HORSE });
+  }
+
   public static ProductionBuilding<Food, Object> appleGarden() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new ProductionBuilding<>("Apple Garden", BuildingType.FARM_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
