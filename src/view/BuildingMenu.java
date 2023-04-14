@@ -8,7 +8,7 @@ public class BuildingMenu {
 
     }
 
-    public static void creatUnit(Matcher matcher) {
+    public static void createUnit(Matcher matcher) {
 
     }
 
