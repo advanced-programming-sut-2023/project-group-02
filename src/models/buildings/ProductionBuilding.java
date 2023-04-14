@@ -4,10 +4,10 @@ import models.Building;
 import models.BuildingType;
 import models.MaterialInstance;
 
-public class ProductionBuilding<T> extends Building {
+public class ProductionBuilding<T, R> extends Building {
   private int rate;
-  private MaterialInstance neededMaterial;
   private T product;
+  private R material;
 
   public ProductionBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
       int workerCount, int effectOnPopularity, int rate, T product) {
@@ -17,9 +17,9 @@ public class ProductionBuilding<T> extends Building {
   }
 
   public ProductionBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
-      int workerCount, int effectOnPopularity, int rate, T product, MaterialInstance neededMaterial) {
+      int workerCount, int effectOnPopularity, int rate, T product, R material) {
     super(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity);
-    this.neededMaterial = neededMaterial;
+    this.material = material;
   }
 
   public int getRate() {
@@ -31,6 +31,6 @@ public class ProductionBuilding<T> extends Building {
   }
 
   public boolean needsMaterial() {
-    return neededMaterial != null;
+    return material != null;
   }
 }
