@@ -6,6 +6,7 @@ import models.buildings.InventoryBuilding;
 import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
 import models.buildings.ProductionBuilding;
+import models.buildings.RatedBuilding;
 
 public class BuildingFactory {
   public static PlainBuilding smallStoneGate() {
@@ -72,6 +73,11 @@ public class BuildingFactory {
   public static PlainBuilding shop() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new PlainBuilding("Shop", BuildingType.INDUSTRY, buildingMaterials, 0, 1, 0);
+  }
+
+  public static RatedBuilding oxTether() {
+    MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
+    return new RatedBuilding("Ox Tether", BuildingType.INDUSTRY, buildingMaterials, 0, 1, 0, 0);
   }
 
   public static ProductionBuilding<Material, Object> pitchRig() {
