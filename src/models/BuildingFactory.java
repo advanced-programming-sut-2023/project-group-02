@@ -177,7 +177,7 @@ public class BuildingFactory {
         Food.BEER);
   }
 
-  public static InventoryBuilding<Object> foodInventory() {
+  public static InventoryBuilding<Food> foodInventory() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new InventoryBuilding<>("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0, 0, 0,
         0);
