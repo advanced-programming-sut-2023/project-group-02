@@ -6,19 +6,19 @@ import models.MaterialInstance;
 
 public class ProductionBuilding<T, R> extends Building {
   private int rate;
-  private T product;
+  private T[] products;
   private R material;
 
   public ProductionBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
-      int workerCount, int effectOnPopularity, int rate, T product) {
+      int workerCount, int effectOnPopularity, int rate, T[] products) {
     super(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity);
     this.rate = rate;
-    this.product = product;
+    this.products = products;
   }
 
   public ProductionBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
-      int workerCount, int effectOnPopularity, int rate, T product, R material) {
-    this(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity, rate, product);
+      int workerCount, int effectOnPopularity, int rate, T[] products, R material) {
+    this(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity, rate, products);
     this.material = material;
   }
 
@@ -26,8 +26,8 @@ public class ProductionBuilding<T, R> extends Building {
     return rate;
   }
 
-  public T getProduct() {
-    return product;
+  public T[] getProducts() {
+    return products;
   }
 
   public boolean needsMaterial() {
