@@ -43,7 +43,7 @@ public class BuildingFactory {
 
   public static DefensiveBuilding circleTower() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.STONE, 40) };
-    return new DefensiveBuilding("Square Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
+    return new DefensiveBuilding("Circle Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
   }
 
   // TODO: use a better type than Object
