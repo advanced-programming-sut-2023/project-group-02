@@ -46,8 +46,7 @@ public class BuildingFactory {
     return new DefensiveBuilding("Circle Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
   }
 
-  // TODO: use a better type than Object
-  public static InventoryBuilding<Object> armoury() {
+  public static InventoryBuilding<MartialEquipment> armoury() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new InventoryBuilding<>("Armoury", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0, 0);
   }
@@ -81,8 +80,7 @@ public class BuildingFactory {
   public static ProductionBuilding<Material, Object> stoneMine() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20) };
     // TODO: implement capacity
-    return new ProductionBuilding<>("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 3, 0, 0,
-        /* stone */ Material.STONE);
+    return new ProductionBuilding<>("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 3, 0, 0, Material.STONE);
   }
 
   public static InventoryBuilding<Object> stockpile() {
@@ -99,32 +97,34 @@ public class BuildingFactory {
     return new PlainBuilding("House", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 0);
   }
 
-  public static ProductionBuilding<Object, Material> armourer() {
+  public static ProductionBuilding<MartialEquipment, Material> armourer() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
         new MaterialInstance(Material.GOLD, 100) };
     return new ProductionBuilding<>("Armourer", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
-        /* armour */ null, Material.IRON);
+        MartialEquipment.METAL_ARMOUR, Material.IRON);
   }
 
-  public static ProductionBuilding<Object, Material> blacksmith() {
+  public static ProductionBuilding<MartialEquipment, Material> blacksmith() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
         new MaterialInstance(Material.GOLD, 100) };
+    // TODO: add maces as the second product
     return new ProductionBuilding<>("Blacksmith", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
-        /* swords, maces */ null, Material.IRON);
+        MartialEquipment.SWORD, Material.IRON);
   }
 
-  public static ProductionBuilding<Object, Material> fletcher() {
+  public static ProductionBuilding<MartialEquipment, Material> fletcher() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
         new MaterialInstance(Material.GOLD, 100) };
+    // TODO: add crossbows
     return new ProductionBuilding<>("Fletcher", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
-        /* arch */ null, Material.WOOD);
+        MartialEquipment.BOW, Material.WOOD);
   }
 
-  public static ProductionBuilding<Object, Material> poleturner() {
+  public static ProductionBuilding<MartialEquipment, Material> poleturner() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20),
         new MaterialInstance(Material.GOLD, 100) };
     return new ProductionBuilding<>("Poleturner", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
-        /* armour */ null, Material.IRON);
+        MartialEquipment.PIKE, Material.IRON);
   }
 
   public static ProductionBuilding<Object, Object> oilSmelter() {
