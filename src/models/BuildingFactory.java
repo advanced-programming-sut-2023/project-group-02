@@ -1,10 +1,10 @@
 package models;
 
-import models.buildingsv2.DamagingBuilding;
-import models.buildingsv2.DefensiveBuilding;
-import models.buildingsv2.InventoryBuilding;
-import models.buildingsv2.PlainBuilding;
-import models.buildingsv2.ProductionBuilding;
+import models.buildings.DamagingBuilding;
+import models.buildings.DefensiveBuilding;
+import models.buildings.InventoryBuilding;
+import models.buildings.PlainBuilding;
+import models.buildings.ProductionBuilding;
 
 public class BuildingFactory {
   public static PlainBuilding smallStoneGate() {

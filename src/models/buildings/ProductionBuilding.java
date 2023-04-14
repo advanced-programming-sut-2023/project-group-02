@@ -1,4 +1,4 @@
-package models.buildingsv2;
+package models.buildings;
 
 import models.Building;
 import models.BuildingType;

@@ -1,4 +1,4 @@
-package models.buildingsv2;
+package models.buildings;
 
 import java.util.ArrayList;
 
