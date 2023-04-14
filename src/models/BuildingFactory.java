@@ -3,6 +3,7 @@ package models;
 import models.buildings.DamagingBuilding;
 import models.buildings.DefensiveBuilding;
 import models.buildings.InventoryBuilding;
+import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
 import models.buildings.ProductionBuilding;
 
@@ -79,11 +80,10 @@ public class BuildingFactory {
         new Material[] { Material.TAR });
   }
 
-  public static ProductionBuilding<Material, Object> stoneMine() {
+  public static LimitedProductionBuilding<Material, Object> stoneMine() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 20) };
-    // TODO: implement capacity
-    return new ProductionBuilding<>("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 3, 0, 0,
-        new Material[] { Material.STONE });
+    return new LimitedProductionBuilding<>("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 0, 3, 0, 0,
+        new Material[] { Material.STONE }, 0);
   }
 
   public static InventoryBuilding<Object> stockpile() {
