@@ -161,6 +161,11 @@ public class BuildingFactory {
     return new PlainBuilding("Caged War Dogs", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
   }
 
+  public static PlainBuilding siegeTent() {
+    // TODO: enforce the worker to be an engineer
+    return new PlainBuilding("Siege Tent", BuildingType.CASTLE_BUILDINGS, new MaterialInstance[0], 0, 1, 0);
+  }
+
   public static ProductionBuilding<Object, MartialEquipment> stable() {
     MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.WOOD, 5) };
     return new ProductionBuilding<>("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0, 0,
