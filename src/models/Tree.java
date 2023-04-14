@@ -1,6 +1,6 @@
 package models;
 
-public class Tree {
+public class Tree extends MapObject {
     private final TreeType type;
 
     public Tree(TreeType type) {

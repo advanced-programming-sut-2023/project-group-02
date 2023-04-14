@@ -1,20 +1,49 @@
 package models;
 
-import java.util.ArrayList;
+public abstract class Building extends MapObject {
+  protected String name;
+  protected BuildingType type;
+  protected MaterialInstance[] buildingMaterials;
+  protected int hitpoint;
+  protected int workerCount = 0;
+  protected int effectOnPopularity = 0;
+  protected Unit unit;
 
-public abstract class Building {
-  private String name;
-  private int hitpoint;
+  public Building(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
+      int workerCount, int effectOnPopularity) {
+    this.name = name;
+    this.type = type;
+    this.buildingMaterials = buildingMaterials;
+    this.hitpoint = initialHitpoint;
+    this.workerCount = workerCount;
+    this.effectOnPopularity = effectOnPopularity;
+  }
 
-  String getName() {
+  public String getName() {
     return name;
   }
 
-  int getHitpoint() {
+  public BuildingType getType() {
+    return type;
+  }
+
+  public MaterialInstance[] getBuildingMaterials() {
+    return buildingMaterials;
+  }
+
+  public int getHitpoint() {
     return hitpoint;
   }
 
-  public static BuildingType type;
+  public int getWorkerCount() {
+    return workerCount;
+  }
 
-  public static ArrayList<MaterialInstance> cost = new ArrayList<>();
+  public int getEffectOnPopularity() {
+    return effectOnPopularity;
+  }
+
+  public void decreaseHitpoint(int value) {
+    hitpoint -= value;
+  }
 }
