@@ -6,7 +6,7 @@ public enum MartialEquipment {
     PIKE,
     // made in Fletcher using wood:
     BOW,
-    CROOSBOW,
+    CROSSBOW,
     // made in Armourer:
     METAL_ARMOUR,
     // made in Diary Farm:
