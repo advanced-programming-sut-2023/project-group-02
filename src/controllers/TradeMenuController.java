@@ -12,7 +12,7 @@ public class TradeMenuController {
         return allTrades;
     }
 
-    public static TradeMenuMessages tradeRequest(String recipientName, String recourseType, int amount, int price, String message) {
+    public static TradeMenuMessages tradeRequest(String recipientName, String resourceType, int amount, int price, String message) {
         return null;
     }
 

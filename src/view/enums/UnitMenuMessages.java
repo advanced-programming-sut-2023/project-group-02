@@ -1,4 +1,13 @@
 package view.enums;
 
 public enum UnitMenuMessages {
+    WRONG_UNIT,
+    CANT_GO_THERE,
+    NO_UNIT_THERE,
+    ALREADY_DONE,
+    INVALID_DIRECTION,
+    INVALID_PLACE,
+    INVALID_EQUIPMENT,
+    NOT_ENOUGH_MATERIAL,
+    DONE_SUCCESSFULLY,
 }

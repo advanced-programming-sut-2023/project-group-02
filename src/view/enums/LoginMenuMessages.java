@@ -1,4 +1,10 @@
 package view.enums;
 
-public class LoginMenuMessages {
+public enum LoginMenuMessages {
+    UNMATCHED_USERNAME_PASSWORD,
+    USERNAME_DOESNT_EXIST,
+    LOGIN_SUCCESSFUL,
+    STAY_LOGIN_SUCCESSFUL, //maybe unnecessary
+    WRONG_SECURITY_ANSWER,
+    LOGOUT_SUCCESSFUL,
 }

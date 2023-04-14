@@ -1,5 +1,15 @@
 package view.enums;
 
 public enum GameMenuMessages {
-
+    INVALID_PLACE,
+    INVALID_RATE,
+    INVALID_BUILDING_NAME,
+    INVALID_UNIT_NAME,
+    NO_BUILDINGS,
+    NO_UNITS,
+    INVALID_TEXTURE,
+    INVALID_DIRECTION,
+    CANT_PUT_THERE,
+    INVALID_TREE_NAME,
+    DONE_SUCCESSFULLY,
 }
