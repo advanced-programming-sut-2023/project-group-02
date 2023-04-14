@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Game;
 import models.User;
 import view.enums.GameMenuMessages;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 
 public class GameMenuController {
     private static ArrayList<User> allUsersInGame = new ArrayList<>();
+    public static Game currentGame;
 
     public static ArrayList<User> getAllUsersInGame() {
         return allUsersInGame;
