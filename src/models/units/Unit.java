@@ -4,10 +4,9 @@ import models.Building;
 
 public class Unit {
 
-    private UnitQuantity damage;
-    private UnitQuantity hitpoint;
-    private UnitQuantity pace;
-
+    private int damage; //out of 100
+    private int hitpoint; //out of 100
+    private int pace; //out of 100
     private int price;
     private UnitState state;
     private UnitType type;
@@ -16,7 +15,7 @@ public class Unit {
     private boolean canClimbLadder;
     // private Building whereCanBeTrained; // Barracks, Engineer guild or cathedral.
     // private Arraylist<Equipments> ---> weapons, armory and horse, if they ride them.
-    public Unit(UnitQuantity damage, UnitQuantity hitpoint, UnitQuantity pace,
+    public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
                 boolean isLongRange, boolean canDigMoat, boolean canClimbLadder) {
         this.damage = damage;
@@ -30,20 +29,36 @@ public class Unit {
         this.canClimbLadder = canClimbLadder;
     }
 
-    public UnitQuantity getDamage() {
+    public int getDamage() {
         return damage;
     }
 
-    public UnitQuantity getHitpoint() {
+    public int getHitpoint() {
         return hitpoint;
     }
 
-    public UnitQuantity getPace() {
+    public int getPace() {
         return pace;
     }
 
     public UnitType getType() {
         return type;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public boolean isLongRange() {
+        return isLongRange;
+    }
+
+    public boolean isCanDigMoat() {
+        return canDigMoat;
+    }
+
+    public boolean isCanClimbLadder() {
+        return canClimbLadder;
     }
 
     public UnitState getState() {
