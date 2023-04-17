@@ -60,10 +60,12 @@ public class Parser {
   }
 
   public String get(String name) {
+    if (getAll(name).size() == 0) return null;
     return getAll(name).get(0);
   }
 
   public String getByIndex(int index) {
+    if (index > tokens.size()) return null;
     return removeQuotations(tokens.get(index));
   }
 
