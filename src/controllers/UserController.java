@@ -40,4 +40,8 @@ public class UserController {
     users.add(user);
     currentUser = user;
   }
+
+  public static int getUserRank(User user) {
+    return 0; // TODO
+  }
 }
