@@ -29,4 +29,8 @@ public class UserController {
     users.put(user.getUsername(), user);
     currentUser = user;
   }
+
+  public static int getUserRank(User user) {
+    return 0; // TODO
+  }
 }
