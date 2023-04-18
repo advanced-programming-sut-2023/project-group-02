@@ -1,7 +1,7 @@
 package view;
 
-import controllers.MainController;
 import controllers.ProfileMenuController;
+import controllers.UserController;
 import utils.Parser;
 import utils.Validation;
 
@@ -34,15 +34,15 @@ public class ProfileMenu {
     void changeInfo(Parser parser) {
         if (parser.get("u") != null) {
             if (Validation.isValidUsername(parser.get("u"))) {
-                MainController.getCurrentUser().setUsername(parser.get("u"));
+                UserController.getCurrentUser().setUsername(parser.get("u"));
             } else {
                 System.out.println("Invalid username format!");
             }
         } else if (parser.get("n") != null) {
-            MainController.getCurrentUser().setNickname(parser.get("n"));
+            UserController.getCurrentUser().setNickname(parser.get("n"));
         } else if (parser.get("e") != null) {
             if (Validation.isValidEmail(parser.get("e"))) {
-                MainController.getCurrentUser().setEmail(parser.get("e"));
+                UserController.getCurrentUser().setEmail(parser.get("e"));
             } else {
                 System.out.println("Invalid email format!");
             }
