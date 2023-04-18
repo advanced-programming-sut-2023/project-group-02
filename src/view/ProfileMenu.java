@@ -4,6 +4,7 @@ import controllers.ProfileMenuController;
 import controllers.UserController;
 import utils.Parser;
 import utils.Validation;
+import view.enums.ProfileMenuMessages;
 
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ public class ProfileMenu {
             } else if (parser.beginsWith("profile remove slogan")) {
                 removeSlogan();
             } else if (parser.beginsWith("profile change password")) {
-                // TODO: change password
+                changePassword(parser);
             } else if (parser.beginsWith("profile change")) {
                 changeInfo(parser);
             } else if (parser.beginsWith("profile display highscore")) {
@@ -32,25 +33,45 @@ public class ProfileMenu {
     }
 
     void removeSlogan() {
-        ProfileMenuController.removeSlogan();
+        ProfileMenuMessages message = ProfileMenuController.removeSlogan();
+        if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+            System.out.println("Slogan is removed successfully!");
+        } else if (message.equals(ProfileMenuMessages.EMPTY_FIELD)) {
+            System.out.println("Slogan field is already empty!");
+        }
     }
 
     void changeSlogan(Parser parser) {
-        ProfileMenuController.changeSlogan(parser.get("s"));
+        ProfileMenuMessages message = ProfileMenuController.changeSlogan(parser.get("s"));
+
+        if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+            System.out.println("Slogan is changed successfully!");
+        } else {
+            System.out.println("Invalid command!");
+        }
     }
 
     void changeInfo(Parser parser) {
+        ProfileMenuMessages message;
         if (parser.get("u") != null) {
-            if (Validation.isValidUsername(parser.get("u"))) {
-                UserController.getCurrentUser().setUsername(parser.get("u"));
+            message = ProfileMenuController.changeUsername(parser.get("u"));
+            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+                System.out.println("Changing username was successful!");
             } else {
                 System.out.println("Invalid username format!");
             }
+
         } else if (parser.get("n") != null) {
-            UserController.getCurrentUser().setNickname(parser.get("n"));
+            message = ProfileMenuController.changeNickname(parser.get("n"));
+            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+                System.out.println("Changing nickname was successful!");
+            } else {
+                System.out.println("Invalid nickname!");
+            }
         } else if (parser.get("e") != null) {
-            if (Validation.isValidEmail(parser.get("e"))) {
-                UserController.getCurrentUser().setEmail(parser.get("e"));
+            message = ProfileMenuController.changeEmail(parser.get("e"));
+            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+                System.out.println("Email is changed successfully!");
             } else {
                 System.out.println("Invalid email format!");
             }
@@ -80,5 +101,16 @@ public class ProfileMenu {
         showRank();
         showHighScore();
         showSlogan();
+    }
+
+    void changePassword(Parser parser) {
+        ProfileMenuMessages message = ProfileMenuController.changePassword(parser.get("o"),parser.get("n"));
+
+        switch (message) {
+            case SAME_THING -> System.out.println("Please enter a new password!");
+            case WEAK_NEW_PASSWORD -> System.out.println("");
+            case INCORRECT_OLD_PASSWORD -> System.out.println("Current password is incorrect!");
+            case SUCCESSFUL -> System.out.println("Password is changed successfully");
+        }
     }
 }

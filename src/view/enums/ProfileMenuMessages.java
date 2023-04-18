@@ -8,5 +8,5 @@ public enum ProfileMenuMessages {
     CONFIRMATION_WRONG,
     SAME_THING,
     INVALID_EMAIL,
-    CHANGE_SUCCESSFUL,
+    SUCCESSFUL;
 }
