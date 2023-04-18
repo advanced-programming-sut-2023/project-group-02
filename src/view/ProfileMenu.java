@@ -19,6 +19,14 @@ public class ProfileMenu {
                 // TODO: change password
             } else if (parser.beginsWith("profile change")) {
                 changeInfo(parser);
+            } else if (parser.beginsWith("profile display highscore")) {
+                showHighScore();
+            } else if (parser.beginsWith("profile display rank")) {
+                showRank();
+            } else if (parser.beginsWith("profile display slogan")) {
+                showSlogan();
+            } else if (parser.beginsWith("profile display")) {
+                showProfile();
             }
         }
     }
@@ -51,22 +59,26 @@ public class ProfileMenu {
         }
     }
 
-    int showHighScore() {
-        return MainController.getCurrentUser().getHighScore();
+    void showHighScore() {
+        System.out.println("Highscore: " + UserController.getCurrentUser().getHighScore());
     }
 
-    int showRank() {
-        return 0; // TODO
+    void showRank() {
+        System.out.println("Rank: " + UserController.getUserRank(UserController.getCurrentUser()));
     }
 
-    String displayInformation() {
-        return MainController.getCurrentUser().toString();
+    void showSlogan() {
+        String slogan = UserController.getCurrentUser().getSlogan();
+        if (slogan != null) {
+            System.out.println("Slogan: " + slogan);
+        } else {
+            System.out.println("No slogan");
+        }
     }
 
-    String showSlogan() {
-        String slogan;
-        if ((slogan = MainController.getCurrentUser().getSlogan()).equals(null))
-            return "Slogan is empty!";
-        return slogan;
+    void showProfile() {
+        showRank();
+        showHighScore();
+        showSlogan();
     }
 }
