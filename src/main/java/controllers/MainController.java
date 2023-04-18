@@ -1,13 +1,14 @@
 package controllers;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import models.User;
 
-import java.util.ArrayList;
-
 public class MainController {
+    private static final ArrayList<User> users = new ArrayList<>();
     private static User currentUser;
-    private static ArrayList<User> allUsers;
-    private static ArrayList<User> allUsersSorted;
 
     public static User getCurrentUser() {
         return currentUser;
@@ -17,24 +18,34 @@ public class MainController {
         MainController.currentUser = currentUser;
     }
 
-    public static void addUser(User user) {
-
-    }
-    public static void addToSortedList(User user) {
-
-    }
-
-    public static void updateSortedList() {
-
-    }
-
-    public static User findUserByUsername(String username) {
+    public static User findUserWithUsername(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username))
+                return user;
+        }
         return null;
     }
 
-    public static boolean emailExists(String email) {
-        return true;
+    public static boolean userWithUsernameExists(String username) {
+        if (findUserWithUsername(username) != null) return true;
+        return false;
     }
 
+    public static boolean userWithEmailExists(String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public static void signup(User user) {
+        users.add(user);
+        currentUser = user;
+    }
+
+    public static int getUserRank(User user) {
+        return 0; // TODO
+    }
 }
