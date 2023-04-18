@@ -1,52 +1,69 @@
 package view;
 
 import controllers.MainController;
+import controllers.ProfileMenuController;
+import utils.Parser;
+import utils.Validation;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class ProfileMenu {
-    public static void run(Scanner scanner) {
-
+    public void run(Scanner scanner) {
+        while (true) {
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("profile change slogan")) {
+                changeSlogan(parser);
+            } else if (parser.beginsWith("profile remove slogan")) {
+                removeSlogan();
+            } else if (parser.beginsWith("profile change password")) {
+                // TODO: change password
+            } else if (parser.beginsWith("profile change")) {
+                changeInfo(parser);
+            }
+        }
     }
 
-    public static void changeUsername(Matcher matcher) {
-
+    void removeSlogan() {
+        ProfileMenuController.removeSlogan();
     }
 
-    public static void changeNickname(Matcher matcher) {
-
+    void changeSlogan(Parser parser) {
+        ProfileMenuController.changeSlogan(parser.get("s"));
     }
 
-    public static void changePassword(Matcher matcher) {
-
+    void changeInfo(Parser parser) {
+        if (parser.get("u") != null) {
+            if (Validation.isValidUsername(parser.get("u"))) {
+                MainController.getCurrentUser().setUsername(parser.get("u"));
+            } else {
+                System.out.println("Invalid username format!");
+            }
+        } else if (parser.get("n") != null) {
+            MainController.getCurrentUser().setNickname(parser.get("n"));
+        } else if (parser.get("e") != null) {
+            if (Validation.isValidEmail(parser.get("e"))) {
+                MainController.getCurrentUser().setEmail(parser.get("e"));
+            } else {
+                System.out.println("Invalid email format!");
+            }
+        } else {
+            System.out.println("Invalid command!");
+        }
     }
 
-    public static void changeEmail(Matcher matcher) {
-
-    }
-
-    public static void changeSlogan(Matcher matcher) {
-
-    }
-
-    public static void removeSlogan(Matcher matcher) {
-
-    }
-
-    public static int showHighScore() {
+    int showHighScore() {
         return MainController.getCurrentUser().getHighScore();
     }
 
-    public static int showRank() {
-        return 0; //TODO
+    int showRank() {
+        return 0; // TODO
     }
 
-    public static String displayInformation() {
+    String displayInformation() {
         return MainController.getCurrentUser().toString();
     }
 
-    public static String showSlogan() {
+    String showSlogan() {
         String slogan;
         if ((slogan = MainController.getCurrentUser().getSlogan()).equals(null))
             return "Slogan is empty!";
