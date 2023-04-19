@@ -1,8 +1,6 @@
 package controllers;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import models.User;
 
@@ -23,8 +21,7 @@ public class UserController {
   }
 
   public static boolean userWithUsernameExists(String username) {
-    if (findUserWithUsername(username) != null) return true;
-    return false;
+    return findUserWithUsername(username) != null;
   }
 
   public static boolean userWithEmailExists(String email) {
