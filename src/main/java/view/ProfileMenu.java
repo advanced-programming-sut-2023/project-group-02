@@ -104,13 +104,14 @@ public class ProfileMenu {
     }
 
     void changePassword(Parser parser) {
-        ProfileMenuMessages message = ProfileMenuController.changePassword(parser.get("o"),parser.get("n"));
+        ProfileMenuMessages message = ProfileMenuController.changePassword(parser.get("o"), parser.get("n"));
 
-        switch (message) {
-            case SAME_THING -> System.out.println("Please enter a new password!");
-            case WEAK_NEW_PASSWORD -> System.out.println("");
-            case INCORRECT_OLD_PASSWORD -> System.out.println("Current password is incorrect!");
-            case SUCCESSFUL -> System.out.println("Password is changed successfully");
-        }
+        System.out.println(switch (message) {
+            case SAME_THING -> "Please enter a new password!";
+            case WEAK_NEW_PASSWORD -> "";
+            case INCORRECT_OLD_PASSWORD -> "Current password is incorrect!";
+            case SUCCESSFUL -> "Password is changed successfully";
+            default -> "";
+        });
     }
 }
