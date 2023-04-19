@@ -39,6 +39,12 @@ public class UserController {
   }
 
   public static int getUserRank(User user) {
-    return 0; // TODO
+    int rank = 1;
+    for (User otherUser : users) {
+      if (otherUser.getHighScore() > user.getHighScore()) {
+        rank++;
+      }
+    }
+    return rank;
   }
 }
