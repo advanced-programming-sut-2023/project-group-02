@@ -43,6 +43,7 @@ public class SignupMenu {
         String slogan = parser.get("s");
         SignUpMenuMessages error = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
                 nickname, email, slogan);
+
         if (error == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
             if (password.equals("random")) {
                 System.out.println("Your password is: " + SignUpMenuController.getPassword());
@@ -69,23 +70,22 @@ public class SignupMenu {
 
     private void pickQuestion(Parser parser) {
         int questionNumber;
+        SecurityQuestion question;
         try {
             questionNumber = Integer.parseInt(parser.get("q"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid number!");
+            question = SecurityQuestion.values()[questionNumber - 1];
+        } catch (Exception e) {
+            System.out.println("Invalid question number!");
             return;
         }
-        SecurityQuestion question = SecurityQuestion.values()[questionNumber - 1];
-        if (question == null) {
-            System.out.println("Invalid number!");
-            return;
-        }
+
         String answer = parser.get("a");
         String answerConfirmation = parser.get("c");
         if (!answer.equals(answerConfirmation)) {
             System.out.println("Answers don't match!");
             return;
         }
+
         SignUpMenuController.setSecurityQuestion(question, answer);
         state = State.SIGNUP_SUCCESSFUL;
         System.err.println("Done!");
