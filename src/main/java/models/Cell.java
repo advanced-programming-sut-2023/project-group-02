@@ -23,7 +23,13 @@ public class Cell {
         this.texture = texture;
     }
 
-    public MapObject getBuilding() {
+    public Building getBuilding() {
+        if (object instanceof Building)
+            return (Building) object;
+        return null;
+    }
+
+    public MapObject getObject() {
         return object;
     }
 

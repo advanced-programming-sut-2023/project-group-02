@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class GameMenuController {
     public static Game currentGame;
 
+    public static Game getCurrentGame() {
+        return currentGame;
+    }
+
     public static ArrayList<User> getAllUsersInGame() {
         return currentGame.getPlayers();
     }

@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
-    void run(Scanner scanner) {
+    public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("user login")) {

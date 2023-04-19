@@ -1,54 +1,72 @@
 package models;
 
 import models.units.Unit;
+import utils.Utils;
 
 import java.util.ArrayList;
 
 public class Map {
-  public final int width;
-  public final int height;
-  private final Cell[][] map;
+    public final int width;
+    public final int height;
+    private final Cell[][] map;
 
-  public Map(int width, int height) {
-    this.width = width;
-    this.height = height;
-    this.map = new Cell[height][width];
-  }
+    public Map(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.map = new Cell[height][width];
+    }
 
-  public Cell findCellWithXAndY(int x, int y) {
-    return map[x][y]; // TODO thinking about changing x and y
-  }
+    public Cell findCellWithXAndY(int x, int y) {
+        return map[y][x]; // TODO thinking about changing x and y
+    }
 
-  public Building findBuildingWithXAndY(int x, int y) {
-    return null;
-  }
+    public Building findBuildingWithXAndY(int x, int y) {
+        return map[y][x].getBuilding();
+    }
 
-  public ArrayList<Unit> findUnitsWithXAndY(int x, int y) {
-    return null;
-  }
+    public ArrayList<Unit> findUnitsWithXAndY(int x, int y) {
+        return map[y][x].getUnits();
+    }
 
-  public Cell[][] getMiniMap(int x, int y) {
-    // TODO a method to return a mini map (20 x 20)
-    return null;
-  }
+    public Cell[][] getMiniMap(int x, int y) {
+        Cell[][] miniMap = new Cell[21][21];
+        int startX = Utils.keepNumbersLimited(y - 10, 0, width);
+        int endX = Utils.keepNumbersLimited(y + 10, 0, width);
+        int startY = Utils.keepNumbersLimited(x - 10, 0, height);
+        int endY = Utils.keepNumbersLimited(x + 10, 0, height);
 
-  public void printMiniMap() {
+        for (int i = 0; i <= endX - startX; i++) {
+            for (int j = 0; j <= endY - startY; j++) {
+                miniMap[i][j] = map[i + startX][j + startY];
+            }
+        }
+        return miniMap;
+    }
 
-  }
+    public void printMiniMap(int x, int y) {
+        Cell[][] miniMap = getMiniMap(x, y);
 
-  public Cell[][] movedUp() {
-    return null;
-  }
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                if (!map[y][x].equals(null))
+                  System.out.println(x + " " + y + " " + map[y][x].toString());
+            }
+        }
+    }
 
-  public Cell[][] movedRight() {
-    return null;
-  }
+    public Cell[][] movedUp(int x, int y) {
+        return getMiniMap(x-1,y);
+    }
 
-  public Cell[][] movedLeft() {
-    return null;
-  }
+    public Cell[][] movedRight() {
+        return null;
+    }
 
-  public Cell[][] movedDown() {
-    return null;
-  }
+    public Cell[][] movedLeft() {
+        return null;
+    }
+
+    public Cell[][] movedDown() {
+        return null;
+    }
 }
