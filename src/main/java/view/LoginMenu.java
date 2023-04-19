@@ -1,6 +1,7 @@
 package view;
 
 import controllers.LoginMenuController;
+import controllers.MainController;
 import utils.Parser;
 import view.enums.LoginMenuMessages;
 
@@ -17,6 +18,8 @@ public class LoginMenu {
                 forgotPassword(parser , scanner);
             } else if (parser.beginsWith("user logout")) {
                 logout();
+            } else {
+                System.out.println("Invalid command!");
             }
         }
     }
@@ -34,11 +37,26 @@ public class LoginMenu {
     void forgotPassword(Parser parser , Scanner scanner) {
         LoginMenuMessages message = LoginMenuController.forgotPassword(parser.get("u"), scanner);
 
-        switch (message) {
-            case WRONG_SECURITY_ANSWER -> System.out.println("Your answer is wrong!");
-            case USERNAME_DOESNT_EXIST -> System.out.println("This username doesn't exist!");
-            case PASSWORD_IS_CHANGED -> System.out.println("Password is changed successfully!");
+        if (message.equals(LoginMenuMessages.WRONG_SECURITY_ANSWER)) {
+            System.out.println("Your answer is wrong!");
+        } else if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)) {
+            System.out.println("This username doesn't exist!");
+        } else if (message.equals(LoginMenuMessages.ENTER_NEW_PASSWORD)) {
+            System.out.println("Please enter a new password");
+            newPassword(parser , scanner);
         }
+    }
+
+    void newPassword(Parser parser , Scanner scanner) {
+        LoginMenuMessages message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
+
+        while (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
+            System.out.println("Your password is weak. Try another one"); //TODO lists of errors
+            message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
+        }
+
+        if (message.equals(LoginMenuMessages.PASSWORD_IS_CHANGED))
+            System.out.println("Your password is changed successfully!");
     }
 
     void logout() {

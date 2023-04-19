@@ -31,16 +31,13 @@ public class LoginMenuController {
         if (!usersAnswer.equals(myUser.getSecurityAnswer()))
             return LoginMenuMessages.WRONG_SECURITY_ANSWER;
 
-        return setNewPassword(myUser , scanner);
+        return LoginMenuMessages.ENTER_NEW_PASSWORD;
     }
 
-    public static LoginMenuMessages setNewPassword(User myUser, Scanner scanner) {
-        System.out.println("Enter your new password");
-        String newPassword = scanner.nextLine();
-        while (Validation.validatePassword(newPassword).size() > 0) {
-            System.out.println("This password is weak. Try another one!");
-            newPassword = scanner.nextLine();
-        }
+    public static LoginMenuMessages setNewPassword(String username, String newPassword) {
+        User myUser = MainController.findUserWithUsername(username);
+        if (Validation.validatePassword(newPassword).size() > 0)
+            return LoginMenuMessages.NEW_PASSWORD_WEAK;
 
         myUser.setPassword(newPassword);
         return LoginMenuMessages.PASSWORD_IS_CHANGED;
