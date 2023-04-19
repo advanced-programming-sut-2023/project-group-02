@@ -44,6 +44,11 @@ public class SignupMenu {
         SignUpMenuMessages error = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
                 nickname, email, slogan);
 
+        if (error == null) {
+            state = State.SECURITY_QUESTION_NEEDED;
+            printSecurityQuestions();
+            return;
+        }
         if (error == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
             if (password.equals("random")) {
                 System.out.println("Your password is: " + SignUpMenuController.getPassword());
@@ -52,13 +57,20 @@ public class SignupMenu {
             state = State.PASSWORD_CONFIRMATION_NEEDED;
             return;
         }
-        if (error == null) {
-            state = State.SECURITY_QUESTION_NEEDED;
-            printSecurityQuestions();
-            return;
-        }
-        System.out.println(error);
-        // TODO: print error
+
+        System.out.println(switch (error) {
+            case EMPTY_USERNAME -> "Username can't be empty!";
+            case EMPTY_PASSWORD -> "Password can't be empty!";
+            case EMPTY_NICKNAME -> "Nickname can't be empty!";
+            case EMPTY_EMAIL -> "Email can't be empty!";
+            case INVALID_USERNAME -> "Username is invalid!";
+            case USERNAME_EXISTS -> "Username already exists!";
+            case WEAK_PASSWORD -> "Password is weak!";
+            case PASSWORD_CONFIRMATION_WRONG -> "Passwords don't match!";
+            case INVALID_EMAIL -> "Email is invalid!";
+            case EMAIL_EXISTS -> "Email already exists!";
+            default -> "Unknown error!";
+        });
     }
 
     private void printSecurityQuestions() {
