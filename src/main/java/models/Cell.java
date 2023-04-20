@@ -46,6 +46,10 @@ public class Cell {
         return true;
     }
 
+    public String cellInfo() {
+        return null;
+    }
+
     @Override
     public String toString() {
         return null; // TODO the details for showing map

@@ -43,30 +43,16 @@ public class Map {
         return miniMap;
     }
 
-    public void printMiniMap(int x, int y) {
+    public String printMiniMap(int x, int y) {
+        String answer = "";
         Cell[][] miniMap = getMiniMap(x, y);
 
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
                 if (!map[y][x].equals(null))
-                  System.out.println(x + " " + y + " " + map[y][x].toString());
+                    answer = answer + x + " " + y + " " + map[y][x].toString() + "\n";
             }
         }
-    }
-
-    public Cell[][] movedUp(int x, int y) {
-        return getMiniMap(x-1,y);
-    }
-
-    public Cell[][] movedRight() {
-        return null;
-    }
-
-    public Cell[][] movedLeft() {
-        return null;
-    }
-
-    public Cell[][] movedDown() {
-        return null;
+        return answer;
     }
 }
