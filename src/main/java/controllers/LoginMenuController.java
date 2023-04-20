@@ -10,19 +10,19 @@ public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean isStayLogin) {
         if (username == null || password == null)
             return LoginMenuMessages.EMPTY_FIELD;
-        if (!MainController.userWithUsernameExists(username))
+        if (!UserController.userWithUsernameExists(username))
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
-        if (!MainController.findUserWithUsername(username).getPassword().equals(password))
+        if (!UserController.findUserWithUsername(username).getPassword().equals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
 
-        MainController.setCurrentUser(MainController.findUserWithUsername(username));
+        UserController.setCurrentUser(UserController.findUserWithUsername(username));
         //TODO something for stay logged in
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
     public static LoginMenuMessages forgotPassword(String username , Scanner scanner) {
         User myUser;
-        if ((myUser = MainController.findUserWithUsername(username)) == null)
+        if ((myUser = UserController.findUserWithUsername(username)) == null)
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
 
         System.out.println(myUser.getSecurityQuestion().fullSentence);
@@ -35,7 +35,7 @@ public class LoginMenuController {
     }
 
     public static LoginMenuMessages setNewPassword(String username, String newPassword) {
-        User myUser = MainController.findUserWithUsername(username);
+        User myUser = UserController.findUserWithUsername(username);
         if (Validation.validatePassword(newPassword).size() > 0)
             return LoginMenuMessages.NEW_PASSWORD_WEAK;
 
@@ -44,9 +44,9 @@ public class LoginMenuController {
     }
 
     public static LoginMenuMessages logout() {
-        if (MainController.getCurrentUser().equals(null))
+        if (UserController.getCurrentUser().equals(null))
             return LoginMenuMessages.ALREADY_LOGGED_OUT;
-        MainController.setCurrentUser(null);
+        UserController.setCurrentUser(null);
         return LoginMenuMessages.LOGOUT_SUCCESSFUL;
     }
 }

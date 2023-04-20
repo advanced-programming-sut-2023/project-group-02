@@ -1,9 +1,8 @@
 package view;
 
 import controllers.ProfileMenuController;
-import controllers.MainController;
+import controllers.UserController;
 import utils.Parser;
-import utils.Validation;
 import view.enums.ProfileMenuMessages;
 
 import java.util.Scanner;
@@ -81,15 +80,15 @@ public class ProfileMenu {
     }
 
     void showHighScore() {
-        System.out.println("Highscore: " + MainController.getCurrentUser().getHighScore());
+        System.out.println("Highscore: " + UserController.getCurrentUser().getHighScore());
     }
 
     void showRank() {
-        System.out.println("Rank: " + MainController.getUserRank(MainController.getCurrentUser()));
+        System.out.println("Rank: " + UserController.getUserRank(UserController.getCurrentUser()));
     }
 
     void showSlogan() {
-        String slogan = MainController.getCurrentUser().getSlogan();
+        String slogan = UserController.getCurrentUser().getSlogan();
         if (slogan != null) {
             System.out.println("Slogan: " + slogan);
         } else {

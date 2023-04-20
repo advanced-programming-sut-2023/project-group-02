@@ -1,12 +1,10 @@
 package view;
 
 import controllers.LoginMenuController;
-import controllers.MainController;
 import utils.Parser;
 import view.enums.LoginMenuMessages;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class LoginMenu {
     public void run(Scanner scanner) {

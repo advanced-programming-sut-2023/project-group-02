@@ -1,6 +1,6 @@
 package models;
 
-import controllers.MainController;
+import controllers.UserController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class Game {
     private int numberOfPlayers;
 
     public Game(ArrayList<User> players, int numberOfTurns, Map map) {
-        this.currentPlayer = MainController.getCurrentUser();
+        this.currentPlayer = UserController.getCurrentUser();
         this.players = players;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
