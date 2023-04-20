@@ -1,13 +1,12 @@
 package models;
 
+import controllers.GameMenuController;
+
 public class Rock extends MapObject {
     private final Directions direction;
-    private final int x;
-    private final int y;
 
     public Rock(int x, int y, Directions direction) {
-        this.x = x;
-        this.y = y;
+        super(x,y,null);
         this.direction = direction;
         // TODO changing the texture of the cell using a function which finds the cell
         // with x and y
@@ -15,13 +14,5 @@ public class Rock extends MapObject {
 
     public Directions getDirection() {
         return direction;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }

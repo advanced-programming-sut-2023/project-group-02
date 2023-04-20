@@ -33,6 +33,10 @@ public class Cell {
         return object;
     }
 
+    public void setObject(MapObject object) {
+        this.object = object;
+    }
+
     public boolean isOccupied() {
         return object != null;
     }

@@ -1,42 +1,51 @@
 package view;
 
+import models.units.Unit;
+import utils.Parser;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class UnitMenu {
-    public static void run(Scanner scanner) {
+    private final ArrayList<Unit> selectedUnits;
+    public UnitMenu(ArrayList<Unit> selectedUnits) {
+        this.selectedUnits = selectedUnits;
+    }
+
+    public void run(Scanner scanner) {
 
     }
 
-    public static void moveUnit(Matcher matcher) {
+   void moveUnit(Parser parser) {
 
     }
 
-    public static void patrolUnit(Matcher matcher) {
+    void patrolUnit(Parser parser) {
 
     }
 
-    public static void setState(Matcher matcher) {
+    void setState(Parser parser) {
 
     }
 
-    public static void attack(Matcher matcher) {
+    void attack(Parser parser) {
 
     }
 
-    public static void pourOil(Matcher matcher) {
+    void pourOil(Parser parser) {
 
     }
 
-    public static void digTunnel(Matcher matcher) {
+    void digTunnel(Parser parser) {
 
     }
 
-    public static void build(Matcher matcher) {
+    void build(Parser parser) {
 
     }
 
-    public static void disbandUnit() {
+    void disbandUnit() {
 
     }
 }
