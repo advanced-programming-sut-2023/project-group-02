@@ -1,83 +1,148 @@
 package view;
 
+import controllers.GameMenuController;
+import controllers.MapMenuController;
+import utils.Parser;
+import view.enums.GameMenuMessages;
+import view.enums.MapMenuMessages;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    public static void runPreGameMenu(Scanner scanner) {
+    public void runPreGameMenu(Scanner scanner) {
+        while (true) {
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("droprock")) {
+                dropRock(parser);
+            } else if (parser.beginsWith("droptree")) {
+                dropTree(parser);
+            }
+        }
+    }
+
+    public void runGameMenu(Scanner scanner) {
+        while (true) {
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("select building")) {
+                selectBuilding(parser, scanner);
+            } else if (parser.beginsWith("select unit")) {
+                selectUnit(parser, scanner);
+            }
+        }
+    }
+
+    void showMap(Parser parser, Scanner scanner) {
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+
+        GameMenuMessages message = GameMenuController.showMap(x,y);
+        if (message.equals(GameMenuMessages.INVALID_PLACE))
+            System.out.println("The numbers are invalid!");
+        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
+            System.out.println(GameMenuController.getCurrentGame().getMap().printMiniMap(x, y));
+            MapMenuController.setCurrentXAndY(x,y);
+            new MapMenu().run(scanner);
+        }
+    }
+
+
+    void showPopularity() {
 
     }
 
-    public static void runGameMenu(Scanner scanner) {
+    void showFoodList() {
 
     }
 
-    public static void showMap(Matcher matcher) {
+    void setFoodRate(Parser parser) {
 
     }
 
-
-    public static void showPopularity() {
-
-    }
-
-    public static void showFoodList() {
+    void showFoodRate() {
 
     }
 
-    public static void setFoodRate(Matcher matcher) {
+    void setTaxRate(Parser parser) {
 
     }
 
-    public static void showFoodRate() {
+    void showTaxRate() {
 
     }
 
-    public static void setTaxRate(Matcher matcher) {
+    void setFearRate(Parser parser) {
 
     }
 
-    public static void showTaxRate() {
+    void dropBuilding(Parser parser) {
 
     }
 
-    public static void setFearRate(Matcher matcher) {
+    void selectBuilding(Parser parser, Scanner scanner) {
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        GameMenuMessages message = GameMenuController.selectBuilding(x,y,scanner);
+
+        switch (message) {
+            case INVALID_PLACE -> System.out.println("The numbers are invalid!");
+            case NO_BUILDINGS -> System.out.println("There is no buildings in this place!");
+            case NOT_YOURS -> System.out.println("The building in this place doesn't belong to you!");
+            case DONE_SUCCESSFULLY -> System.out.println("Out of building menu!"); //TODO this may make bugs
+        }
+    }
+
+    void dropUnit(Parser parser) {
 
     }
 
-    public static void dropBuilding(Matcher matcher) {
-
+    void selectUnit(Parser parser, Scanner scanner) {
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        GameMenuMessages message = GameMenuController.selectUnit(x,y,scanner);
+        
+        switch (message) {
+            case INVALID_PLACE -> System.out.println("The numbers are invalid!");
+            case NO_UNITS -> System.out.println("There is no units here!");
+            case DONE_SUCCESSFULLY -> System.out.println("Out of unit menu!"); //this may have bugs too
+        }
     }
 
-    public static void selectBuilding(Matcher matcher) {
-
-    }
-
-    public static void dropUnit(Matcher matcher) {
-
-    }
-
-    public static void selectUnit(Matcher matcher) {
-
-    }
-
-    public static void setTexture(Matcher matcher) {
+    void setTexture(Parser parser) {
         //handling both small and big parts
     }
 
-    public static void clearBlock(Matcher matcher) {
+    void clearBlock(Parser parser) {
 
     }
 
-    public static void dropRock(Matcher matcher) {
+    void dropRock(Parser parser) {
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        GameMenuMessages message = GameMenuController.dropRock(x,y, parser.get("d"));
 
+        switch (message) {
+            case INVALID_PLACE -> System.out.println("Numbers are invalid!");
+            case INVALID_DIRECTION -> System.out.println("Direction is invalid!");
+            case FULL_CELL -> System.out.println("This cell is already full!");
+            case DONE_SUCCESSFULLY -> System.out.println("The rock is dropped successfully!");
+        }
     }
 
-    public static void dropTree(Matcher matcher) {
+    void dropTree(Parser parser) {
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        GameMenuMessages message = GameMenuController.dropTree(x,y, parser.get("t"));
 
+        switch (message) {
+            case INVALID_PLACE -> System.out.println("Numbers are invalid!");
+            case INVALID_TREE_NAME -> System.out.println("There is no trees with this name!");
+            case FULL_CELL -> System.out.println("This cell is already full!");
+            case DONE_SUCCESSFULLY -> System.out.println("The tree is dropped successfully!");
+        }
     }
 
-    public static void nextTurn() {
+    void nextTurn() {
 
     }
 }

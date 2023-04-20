@@ -1,64 +1,72 @@
 package utils;
 
+import controllers.GameMenuController;
+
 import java.util.ArrayList;
 
 public class Validation {
-  private static final int MIN_PASSWORD_LENGTH = 6;
+    private static final int MIN_PASSWORD_LENGTH = 6;
 
-  public static boolean isValidEmail(String email) {
-    return email.matches("^[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+\\.[a-zA-Z0-9_.]+$");
-  }
-
-  public static boolean isValidUsername(String username) {
-    return username.matches("^[a-zA-Z0-9_]+$");
-  }
-
-  public enum PasswordProblem {
-    TOO_SHORT, NO_LOWERCASE, NO_UPPERCASE, NO_DIGIT, NO_SPECIAL_CHARACTER
-  }
-
-  public static ArrayList<PasswordProblem> validatePassword(String password) {
-    ArrayList<PasswordProblem> problems = new ArrayList<PasswordProblem>();
-
-    if (password.length() < MIN_PASSWORD_LENGTH) {
-      problems.add(PasswordProblem.TOO_SHORT);
+    public static boolean isValidEmail(String email) {
+        return email.matches("^[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+\\.[a-zA-Z0-9_.]+$");
     }
 
-    boolean hasLowercase = false;
-    boolean hasUppercase = false;
-    boolean hasDigit = false;
-    boolean hasSpecialCharacter = false;
-
-    for (int i = 0; i < password.length(); i++) {
-      char c = password.charAt(i);
-
-      if (Character.isLowerCase(c)) {
-        hasLowercase = true;
-      } else if (Character.isUpperCase(c)) {
-        hasUppercase = true;
-      } else if (Character.isDigit(c)) {
-        hasDigit = true;
-      } else {
-        hasSpecialCharacter = true;
-      }
+    public static boolean isValidUsername(String username) {
+        return username.matches("^[a-zA-Z0-9_]+$");
     }
 
-    if (!hasLowercase) {
-      problems.add(PasswordProblem.NO_LOWERCASE);
+    public enum PasswordProblem {
+        TOO_SHORT, NO_LOWERCASE, NO_UPPERCASE, NO_DIGIT, NO_SPECIAL_CHARACTER
     }
 
-    if (!hasUppercase) {
-      problems.add(PasswordProblem.NO_UPPERCASE);
+    public static ArrayList<PasswordProblem> validatePassword(String password) {
+        ArrayList<PasswordProblem> problems = new ArrayList<PasswordProblem>();
+
+        if (password.length() < MIN_PASSWORD_LENGTH) {
+            problems.add(PasswordProblem.TOO_SHORT);
+        }
+
+        boolean hasLowercase = false;
+        boolean hasUppercase = false;
+        boolean hasDigit = false;
+        boolean hasSpecialCharacter = false;
+
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+
+            if (Character.isLowerCase(c)) {
+                hasLowercase = true;
+            } else if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else {
+                hasSpecialCharacter = true;
+            }
+        }
+
+        if (!hasLowercase) {
+            problems.add(PasswordProblem.NO_LOWERCASE);
+        }
+
+        if (!hasUppercase) {
+            problems.add(PasswordProblem.NO_UPPERCASE);
+        }
+
+        if (!hasDigit) {
+            problems.add(PasswordProblem.NO_DIGIT);
+        }
+
+        if (!hasSpecialCharacter) {
+            problems.add(PasswordProblem.NO_SPECIAL_CHARACTER);
+        }
+
+        return problems;
     }
 
-    if (!hasDigit) {
-      problems.add(PasswordProblem.NO_DIGIT);
+    public static boolean areCoordinatesValid(int x, int y) {
+        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().width || y > GameMenuController.getCurrentGame().getMap().height)
+            return false;
+        return true;
     }
-
-    if (!hasSpecialCharacter) {
-      problems.add(PasswordProblem.NO_SPECIAL_CHARACTER);
-    }
-
-    return problems;
-  }
 }

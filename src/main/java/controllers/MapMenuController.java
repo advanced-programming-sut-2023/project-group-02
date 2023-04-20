@@ -3,6 +3,7 @@ package controllers;
 import models.Directions;
 import models.Game;
 import models.Map;
+import utils.Validation;
 import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
@@ -19,14 +20,9 @@ public class MapMenuController {
         return currentY;
     }
 
-    public static MapMenuMessages showMap(int x, int y) {
-        currentX = x;
-        currentY = y;
-
-        if (x > currentMap.height || y < currentMap.width || x < 0 || y < 0)
-            return MapMenuMessages.INVALID_PLACE;
-
-        return MapMenuMessages.PRINTED_SUCCESSFULLY;
+    public static void setCurrentXAndY(int currentX, int currentY) {
+        MapMenuController.currentX = currentX;
+        MapMenuController.currentY = currentY;
     }
 
     public static MapMenuMessages moveMap(ArrayList<String> directions) {
@@ -45,7 +41,7 @@ public class MapMenuController {
     }
 
     public static MapMenuMessages showDetails(int x, int y) {
-        if (x > currentMap.height || y < currentMap.width || x < 0 || y < 0)
+        if (!Validation.areCoordinatesValid(x,y))
             return MapMenuMessages.INVALID_PLACE;
 
         return MapMenuMessages.PRINTED_SUCCESSFULLY;

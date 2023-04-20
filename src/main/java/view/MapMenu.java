@@ -14,9 +14,7 @@ public class MapMenu {
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("show map")) {
-                showMap(parser);
-            } else if (parser.beginsWith("map")) {
+            if (parser.beginsWith("map")) {
                 getDirections(parser);
             } else if (parser.beginsWith("show details")) {
                 showMapDetails(parser);
@@ -24,17 +22,6 @@ public class MapMenu {
                 System.out.println("Invalid command!");
             }
         }
-    }
-
-    void showMap(Parser parser) {
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-
-        MapMenuMessages message = MapMenuController.showMap(x,y);
-        if (message.equals(MapMenuMessages.INVALID_PLACE))
-            System.out.println("Please enter invalid numbers!");
-        if (message.equals(MapMenuMessages.PRINTED_SUCCESSFULLY))
-            System.out.println(currentMap.printMiniMap(x,y));
     }
 
     void getDirections(Parser parser) {
