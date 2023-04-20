@@ -27,6 +27,8 @@ public class ProfileMenu {
                 showSlogan();
             } else if (parser.beginsWith("profile display")) {
                 showProfile();
+            } else {
+                System.out.println("Invalid command!");
             }
         }
     }
