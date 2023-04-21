@@ -13,7 +13,7 @@ public class LoginMenu {
             if (parser.beginsWith("user login")) {
                 login(parser);
             } else if (parser.beginsWith("forgot my password")) {
-                forgotPassword(parser , scanner);
+                forgotPassword(parser, scanner);
             } else if (parser.beginsWith("user logout")) {
                 logout();
             } else {
@@ -23,7 +23,8 @@ public class LoginMenu {
     }
 
     void login(Parser parser) {
-        LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),parser.get("stay-logged-in") != null);
+        LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
+                parser.get("stay-logged-in") != null);
         switch (message) {
             case UNMATCHED_USERNAME_PASSWORD -> System.out.println("Incorrect password!");
             case USERNAME_DOESNT_EXIST -> System.out.println("This username doesn't exist!");
@@ -32,7 +33,7 @@ public class LoginMenu {
         }
     }
 
-    void forgotPassword(Parser parser , Scanner scanner) {
+    void forgotPassword(Parser parser, Scanner scanner) {
         LoginMenuMessages message = LoginMenuController.forgotPassword(parser.get("u"), scanner);
 
         if (message.equals(LoginMenuMessages.WRONG_SECURITY_ANSWER)) {
@@ -41,15 +42,15 @@ public class LoginMenu {
             System.out.println("This username doesn't exist!");
         } else if (message.equals(LoginMenuMessages.ENTER_NEW_PASSWORD)) {
             System.out.println("Please enter a new password");
-            newPassword(parser , scanner);
+            newPassword(parser, scanner);
         }
     }
 
-    void newPassword(Parser parser , Scanner scanner) {
+    void newPassword(Parser parser, Scanner scanner) {
         LoginMenuMessages message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
 
         while (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
-            System.out.println("Your password is weak. Try another one"); //TODO lists of errors
+            System.out.println("Your password is weak. Try another one"); // TODO lists of errors
             message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
         }
 

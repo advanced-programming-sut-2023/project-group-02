@@ -36,16 +36,15 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
 
-        GameMenuMessages message = GameMenuController.showMap(x,y);
+        GameMenuMessages message = GameMenuController.showMap(x, y);
         if (message.equals(GameMenuMessages.INVALID_PLACE))
             System.out.println("The numbers are invalid!");
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
             System.out.println(GameMenuController.getCurrentGame().getMap().printMiniMap(x, y));
-            MapMenuController.setCurrentXAndY(x,y);
+            MapMenuController.setCurrentXAndY(x, y);
             new MapMenu().run(scanner);
         }
     }
-
 
     void showPopularity() {
 
@@ -82,13 +81,13 @@ public class GameMenu {
     void selectBuilding(Parser parser, Scanner scanner) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectBuilding(x,y,scanner);
+        GameMenuMessages message = GameMenuController.selectBuilding(x, y, scanner);
 
         switch (message) {
             case INVALID_PLACE -> System.out.println("The numbers are invalid!");
             case NO_BUILDINGS -> System.out.println("There is no buildings in this place!");
             case NOT_YOURS -> System.out.println("The building in this place doesn't belong to you!");
-            case DONE_SUCCESSFULLY -> System.out.println("Out of building menu!"); //TODO this may make bugs
+            case DONE_SUCCESSFULLY -> System.out.println("Out of building menu!"); // TODO this may make bugs
         }
     }
 
@@ -99,17 +98,17 @@ public class GameMenu {
     void selectUnit(Parser parser, Scanner scanner) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectUnit(x,y,scanner);
-        
+        GameMenuMessages message = GameMenuController.selectUnit(x, y, scanner);
+
         switch (message) {
             case INVALID_PLACE -> System.out.println("The numbers are invalid!");
             case NO_UNITS -> System.out.println("There is no units here!");
-            case DONE_SUCCESSFULLY -> System.out.println("Out of unit menu!"); //this may have bugs too
+            case DONE_SUCCESSFULLY -> System.out.println("Out of unit menu!"); // this may have bugs too
         }
     }
 
     void setTexture(Parser parser) {
-        //handling both small and big parts
+        // handling both small and big parts
     }
 
     void clearBlock(Parser parser) {
@@ -119,7 +118,7 @@ public class GameMenu {
     void dropRock(Parser parser) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.dropRock(x,y, parser.get("d"));
+        GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
 
         switch (message) {
             case INVALID_PLACE -> System.out.println("Numbers are invalid!");
@@ -132,7 +131,7 @@ public class GameMenu {
     void dropTree(Parser parser) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.dropTree(x,y, parser.get("t"));
+        GameMenuMessages message = GameMenuController.dropTree(x, y, parser.get("t"));
 
         switch (message) {
             case INVALID_PLACE -> System.out.println("Numbers are invalid!");

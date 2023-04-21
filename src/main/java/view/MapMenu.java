@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class MapMenu {
     Map currentMap = GameMenuController.getCurrentGame().getMap();
+
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
@@ -28,8 +29,8 @@ public class MapMenu {
         ArrayList<String> directions = new ArrayList<>();
         for (int i = 1; i < parser.getTokens().size(); i++) {
             if (parser.getByIndex(i).matches("\\d+")) {
-                for (int j = 2; j < Integer.parseInt(parser.getByIndex(j)) ; j++) {
-                    directions.add(parser.getByIndex(j-1));
+                for (int j = 2; j < Integer.parseInt(parser.getByIndex(j)); j++) {
+                    directions.add(parser.getByIndex(j - 1));
                 }
             } else {
                 directions.add(parser.getByIndex(i));
@@ -40,18 +41,21 @@ public class MapMenu {
 
     void moveMap(ArrayList<String> directions) {
         MapMenuMessages message = MapMenuController.moveMap(directions);
-        if (message.equals(MapMenuMessages.INVALID_DIRECTION)) System.out.println("Invalid direction!");
+        if (message.equals(MapMenuMessages.INVALID_DIRECTION))
+            System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.MAP_MOVED))
-            System.out.println(currentMap.printMiniMap(MapMenuController.getCurrentX(),MapMenuController.getCurrentY()));
+            System.out
+                    .println(currentMap.printMiniMap(MapMenuController.getCurrentX(), MapMenuController.getCurrentY()));
     }
 
     void showMapDetails(Parser parser) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
 
-        MapMenuMessages message = MapMenuController.showDetails(x,y);
-        if (message.equals(MapMenuMessages.INVALID_DIRECTION)) System.out.println("Invalid direction!");
+        MapMenuMessages message = MapMenuController.showDetails(x, y);
+        if (message.equals(MapMenuMessages.INVALID_DIRECTION))
+            System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.PRINTED_SUCCESSFULLY))
-            System.out.println(currentMap.findCellWithXAndY(x,y).cellInfo());
+            System.out.println(currentMap.findCellWithXAndY(x, y).cellInfo());
     }
 }
