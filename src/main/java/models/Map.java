@@ -28,6 +28,11 @@ public class Map {
         return map[y][x].getUnits();
     }
 
+    public void addObject(MapObject object, int x, int y) {
+        findCellWithXAndY(x, y).setObject(object);
+        object.setCoordinates(x, y);
+    }
+
     public Cell[][] getMiniMap(int x, int y) {
         Cell[][] miniMap = new Cell[21][21];
         int startX = Utils.keepNumbersLimited(y - 10, 0, width);

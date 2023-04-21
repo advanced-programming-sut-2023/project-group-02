@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Game {
     private final ArrayList<User> players;
-    private HashMap<User,Colors> playersColors;
+    private HashMap<User, Colors> playersColors;
     private User currentPlayer;
     private int turnCounter;
     private final int numberOfTurns;
@@ -23,6 +23,11 @@ public class Game {
 
     public void givePlayersColors(ArrayList<User> players) {
 
+    }
+
+    public void addObject(MapObject object, int x, int y) {
+        map.addObject(object, x, y);
+        object.setOwner(currentPlayer);
     }
 
     public int getTurnCounter() {

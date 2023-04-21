@@ -95,6 +95,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop rock
+        currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -108,7 +109,7 @@ public class GameMenuController {
 
         // TODO handle the textures in which we cant drop tree
 
-        new Tree(x,y,TreeType.getTreeTypeWithName(treeName));
+        currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 }

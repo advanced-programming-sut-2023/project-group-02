@@ -1,20 +1,15 @@
 package models;
 
-import controllers.GameMenuController;
-
 public abstract class MapObject {
-    private final User owner;
-    private final int x, y;
-
-    public MapObject(int x, int y, User owner) {
-        this.x = x;
-        this.y = y;
-        GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x,y).setObject(this);
-        this.owner = owner;
-    }
+    private User owner;
+    private int x, y;
 
     public User getOwner() {
         return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public int getX() {
@@ -23,5 +18,10 @@ public abstract class MapObject {
 
     public int getY() {
         return y;
+    }
+
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
