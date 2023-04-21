@@ -15,12 +15,11 @@ public class LoginMenuController {
         if (!UserController.findUserWithUsername(username).getPassword().equals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
 
-        UserController.setCurrentUser(UserController.findUserWithUsername(username));
-        //TODO something for stay logged in
+        UserController.login(UserController.findUserWithUsername(username));
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
-    public static LoginMenuMessages forgotPassword(String username , Scanner scanner) {
+    public static LoginMenuMessages forgotPassword(String username, Scanner scanner) {
         User myUser;
         if ((myUser = UserController.findUserWithUsername(username)) == null)
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
@@ -46,7 +45,7 @@ public class LoginMenuController {
     public static LoginMenuMessages logout() {
         if (UserController.getCurrentUser().equals(null))
             return LoginMenuMessages.ALREADY_LOGGED_OUT;
-        UserController.setCurrentUser(null);
+        UserController.logout();
         return LoginMenuMessages.LOGOUT_SUCCESSFUL;
     }
 }
