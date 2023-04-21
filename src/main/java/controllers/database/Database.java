@@ -9,12 +9,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 public class Database {
-    public static final String path = ".database";
-
+    public static final String DATABASE_ROOT = ".database";
     private static Gson gson = new Gson();
 
+    public static void init() throws IOException {
+        Files.createDirectories(Path.of(DATABASE_ROOT));
+    }
+
     private static Path getTablePath(String tableName) {
-        return Path.of(path, tableName + ".json").normalize();
+        return Path.of(DATABASE_ROOT, tableName + ".json").normalize();
     }
 
     public static <T> T read(String tableName, Class<T> classOfT) {
