@@ -20,6 +20,16 @@ public class Map {
         return map[y][x]; // TODO thinking about changing x and y
     }
 
+    public ArrayList<Cell> findMoreThanOneCell(int x1, int y1, int x2, int y2) {
+        ArrayList<Cell> answer = new ArrayList<>();
+        for (int i = y1; i <= y2 ; i++) {
+            for (int j = x1; j <= x2 ; j++) {
+                answer.add(map[i][j]);
+            }
+        }
+        return answer;
+    }
+
     public Building findBuildingWithXAndY(int x, int y) {
         return map[y][x].getBuilding();
     }

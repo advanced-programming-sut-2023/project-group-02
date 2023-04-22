@@ -53,4 +53,8 @@ public class Government {
     public void addToFoodStock(int foodType, int value) {
         this.foodStock[foodType] += value;
     }
+
+    public int getMaterialAmount() {
+        return 0; //TODO counting materials from all storages
+    }
 }

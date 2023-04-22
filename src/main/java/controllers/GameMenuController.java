@@ -75,15 +75,39 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages setTexture(int x, int y, String textureType) {
-        return null;
+        Cell cell;
+        Texture texture;
+
+        if (Validation.areCoordinatesValid(x,y))
+            return GameMenuMessages.INVALID_PLACE;
+        if ((texture = Texture.findTextureWithName(textureType)) == null)
+            return GameMenuMessages.INVALID_TEXTURE;
+        if ((cell = currentGame.getMap().findCellWithXAndY(x,y)).isOccupied())
+            return GameMenuMessages.FULL_CELL;
+
+        cell.setTexture(texture);
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages setTexture(int x1, int y1, int x2, int y2, String textureType) {
-        return null;
+        Texture texture;
+        if (!Validation.areCoordinatesValid(x1,y1,x2,y2))
+            return GameMenuMessages.INVALID_PLACE;
+        if ((texture = Texture.findTextureWithName(textureType)) == null)
+            return GameMenuMessages.INVALID_TEXTURE;
+
+        ArrayList<Cell> allCells = currentGame.getMap().findMoreThanOneCell(x1,y1,x2,y2);
+        if (Cell.isABlockOccupied(allCells)) return GameMenuMessages.FULL_CELL;
+        Cell.setBlocksTexture(allCells,texture);
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages clearBlock(int x, int y) {
-        return null;
+        if (!Validation.areCoordinatesValid(x,y))
+            return GameMenuMessages.INVALID_PLACE;
+
+        currentGame.getMap().findCellWithXAndY(x,y).clear();
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages dropRock(int x, int y, String direction) {

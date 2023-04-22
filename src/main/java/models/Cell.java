@@ -19,8 +19,22 @@ public class Cell {
         return texture;
     }
 
+    public static boolean isABlockOccupied(ArrayList<Cell> cells) {
+        for (Cell cell : cells) {
+            if (cell.isOccupied())
+                return true;
+        }
+        return false;
+    }
+
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+
+    public static void setBlocksTexture(ArrayList<Cell> cells, Texture texture) {
+        for (Cell cell : cells) {
+            cell.setTexture(texture);
+        }
     }
 
     public Building getBuilding() {
@@ -52,6 +66,14 @@ public class Cell {
 
     public String cellInfo() {
         return null;
+    }
+
+    public void clear() {
+        object = null;
+        units.clear();
+        texture = Texture.EARTH;
+        hasLadder = false;
+        //Other things later
     }
 
     @Override

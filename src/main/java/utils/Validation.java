@@ -69,4 +69,11 @@ public class Validation {
             return false;
         return true;
     }
+
+    public static boolean areCoordinatesValid(int x1, int y1, int x2, int y2) {
+        if (!areCoordinatesValid(x1,y1) || !areCoordinatesValid(x2,y2))
+            return false;
+        if (x2 < x1 || y2 < y1) return false;
+        return true;
+    }
 }

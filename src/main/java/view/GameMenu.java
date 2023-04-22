@@ -17,6 +17,10 @@ public class GameMenu {
                 dropRock(parser);
             } else if (parser.beginsWith("droptree")) {
                 dropTree(parser);
+            } else if (parser.beginsWith("settexture")) {
+                setTexture(parser);
+            } else if (parser.beginsWith("clear")) {
+                clearBlock(parser);
             }
         }
     }
@@ -108,11 +112,30 @@ public class GameMenu {
     }
 
     void setTexture(Parser parser) {
-        // handling both small and big parts
+        GameMenuMessages message;
+        if (parser.get("x1") != null) {
+            message = GameMenuController.setTexture
+                (Integer.parseInt(parser.get("x1")),Integer.parseInt(parser.get("y1"))
+                    , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
+                    , parser.get("t"));
+        } else {
+            message = GameMenuController.setTexture
+                (Integer.parseInt(parser.get("x")),Integer.parseInt(parser.get("y")), parser.get("t"));
+        }
+
+        switch (message) {
+            case INVALID_PLACE -> System.out.println("Your numbers are invalid!");
+            case INVALID_TEXTURE -> System.out.println("There is no texture with this name!");
+            case FULL_CELL -> System.out.println("This place is already full!");
+            case DONE_SUCCESSFULLY -> System.out.println("Texture is changed successfully!");
+        }
     }
 
     void clearBlock(Parser parser) {
+        GameMenuMessages messages = GameMenuController.clearBlock(Integer.parseInt(parser.get("x")),Integer.parseInt(parser.get("y")));
 
+        if (messages.equals(GameMenuMessages.INVALID_PLACE)) System.out.println("Numbers are invalid!");
+        if (messages.equals(GameMenuMessages.DONE_SUCCESSFULLY)) System.out.println("Block is cleared successfully!");
     }
 
     void dropRock(Parser parser) {
