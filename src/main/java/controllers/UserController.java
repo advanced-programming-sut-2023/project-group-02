@@ -67,8 +67,11 @@ public class UserController {
     }
 
     private static void saveCredentials() {
-        // TODO: delete the file if currentUser is null
-        Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
+        if (currentUser != null) {
+            Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
+        } else {
+            Database.delete("currentUser");
+        }
     }
 
     public static void loadUsersFromFile() {

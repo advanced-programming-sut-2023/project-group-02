@@ -41,4 +41,14 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    public static void delete(String tableName) {
+        Path path = getTablePath(tableName);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            // TODO: how should we handle errors?
+            e.printStackTrace();
+        }
+    }
 }
