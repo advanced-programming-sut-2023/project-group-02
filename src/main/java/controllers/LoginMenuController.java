@@ -42,10 +42,4 @@ public class LoginMenuController {
         return LoginMenuMessages.PASSWORD_IS_CHANGED;
     }
 
-    public static LoginMenuMessages logout() {
-        if (UserController.getCurrentUser().equals(null))
-            return LoginMenuMessages.ALREADY_LOGGED_OUT;
-        UserController.logout();
-        return LoginMenuMessages.LOGOUT_SUCCESSFUL;
-    }
 }

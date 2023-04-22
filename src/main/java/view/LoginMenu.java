@@ -14,8 +14,6 @@ public class LoginMenu {
                 login(parser);
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
-            } else if (parser.beginsWith("user logout")) {
-                logout();
             } else {
                 System.out.println("Invalid command!");
             }
@@ -24,7 +22,7 @@ public class LoginMenu {
 
     void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-                parser.get("stay-logged-in") != null);
+            parser.get("stay-logged-in") != null);
         switch (message) {
             case UNMATCHED_USERNAME_PASSWORD -> System.out.println("Incorrect password!");
             case USERNAME_DOESNT_EXIST -> System.out.println("This username doesn't exist!");
@@ -58,11 +56,4 @@ public class LoginMenu {
             System.out.println("Your password is changed successfully!");
     }
 
-    void logout() {
-        LoginMenuMessages message = LoginMenuController.logout();
-        if (message.equals(LoginMenuMessages.ALREADY_LOGGED_OUT))
-            System.out.println("You are not in any accounts now");
-        if (message.equals(LoginMenuMessages.LOGOUT_SUCCESSFUL))
-            System.out.println("You are logged out successfully!");
-    }
 }

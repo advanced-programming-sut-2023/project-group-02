@@ -1,6 +1,7 @@
 package controllers;
 
 import utils.Validation;
+import view.enums.LoginMenuMessages;
 import view.enums.ProfileMenuMessages;
 
 public class ProfileMenuController {
@@ -27,7 +28,7 @@ public class ProfileMenuController {
             return ProfileMenuMessages.INCORRECT_OLD_PASSWORD;
         }
         if (oldPassword.equals(newPassword)) {
-            return  ProfileMenuMessages.SAME_THING;
+            return ProfileMenuMessages.SAME_THING;
         }
         if (Validation.validatePassword(newPassword).size() == 0) {
             return ProfileMenuMessages.WEAK_NEW_PASSWORD;
@@ -60,5 +61,12 @@ public class ProfileMenuController {
         } else {
             return ProfileMenuMessages.INVALID_EMAIL;
         }
+    }
+
+    public static LoginMenuMessages logout() {
+        if (UserController.getCurrentUser().equals(null))
+            return LoginMenuMessages.ALREADY_LOGGED_OUT;
+        UserController.logout();
+        return LoginMenuMessages.LOGOUT_SUCCESSFUL;
     }
 }
