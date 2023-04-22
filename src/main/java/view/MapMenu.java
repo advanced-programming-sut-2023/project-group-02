@@ -44,14 +44,12 @@ public class MapMenu {
         if (message.equals(MapMenuMessages.INVALID_DIRECTION))
             System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.MAP_MOVED))
-            System.out
-                    .println(currentMap.printMiniMap(MapMenuController.getCurrentX(), MapMenuController.getCurrentY()));
+            System.out.println(currentMap.printMiniMap(MapMenuController.getCurrentX(), MapMenuController.getCurrentY()));
     }
 
     void showMapDetails(Parser parser) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-
         MapMenuMessages message = MapMenuController.showDetails(x, y);
         if (message.equals(MapMenuMessages.INVALID_DIRECTION))
             System.out.println("Invalid direction!");

@@ -23,23 +23,15 @@ public class LoginMenu {
     void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
             parser.get("stay-logged-in") != null);
-        switch (message) {
-            case UNMATCHED_USERNAME_PASSWORD -> System.out.println("Incorrect password!");
-            case USERNAME_DOESNT_EXIST -> System.out.println("This username doesn't exist!");
-            case EMPTY_FIELD -> System.out.println("Please fill the empty fields!");
-            case LOGIN_SUCCESSFUL -> System.out.println("You are logged in!");
-        }
+
+        System.out.println(message.getMessage());
     }
 
     void forgotPassword(Parser parser, Scanner scanner) {
         LoginMenuMessages message = LoginMenuController.forgotPassword(parser.get("u"), scanner);
 
-        if (message.equals(LoginMenuMessages.WRONG_SECURITY_ANSWER)) {
-            System.out.println("Your answer is wrong!");
-        } else if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)) {
-            System.out.println("This username doesn't exist!");
-        } else if (message.equals(LoginMenuMessages.ENTER_NEW_PASSWORD)) {
-            System.out.println("Please enter a new password");
+        System.out.println(message.getMessage());
+        if (message.equals(LoginMenuMessages.ENTER_NEW_PASSWORD)) {
             newPassword(parser, scanner);
         }
     }
