@@ -11,7 +11,12 @@ public class LoginMenu {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("user login")) {
-                login(parser);
+                LoginMenuMessages output = login(parser);
+                System.out.println(output.getMessage());
+                if (output == LoginMenuMessages.LOGIN_SUCCESSFUL) {
+                    new MainMenu().run(scanner);
+                    break;
+                }
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
             } else {
@@ -20,11 +25,11 @@ public class LoginMenu {
         }
     }
 
-    void login(Parser parser) {
+    LoginMenuMessages login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
             parser.get("stay-logged-in") != null);
 
-        System.out.println(message.getMessage());
+        return message;
     }
 
     void forgotPassword(Parser parser, Scanner scanner) {

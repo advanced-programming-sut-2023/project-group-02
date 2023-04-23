@@ -26,6 +26,8 @@ public class SignupMenu {
                 new MainMenu().run(scanner);
             } else if (parser.beginsWith("create user")) {
                 createUser(parser);
+            } else if (parser.beginsWith("enter login menu")) {
+                new LoginMenu().run(scanner);
             } else if (state == State.SECURITY_QUESTION_NEEDED && parser.beginsWith("question pick")) {
                 pickQuestion(parser);
             } else if (state == State.PASSWORD_CONFIRMATION_NEEDED) {
