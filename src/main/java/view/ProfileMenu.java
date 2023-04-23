@@ -29,6 +29,8 @@ public class ProfileMenu {
                 showSlogan();
             } else if (parser.beginsWith("profile display")) {
                 showProfile();
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at ProfileMenu");
             } else {
                 System.out.println("Invalid command!");
             }

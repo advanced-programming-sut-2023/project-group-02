@@ -20,6 +20,8 @@ public class GameMenu {
                 break;
             } else if (parser.beginsWith("no")) {
                 // TODO : option to load a saved game
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at GamaMenu");
             } else {
                 System.out.println("Invalid command!");
             }
@@ -37,6 +39,10 @@ public class GameMenu {
                 setTexture(parser);
             } else if (parser.beginsWith("clear")) {
                 clearBlock(parser);
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at GamaMenu");
+            } else {
+                System.out.println("Invalid command!");
             }
         }
     }
@@ -48,6 +54,10 @@ public class GameMenu {
                 selectBuilding(parser, scanner);
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at GamaMenu");
+            } else {
+                System.out.println("Invalid command!");
             }
         }
     }

@@ -20,6 +20,8 @@ public class MainMenu {
                     break;
             } else if (parser.beginsWith("enter game menu")) {
                 new GameMenu().run(scanner);
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at MainMenu");
             } else {
                 System.out.println("Invalid command!");
             }

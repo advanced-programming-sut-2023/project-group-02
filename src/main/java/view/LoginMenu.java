@@ -19,6 +19,8 @@ public class LoginMenu {
                 }
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at LoginMenu");
             } else {
                 System.out.println("Invalid command!");
             }

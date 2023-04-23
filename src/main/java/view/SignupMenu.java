@@ -32,6 +32,8 @@ public class SignupMenu {
                 pickQuestion(parser);
             } else if (state == State.PASSWORD_CONFIRMATION_NEEDED) {
                 confirmPassword(parser.input);
+            } else if (parser.beginsWith("show current menu")) {
+                System.out.println("You are at SignupMenu");
             } else {
                 System.out.println("Invalid command!");
             }
