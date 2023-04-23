@@ -29,11 +29,6 @@ public class ProfileMenu {
                 showSlogan();
             } else if (parser.beginsWith("profile display")) {
                 showProfile();
-            } else if (parser.beginsWith("user logout")) {
-                String output = logout();
-                System.out.println(output);
-                if (output.equals("You are logged out successfully!"))
-                    break;
             } else {
                 System.out.println("Invalid command!");
             }
@@ -121,14 +116,5 @@ public class ProfileMenu {
             case SUCCESSFUL -> "Password is changed successfully";
             default -> "";
         });
-    }
-
-    String logout() {
-        LoginMenuMessages message = ProfileMenuController.logout();
-        if (message.equals(LoginMenuMessages.ALREADY_LOGGED_OUT))
-            return "You are not in any accounts now";
-        if (message.equals(LoginMenuMessages.LOGOUT_SUCCESSFUL))
-            return "You are logged out successfully!";
-        return null;
     }
 }

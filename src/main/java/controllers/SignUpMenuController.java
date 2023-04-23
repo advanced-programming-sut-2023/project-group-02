@@ -9,15 +9,15 @@ import view.enums.SignUpMenuMessages;
 
 public class SignUpMenuController {
     public static ProfileMenuMessages register(String username, String password,
-            String nickname, String slogan, String email, SecurityQuestion question,
-            String securityAnswer) {
+                                               String nickname, String slogan, String email, SecurityQuestion question,
+                                               String securityAnswer) {
         return null;
     }
 
     private static User toBeSignedIn;
 
     public static SignUpMenuMessages initiateSignup(String username, String password, String passwordConfirmation,
-            String nickname, String email, String slogan) {
+                                                    String nickname, String email, String slogan) {
         if (username == null || username.length() == 0) {
             return SignUpMenuMessages.EMPTY_USERNAME;
         }
@@ -40,7 +40,7 @@ public class SignUpMenuController {
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG;
         }
         if (!password.equals("random") && Validation.validatePassword(password).size() != 0) {
-            // TODO: return detailed errors on why password is weak
+            // TODO : return detailed errors on why password is weak
             return SignUpMenuMessages.WEAK_PASSWORD;
         }
         if (!Validation.isValidEmail(email)) {

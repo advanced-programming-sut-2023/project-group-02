@@ -1,3 +1,4 @@
+import view.MainMenu;
 import view.ProfileMenu;
 import view.SignupMenu;
 
@@ -19,10 +20,15 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         if (UserController.isAuthorized()) {
-            new ProfileMenu().run(scanner);
+            new MainMenu().run(scanner);
         } else {
             new SignupMenu().run(scanner);
         }
         scanner.close();
     }
 }
+
+/* samples
+create user -u danial -p Danial01* Danial01* --email danielparnian@gmail.com -n Dani -s random
+question pick -q 2 -a jack -c jack
+ */

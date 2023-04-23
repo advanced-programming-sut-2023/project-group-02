@@ -21,7 +21,10 @@ public class SignupMenu {
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("create user")) {
+            if (state == State.SIGNUP_SUCCESSFUL) {
+                state = State.WAITING;
+                new MainMenu().run(scanner);
+            } else if (parser.beginsWith("create user")) {
                 createUser(parser);
             } else if (state == State.SECURITY_QUESTION_NEEDED && parser.beginsWith("question pick")) {
                 pickQuestion(parser);

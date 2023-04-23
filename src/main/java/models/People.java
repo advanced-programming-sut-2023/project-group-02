@@ -24,7 +24,7 @@ public class People {
         return workingPlace;
     }
 
-    public boolean isHasJob() {
+    public boolean hasJob() {
         return hasJob;
     }
 }

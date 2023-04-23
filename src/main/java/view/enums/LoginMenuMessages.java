@@ -8,9 +8,7 @@ public enum LoginMenuMessages {
     WRONG_SECURITY_ANSWER("Your answer is wrong!"),
     ENTER_NEW_PASSWORD("Please enter a new password!"),
     NEW_PASSWORD_WEAK("Your new password is weak!"),
-    PASSWORD_IS_CHANGED("Your password is changed successfully!"),
-    ALREADY_LOGGED_OUT("You aren't in your account right now!"),
-    LOGOUT_SUCCESSFUL("You logged out successfully!");
+    PASSWORD_IS_CHANGED("Your password is changed successfully!");
 
     private final String message;
 

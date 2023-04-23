@@ -62,11 +62,4 @@ public class ProfileMenuController {
             return ProfileMenuMessages.INVALID_EMAIL;
         }
     }
-
-    public static LoginMenuMessages logout() {
-        if (UserController.getCurrentUser().equals(null))
-            return LoginMenuMessages.ALREADY_LOGGED_OUT;
-        UserController.logout();
-        return LoginMenuMessages.LOGOUT_SUCCESSFUL;
-    }
 }
