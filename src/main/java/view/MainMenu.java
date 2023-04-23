@@ -11,15 +11,17 @@ public class MainMenu {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("enter profile menu")) {
+                System.out.println("You successfully entered ProfileMenu!");
                 new ProfileMenu().run(scanner);
                 System.out.println("You successfully entered profile menu!");
+            } else if (parser.beginsWith("enter game menu")) {
+                System.out.println("You successfully entered GameMenu!");
+                new GameMenu().run(scanner);
             } else if (parser.beginsWith("user logout")) {
                 MainMenuMessages output = logout();
                 System.out.println(output.getMessage());
                 if (output == MainMenuMessages.LOGOUT_SUCCESSFUL)
                     break;
-            } else if (parser.beginsWith("enter game menu")) {
-                new GameMenu().run(scanner);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at MainMenu");
             } else {

@@ -27,6 +27,7 @@ public class SignupMenu {
             } else if (parser.beginsWith("create user")) {
                 createUser(parser);
             } else if (parser.beginsWith("enter login menu")) {
+                System.out.println("You successfully entered LoginMenu!");
                 new LoginMenu().run(scanner);
             } else if (state == State.SECURITY_QUESTION_NEEDED && parser.beginsWith("question pick")) {
                 pickQuestion(parser);
