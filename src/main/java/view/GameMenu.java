@@ -4,12 +4,28 @@ import controllers.GameMenuController;
 import controllers.MapMenuController;
 import utils.Parser;
 import view.enums.GameMenuMessages;
+import view.enums.MainMenuMessages;
 import view.enums.MapMenuMessages;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
+    public void run(Scanner scanner) {
+        while (true) {
+            System.out.print("Do you want to start a new game? (yes or no): ");
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("yes")) {
+                runPreGameMenu(scanner);
+                break;
+            } else if (parser.beginsWith("no")) {
+                // TODO : option to load a saved game
+            } else {
+                System.out.println("Invalid command!");
+            }
+        }
+    }
+
     public void runPreGameMenu(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
@@ -115,12 +131,12 @@ public class GameMenu {
         GameMenuMessages message;
         if (parser.get("x1") != null) {
             message = GameMenuController.setTexture
-                (Integer.parseInt(parser.get("x1")),Integer.parseInt(parser.get("y1"))
+                (Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1"))
                     , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
                     , parser.get("t"));
         } else {
             message = GameMenuController.setTexture
-                (Integer.parseInt(parser.get("x")),Integer.parseInt(parser.get("y")), parser.get("t"));
+                (Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), parser.get("t"));
         }
 
         switch (message) {
@@ -132,7 +148,7 @@ public class GameMenu {
     }
 
     void clearBlock(Parser parser) {
-        GameMenuMessages messages = GameMenuController.clearBlock(Integer.parseInt(parser.get("x")),Integer.parseInt(parser.get("y")));
+        GameMenuMessages messages = GameMenuController.clearBlock(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")));
 
         if (messages.equals(GameMenuMessages.INVALID_PLACE)) System.out.println("Numbers are invalid!");
         if (messages.equals(GameMenuMessages.DONE_SUCCESSFULLY)) System.out.println("Block is cleared successfully!");

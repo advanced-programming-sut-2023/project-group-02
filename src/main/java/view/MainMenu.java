@@ -2,7 +2,6 @@ package view;
 
 import controllers.UserController;
 import utils.Parser;
-import view.enums.LoginMenuMessages;
 import view.enums.MainMenuMessages;
 
 import java.util.Scanner;
@@ -19,6 +18,8 @@ public class MainMenu {
                 System.out.println(output.getMessage());
                 if (output == MainMenuMessages.LOGOUT_SUCCESSFUL)
                     break;
+            } else if (parser.beginsWith("enter game menu")) {
+                new GameMenu().run(scanner);
             } else {
                 System.out.println("Invalid command!");
             }
