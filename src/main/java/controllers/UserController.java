@@ -14,11 +14,6 @@ public class UserController {
         return currentUser;
     }
 
-    private static void setCurrentUser(User user) {
-        currentUser = user;
-        saveCredentials();
-    }
-
     public static boolean isAuthorized() {
         return currentUser != null;
     }
@@ -44,18 +39,22 @@ public class UserController {
         return false;
     }
 
-    public static void login(User user) {
-        setCurrentUser(user);
+    public static void login(User user, boolean stayLoggedIn) {
+        currentUser = user;
+        if (stayLoggedIn) {
+            saveCredentials();
+        }
     }
 
     public static void signup(User user) {
         users.add(user);
-        login(user);
+        login(user, false);
         saveUsers();
     }
 
     public static void logout() {
-        setCurrentUser(null);
+        currentUser = null;
+        deleteCredentials();
     }
 
     private static void saveUsers() {
@@ -67,11 +66,11 @@ public class UserController {
     }
 
     private static void saveCredentials() {
-        if (currentUser != null) {
-            Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
-        } else {
-            Database.delete("currentUser");
-        }
+        Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
+    }
+
+    private static void deleteCredentials() {
+        Database.delete("currentUser");
     }
 
     public static void loadUsersFromFile() {
@@ -88,7 +87,7 @@ public class UserController {
             User user = findUserWithUsername(credentials.username());
             if (user != null) {
                 if (user.getPassword().equals(credentials.password())) {
-                    setCurrentUser(user);
+                    currentUser = user;
                 }
             }
         }

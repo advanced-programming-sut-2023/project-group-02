@@ -7,7 +7,7 @@ import view.enums.LoginMenuMessages;
 import java.util.Scanner;
 
 public class LoginMenuController {
-    public static LoginMenuMessages login(String username, String password, boolean isStayLogin) {
+    public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
         if (username == null || password == null)
             return LoginMenuMessages.EMPTY_FIELD;
         if (!UserController.userWithUsernameExists(username))
@@ -15,7 +15,7 @@ public class LoginMenuController {
         if (!UserController.findUserWithUsername(username).getPassword().equals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
 
-        UserController.login(UserController.findUserWithUsername(username));
+        UserController.login(UserController.findUserWithUsername(username), stayLoggedIn);
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
