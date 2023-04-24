@@ -29,7 +29,7 @@ public class LoginMenu {
 
     LoginMenuMessages login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-            parser.get("stay-logged-in") != null);
+                parser.getFlag("stay-logged-in"));
 
         return message;
     }

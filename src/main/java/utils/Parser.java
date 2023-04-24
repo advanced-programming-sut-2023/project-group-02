@@ -56,13 +56,18 @@ public class Parser {
                 }
             }
         }
-        return output;
+        return found ? output : null;
     }
 
     public String get(String name) {
-        if (getAll(name).size() == 0)
+        ArrayList<String> all = getAll(name);
+        if (all == null || all.size() == 0)
             return null;
-        return getAll(name).get(0);
+        return all.get(0);
+    }
+
+    public boolean getFlag(String name) {
+        return getAll(name) != null;
     }
 
     public String getByIndex(int index) {
