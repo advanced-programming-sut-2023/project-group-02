@@ -12,7 +12,7 @@ public class LoginMenuController {
             return LoginMenuMessages.EMPTY_FIELD;
         if (!UserController.userWithUsernameExists(username))
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
-        if (!UserController.findUserWithUsername(username).getPassword().equals(password))
+        if (!UserController.findUserWithUsername(username).passwordEquals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
 
         UserController.login(UserController.findUserWithUsername(username), stayLoggedIn);

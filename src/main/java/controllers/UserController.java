@@ -86,7 +86,7 @@ public class UserController {
         if (credentials != null) {
             User user = findUserWithUsername(credentials.username());
             if (user != null) {
-                if (user.getPassword().equals(credentials.password())) {
+                if (user.getPasswordHash().equals(credentials.password())) {
                     currentUser = user;
                 }
             }

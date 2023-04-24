@@ -2,8 +2,10 @@ package models;
 
 import java.util.ArrayList;
 
+import utils.Utils;
+
 public class User {
-    private String username, password, nickname, email, slogan;
+    private String username, passwordHash, nickname, email, slogan;
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
     private int highScore;
@@ -13,7 +15,7 @@ public class User {
     public User(String username, String password, String nickname, String email, String slogan,
             SecurityQuestion securityQuestion, String securityAnswer) {
         this.username = username;
-        this.password = password;
+        this.passwordHash = encrypt(password);
         this.nickname = nickname;
         this.email = email;
         this.slogan = slogan;
@@ -25,8 +27,8 @@ public class User {
         return username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     public String getNickname() {
@@ -78,11 +80,15 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.passwordHash = encrypt(password);
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean passwordEquals(String password) {
+        return encrypt(password).equals(this.passwordHash);
     }
 
     public ArrayList<Trade> getUsersAllTrades() {
@@ -96,10 +102,14 @@ public class User {
     @Override
     public String toString() {
         return "Username: " + username + "\n" +
-                "Password: " + password + "\n" +
+                "Password: " + passwordHash + "\n" +
                 "Nickname: " + nickname + "\n" +
                 "Email: " + email + "\n" +
                 "Slogan: " + slogan + "\n" +
                 "HighScore: " + highScore + "\n";
+    }
+
+    private static String encrypt(String password) {
+        return Utils.encryptUsingSHA256(password);
     }
 }

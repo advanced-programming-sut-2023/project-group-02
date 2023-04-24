@@ -24,7 +24,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changePassword(String oldPassword, String newPassword) {
-        if (!oldPassword.equals(UserController.getCurrentUser().getPassword())) {
+        if (!UserController.getCurrentUser().passwordEquals(oldPassword)) {
             return ProfileMenuMessages.INCORRECT_OLD_PASSWORD;
         }
         if (oldPassword.equals(newPassword)) {
