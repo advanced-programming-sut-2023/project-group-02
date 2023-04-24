@@ -24,7 +24,7 @@ public class SignupMenu {
             if (state == State.SIGNUP_SUCCESSFUL) {
                 state = State.WAITING;
                 new MainMenu().run(scanner);
-            } else if (parser.beginsWith("create user")) {
+            } else if (parser.beginsWith("user create")) {
                 createUser(parser);
             } else if (parser.beginsWith("enter login menu")) {
                 System.out.println("You successfully entered LoginMenu!");
@@ -50,7 +50,7 @@ public class SignupMenu {
         String nickname = parser.get("n");
         String slogan = parser.get("s");
         SignUpMenuMessages error = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
-            nickname, email, slogan);
+                nickname, email, slogan);
 
         if (error == null) {
             state = State.SECURITY_QUESTION_NEEDED;

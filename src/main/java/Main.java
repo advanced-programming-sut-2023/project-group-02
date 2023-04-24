@@ -29,7 +29,9 @@ public class Main {
     }
 }
 
-/* samples
-create user -u danial -p Danial01* Danial01* --email danielparnian@gmail.com -n Dani -s random
-question pick -q 2 -a jack -c jack
+/*
+ * samples
+ * user create -u danial -p Danial01* Danial01* --email danielparnian@gmail.com
+ * -n Dani -s random
+ * question pick -q 2 -a jack -c jack
  */
