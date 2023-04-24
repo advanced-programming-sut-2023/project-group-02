@@ -44,6 +44,10 @@ public class SignupMenu {
     private void createUser(Parser parser) {
         String username = parser.get("u");
         ArrayList<String> passwords = parser.getAll("p");
+        if (passwords.size() == 0) {
+            System.out.println(SignUpMenuMessages.EMPTY_PASSWORD.getMessage());
+            return;
+        }
         String password = passwords.get(0);
         String passwordConfirmation = passwords.size() >= 2 ? passwords.get(1) : null;
         String email = parser.get("email");
