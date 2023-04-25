@@ -25,7 +25,7 @@ public class GameMenu {
                 // TODO : option to load a saved game
                 loadGame();
             } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GamaMenu");
+                System.out.println("You are at GameMenu");
             } else {
                 System.out.println("Invalid command!");
             }
@@ -51,7 +51,7 @@ public class GameMenu {
                 System.out.println("You came back to the main menu!");
                 break;
             } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GamaMenu");
+                System.out.println("You are at GameMenu");
             } else {
                 System.out.println("Invalid command!");
             }
