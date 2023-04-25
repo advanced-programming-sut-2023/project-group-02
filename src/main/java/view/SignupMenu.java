@@ -35,6 +35,8 @@ public class SignupMenu {
                 confirmPassword(parser.input);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at SignupMenu");
+            } else if (parser.beginsWith("exit")) {
+                break;
             } else {
                 System.out.println("Invalid command!");
             }
@@ -54,7 +56,7 @@ public class SignupMenu {
         String nickname = parser.get("n");
         String slogan = parser.get("s");
         SignUpMenuMessages error = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
-                nickname, email, slogan);
+            nickname, email, slogan);
 
         if (error == null) {
             state = State.SECURITY_QUESTION_NEEDED;

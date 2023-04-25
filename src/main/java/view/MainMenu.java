@@ -13,7 +13,6 @@ public class MainMenu {
             if (parser.beginsWith("enter profile menu")) {
                 System.out.println("You successfully entered ProfileMenu!");
                 new ProfileMenu().run(scanner);
-                System.out.println("You successfully entered profile menu!");
             } else if (parser.beginsWith("enter game menu")) {
                 System.out.println("You successfully entered GameMenu!");
                 new GameMenu().run(scanner);

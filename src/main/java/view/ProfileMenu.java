@@ -31,6 +31,9 @@ public class ProfileMenu {
                 showProfile();
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at ProfileMenu");
+            } else if (parser.beginsWith("exit")) {
+                System.out.println("You are at Main Menu");
+                break;
             } else {
                 System.out.println("Invalid command!");
             }
