@@ -19,8 +19,9 @@ public class MainMenu {
             } else if (parser.beginsWith("user logout")) {
                 MainMenuMessages output = logout();
                 System.out.println(output.getMessage());
-                if (output == MainMenuMessages.LOGOUT_SUCCESSFUL)
-                    break;
+                if (output == MainMenuMessages.LOGOUT_SUCCESSFUL) {
+                    new SignupMenu().run(scanner);
+                }
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at MainMenu");
             } else {

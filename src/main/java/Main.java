@@ -21,7 +21,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         if (UserController.isAuthorized()) {
             new MainMenu().run(scanner);
-            new SignupMenu().run(scanner);
         } else {
             new SignupMenu().run(scanner);
         }
