@@ -18,6 +18,10 @@ public class GameMenuController {
         return currentGame;
     }
 
+    public static void setCurrentGame(Game currentGame) {
+        GameMenuController.currentGame = currentGame;
+    }
+
     public static ArrayList<User> getAllUsersInGame() {
         return currentGame.getPlayers();
     }
@@ -78,11 +82,11 @@ public class GameMenuController {
         Cell cell;
         Texture texture;
 
-        if (Validation.areCoordinatesValid(x,y))
+        if (Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
         if ((texture = Texture.findTextureWithName(textureType)) == null)
             return GameMenuMessages.INVALID_TEXTURE;
-        if ((cell = currentGame.getMap().findCellWithXAndY(x,y)).isOccupied())
+        if ((cell = currentGame.getMap().findCellWithXAndY(x, y)).isOccupied())
             return GameMenuMessages.FULL_CELL;
 
         cell.setTexture(texture);
@@ -91,22 +95,22 @@ public class GameMenuController {
 
     public static GameMenuMessages setTexture(int x1, int y1, int x2, int y2, String textureType) {
         Texture texture;
-        if (!Validation.areCoordinatesValid(x1,y1,x2,y2))
+        if (!Validation.areCoordinatesValid(x1, y1, x2, y2))
             return GameMenuMessages.INVALID_PLACE;
         if ((texture = Texture.findTextureWithName(textureType)) == null)
             return GameMenuMessages.INVALID_TEXTURE;
 
-        ArrayList<Cell> allCells = currentGame.getMap().findMoreThanOneCell(x1,y1,x2,y2);
+        ArrayList<Cell> allCells = currentGame.getMap().findMoreThanOneCell(x1, y1, x2, y2);
         if (Cell.isABlockOccupied(allCells)) return GameMenuMessages.FULL_CELL;
-        Cell.setBlocksTexture(allCells,texture);
+        Cell.setBlocksTexture(allCells, texture);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages clearBlock(int x, int y) {
-        if (!Validation.areCoordinatesValid(x,y))
+        if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
 
-        currentGame.getMap().findCellWithXAndY(x,y).clear();
+        currentGame.getMap().findCellWithXAndY(x, y).clear();
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 

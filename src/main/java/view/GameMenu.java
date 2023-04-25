@@ -2,11 +2,14 @@ package view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
+import models.Game;
+import models.Map;
 import utils.Parser;
 import view.enums.GameMenuMessages;
 import view.enums.MainMenuMessages;
 import view.enums.MapMenuMessages;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -20,6 +23,7 @@ public class GameMenu {
                 break;
             } else if (parser.beginsWith("no")) {
                 // TODO : option to load a saved game
+                loadGame();
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -29,6 +33,10 @@ public class GameMenu {
     }
 
     public void runPreGameMenu(Scanner scanner) {
+        int numberOfTurns = setNumberOfTurns();
+        int mapWidth = setMapWidth();
+        int mapHeight = setMapHeight();
+        GameMenuController.setCurrentGame(new Game(new ArrayList<>(), numberOfTurns, new Map(mapWidth, mapHeight)));
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("droprock")) {
@@ -39,6 +47,9 @@ public class GameMenu {
                 setTexture(parser);
             } else if (parser.beginsWith("clear")) {
                 clearBlock(parser);
+            } else if (parser.beginsWith("exit")) {
+                System.out.println("You came back to the main menu!");
+                break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -48,18 +59,39 @@ public class GameMenu {
     }
 
     public void runGameMenu(Scanner scanner) {
+        initGovernments();
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("select building")) {
                 selectBuilding(parser, scanner);
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
+            } else if (parser.beginsWith("enter trade menu")) {
+                TradeMenu.run(scanner);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
                 System.out.println("Invalid command!");
             }
         }
+    }
+
+    private void initGovernments() {
+    }
+
+    private void loadGame() {
+    }
+
+    private int setMapHeight() {
+        return 0; // TODO compelte this
+    }
+
+    private int setMapWidth() {
+        return 0; // TODO compelte this
+    }
+
+    private int setNumberOfTurns() {
+        return 0; // TODO compelte this
     }
 
     void showMap(Parser parser, Scanner scanner) {
