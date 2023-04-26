@@ -7,7 +7,7 @@ import java.util.Random;
 public class Captcha {
     private static String captcha;
     private static final Random random = new Random();
-    private static final int width = 200 , height = 50;
+    private static final int width = 70 , height = 20;
 
     public static String showCaptcha() {
         captcha = makeCaptchaString();
@@ -29,15 +29,15 @@ public class Captcha {
         Graphics2D graphics2D = image.createGraphics();
         graphics2D.setColor(Color.WHITE);
         graphics2D.fillRect(0,0,width,height);
-        graphics2D.setFont(new Font("Arial",Font.BOLD,30));
+        graphics2D.setFont(new Font("Arial",Font.BOLD,20));
         graphics2D.setColor(Color.BLACK);
-        graphics2D.drawString(myCaptcha,20,35);
+        graphics2D.drawString(myCaptcha,5,17);
         graphics2D.dispose();
         return addNoiseToCaptcha(image);
     }
 
     private static BufferedImage addNoiseToCaptcha(BufferedImage image) {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             image.setRGB(x, y, -16777216);

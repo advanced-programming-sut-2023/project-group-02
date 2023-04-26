@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import controllers.SignUpMenuController;
 import models.SecurityQuestion;
+import utils.Captcha;
 import utils.Parser;
 import view.enums.SignUpMenuMessages;
 
@@ -12,6 +13,7 @@ public class SignupMenu {
     enum State {
         PASSWORD_CONFIRMATION_NEEDED,
         SECURITY_QUESTION_NEEDED,
+        CAPTCHA_ANSWER_NEEDED,
         SIGNUP_SUCCESSFUL,
         WAITING
     }
@@ -33,6 +35,8 @@ public class SignupMenu {
                 pickQuestion(parser);
             } else if (state == State.PASSWORD_CONFIRMATION_NEEDED) {
                 confirmPassword(parser.input);
+            } else if (state == State.CAPTCHA_ANSWER_NEEDED) {
+                captcha(parser);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at SignupMenu");
             } else if (parser.beginsWith("exit")) {
@@ -101,8 +105,8 @@ public class SignupMenu {
         }
 
         SignUpMenuController.setSecurityQuestion(question, answer);
-        state = State.SIGNUP_SUCCESSFUL;
-        System.err.println("Done!");
+        state = State.CAPTCHA_ANSWER_NEEDED;
+        System.out.println(Captcha.showCaptcha());
     }
 
     public void confirmPassword(String password) {
@@ -111,6 +115,17 @@ public class SignupMenu {
             printSecurityQuestions();
         } else {
             System.out.println("Passwords don't match!");
+        }
+    }
+
+    public void captcha(Parser parser) {
+        String userInput = parser.getByIndex(0);
+        if (Captcha.inputEqualsCaptcha(userInput)) {
+            state = State.SIGNUP_SUCCESSFUL;
+            System.err.println("Done!");
+        } else {
+            System.out.println("Please enter the numbers correctly!");
+            System.out.println(Captcha.showCaptcha());
         }
     }
 }

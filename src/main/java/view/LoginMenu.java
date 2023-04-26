@@ -1,22 +1,31 @@
 package view;
 
 import controllers.LoginMenuController;
+import utils.Captcha;
 import utils.Parser;
 import view.enums.LoginMenuMessages;
 
 import java.util.Scanner;
 
 public class LoginMenu {
+    enum State {
+        LOGIN_SUCCESSFUL,
+        WAIT_FOR_CAPTCHA,
+        WAITING,
+    }
+
+    private State state = State.WAITING;
+
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("user login")) {
-                LoginMenuMessages output = login(parser);
-                System.out.println(output.getMessage());
-                if (output == LoginMenuMessages.LOGIN_SUCCESSFUL) {
-                    new MainMenu().run(scanner);
-                    break;
-                }
+            if (state.equals(State.LOGIN_SUCCESSFUL)) {
+                state = State.WAITING;
+                new MainMenu().run(scanner);
+            } else if (state.equals(State.WAIT_FOR_CAPTCHA)) {
+                captcha(parser);
+            } else if (parser.beginsWith("user login")) {
+                login(parser);
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
             } else if (parser.beginsWith("show current menu")) {
@@ -27,11 +36,29 @@ public class LoginMenu {
         }
     }
 
-    LoginMenuMessages login(Parser parser) {
+    void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-                parser.getFlag("stay-logged-in"));
+            parser.getFlag("stay-logged-in"));
 
-        return message;
+        if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
+            state = State.WAIT_FOR_CAPTCHA;
+            System.out.println(Captcha.showCaptcha());
+            captcha(parser);
+        } else {
+            System.out.println(message.getMessage());
+        }
+    }
+
+
+    void captcha(Parser parser) {
+        String userInput = parser.getByIndex(0);
+        if (Captcha.inputEqualsCaptcha(userInput)) {
+            state = State.LOGIN_SUCCESSFUL;
+            System.out.println("You Logged in successfully!");
+        } else {
+            System.out.println("Please enter the numbers more carefully!");
+            System.out.println(Captcha.showCaptcha());
+        }
     }
 
     void forgotPassword(Parser parser, Scanner scanner) {
