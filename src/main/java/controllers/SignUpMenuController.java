@@ -2,12 +2,17 @@ package controllers;
 
 import models.SecurityQuestion;
 import models.User;
+import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
 import view.enums.ProfileMenuMessages;
 import view.enums.SignUpMenuMessages;
 
+import java.util.ArrayList;
+
 public class SignUpMenuController {
+    public static ArrayList<PasswordProblem> passwordProblems;
+
     public static ProfileMenuMessages register(String username, String password,
                                                String nickname, String slogan, String email, SecurityQuestion question,
                                                String securityAnswer) {
@@ -42,6 +47,7 @@ public class SignUpMenuController {
         }
         if (!password.equals("random") && Validation.validatePassword(password).size() != 0) {
             // TODO : return detailed errors on why password is weak
+            passwordProblems = Validation.validatePassword(password);
             return SignUpMenuMessages.WEAK_PASSWORD;
         }
         if (!Validation.isValidEmail(email)) {

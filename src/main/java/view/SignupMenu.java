@@ -7,6 +7,8 @@ import controllers.SignUpMenuController;
 import models.SecurityQuestion;
 import utils.Captcha;
 import utils.Parser;
+import utils.PasswordProblem;
+import utils.Validation;
 import view.enums.SignUpMenuMessages;
 
 public class SignupMenu {
@@ -76,7 +78,11 @@ public class SignupMenu {
             return;
         }
 
-        System.out.println(error.getMessage());
+        if (error.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
+            System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
+        }
+        else
+            System.out.println(error.getMessage());
     }
 
     private void printSecurityQuestions() {

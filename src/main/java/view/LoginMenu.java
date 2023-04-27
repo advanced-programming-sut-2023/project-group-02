@@ -3,6 +3,7 @@ package view;
 import controllers.LoginMenuController;
 import utils.Captcha;
 import utils.Parser;
+import utils.PasswordProblem;
 import view.enums.LoginMenuMessages;
 
 import java.util.Scanner;
@@ -74,7 +75,7 @@ public class LoginMenu {
         LoginMenuMessages message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
 
         while (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
-            System.out.println("Your password is weak. Try another one"); // TODO lists of errors
+            System.out.println(PasswordProblem.showErrors(LoginMenuController.passwordProblems));
             message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
         }
 

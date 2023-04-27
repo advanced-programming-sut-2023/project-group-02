@@ -15,10 +15,6 @@ public class Validation {
         return username.matches("^[a-zA-Z0-9_]+$");
     }
 
-    public enum PasswordProblem {
-        TOO_SHORT, NO_LOWERCASE, NO_UPPERCASE, NO_DIGIT, NO_SPECIAL_CHARACTER
-    }
-
     public static ArrayList<PasswordProblem> validatePassword(String password) {
         ArrayList<PasswordProblem> problems = new ArrayList<PasswordProblem>();
 

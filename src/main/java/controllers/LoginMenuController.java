@@ -1,13 +1,16 @@
 package controllers;
 
 import models.User;
+import utils.PasswordProblem;
 import utils.Validation;
 import view.enums.LoginMenuMessages;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Date;
 
 public class LoginMenuController {
+    public static ArrayList<PasswordProblem> passwordProblems;
     static int attempts = 0;
     static Date lastAttempt;
 
@@ -59,8 +62,10 @@ public class LoginMenuController {
 
     public static LoginMenuMessages setNewPassword(String username, String newPassword) {
         User myUser = UserController.findUserWithUsername(username);
-        if (Validation.validatePassword(newPassword).size() > 0)
+        if (Validation.validatePassword(newPassword).size() > 0) {
+            passwordProblems = Validation.validatePassword(newPassword);
             return LoginMenuMessages.NEW_PASSWORD_WEAK;
+        }
 
         myUser.setPassword(newPassword);
         return LoginMenuMessages.PASSWORD_IS_CHANGED;
