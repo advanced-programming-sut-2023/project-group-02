@@ -8,7 +8,8 @@ public enum LoginMenuMessages {
     WRONG_SECURITY_ANSWER("Your answer is wrong!"),
     ENTER_NEW_PASSWORD("Please enter a new password!"),
     NEW_PASSWORD_WEAK("Your new password is weak!"),
-    PASSWORD_IS_CHANGED("Your password is changed successfully!");
+    PASSWORD_IS_CHANGED("Your password is changed successfully!"),
+    TOO_MANY_REQUESTS("Too many requests! Please try again a few seconds later.");
 
     private final String message;
 
