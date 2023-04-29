@@ -46,7 +46,6 @@ public class SignUpMenuController {
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG;
         }
         if (!password.equals("random") && Validation.validatePassword(password).size() != 0) {
-            // TODO : return detailed errors on why password is weak
             passwordProblems = Validation.validatePassword(password);
             return SignUpMenuMessages.WEAK_PASSWORD;
         }
