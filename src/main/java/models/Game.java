@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class Game {
     private final ArrayList<User> players;
     private HashMap<User, Colors> playersColors;
+    private HashMap<User, Government> playersGovernments;
     private User currentPlayer;
     private int turnCounter;
     private final int numberOfTurns;
@@ -23,6 +24,18 @@ public class Game {
 
     public void givePlayersColors(ArrayList<User> players) {
 
+    }
+
+    public void givePlayersGovernments(ArrayList<User> players) {
+
+    }
+
+    public Government getCurrentPlayersGovernment() {
+        return playersGovernments.get(currentPlayer);
+    }
+
+    public Government getPlayersGovernment(User player) {
+        return playersGovernments.get(player);
     }
 
     public void addObject(MapObject object, int x, int y) {

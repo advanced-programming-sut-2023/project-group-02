@@ -1,6 +1,9 @@
 package view;
 
+import controllers.ShopMenuController;
+import models.Material;
 import utils.Parser;
+import view.enums.ShopMenuMessages;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -26,14 +29,16 @@ public class ShopMenu {
     }
 
     public static void showPriceList() {
-
+        System.out.println(ShopMenuController.showPrice());
     }
 
     public static void buyItem(Parser parser) {
-
+        ShopMenuMessages message = ShopMenuController.buyItem(parser.get("i"),Integer.parseInt(parser.get("a")));
+        System.out.println(message.getMessage());
     }
 
     public static void sellItem(Parser parser) {
-
+        ShopMenuMessages message = ShopMenuController.sellItem(parser.get("i"),Integer.parseInt(parser.get("a")));
+        System.out.println(message.getMessage());
     }
 }
