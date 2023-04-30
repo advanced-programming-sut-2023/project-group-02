@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import utils.Utils;
 
 public class User {
+    public final int id;
     private String username, passwordHash, nickname, email, slogan;
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
@@ -12,8 +13,9 @@ public class User {
     private ArrayList<Trade> usersAllTrades = new ArrayList<>();
     private ArrayList<Trade> usersNewTrades = new ArrayList<>();
 
-    public User(String username, String password, String nickname, String email, String slogan,
+    public User(int id, String username, String password, String nickname, String email, String slogan,
             SecurityQuestion securityQuestion, String securityAnswer) {
+        this.id = id;
         this.username = username;
         this.passwordHash = encrypt(password);
         this.nickname = nickname;

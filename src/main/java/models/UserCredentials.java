@@ -1,7 +1,7 @@
 package models;
 
-public record UserCredentials(String username, String password) {
+public record UserCredentials(int id, String password) {
     public static UserCredentials of(User user) {
-        return new UserCredentials(user.getUsername(), user.getPasswordHash());
+        return new UserCredentials(user.id, user.getPasswordHash());
     }
 }

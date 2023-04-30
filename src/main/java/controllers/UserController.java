@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.ArrayList;
 
+import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
+
 import controllers.database.Database;
 import models.User;
 import models.UserCredentials;
@@ -16,6 +18,14 @@ public class UserController {
 
     public static boolean isAuthorized() {
         return currentUser != null;
+    }
+
+    public static User findUserWithId(int id) {
+        for (User user : users) {
+            if (user.id == id)
+                return user;
+        }
+        return null;
     }
 
     public static User findUserWithUsername(String username) {
@@ -84,7 +94,7 @@ public class UserController {
     public static void loadCurrentUserFromFile() {
         UserCredentials credentials = Database.read("currentUser", UserCredentials.class);
         if (credentials != null) {
-            User user = findUserWithUsername(credentials.username());
+            User user = findUserWithId(credentials.id());
             if (user != null) {
                 if (user.getPasswordHash().equals(credentials.password())) {
                     currentUser = user;
@@ -107,7 +117,7 @@ public class UserController {
         user.setUsername(username);
         saveUsers();
         if (user == currentUser) {
-            saveCredentials();
+            deleteCredentials();
         }
     }
 
@@ -115,7 +125,7 @@ public class UserController {
         user.setPassword(password);
         saveUsers();
         if (user == currentUser) {
-            saveCredentials();
+            deleteCredentials();
         }
     }
 
@@ -137,5 +147,9 @@ public class UserController {
     public static void changeSlogan(User user, String slogan) {
         user.setSlogan(slogan);
         saveUsers();
+    }
+
+    public static int getNextId() {
+        return users.size() + 1;
     }
 }

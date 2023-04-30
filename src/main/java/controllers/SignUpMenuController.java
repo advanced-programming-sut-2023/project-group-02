@@ -14,8 +14,8 @@ public class SignUpMenuController {
     public static ArrayList<PasswordProblem> passwordProblems;
 
     public static ProfileMenuMessages register(String username, String password,
-                                               String nickname, String slogan, String email, SecurityQuestion question,
-                                               String securityAnswer) {
+            String nickname, String slogan, String email, SecurityQuestion question,
+            String securityAnswer) {
         return null;
     }
 
@@ -23,7 +23,7 @@ public class SignUpMenuController {
     private static String randomPassword;
 
     public static SignUpMenuMessages initiateSignup(String username, String password, String passwordConfirmation,
-                                                    String nickname, String email, String slogan) {
+            String nickname, String email, String slogan) {
         if (username == null || username.length() == 0) {
             return SignUpMenuMessages.EMPTY_USERNAME;
         }
@@ -55,12 +55,13 @@ public class SignUpMenuController {
         if (UserController.userWithEmailExists(email)) {
             return SignUpMenuMessages.EMAIL_EXISTS;
         }
+        int id = UserController.getNextId();
         if (password.equals("random")) {
             randomPassword = Randoms.getPassword();
-            toBeSignedIn = new User(username, randomPassword, nickname, email, slogan, null, slogan);
+            toBeSignedIn = new User(id, username, randomPassword, nickname, email, slogan, null, slogan);
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED;
         }
-        toBeSignedIn = new User(username, password, nickname, email, slogan, null, slogan);
+        toBeSignedIn = new User(id, username, password, nickname, email, slogan, null, slogan);
         return null;
     }
 
