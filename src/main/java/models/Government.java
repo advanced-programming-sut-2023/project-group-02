@@ -16,7 +16,7 @@ public class Government {
         this.map = map;
     }
 
-    public int getMaterial(Material material) {
+    public int getMaterialAmount(Material material) {
         //TODO go and get amount of golds from storage
         return 0;
     }
@@ -70,9 +70,5 @@ public class Government {
     }
     public void addToFoodStock(int foodType, int value) {
         this.foodStock[foodType] += value;
-    }
-
-    public int getMaterialAmount() {
-        return 0; //TODO counting materials from all storages
     }
 }

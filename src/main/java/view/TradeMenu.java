@@ -1,15 +1,15 @@
 package view;
 
+import controllers.TradeMenuController;
 import utils.Parser;
+import view.enums.TradeMenuMessages;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class TradeMenu {
     public static void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            Matcher matcher;
             if (parser.beginsWith("trade list")) {
                 showTradeList();
             } else if (parser.beginsWith("trade accept")) {
@@ -29,18 +29,21 @@ public class TradeMenu {
     }
 
     public static void tradeRequest(Parser parser) {
-
+        TradeMenuMessages message = TradeMenuController.tradeRequest(parser.get("t"), Integer.parseInt(parser.get("a")),
+            Integer.parseInt(parser.get("p")), parser.get("m"));
+        System.out.println(message.getMessage());
     }
 
     public static void showTradeList() {
-
+        System.out.println(TradeMenuController.showAllTrades());
     }
 
     public static void acceptTrade(Parser parser) {
-
+        TradeMenuMessages message = TradeMenuController.acceptTrade(Integer.parseInt(parser.get("i")), parser.get("m"));
+        System.out.println(message.getMessage());
     }
 
     public static void showTradeHistory() {
-
+        System.out.println(TradeMenuController.showTradeHistory());
     }
 }

@@ -2,42 +2,43 @@ package models;
 
 public class Trade {
     public static int nowId = 1;
-    private int id;
+    private final int id;
     private final Material resourceType;
     private final int amount;
     private final int price;
-    private final String message;
-    private User requester;
-    private User recipient;
+    private final String requesterMessage;
+    private String acceptorMessage;
+    private final User requester;
+    private User acceptor;
 
-    public Trade(User recipient, Material resourceType, int amount, int price, String message) {
-        this.recipient = recipient;
+    public Trade(User requester, Material resourceType, int amount, int price, String requesterMessage) {
+        this.requester = requester;
         this.resourceType = resourceType;
         this.amount = amount;
         this.price = price;
-        this.message = message;
+        this.requesterMessage = requesterMessage;
         this.id = nowId;
         nowId++;
     }
 
-    public void setRequester(User requester) {
-        this.requester = requester;
+    public void setAcceptor(User acceptor) {
+        this.acceptor = acceptor;
     }
 
     public User getRequester() {
         return requester;
     }
 
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
-    }
-
-    public User getRecipient() {
-        return recipient;
+    public User getAcceptor() {
+        return acceptor;
     }
 
     public Material getResourceType() {
         return resourceType;
+    }
+
+    public void setAcceptorMessage(String acceptorMessage) {
+        this.acceptorMessage = acceptorMessage;
     }
 
     public int getId() {
@@ -52,12 +53,19 @@ public class Trade {
         return price;
     }
 
-    public String getMessage() {
-        return message;
+    public boolean isAccepted() {
+        return acceptor != null;
     }
 
     @Override
     public String toString() {
-        return null;
+        String answer = id + ". Requester: " + requester.getUsername();
+        if (isAccepted()) answer += " Acceptor: " + acceptor.getUsername();
+        answer += "\nResourceType: " + resourceType.getMaterialName() +
+        " Amount: " + amount + " Price: " + price +
+        "\nRequester Message: " + requesterMessage +
+            "\nAcceptor Message: " + acceptorMessage;
+
+        return answer;
     }
 }
