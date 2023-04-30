@@ -102,4 +102,40 @@ public class UserController {
         }
         return rank;
     }
+
+    public static void changeUsername(User user, String username) {
+        user.setUsername(username);
+        saveUsers();
+        if (user == currentUser) {
+            saveCredentials();
+        }
+    }
+
+    public static void changePassword(User user, String password) {
+        user.setPassword(password);
+        saveUsers();
+        if (user == currentUser) {
+            saveCredentials();
+        }
+    }
+
+    public static void changeEmail(User user, String email) {
+        user.setEmail(email);
+        saveUsers();
+    }
+
+    public static void changeNickname(User user, String nickname) {
+        user.setNickname(nickname);
+        saveUsers();
+    }
+
+    public static void changeHighScore(User user, int highScore) {
+        user.setHighScore(highScore);
+        saveUsers();
+    }
+
+    public static void changeSlogan(User user, String slogan) {
+        user.setSlogan(slogan);
+        saveUsers();
+    }
 }

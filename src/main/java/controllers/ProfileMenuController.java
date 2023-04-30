@@ -1,13 +1,12 @@
 package controllers;
 
 import utils.Validation;
-import view.enums.LoginMenuMessages;
 import view.enums.ProfileMenuMessages;
 
 public class ProfileMenuController {
     public static ProfileMenuMessages changeUsername(String newUsername) {
         if (Validation.isValidUsername(newUsername)) {
-            UserController.getCurrentUser().setUsername(newUsername);
+            UserController.changeUsername(UserController.getCurrentUser(), newUsername);
             return ProfileMenuMessages.SUCCESSFUL;
         } else {
             return ProfileMenuMessages.INVALID_NEW_USERNAME;
@@ -16,7 +15,7 @@ public class ProfileMenuController {
 
     public static ProfileMenuMessages changeNickname(String newNickname) {
         if (newNickname != null && newNickname.length() > 0) {
-            UserController.getCurrentUser().setNickname(newNickname);
+            UserController.changeNickname(UserController.getCurrentUser(), newNickname);
             return ProfileMenuMessages.SUCCESSFUL;
         } else {
             return ProfileMenuMessages.EMPTY_FIELD;
@@ -34,13 +33,13 @@ public class ProfileMenuController {
             return ProfileMenuMessages.WEAK_NEW_PASSWORD;
         }
 
-        UserController.getCurrentUser().setPassword(newPassword);
+        UserController.changePassword(UserController.getCurrentUser(), newPassword);
         return ProfileMenuMessages.SUCCESSFUL;
     }
 
     public static ProfileMenuMessages changeSlogan(String newSlogan) {
         if (newSlogan != null && newSlogan.length() > 0) {
-            UserController.getCurrentUser().setSlogan(newSlogan);
+            UserController.changeSlogan(UserController.getCurrentUser(), newSlogan);
             return ProfileMenuMessages.SUCCESSFUL;
         } else {
             return ProfileMenuMessages.EMPTY_FIELD;
@@ -56,7 +55,7 @@ public class ProfileMenuController {
 
     public static ProfileMenuMessages changeEmail(String newEmail) {
         if (Validation.isValidEmail(newEmail)) {
-            UserController.getCurrentUser().setEmail(newEmail);
+            UserController.changeEmail(UserController.getCurrentUser(), newEmail);
             return ProfileMenuMessages.SUCCESSFUL;
         } else {
             return ProfileMenuMessages.INVALID_EMAIL;
