@@ -26,8 +26,8 @@ public class ShopMenuController {
         if (amount < 0)
             return ShopMenuMessages.INVALID_AMOUNT;
 
-        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,amount * material.getBuyPrice(),GameMenuController.getCurrentGame().getCurrentPlayer());
-        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(material,amount,GameMenuController.getCurrentGame().getCurrentPlayer());
+        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,amount * material.getBuyPrice());
+        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(material,amount);
         return ShopMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -40,8 +40,8 @@ public class ShopMenuController {
         if (amount < 0)
             return ShopMenuMessages.INVALID_AMOUNT;
 
-        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(Material.GOLD,amount * material.getSellPrice(),GameMenuController.currentGame.getCurrentPlayer());
-        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(material,amount,GameMenuController.getCurrentGame().getCurrentPlayer());
+        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(Material.GOLD,amount * material.getSellPrice());
+        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(material,amount);
         return ShopMenuMessages.DONE_SUCCESSFULLY;
     }
 }

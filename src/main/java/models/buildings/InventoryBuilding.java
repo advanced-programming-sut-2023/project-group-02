@@ -35,9 +35,25 @@ public class InventoryBuilding<T> extends Building {
         return items.get(item);
     }
 
-    public void addIncreaseItem(T item, int amount) {
-        for (int i = 0; i < amount; i++) {
-            add(item);
+    public int increaseItem(T item, int amount) {
+        int currentAmount = items.get(item);
+        if (currentAmount + amount > capacity) {
+            items.put(item,capacity);
+            return amount + currentAmount - capacity;
+        } else {
+            items.put(item,currentAmount + amount);
+            return 0;
+        }
+    }
+
+    public int decreaseItem(T item, int amount) {
+        int currentAmount = items.get(item);
+        if (amount > currentAmount) {
+            items.put(item,0);
+            return amount - currentAmount;
+        } else {
+            items.put(item,currentAmount - amount);
+            return 0;
         }
     }
 

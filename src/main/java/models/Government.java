@@ -19,9 +19,9 @@ public class Government {
         this.map = map;
     }
 
-    public int getMaterialAmount(Material material, User player) {
+    public int getMaterialAmount(Material material) {
         int amount = 0;
-        ArrayList<Building> buildings = map.getPlayersBuildings(player);
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
             InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
             if (inventoryBuilding != null) {
@@ -31,12 +31,28 @@ public class Government {
         return amount;
     }
 
-    public void reduceMaterial(Material material, int amount, User player) {
-        // TODO go and reduce golds in storage
+    public void reduceMaterial(Material material, int amount) {
+        int amountLeft = amount;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (amountLeft == 0) break;
+            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            if (inventoryBuilding != null) {
+                amountLeft = inventoryBuilding.decreaseItem(material,amountLeft);
+            }
+        }
     }
 
-    public void increaseMaterial(Material material, int amount, User player) {
-        // TODO go and increase golds int storage
+    public void increaseMaterial(Material material, int amount) {
+        int amountLeft = amount;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (amountLeft == 0) break;
+            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            if (inventoryBuilding != null) {
+                amountLeft = inventoryBuilding.increaseItem(material,amountLeft);
+            }
+        }
     }
 
     public int getPopularity() {
