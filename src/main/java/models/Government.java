@@ -1,5 +1,8 @@
 package models;
 
+import controllers.GameMenuController;
+import models.buildings.InventoryBuilding;
+
 import java.util.ArrayList;
 
 public class Government {
@@ -16,16 +19,21 @@ public class Government {
         this.map = map;
     }
 
-    public int getMaterialAmount(Material material) {
-        //TODO go and get amount of golds from storage
-        return 0;
+    public int getMaterialAmount(Material material, User player) {
+        int amount;
+        ArrayList<Building> buildings = map.getPlayersBuildings(player);
+        for (Building building : buildings) {
+            if (building instanceof InventoryBuilding<?>)
+                amount += ((InventoryBuilding<?>) building).getAmount(material); //TODO what must i do?
+        }
+        return amount;
     }
 
-    public void reduceMaterial(Material material, int amount) {
+    public void reduceMaterial(Material material, int amount, User player) {
         //TODO go and reduce golds in storage
     }
 
-    public void increaseMaterial(Material material, int amount) {
+    public void increaseMaterial(Material material, int amount, User player) {
         //TODO go and increase golds int storage
     }
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import models.Building;
 import models.BuildingType;
+import models.Material;
 import models.MaterialInstance;
 
 public class InventoryBuilding<T> extends Building {
@@ -33,5 +34,11 @@ public class InventoryBuilding<T> extends Building {
 
     public int getAmount(T item) {
         return items.get(item);
+    }
+
+    public void addIncreaseItem(T item, int amount) {
+        for (int i = 0; i < amount; i++) {
+            add(item);
+        }
     }
 }

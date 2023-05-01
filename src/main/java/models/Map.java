@@ -1,5 +1,6 @@
 package models;
 
+import models.buildings.InventoryBuilding;
 import models.units.Unit;
 import utils.Utils;
 
@@ -41,6 +42,28 @@ public class Map {
     public void addObject(MapObject object, int x, int y) {
         findCellWithXAndY(x, y).setObject(object);
         object.setCoordinates(x, y);
+    }
+
+    public ArrayList<Building> getInventoryBuildings() {
+        ArrayList<Building> inventoryBuildings = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (map[i][j].getBuilding() instanceof InventoryBuilding)
+                    inventoryBuildings.add(map[i][j].getBuilding());
+            }
+        }
+        return inventoryBuildings;
+    }
+
+    public ArrayList<Building> getPlayersBuildings(User player) {
+        ArrayList<Building> playersBuildings = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (map[i][j].getBuilding() != null && map[i][j].getBuilding().getOwner().equals(player))
+                    playersBuildings.add(map[i][j].getBuilding());
+            }
+        }
+        return playersBuildings;
     }
 
     public Cell[][] getMiniMap(int x, int y) {
