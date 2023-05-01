@@ -20,21 +20,23 @@ public class Government {
     }
 
     public int getMaterialAmount(Material material, User player) {
-        int amount;
+        int amount = 0;
         ArrayList<Building> buildings = map.getPlayersBuildings(player);
         for (Building building : buildings) {
-            if (building instanceof InventoryBuilding<?>)
-                amount += ((InventoryBuilding<?>) building).getAmount(material); //TODO what must i do?
+            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            if (inventoryBuilding != null) {
+                amount += inventoryBuilding.getAmount(material);
+            }
         }
         return amount;
     }
 
     public void reduceMaterial(Material material, int amount, User player) {
-        //TODO go and reduce golds in storage
+        // TODO go and reduce golds in storage
     }
 
     public void increaseMaterial(Material material, int amount, User player) {
-        //TODO go and increase golds int storage
+        // TODO go and increase golds int storage
     }
 
     public int getPopularity() {
@@ -76,6 +78,7 @@ public class Government {
     public int getPopulation() {
         return people.size();
     }
+
     public void addToFoodStock(int foodType, int value) {
         this.foodStock[foodType] += value;
     }
