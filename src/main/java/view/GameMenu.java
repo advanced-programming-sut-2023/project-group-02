@@ -69,6 +69,8 @@ public class GameMenu {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
                 TradeMenu.run(scanner);
+            } else if (parser.beginsWith("show map")) {
+                showMap(parser, scanner);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
