@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameMenuController {
-    public static Game currentGame;
+    private static Game currentGame;
 
     public static Game getCurrentGame() {
         return currentGame;
