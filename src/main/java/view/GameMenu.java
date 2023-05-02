@@ -71,8 +71,12 @@ public class GameMenu {
                 showPopularityFactors();
             } else if (parser.beginsWith("show popularity")) {
                 showPopularity();
+            } else if (parser.beginsWith("food rate show")) {
+                showFoodRate();
             } else if (parser.beginsWith("food rate")) {
                 setFoodRate(parser);
+            } else if (parser.beginsWith("tax rate show")) {
+                showTaxRate();
             } else if (parser.beginsWith("tax rate")) {
                 setTaxRate(parser);
             } else if (parser.beginsWith("fear rate")) {
@@ -140,11 +144,11 @@ public class GameMenu {
     }
 
     void showPopularityFactors() {
-        Government gov = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
-        System.out.println("Food rate: " + gov.getFoodRate());
+        showFoodRate();
         // TODO: food count
-        System.out.println("Fear rate: " + gov.getFearRate());
-        System.out.println("Tax rate: " + gov.getTaxRate());
+        System.out.println(
+                "Fear rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate());
+        showTaxRate();
     }
 
     void showPopularity() {
@@ -171,7 +175,8 @@ public class GameMenu {
     }
 
     void showFoodRate() {
-
+        System.out.println(
+                "Food rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
     }
 
     void setTaxRate(Parser parser) {
@@ -189,7 +194,8 @@ public class GameMenu {
     }
 
     void showTaxRate() {
-
+        System.out
+                .println("Tax rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
     }
 
     void setFearRate(Parser parser) {
