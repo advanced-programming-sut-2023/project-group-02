@@ -67,7 +67,7 @@ public class GameMenu {
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
-                TradeMenu.run(scanner);
+                new TradeMenu().run(scanner);
             } else if (parser.beginsWith("show popularity factors")) {
                 showPopularityFactors();
             } else if (parser.beginsWith("show popularity")) {
