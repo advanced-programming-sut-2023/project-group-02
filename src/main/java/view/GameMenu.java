@@ -3,6 +3,7 @@ package view;
 import controllers.GameMenuController;
 import controllers.MapMenuController;
 import models.Game;
+import models.Government;
 import models.Map;
 import utils.Parser;
 import utils.Utils;
@@ -69,6 +70,14 @@ public class GameMenu {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
                 TradeMenu.run(scanner);
+            } else if (parser.beginsWith("show popularity factors")) {
+                showPopularityFactors();
+            } else if (parser.beginsWith("show popularity")) {
+                showPopularity();
+            } else if (parser.beginsWith("food rate")) {
+                setFoodRate(parser);
+            } else if (parser.beginsWith("tax rate")) {
+                setTaxRate(parser);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -131,8 +140,17 @@ public class GameMenu {
         }
     }
 
-    void showPopularity() {
+    void showPopularityFactors() {
+        Government gov = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
+        System.out.println("Food rate: " + gov.getFoodRate());
+        // TODO: food count
+        System.out.println("Fear rate: " + gov.getFearRate());
+        System.out.println("Tax rate: " + gov.getTaxRate());
+    }
 
+    void showPopularity() {
+        System.out.println(
+                "Popularity: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity());
     }
 
     void showFoodList() {
@@ -140,7 +158,17 @@ public class GameMenu {
     }
 
     void setFoodRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFoodRate(rate)) {
+                System.out.println("Food rate changed");
+            } else {
+                System.out.println("Food rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void showFoodRate() {
@@ -148,7 +176,17 @@ public class GameMenu {
     }
 
     void setTaxRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setTaxRate(rate)) {
+                System.out.println("Tax rate changed");
+            } else {
+                System.out.println("Tax rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void showTaxRate() {
