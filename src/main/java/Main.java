@@ -32,4 +32,6 @@ public class Main {
  * samples
  * user create -u danial -p Danial01* Danial01* --email danielparnian@gmail.com -n Dani -s random
  * question pick -q 2 -a jack -c jack
+ * enter login menu
+ * user login -u danial -p Danial01*
  */

@@ -5,6 +5,7 @@ import controllers.MapMenuController;
 import models.Game;
 import models.Map;
 import utils.Parser;
+import utils.Utils;
 import view.enums.GameMenuMessages;
 import view.enums.MainMenuMessages;
 import view.enums.MapMenuMessages;
@@ -33,9 +34,9 @@ public class GameMenu {
     }
 
     public void runPreGameMenu(Scanner scanner) {
-        int numberOfTurns = setNumberOfTurns();
-        int mapWidth = setMapWidth();
-        int mapHeight = setMapHeight();
+        int numberOfTurns = setNumberOfTurns(scanner);
+        int mapWidth = setMapWidth(scanner);
+        int mapHeight = setMapHeight(scanner);
         GameMenuController.setCurrentGame(new Game(new ArrayList<>(), numberOfTurns, new Map(mapWidth, mapHeight)));
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
@@ -80,18 +81,40 @@ public class GameMenu {
     }
 
     private void loadGame() {
+
     }
 
-    private int setMapHeight() {
-        return 0; // TODO compelte this
+    private int setMapHeight(Scanner scanner) {
+        System.out.println("Enter the height of the map: ");
+        while (true) {
+            String input = scanner.nextLine();
+            if (!Utils.isInteger(input))
+                System.out.println("your input isn't an integer!");
+            else
+                return Integer.parseInt(input);
+        }
     }
 
-    private int setMapWidth() {
-        return 0; // TODO compelte this
+    private int setMapWidth(Scanner scanner) {
+        System.out.println("Enter the width of the map: ");
+        while (true) {
+            String input = scanner.nextLine();
+            if (!Utils.isInteger(input))
+                System.out.println("your input isn't an integer!");
+            else
+                return Integer.parseInt(input);
+        }
     }
 
-    private int setNumberOfTurns() {
-        return 0; // TODO compelte this
+    private int setNumberOfTurns(Scanner scanner) {
+        System.out.println("Enter the number of turns: ");
+        while (true) {
+            String input = scanner.nextLine();
+            if (!Utils.isInteger(input))
+                System.out.println("your input isn't an integer!");
+            else
+                return Integer.parseInt(input);
+        }
     }
 
     void showMap(Parser parser, Scanner scanner) {
