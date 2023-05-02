@@ -8,12 +8,9 @@ import models.Map;
 import utils.Parser;
 import utils.Utils;
 import view.enums.GameMenuMessages;
-import view.enums.MainMenuMessages;
-import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class GameMenu {
     public void run(Scanner scanner) {
