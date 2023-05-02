@@ -78,6 +78,8 @@ public class GameMenu {
                 setFoodRate(parser);
             } else if (parser.beginsWith("tax rate")) {
                 setTaxRate(parser);
+            } else if (parser.beginsWith("fear rate")) {
+                setFearRate(parser);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -194,7 +196,17 @@ public class GameMenu {
     }
 
     void setFearRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFearRate(rate)) {
+                System.out.println("Fear rate changed");
+            } else {
+                System.out.println("Fear rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void dropBuilding(Parser parser) {

@@ -9,14 +9,16 @@ public class Government {
     private Map map;
 
     private int popularity = 0;
-    private int foodRate = -2;
-    private int taxRate = 0;
-    private int fearRate = 0;
     private final int[] foodStock = new int[4];
+    private int foodRate = -2;
     private static final int MIN_FOOD_RATE = -2;
     private static final int MAX_FOOD_RATE = 2;
+    private int taxRate = 0;
     private static final int MIN_TAX_RATE = -3;
     private static final int MAX_TAX_RATE = 8;
+    private int fearRate = 0;
+    private static final int MIN_FEAR_RATE = -5;
+    private static final int MAX_FEAR_RATE = 5;
 
     private final ArrayList<People> people = new ArrayList<>();
 
@@ -100,8 +102,13 @@ public class Government {
         return fearRate;
     }
 
-    public void setFearRate(int fearRate) {
-        this.fearRate = fearRate;
+    public boolean setFearRate(int fearRate) {
+        if (fearRate >= MIN_FEAR_RATE && fearRate <= MAX_FEAR_RATE) {
+            this.fearRate = fearRate;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int[] getFoodStock() {
