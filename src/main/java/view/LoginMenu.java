@@ -19,16 +19,20 @@ public class LoginMenu {
 
     public void run(Scanner scanner) {
         while (true) {
-            Parser parser = new Parser(scanner.nextLine());
             if (state.equals(State.LOGIN_SUCCESSFUL)) {
-                state = State.WAITING;
                 new MainMenu().run(scanner);
-            } else if (state.equals(State.WAIT_FOR_CAPTCHA)) {
+                break;
+            }
+            Parser parser = new Parser(scanner.nextLine());
+            if (state.equals(State.WAIT_FOR_CAPTCHA)) {
                 captcha(parser);
             } else if (parser.beginsWith("user login")) {
                 login(parser);
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
+            } else if (parser.beginsWith("back")) {
+                System.out.println("You're back at the signin menu");
+                break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at LoginMenu");
             } else {
@@ -39,7 +43,7 @@ public class LoginMenu {
 
     void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-            parser.getFlag("stay-logged-in"));
+                parser.getFlag("stay-logged-in"));
 
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
             state = State.WAIT_FOR_CAPTCHA;
@@ -49,7 +53,6 @@ public class LoginMenu {
             System.out.println(message.getMessage());
         }
     }
-
 
     void captcha(Parser parser) {
         String userInput = parser.getByIndex(0);
