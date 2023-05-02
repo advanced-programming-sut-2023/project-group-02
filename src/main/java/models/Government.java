@@ -3,13 +3,14 @@ package models;
 import models.buildings.InventoryBuilding;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Government {
     private User user;
     private Map map;
 
     private int popularity = 0;
-    private final int[] foodStock = new int[4];
+    private HashSet<Food> foodStock = new HashSet<>(4);
     private int foodRate = -2;
     private static final int MIN_FOOD_RATE = -2;
     private static final int MAX_FOOD_RATE = 2;
@@ -111,7 +112,7 @@ public class Government {
         }
     }
 
-    public int[] getFoodStock() {
+    public HashSet<Food> getFoodStock() {
         return foodStock;
     }
 
@@ -119,7 +120,9 @@ public class Government {
         return people.size();
     }
 
-    public void addToFoodStock(int foodType, int value) {
-        this.foodStock[foodType] += value;
+    public void addToFoodStock(Food food) {
+        if (foodStock.size() < 4) {
+            foodStock.add(food);
+        }
     }
 }

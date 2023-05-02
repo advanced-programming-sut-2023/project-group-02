@@ -2,6 +2,7 @@ package view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
+import models.Food;
 import models.Game;
 import models.Government;
 import models.Map;
@@ -71,6 +72,8 @@ public class GameMenu {
                 showPopularityFactors();
             } else if (parser.beginsWith("show popularity")) {
                 showPopularity();
+            } else if (parser.beginsWith("show food list")) {
+                showFoodList();
             } else if (parser.beginsWith("food rate show")) {
                 showFoodRate();
             } else if (parser.beginsWith("food rate")) {
@@ -144,10 +147,11 @@ public class GameMenu {
     }
 
     void showPopularityFactors() {
+        Government gov = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
         showFoodRate();
-        // TODO: food count
+        System.out.println("Food type count: " + gov.getFoodStock().size());
         System.out.println(
-                "Fear rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate());
+                "Fear rate: " + gov.getFearRate());
         showTaxRate();
     }
 
@@ -157,7 +161,10 @@ public class GameMenu {
     }
 
     void showFoodList() {
-
+        System.out.println("Foods:");
+        for (Food food : GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodStock()) {
+            System.out.println(food.name()); // TODO: use a more human-friendly name
+        }
     }
 
     void setFoodRate(Parser parser) {
