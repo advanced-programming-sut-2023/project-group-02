@@ -19,6 +19,8 @@ public class MapMenu {
                 getDirections(parser);
             } else if (parser.beginsWith("show details")) {
                 showMapDetails(parser);
+            } else if (parser.beginsWith("back")) {
+                break;
             } else {
                 System.out.println("Invalid command!");
             }
