@@ -2,6 +2,7 @@ package view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
+import jdk.jshell.execution.Util;
 import models.Food;
 import models.Game;
 import models.Government;
@@ -11,6 +12,7 @@ import utils.Utils;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameMenu {
@@ -133,6 +135,10 @@ public class GameMenu {
     }
 
     void showMap(Parser parser, Scanner scanner) {
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
 
@@ -255,11 +261,21 @@ public class GameMenu {
     void setTexture(Parser parser) {
         GameMenuMessages message;
         if (parser.get("x1") != null) {
+            String[] strings = {parser.get("x1"),parser.get("x2"),parser.get("y1"),parser.get("y2")};
+            if (!Utils.areIntegers(strings)) {
+                System.out.println("Please import the numbers!");
+                return;
+            }
             message = GameMenuController.setTexture
                 (Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1"))
                     , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
                     , parser.get("t"));
         } else {
+            String[] strings = {parser.get("x"),parser.get("y")};
+            if (!Utils.areIntegers(strings)) {
+                System.out.println("Please import the numbers!");
+                return;
+            }
             message = GameMenuController.setTexture
                 (Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), parser.get("t"));
         }
@@ -280,6 +296,11 @@ public class GameMenu {
     }
 
     void dropRock(Parser parser) {
+        String[] strings = {parser.get("x"),parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
@@ -293,6 +314,11 @@ public class GameMenu {
     }
 
     void dropTree(Parser parser) {
+        String[] strings = {parser.get("x"),parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropTree(x, y, parser.get("t"));

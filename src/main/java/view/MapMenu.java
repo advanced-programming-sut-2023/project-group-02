@@ -4,6 +4,7 @@ import controllers.GameMenuController;
 import controllers.MapMenuController;
 import models.Map;
 import utils.Parser;
+import utils.Utils;
 import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
@@ -50,6 +51,11 @@ public class MapMenu {
     }
 
     void showMapDetails(Parser parser) {
+        String[] strings = {parser.get("x"), parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import number!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         MapMenuMessages message = MapMenuController.showDetails(x, y);

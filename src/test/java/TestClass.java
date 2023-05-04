@@ -1,8 +1,6 @@
 import org.junit.jupiter.api.*;
 
 import controllers.*;
-import models.*;
-import view.*;
 import utils.*;
 import view.enums.SignUpMenuMessages;
 
@@ -50,7 +48,7 @@ public class TestClass {
     @Test
     public void emailValidation3() {
         SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Ofs..s@gmail.co.m","hello");
-        Assertions.assertEquals(message,null);
+        Assertions.assertNull(message);
     }
 
     @Test

@@ -2,6 +2,7 @@ package view;
 
 import controllers.TradeMenuController;
 import utils.Parser;
+import utils.Utils;
 import view.enums.TradeMenuMessages;
 
 import java.util.Scanner;
@@ -29,6 +30,11 @@ public class TradeMenu {
     }
 
     void tradeRequest(Parser parser) {
+        String[] strings = {parser.get("t"), parser.get("a"), parser.get("p"),parser.get("m")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         TradeMenuMessages message = TradeMenuController.tradeRequest(parser.get("t"), Integer.parseInt(parser.get("a")),
             Integer.parseInt(parser.get("p")), parser.get("m"));
         System.out.println(message.getMessage());
@@ -39,6 +45,10 @@ public class TradeMenu {
     }
 
     void acceptTrade(Parser parser) {
+        if (!Utils.isInteger(parser.get("i"))) {
+            System.out.println("Please import number!");
+            return;
+        }
         TradeMenuMessages message = TradeMenuController.acceptTrade(Integer.parseInt(parser.get("i")), parser.get("m"));
         System.out.println(message.getMessage());
     }
