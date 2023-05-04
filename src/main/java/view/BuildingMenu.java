@@ -1,7 +1,9 @@
 package view;
 
+import controllers.BuildingMenuController;
 import models.Building;
 import utils.Parser;
+import view.enums.BuildingMenuMessages;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -36,6 +38,7 @@ public class BuildingMenu {
     }
 
     void repair() {
-
+        BuildingMenuMessages message = BuildingMenuController.repair(selectedBuilding);
+        System.out.println(message.getMessage());
     }
 }

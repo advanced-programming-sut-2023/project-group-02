@@ -153,7 +153,7 @@ public class BuildingFactory {
     }
 
     public static PlainBuilding pitchDitch() {
-        MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.TAR, 0.4) };
+        MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.TAR, 4) }; //TODO i changed 0.4 to 4 hossein!
         return new PlainBuilding("Pitch Ditch", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 1, 0);
     }
 
