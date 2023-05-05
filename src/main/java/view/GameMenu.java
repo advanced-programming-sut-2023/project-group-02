@@ -68,6 +68,8 @@ public class GameMenu {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("select building")) {
                 selectBuilding(parser, scanner);
+            } else if (parser.beginsWith("show map")) {
+                showMap(parser, scanner);
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
@@ -179,8 +181,7 @@ public class GameMenu {
             System.out.println("The numbers are invalid!");
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
             System.out.println(GameMenuController.getCurrentGame().getMap().printMiniMap(x, y));
-            MapMenuController.setCurrentXAndY(x, y);
-            new MapMenu().run(scanner);
+            new MapMenu(x, y).run(scanner);
         }
     }
 

@@ -11,7 +11,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapMenu {
+    MapMenuController mapMenuController;
     Map currentMap = GameMenuController.getCurrentGame().getMap();
+
+    public MapMenu(int currentX, int currentY) {
+        mapMenuController = new MapMenuController(currentX, currentY);
+    }
 
     public void run(Scanner scanner) {
         while (true) {
@@ -43,11 +48,11 @@ public class MapMenu {
     }
 
     void moveMap(ArrayList<String> directions) {
-        MapMenuMessages message = MapMenuController.moveMap(directions);
+        MapMenuMessages message = mapMenuController.moveMap(directions);
         if (message.equals(MapMenuMessages.INVALID_DIRECTION))
             System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.MAP_MOVED))
-            System.out.println(currentMap.printMiniMap(MapMenuController.getCurrentX(), MapMenuController.getCurrentY()));
+            System.out.println(currentMap.printMiniMap(mapMenuController.getCurrentX(), mapMenuController.getCurrentY()));
     }
 
     void showMapDetails(Parser parser) {
@@ -58,7 +63,7 @@ public class MapMenu {
         }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        MapMenuMessages message = MapMenuController.showDetails(x, y);
+        MapMenuMessages message = mapMenuController.showDetails(x, y);
         if (message.equals(MapMenuMessages.INVALID_DIRECTION))
             System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.PRINTED_SUCCESSFULLY))

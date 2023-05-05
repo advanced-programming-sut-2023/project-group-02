@@ -9,23 +9,28 @@ import view.enums.MapMenuMessages;
 import java.util.ArrayList;
 
 public class MapMenuController {
-    private static int currentX, currentY;
-    private static Map currentMap = GameMenuController.getCurrentGame().getMap();
+    private int currentX, currentY;
+    private Map currentMap;
 
-    public static int getCurrentX() {
+    public MapMenuController(int currentX, int currentY) {
+        this.currentX = currentX;
+        this.currentY = currentY;
+    }
+
+    public int getCurrentX() {
         return currentX;
     }
 
-    public static int getCurrentY() {
+    public int getCurrentY() {
         return currentY;
     }
 
-    public static void setCurrentXAndY(int currentX, int currentY) {
-        MapMenuController.currentX = currentX;
-        MapMenuController.currentY = currentY;
+    public void setCurrentXAndY(int currentX, int currentY) {
+        this.currentX = currentX;
+        this.currentY = currentY;
     }
 
-    public static MapMenuMessages moveMap(ArrayList<String> directions) {
+    public MapMenuMessages moveMap(ArrayList<String> directions) {
         boolean hasInvalidDirection = false;
         for (String direction : directions) {
             switch (direction) {
@@ -41,7 +46,7 @@ public class MapMenuController {
         return MapMenuMessages.MAP_MOVED;
     }
 
-    public static MapMenuMessages showDetails(int x, int y) {
+    public MapMenuMessages showDetails(int x, int y) {
         if (!Validation.areCoordinatesValid(x, y))
             return MapMenuMessages.INVALID_PLACE;
 
