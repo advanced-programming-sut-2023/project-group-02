@@ -106,6 +106,15 @@ public class User {
                 "HighScore: " + highScore + "\n";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            User otherUser = (User) obj;
+            return this.id == otherUser.id;
+        }
+        return false;
+    }
+
     private static String encrypt(String password) {
         return Utils.encryptUsingSHA256(password);
     }
