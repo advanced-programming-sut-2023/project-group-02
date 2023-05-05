@@ -70,5 +70,4 @@ public class LoginMenuController {
         myUser.setPassword(newPassword);
         return LoginMenuMessages.PASSWORD_IS_CHANGED;
     }
-
 }

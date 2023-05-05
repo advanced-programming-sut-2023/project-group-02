@@ -7,7 +7,7 @@ import view.enums.SignUpMenuMessages;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestClass {
+public class SignUpTest {
     @Test
     public void testRandomPasswordValidation() {
         for (int i = 0; i < 100; i++) {
