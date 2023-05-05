@@ -2,17 +2,18 @@ package view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
+import jdk.jshell.execution.Util;
+import models.Food;
 import models.Game;
+import models.Government;
 import models.Map;
 import utils.Parser;
 import utils.Utils;
 import view.enums.GameMenuMessages;
-import view.enums.MainMenuMessages;
-import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class GameMenu {
     public void run(Scanner scanner) {
@@ -68,9 +69,23 @@ public class GameMenu {
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
-                TradeMenu.run(scanner);
-            } else if (parser.beginsWith("show map")) {
-                showMap(parser, scanner);
+                new TradeMenu().run(scanner);
+            } else if (parser.beginsWith("show popularity factors")) {
+                showPopularityFactors();
+            } else if (parser.beginsWith("show popularity")) {
+                showPopularity();
+            } else if (parser.beginsWith("show food list")) {
+                showFoodList();
+            } else if (parser.beginsWith("food rate show")) {
+                showFoodRate();
+            } else if (parser.beginsWith("food rate")) {
+                setFoodRate(parser);
+            } else if (parser.beginsWith("tax rate show")) {
+                showTaxRate();
+            } else if (parser.beginsWith("tax rate")) {
+                setTaxRate(parser);
+            } else if (parser.beginsWith("fear rate")) {
+                setFearRate(parser);
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -120,6 +135,10 @@ public class GameMenu {
     }
 
     void showMap(Parser parser, Scanner scanner) {
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
 
@@ -133,32 +152,77 @@ public class GameMenu {
         }
     }
 
-    void showPopularity() {
+    void showPopularityFactors() {
+        Government gov = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
+        showFoodRate();
+        System.out.println("Food type count: " + gov.getFoodStock().size());
+        System.out.println(
+                "Fear rate: " + gov.getFearRate());
+        showTaxRate();
+    }
 
+    void showPopularity() {
+        System.out.println(
+                "Popularity: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity());
     }
 
     void showFoodList() {
-
+        System.out.println("Foods:");
+        for (Food food : GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodStock()) {
+            System.out.println(food.name()); // TODO: use a more human-friendly name
+        }
     }
 
     void setFoodRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFoodRate(rate)) {
+                System.out.println("Food rate changed");
+            } else {
+                System.out.println("Food rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void showFoodRate() {
-
+        System.out.println(
+                "Food rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
     }
 
     void setTaxRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setTaxRate(rate)) {
+                System.out.println("Tax rate changed");
+            } else {
+                System.out.println("Tax rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void showTaxRate() {
-
+        System.out
+                .println("Tax rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
     }
 
     void setFearRate(Parser parser) {
-
+        String r = parser.get("r");
+        if (Utils.isInteger(r)) {
+            int rate = Integer.parseInt(r);
+            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFearRate(rate)) {
+                System.out.println("Fear rate changed");
+            } else {
+                System.out.println("Fear rate out of bounds");
+            }
+        } else {
+            System.out.println("Invalid number!");
+        }
     }
 
     void dropBuilding(Parser parser) {
@@ -197,11 +261,21 @@ public class GameMenu {
     void setTexture(Parser parser) {
         GameMenuMessages message;
         if (parser.get("x1") != null) {
+            String[] strings = {parser.get("x1"),parser.get("x2"),parser.get("y1"),parser.get("y2")};
+            if (!Utils.areIntegers(strings)) {
+                System.out.println("Please import the numbers!");
+                return;
+            }
             message = GameMenuController.setTexture
                 (Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1"))
                     , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
                     , parser.get("t"));
         } else {
+            String[] strings = {parser.get("x"),parser.get("y")};
+            if (!Utils.areIntegers(strings)) {
+                System.out.println("Please import the numbers!");
+                return;
+            }
             message = GameMenuController.setTexture
                 (Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), parser.get("t"));
         }
@@ -222,6 +296,11 @@ public class GameMenu {
     }
 
     void dropRock(Parser parser) {
+        String[] strings = {parser.get("x"),parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
@@ -235,6 +314,11 @@ public class GameMenu {
     }
 
     void dropTree(Parser parser) {
+        String[] strings = {parser.get("x"),parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropTree(x, y, parser.get("t"));

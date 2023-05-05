@@ -3,6 +3,7 @@ package utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class Utils {
     public static int keepNumbersLimited(int number, int min, int max) {
@@ -38,6 +39,14 @@ public class Utils {
             return false;
         } catch (NullPointerException e) {
             return false;
+        }
+        return true;
+    }
+
+    public static boolean areIntegers(String[] strings) {
+        for (String string : strings) {
+            if (!isInteger(string))
+                return false;
         }
         return true;
     }

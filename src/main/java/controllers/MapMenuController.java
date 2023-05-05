@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class MapMenuController {
     private static int currentX, currentY;
-    private static Map currentMap = GameMenuController.currentGame.getMap();
+    private static Map currentMap = GameMenuController.getCurrentGame().getMap();
 
     public static int getCurrentX() {
         return currentX;
@@ -36,12 +36,13 @@ public class MapMenuController {
                 default -> hasInvalidDirection = true;
             }
         }
-        if (hasInvalidDirection) return MapMenuMessages.INVALID_DIRECTION;
+        if (hasInvalidDirection)
+            return MapMenuMessages.INVALID_DIRECTION;
         return MapMenuMessages.MAP_MOVED;
     }
 
     public static MapMenuMessages showDetails(int x, int y) {
-        if (!Validation.areCoordinatesValid(x,y))
+        if (!Validation.areCoordinatesValid(x, y))
             return MapMenuMessages.INVALID_PLACE;
 
         return MapMenuMessages.PRINTED_SUCCESSFULLY;

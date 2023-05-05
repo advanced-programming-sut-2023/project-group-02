@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopMenuController {
-    private static final ArrayList<Material> materialsToBuy = new ArrayList<>(List.of(Material.IRON,Material.WOOD,Material.STONE));
+    private static final ArrayList<Material> materialsToBuy = new ArrayList<>(
+            List.of(Material.IRON, Material.WOOD, Material.STONE));
 
     public static String showPrice() {
         String answer = "";
         for (Material material : materialsToBuy) {
-            answer += material.getMaterialName() + " Buy: " + material.getBuyPrice() + " Sell: " + material.getSellPrice() + "\n";
+            answer += material.getMaterialName() + " Buy: " + material.getBuyPrice() + " Sell: "
+                    + material.getSellPrice() + "\n";
         }
         return answer.trim();
     }
@@ -26,8 +28,9 @@ public class ShopMenuController {
         if (amount < 0)
             return ShopMenuMessages.INVALID_AMOUNT;
 
-        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,amount * material.getBuyPrice());
-        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(material,amount);
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,
+                amount * material.getBuyPrice());
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseMaterial(material, amount);
         return ShopMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -40,8 +43,9 @@ public class ShopMenuController {
         if (amount < 0)
             return ShopMenuMessages.INVALID_AMOUNT;
 
-        GameMenuController.currentGame.getCurrentPlayersGovernment().increaseMaterial(Material.GOLD,amount * material.getSellPrice());
-        GameMenuController.currentGame.getCurrentPlayersGovernment().reduceMaterial(material,amount);
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseMaterial(Material.GOLD,
+                amount * material.getSellPrice());
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(material, amount);
         return ShopMenuMessages.DONE_SUCCESSFULLY;
     }
 }

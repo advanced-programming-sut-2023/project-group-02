@@ -6,6 +6,7 @@ public abstract class Building extends MapObject {
     protected String name;
     protected BuildingType type;
     protected MaterialInstance[] buildingMaterials;
+    protected final int initialHitpoint;
     protected int hitpoint;
     protected int workerCount = 0;
     protected int effectOnPopularity = 0;
@@ -16,6 +17,7 @@ public abstract class Building extends MapObject {
         this.name = name;
         this.type = type;
         this.buildingMaterials = buildingMaterials;
+        this.initialHitpoint = initialHitpoint;
         this.hitpoint = initialHitpoint;
         this.workerCount = workerCount;
         this.effectOnPopularity = effectOnPopularity;
@@ -37,6 +39,10 @@ public abstract class Building extends MapObject {
         return hitpoint;
     }
 
+    public int getInitialHitpoint() {
+        return initialHitpoint;
+    }
+
     public int getWorkerCount() {
         return workerCount;
     }
@@ -47,5 +53,9 @@ public abstract class Building extends MapObject {
 
     public void decreaseHitpoint(int value) {
         hitpoint -= value;
+    }
+
+    public void setHitpoint(int hitpoint) {
+        this.hitpoint = hitpoint;
     }
 }

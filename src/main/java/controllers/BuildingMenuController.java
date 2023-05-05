@@ -1,5 +1,7 @@
 package controllers;
 
+import models.Building;
+import models.MaterialInstance;
 import view.enums.BuildingMenuMessages;
 
 public class BuildingMenuController {
@@ -8,7 +10,33 @@ public class BuildingMenuController {
         return null;
     }
 
-    public static BuildingMenuMessages repair() {
-        return null;
+    public static BuildingMenuMessages repair(Building building) {
+        if (building.getHitpoint() == building.getInitialHitpoint()) {
+            return BuildingMenuMessages.HP_IS_FULL;
+        }
+        MaterialInstance[] neededMaterials = neededMaterial(building);
+        for (MaterialInstance material : neededMaterials) {
+            if (material.amount > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getMaterialAmount(material.material)) {
+                return BuildingMenuMessages.NOT_ENOUGH_MATERIAL;
+            }
+        }
+        for (MaterialInstance material : neededMaterials) {
+            GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(material.material, material.amount);
+        }
+        building.setHitpoint(building.getInitialHitpoint());
+        return BuildingMenuMessages.DONE_SUCCESSFULLY;
     }
+
+    public static MaterialInstance[] neededMaterial(Building building) {
+        int hitpoint = building.getHitpoint();
+        int initialHitpoint = building.getInitialHitpoint();
+        MaterialInstance[] usedMaterials = building.getBuildingMaterials();
+        MaterialInstance[] neededMaterials = new MaterialInstance[usedMaterials.length];
+        for (int i = 0; i < usedMaterials.length ; i++) {
+            neededMaterials[i] = new MaterialInstance(usedMaterials[i].material , (int) ((initialHitpoint - hitpoint) / initialHitpoint) * usedMaterials[i].amount);
+        }
+        return neededMaterials;
+    }
+
+
 }
