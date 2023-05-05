@@ -1,8 +1,5 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum TreeType {
     DESERT_SHRUB("desert shrub"),
     CHERRY_PALM("cherry palm"),
@@ -20,12 +17,8 @@ public enum TreeType {
         return treeName;
     }
 
-    private final static ArrayList<TreeType> allTrees = new ArrayList<>(
-        List.of(DESERT_SHRUB,CHERRY_PALM,COCONUT_PALM,OLIVE_TREE,DATES_PALM)
-    );
-
     public static TreeType getTreeTypeWithName(String name) {
-        for (TreeType tree : allTrees) {
+        for (TreeType tree : values()) {
             if (name.equals(tree.treeName))
                 return tree;
         }
