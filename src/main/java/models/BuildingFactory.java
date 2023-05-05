@@ -1,5 +1,7 @@
 package models;
 
+import java.lang.reflect.Method;
+
 import models.buildings.DamagingBuilding;
 import models.buildings.DefensiveBuilding;
 import models.buildings.InventoryBuilding;
@@ -7,6 +9,7 @@ import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
 import models.buildings.ProductionBuilding;
 import models.buildings.RatedBuilding;
+import utils.Utils;
 
 public class BuildingFactory {
     public static PlainBuilding smallStoneGate() {
@@ -234,5 +237,24 @@ public class BuildingFactory {
     public static PlainBuilding cathedral() {
         MaterialInstance[] buildingMaterials = { new MaterialInstance(Material.GOLD, 1000) };
         return new PlainBuilding("Cathedral", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 2);
+    }
+
+    /**
+     * @param name name of the building (case-insensitive)
+     * @return a building with the given name, or `null` if not found
+     */
+    public static Building makeBuilding(String name) {
+        name = Utils.toCamelCase(name);
+        Method[] methods = BuildingFactory.class.getMethods();
+        for (Method method : methods) {
+            if (method.getName().equals(name)) {
+                try {
+                    return (Building) method.invoke(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

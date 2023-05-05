@@ -61,4 +61,16 @@ public class Utils {
             System.out.println("Your input isn't a positive number! Please try again: ");
         }
     }
+
+    public static String toCamelCase(String string) {
+        String[] words = string.split("\\s+");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            String firstLetter = word.substring(0, 1);
+            result.append(i == 0 ? firstLetter.toLowerCase() : firstLetter.toUpperCase());
+            result.append(word.substring(1).toLowerCase());
+        }
+        return result.toString();
+    }
 }
