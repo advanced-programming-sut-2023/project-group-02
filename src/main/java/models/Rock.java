@@ -5,8 +5,7 @@ public class Rock extends MapObject {
 
     public Rock(Directions direction) {
         this.direction = direction;
-        // TODO changing the texture of the cell using a function which finds the cell
-        // with x and y
+        this.name = "rock";
     }
 
     public Directions getDirection() {
