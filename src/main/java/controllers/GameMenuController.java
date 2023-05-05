@@ -10,8 +10,23 @@ import view.enums.GameMenuMessages;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import controllers.database.Database;
+
 public class GameMenuController {
     private static Game currentGame;
+
+    public static void saveGame() {
+        Database.write("game", currentGame, Game.class);
+    }
+
+    public static boolean loadGame() {
+        Game savedGame = Database.read("game", Game.class);
+        if (savedGame == null) {
+            return false;
+        }
+        currentGame = savedGame;
+        return true;
+    }
 
     public static Game getCurrentGame() {
         return currentGame;
@@ -19,10 +34,11 @@ public class GameMenuController {
 
     public static void setCurrentGame(Game currentGame) {
         GameMenuController.currentGame = currentGame;
+        saveGame();
     }
 
     public static void addPlayerToGame(User player, Colors color) {
-        currentGame.addGovernment(player, new Government(player, color));
+        currentGame.addGovernment(new Government(player, color));
     }
 
     public static GameMenuMessages showMap(int x, int y) {
