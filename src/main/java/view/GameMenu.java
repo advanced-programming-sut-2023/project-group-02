@@ -64,6 +64,7 @@ public class GameMenu {
 
     public void runGameMenu(Scanner scanner) {
         initGovernments(scanner);
+        GameMenuController.saveGame();
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("select building")) {
@@ -90,6 +91,9 @@ public class GameMenu {
                 setTaxRate(parser);
             } else if (parser.beginsWith("fear rate")) {
                 setFearRate(parser);
+            } else if (parser.beginsWith("save")) {
+                GameMenuController.saveGame();
+                System.out.println("Game saved successfully!");
             } else if (parser.beginsWith("exit")) {
                 break;
             } else if (parser.beginsWith("show current menu")) {
