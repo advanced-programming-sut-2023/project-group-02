@@ -22,7 +22,7 @@ public class GameMenuController {
     }
 
     public static void addPlayerToGame(User player, Colors color) {
-        currentGame.addGovernment(player, new Government(player, color));
+        currentGame.addGovernment(new Government(player, color));
     }
 
     public static GameMenuMessages showMap(int x, int y) {

@@ -8,7 +8,6 @@ import java.util.HashMap;
 public class Game {
     private final ArrayList<Government> governments;
     private HashMap<User, Colors> playersColors;
-    private HashMap<User, Government> playersGovernments;
     private User currentPlayer;
     private int turnCounter = 0;
     private final int numberOfTurns;
@@ -19,7 +18,6 @@ public class Game {
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
-        this.playersGovernments = new HashMap<>();
     }
 
     public void givePlayersColors(ArrayList<User> players) {
@@ -30,17 +28,21 @@ public class Game {
 
     }
 
-    public void addGovernment(User player, Government government) {
+    public void addGovernment(Government government) {
         governments.add(government);
-        playersGovernments.put(player, government);
-    }
-
-    public Government getCurrentPlayersGovernment() {
-        return playersGovernments.get(currentPlayer);
     }
 
     public Government getPlayersGovernment(User player) {
-        return playersGovernments.get(player);
+        for (Government government : governments) {
+            if (government.getUser().equals(player)) {
+                return government;
+            }
+        }
+        return null;
+    }
+
+    public Government getCurrentPlayersGovernment() {
+        return getPlayersGovernment(currentPlayer);
     }
 
     public void addObject(MapObject object, int x, int y) {
