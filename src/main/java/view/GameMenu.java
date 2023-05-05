@@ -93,7 +93,7 @@ public class GameMenu {
             } else if (parser.beginsWith("exit")) {
                 break;
             } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GamaMenu");
+                System.out.println("You are at GameMenu");
             } else {
                 System.out.println("Invalid command!");
             }

@@ -7,18 +7,23 @@ import utils.Utils;
 import java.util.ArrayList;
 
 public class Map {
-    public final int width;
-    public final int height;
+    private final int width;
+    private final int height;
     private final Cell[][] map;
 
     public Map(int width, int height) {
         this.width = width;
         this.height = height;
         this.map = new Cell[height][width];
+        for (int i = 0; i < height ; i++) {
+            for (int j = 0; j < width ; j++) {
+                map[i][j] = new Cell(Texture.EARTH);
+            }
+        }
     }
 
     public Cell findCellWithXAndY(int x, int y) {
-        return map[y][x]; // TODO thinking about changing x and y
+        return map[y][x];
     }
 
     public ArrayList<Cell> findMoreThanOneCell(int x1, int y1, int x2, int y2) {
@@ -92,5 +97,13 @@ public class Map {
             }
         }
         return answer;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

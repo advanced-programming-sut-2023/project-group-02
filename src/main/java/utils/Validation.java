@@ -61,7 +61,7 @@ public class Validation {
     }
 
     public static boolean areCoordinatesValid(int x, int y) {
-        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().width || y > GameMenuController.getCurrentGame().getMap().height)
+        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().getWidth() || y > GameMenuController.getCurrentGame().getMap().getHeight())
             return false;
         return true;
     }
@@ -71,7 +71,7 @@ public class Validation {
             return false;
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().width || y > GameMenuController.getCurrentGame().getMap().height)
+        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().getWidth() || y > GameMenuController.getCurrentGame().getMap().getHeight())
             return false;
         return true;
     }

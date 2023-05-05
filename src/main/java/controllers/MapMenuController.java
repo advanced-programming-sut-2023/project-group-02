@@ -31,18 +31,19 @@ public class MapMenuController {
     }
 
     public MapMenuMessages moveMap(ArrayList<String> directions) {
-        boolean hasInvalidDirection = false;
+        for (String direction : directions) {
+            if (!direction.matches("up|down|left|right]")) {
+                return MapMenuMessages.INVALID_DIRECTION;
+            }
+        }
         for (String direction : directions) {
             switch (direction) {
                 case "up" -> currentY--;
                 case "down" -> currentY++;
                 case "left" -> currentX--;
                 case "right" -> currentX++;
-                default -> hasInvalidDirection = true;
             }
         }
-        if (hasInvalidDirection)
-            return MapMenuMessages.INVALID_DIRECTION;
         return MapMenuMessages.MAP_MOVED;
     }
 

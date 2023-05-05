@@ -82,7 +82,7 @@ public class GameMenuController {
         Cell cell;
         Texture texture;
 
-        if (Validation.areCoordinatesValid(x, y))
+        if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
         if ((texture = Texture.findTextureWithName(textureType)) == null)
             return GameMenuMessages.INVALID_TEXTURE;
@@ -119,7 +119,7 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_PLACE;
         if (!direction.matches("north|south|east|west|random"))
             return GameMenuMessages.INVALID_DIRECTION;
-        if (!GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
+        if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop rock
@@ -132,7 +132,7 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_PLACE;
         if (!treeName.matches("desert shrub|cherry palm|olive tree|cocunut palm|dates palm"))
             return GameMenuMessages.INVALID_TREE_NAME;
-        if (!GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
+        if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop tree
