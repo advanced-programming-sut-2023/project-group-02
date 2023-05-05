@@ -19,6 +19,7 @@ public class Game {
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
+        this.playersGovernments = new HashMap<>();
     }
 
     public void givePlayersColors(ArrayList<User> players) {

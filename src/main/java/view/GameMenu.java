@@ -37,6 +37,7 @@ public class GameMenu {
         int mapWidth = setMapWidth(scanner);
         int mapHeight = setMapHeight(scanner);
         GameMenuController.setCurrentGame(new Game(new ArrayList<>(), numberOfTurns, new Map(mapWidth, mapHeight)));
+        System.out.println("Now you can initialize map. type next to continue.");
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("droprock")) {
@@ -49,6 +50,9 @@ public class GameMenu {
                 clearBlock(parser);
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to the main menu!");
+                break;
+            } else if (parser.beginsWith("next")) {
+                runGameMenu(scanner);
                 break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GameMenu");
@@ -84,6 +88,8 @@ public class GameMenu {
                 setTaxRate(parser);
             } else if (parser.beginsWith("fear rate")) {
                 setFearRate(parser);
+            } else if (parser.beginsWith("exit")) {
+                break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GamaMenu");
             } else {
@@ -93,7 +99,7 @@ public class GameMenu {
     }
 
     private void initGovernments(Scanner scanner) {
-        System.out.println("Enter the number of governments: ");
+        System.out.print("Enter the number of governments: ");
         int numberOfGovernments;
         while (true) {
             numberOfGovernments = Utils.getValidInt(scanner);
@@ -103,7 +109,7 @@ public class GameMenu {
         }
         for (int i = 0; i < numberOfGovernments; i++) {
             while (true) {
-                System.out.println("Enter the username of player you want to add: ");
+                System.out.print("Enter the username of player you want to add: ");
                 String username = scanner.nextLine().trim();
                 if (!UserController.userWithUsernameExists(username))
                     System.out.println("user with this username doesn't exist!");
@@ -115,6 +121,7 @@ public class GameMenu {
                     Colors color = pickColor(colors, scanner);
                     deploySmallStoneGate(player);
                     GameMenuController.addPlayerToGame(player, color);
+                    break;
                 }
             }
         }
