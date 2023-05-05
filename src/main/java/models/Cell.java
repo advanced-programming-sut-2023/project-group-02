@@ -3,6 +3,7 @@ package models;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Cell {
     private Texture texture;
@@ -35,6 +36,17 @@ public class Cell {
         for (Cell cell : cells) {
             cell.setTexture(texture);
         }
+    }
+
+    public static Texture blocksTexture(ArrayList<Cell> cells) {
+        ArrayList<Texture> textures = new ArrayList<>();
+        for (Cell cell : cells) {
+            if (!textures.contains(cell.getTexture()))
+                textures.add(cell.getTexture());
+        }
+        if (textures.size() == 1)
+            return textures.get(0);
+        return null;
     }
 
     public Building getBuilding() {

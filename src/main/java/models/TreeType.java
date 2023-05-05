@@ -1,18 +1,34 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TreeType {
-    DESERT_SHRUB,
-    CHERRY_PALM,
-    OLIVE_TREE,
-    COCONUT_PALM,
-    DATES_PALM;
+    DESERT_SHRUB("desert shrub"),
+    CHERRY_PALM("cherry palm"),
+    OLIVE_TREE("olive tree"),
+    COCONUT_PALM("coconut palm"),
+    DATES_PALM("dates palm");
+
+    private final String treeName;
+
+    TreeType(String treeName) {
+        this.treeName = treeName;
+    }
+
+    public String getTreeName() {
+        return treeName;
+    }
+
+    private final static ArrayList<TreeType> allTrees = new ArrayList<>(
+        List.of(DESERT_SHRUB,CHERRY_PALM,COCONUT_PALM,OLIVE_TREE,DATES_PALM)
+    );
 
     public static TreeType getTreeTypeWithName(String name) {
-        if (name.equals("desert shrub")) return DESERT_SHRUB;
-        if (name.equals("cherry palm")) return CHERRY_PALM;
-        if (name.equals("olive tree")) return OLIVE_TREE;
-        if (name.equals("coconut palm")) return COCONUT_PALM;
-        if (name.equals("dates palm")) return DATES_PALM;
+        for (TreeType tree : allTrees) {
+            if (name.equals(tree.treeName))
+                return tree;
+        }
         return null;
     }
 }

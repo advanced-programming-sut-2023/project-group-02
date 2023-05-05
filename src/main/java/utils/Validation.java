@@ -66,16 +66,6 @@ public class Validation {
         return true;
     }
 
-    public static boolean areCoordinatesValid(Parser parser) {
-        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y")))
-            return false;
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-        if (x < 0 || y < 0 || x > GameMenuController.getCurrentGame().getMap().getWidth() || y > GameMenuController.getCurrentGame().getMap().getHeight())
-            return false;
-        return true;
-    }
-
     public static boolean areCoordinatesValid(int x1, int y1, int x2, int y2) {
         if (!areCoordinatesValid(x1, y1) || !areCoordinatesValid(x2, y2))
             return false;

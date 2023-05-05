@@ -12,7 +12,7 @@ public enum Texture {
 
     private final String name;
 
-    private static Texture[] allTextures = {EARTH,EARTH_WITH_GRAVEL,SLATE,ROCK,IRON,GRASS,MEADOW,DENSE_MEADOW};
+    private final static Texture[] allTextures = {EARTH,EARTH_WITH_GRAVEL,SLATE,ROCK,IRON,GRASS,MEADOW,DENSE_MEADOW};
 
     Texture(String name) {
         this.name = name;

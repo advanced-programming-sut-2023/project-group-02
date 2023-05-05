@@ -4,7 +4,6 @@ import models.*;
 import models.units.Unit;
 import utils.Validation;
 import view.BuildingMenu;
-import view.MapMenu;
 import view.UnitMenu;
 import view.enums.GameMenuMessages;
 
@@ -88,6 +87,8 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_TEXTURE;
         if ((cell = currentGame.getMap().findCellWithXAndY(x, y)).isOccupied())
             return GameMenuMessages.FULL_CELL;
+        if (cell.getTexture().equals(texture))
+            return GameMenuMessages.SAME_CELL;
 
         cell.setTexture(texture);
         return GameMenuMessages.DONE_SUCCESSFULLY;
@@ -99,8 +100,9 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_PLACE;
         if ((texture = Texture.findTextureWithName(textureType)) == null)
             return GameMenuMessages.INVALID_TEXTURE;
-
         ArrayList<Cell> allCells = currentGame.getMap().findMoreThanOneCell(x1, y1, x2, y2);
+        if (Cell.blocksTexture(allCells) != null && texture.equals(Cell.blocksTexture(allCells)))
+            return GameMenuMessages.SAME_BLOCK;
         if (Cell.isABlockOccupied(allCells)) return GameMenuMessages.FULL_CELL;
         Cell.setBlocksTexture(allCells, texture);
         return GameMenuMessages.DONE_SUCCESSFULLY;
@@ -109,7 +111,6 @@ public class GameMenuController {
     public static GameMenuMessages clearBlock(int x, int y) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-
         currentGame.getMap().findCellWithXAndY(x, y).clear();
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
@@ -130,13 +131,12 @@ public class GameMenuController {
     public static GameMenuMessages dropTree(int x, int y, String treeName) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-        if (!treeName.matches("desert shrub|cherry palm|olive tree|cocunut palm|dates palm"))
+        if (TreeType.getTreeTypeWithName(treeName) == null)
             return GameMenuMessages.INVALID_TREE_NAME;
         if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop tree
-
         currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }

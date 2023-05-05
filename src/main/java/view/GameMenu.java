@@ -266,13 +266,7 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.selectBuilding(x, y, scanner);
-
-        switch (message) {
-            case INVALID_PLACE -> System.out.println("The numbers are invalid!");
-            case NO_BUILDINGS -> System.out.println("There is no buildings in this place!");
-            case NOT_YOURS -> System.out.println("The building in this place doesn't belong to you!");
-            case DONE_SUCCESSFULLY -> System.out.println("Out of building menu!"); // TODO this may make bugs
-        }
+        System.out.println(message.getMessage());
     }
 
     void dropUnit(Parser parser) {
@@ -283,12 +277,7 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.selectUnit(x, y, scanner);
-
-        switch (message) {
-            case INVALID_PLACE -> System.out.println("The numbers are invalid!");
-            case NO_UNITS -> System.out.println("There is no units here!");
-            case DONE_SUCCESSFULLY -> System.out.println("Out of unit menu!"); // this may have bugs too
-        }
+        System.out.println(message.getMessage());
     }
 
     void setTexture(Parser parser) {
@@ -312,20 +301,12 @@ public class GameMenu {
             message = GameMenuController.setTexture
                 (Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), parser.get("t"));
         }
-
-        switch (message) {
-            case INVALID_PLACE -> System.out.println("Your numbers are invalid!");
-            case INVALID_TEXTURE -> System.out.println("There is no texture with this name!");
-            case FULL_CELL -> System.out.println("This place is already full!");
-            case DONE_SUCCESSFULLY -> System.out.println("Texture is changed successfully!");
-        }
+        System.out.println(message.getMessage());
     }
 
     void clearBlock(Parser parser) {
         GameMenuMessages messages = GameMenuController.clearBlock(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")));
-
-        if (messages.equals(GameMenuMessages.INVALID_PLACE)) System.out.println("Numbers are invalid!");
-        if (messages.equals(GameMenuMessages.DONE_SUCCESSFULLY)) System.out.println("Block is cleared successfully!");
+        System.out.println(messages.getMessage());
     }
 
     void dropRock(Parser parser) {
@@ -337,13 +318,7 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
-
-        switch (message) {
-            case INVALID_PLACE -> System.out.println("Numbers are invalid!");
-            case INVALID_DIRECTION -> System.out.println("Direction is invalid!");
-            case FULL_CELL -> System.out.println("This cell is already full!");
-            case DONE_SUCCESSFULLY -> System.out.println("The rock is dropped successfully!");
-        }
+        System.out.println(message.getMessage());
     }
 
     void dropTree(Parser parser) {
@@ -355,13 +330,7 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.dropTree(x, y, parser.get("t"));
-
-        switch (message) {
-            case INVALID_PLACE -> System.out.println("Numbers are invalid!");
-            case INVALID_TREE_NAME -> System.out.println("There is no trees with this name!");
-            case FULL_CELL -> System.out.println("This cell is already full!");
-            case DONE_SUCCESSFULLY -> System.out.println("The tree is dropped successfully!");
-        }
+        System.out.println(message.getMessage());
     }
 
     void nextTurn() {
