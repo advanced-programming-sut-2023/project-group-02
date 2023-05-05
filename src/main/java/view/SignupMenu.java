@@ -24,11 +24,12 @@ public class SignupMenu {
 
     public void run(Scanner scanner) {
         while (true) {
-            Parser parser = new Parser(scanner.nextLine());
             if (state == State.SIGNUP_SUCCESSFUL) {
                 state = State.WAITING;
                 new MainMenu().run(scanner);
-            } else if (parser.beginsWith("user create")) {
+            }
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("user create")) {
                 createUser(parser);
             } else if (parser.beginsWith("enter login menu")) {
                 System.out.println("You successfully entered LoginMenu!");

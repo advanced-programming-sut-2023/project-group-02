@@ -31,7 +31,7 @@ public class LoginMenu {
             } else if (parser.beginsWith("forgot my password")) {
                 forgotPassword(parser, scanner);
             } else if (parser.beginsWith("back")) {
-                System.out.println("You're back at the signin menu");
+                System.out.println("You're back at the sign up menu");
                 break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at LoginMenu");
@@ -48,7 +48,6 @@ public class LoginMenu {
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
             state = State.WAIT_FOR_CAPTCHA;
             System.out.println(Captcha.showCaptcha());
-            captcha(parser);
         } else {
             System.out.println(message.getMessage());
         }
