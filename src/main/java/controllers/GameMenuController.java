@@ -22,8 +22,8 @@ public class GameMenuController {
         GameMenuController.currentGame = currentGame;
     }
 
-    public static ArrayList<User> getAllUsersInGame() {
-        return currentGame.getPlayers();
+    public static void addPlayerToGame(User player, Colors color) {
+        currentGame.addGovernment(player, new Government(player, color));
     }
 
     public static GameMenuMessages showMap(int x, int y) {

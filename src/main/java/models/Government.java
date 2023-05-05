@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 public class Government {
     private User user;
+    private Colors color;
     private Map map;
 
     private int popularity = 0;
@@ -23,8 +24,17 @@ public class Government {
 
     private final ArrayList<People> people = new ArrayList<>();
 
+    public Government(User user, Colors color) {
+        this.user = user;
+        this.color = color;
+    }
+
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public int getMaterialAmount(Material material) {

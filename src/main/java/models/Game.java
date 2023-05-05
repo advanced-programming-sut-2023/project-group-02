@@ -6,18 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
-    private final ArrayList<User> players;
+    private final ArrayList<Government> governments;
     private HashMap<User, Colors> playersColors;
     private HashMap<User, Government> playersGovernments;
     private User currentPlayer;
-    private int turnCounter;
+    private int turnCounter = 0;
     private final int numberOfTurns;
     private final Map map;
-    private int numberOfPlayers;
 
-    public Game(ArrayList<User> players, int numberOfTurns, Map map) {
+    public Game(ArrayList<Government> governments, int numberOfTurns, Map map) {
         this.currentPlayer = UserController.getCurrentUser();
-        this.players = players;
+        this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
     }
@@ -28,6 +27,11 @@ public class Game {
 
     public void givePlayersGovernments(ArrayList<User> players) {
 
+    }
+
+    public void addGovernment(User player, Government government) {
+        governments.add(government);
+        playersGovernments.put(player, government);
     }
 
     public Government getCurrentPlayersGovernment() {
@@ -55,11 +59,16 @@ public class Game {
         return map;
     }
 
-    public ArrayList<User> getPlayers() {
-        return players;
+    public ArrayList<Government> getGovernments() {
+        return governments;
     }
 
     public User getPlayerByUsername(String username) {
+        for (Government government : governments) {
+            User player = government.getUser();
+            if (player.getUsername().equals(username))
+                return player;
+        }
         return null;
     }
 

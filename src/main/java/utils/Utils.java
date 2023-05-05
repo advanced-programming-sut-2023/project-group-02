@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Utils {
     public static int keepNumbersLimited(int number, int min, int max) {
@@ -49,5 +50,15 @@ public class Utils {
                 return false;
         }
         return true;
+    }
+
+    public static int getValidInt(Scanner scanner) {
+        String input;
+        while (true) {
+            input = scanner.nextLine();
+            if (isInteger(input) && Integer.parseInt(input) >= 0)
+                return Integer.parseInt(input);
+            System.out.println("Your input isn't a positive number! Please try again: ");
+        }
     }
 }

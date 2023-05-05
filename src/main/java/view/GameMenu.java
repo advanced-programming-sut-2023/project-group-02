@@ -2,11 +2,9 @@ package view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
+import controllers.UserController;
 import jdk.jshell.execution.Util;
-import models.Food;
-import models.Game;
-import models.Government;
-import models.Map;
+import models.*;
 import utils.Parser;
 import utils.Utils;
 import view.enums.GameMenuMessages;
@@ -61,7 +59,7 @@ public class GameMenu {
     }
 
     public void runGameMenu(Scanner scanner) {
-        initGovernments();
+        initGovernments(scanner);
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("select building")) {
@@ -94,7 +92,52 @@ public class GameMenu {
         }
     }
 
-    private void initGovernments() {
+    private void initGovernments(Scanner scanner) {
+        System.out.println("Enter the number of governments: ");
+        int numberOfGovernments;
+        while (true) {
+            numberOfGovernments = Utils.getValidInt(scanner);
+            if (numberOfGovernments <= 8)
+                break;
+            System.out.println("The number of governments should be at most 8!");
+        }
+        for (int i = 0; i < numberOfGovernments; i++) {
+            while (true) {
+                System.out.println("Enter the username of player you want to add: ");
+                String username = scanner.nextLine().trim();
+                if (!UserController.userWithUsernameExists(username))
+                    System.out.println("user with this username doesn't exist!");
+                else if (GameMenuController.getCurrentGame().getPlayerByUsername(username) != null)
+                    System.out.println("player already in game!");
+                else {
+                    User player = UserController.findUserWithUsername(username);
+                    int[] colors = new int[8];
+                    Colors color = pickColor(colors, scanner);
+                    deploySmallStoneGate(player);
+                    GameMenuController.addPlayerToGame(player, color);
+                }
+            }
+        }
+    }
+
+    private void deploySmallStoneGate(User player) {
+        // TODO : complete this
+    }
+
+    private Colors pickColor(int[] colors, Scanner scanner) {
+        System.out.println("Pick a color for this player: ");
+        System.out.println("Blue: 1 | Red: 2 | Yellow: 3 | Green: 4 | Black: 5 | White: 6 | Purple: 7 | Pink: 8");
+        while (true) {
+            int input = Utils.getValidInt(scanner);
+            if (input > 8)
+                System.out.println("Invalid input! number should be at most 8!");
+            else if (colors[input - 1] != 0)
+                System.out.println("This color is already picked!");
+            else {
+                colors[input - 1] = 1;
+                return Colors.values()[input - 1];
+            }
+        }
     }
 
     private void loadGame() {
@@ -103,35 +146,17 @@ public class GameMenu {
 
     private int setMapHeight(Scanner scanner) {
         System.out.println("Enter the height of the map: ");
-        while (true) {
-            String input = scanner.nextLine();
-            if (!Utils.isInteger(input))
-                System.out.println("your input isn't an integer!");
-            else
-                return Integer.parseInt(input);
-        }
+        return Utils.getValidInt(scanner);
     }
 
     private int setMapWidth(Scanner scanner) {
         System.out.println("Enter the width of the map: ");
-        while (true) {
-            String input = scanner.nextLine();
-            if (!Utils.isInteger(input))
-                System.out.println("your input isn't an integer!");
-            else
-                return Integer.parseInt(input);
-        }
+        return Utils.getValidInt(scanner);
     }
 
     private int setNumberOfTurns(Scanner scanner) {
         System.out.println("Enter the number of turns: ");
-        while (true) {
-            String input = scanner.nextLine();
-            if (!Utils.isInteger(input))
-                System.out.println("your input isn't an integer!");
-            else
-                return Integer.parseInt(input);
-        }
+        return Utils.getValidInt(scanner);
     }
 
     void showMap(Parser parser, Scanner scanner) {
@@ -157,13 +182,13 @@ public class GameMenu {
         showFoodRate();
         System.out.println("Food type count: " + gov.getFoodStock().size());
         System.out.println(
-                "Fear rate: " + gov.getFearRate());
+            "Fear rate: " + gov.getFearRate());
         showTaxRate();
     }
 
     void showPopularity() {
         System.out.println(
-                "Popularity: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity());
+            "Popularity: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity());
     }
 
     void showFoodList() {
@@ -189,7 +214,7 @@ public class GameMenu {
 
     void showFoodRate() {
         System.out.println(
-                "Food rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
+            "Food rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
     }
 
     void setTaxRate(Parser parser) {
@@ -208,7 +233,7 @@ public class GameMenu {
 
     void showTaxRate() {
         System.out
-                .println("Tax rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
+            .println("Tax rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
     }
 
     void setFearRate(Parser parser) {
@@ -261,7 +286,7 @@ public class GameMenu {
     void setTexture(Parser parser) {
         GameMenuMessages message;
         if (parser.get("x1") != null) {
-            String[] strings = {parser.get("x1"),parser.get("x2"),parser.get("y1"),parser.get("y2")};
+            String[] strings = {parser.get("x1"), parser.get("x2"), parser.get("y1"), parser.get("y2")};
             if (!Utils.areIntegers(strings)) {
                 System.out.println("Please import the numbers!");
                 return;
@@ -271,7 +296,7 @@ public class GameMenu {
                     , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
                     , parser.get("t"));
         } else {
-            String[] strings = {parser.get("x"),parser.get("y")};
+            String[] strings = {parser.get("x"), parser.get("y")};
             if (!Utils.areIntegers(strings)) {
                 System.out.println("Please import the numbers!");
                 return;
@@ -296,7 +321,7 @@ public class GameMenu {
     }
 
     void dropRock(Parser parser) {
-        String[] strings = {parser.get("x"),parser.get("y")};
+        String[] strings = {parser.get("x"), parser.get("y")};
         if (!Utils.areIntegers(strings)) {
             System.out.println("Please import numbers!");
             return;
@@ -314,7 +339,7 @@ public class GameMenu {
     }
 
     void dropTree(Parser parser) {
-        String[] strings = {parser.get("x"),parser.get("y")};
+        String[] strings = {parser.get("x"), parser.get("y")};
         if (!Utils.areIntegers(strings)) {
             System.out.println("Please import numbers!");
             return;
