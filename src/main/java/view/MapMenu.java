@@ -67,6 +67,6 @@ public class MapMenu {
         if (message.equals(MapMenuMessages.INVALID_DIRECTION))
             System.out.println("Invalid direction!");
         if (message.equals(MapMenuMessages.PRINTED_SUCCESSFULLY))
-            System.out.println(currentMap.findCellWithXAndY(x, y).cellInfo());
+            System.out.println(currentMap.findCellWithXAndY(x, y).toString());
     }
 }

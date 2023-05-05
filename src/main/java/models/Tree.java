@@ -6,6 +6,7 @@ public class Tree extends MapObject {
     public Tree(TreeType type) {
         this.type = type;
         this.name = type.getTreeName();
+        this.owner = null;
     }
 
     public TreeType getType() {

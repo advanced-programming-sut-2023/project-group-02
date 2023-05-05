@@ -47,7 +47,8 @@ public class Game {
 
     public void addObject(MapObject object, int x, int y) {
         map.addObject(object, x, y);
-        object.setOwner(currentPlayer);
+        if (!(object instanceof Tree) && !(object instanceof Rock))
+            object.setOwner(currentPlayer);
     }
 
     public int getTurnCounter() {

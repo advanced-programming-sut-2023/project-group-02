@@ -2,7 +2,7 @@ package models;
 
 public abstract class MapObject {
     protected String name;
-    private User owner;
+    protected User owner;
     private int x, y;
 
     public String getName() {

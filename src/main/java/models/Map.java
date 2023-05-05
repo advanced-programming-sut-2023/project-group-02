@@ -49,17 +49,6 @@ public class Map {
         object.setCoordinates(x, y);
     }
 
-    public ArrayList<Building> getInventoryBuildings() {
-        ArrayList<Building> inventoryBuildings = new ArrayList<>();
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (map[i][j].getBuilding() instanceof InventoryBuilding)
-                    inventoryBuildings.add(map[i][j].getBuilding());
-            }
-        }
-        return inventoryBuildings;
-    }
-
     public ArrayList<Building> getPlayersBuildings(User player) {
         ArrayList<Building> playersBuildings = new ArrayList<>();
         for (int i = 0; i < height; i++) {
@@ -71,12 +60,12 @@ public class Map {
         return playersBuildings;
     }
 
-    public Cell[][] getMiniMap(int x, int y) {
-        Cell[][] miniMap = new Cell[21][21];
+    private Cell[][] getMiniMap(int x, int y) {
         int startX = Utils.keepNumbersLimited(y - 10, 0, width);
         int endX = Utils.keepNumbersLimited(y + 10, 0, width);
         int startY = Utils.keepNumbersLimited(x - 10, 0, height);
         int endY = Utils.keepNumbersLimited(x + 10, 0, height);
+        Cell[][] miniMap = new Cell[endX - startX + 1][endY - startY + 1];
 
         for (int i = 0; i <= endX - startX; i++) {
             for (int j = 0; j <= endY - startY; j++) {
@@ -86,17 +75,51 @@ public class Map {
         return miniMap;
     }
 
-    public String printMiniMap(int x, int y) {
+    private String showMapAlgorithm(Cell[][] miniMap) {
         String answer = "";
-        Cell[][] miniMap = getMiniMap(x, y);
+        int height = miniMap.length;
+        int width = miniMap[0].length;
+        System.out.println(height + " " + width);
 
-        for (int i = 0; i < y; i++) {
-            for (int j = 0; j < x; j++) {
-                if (!map[y][x].equals(null))
-                    answer = answer + x + " " + y + " " + map[y][x].toString() + "\n";
+        for (int i = 0; i <= 3 * height; i++) {
+            if (i % 3 == 0) {
+                for (int j = 0; j < width; j++) {
+                    answer += "--------";
+                }
+                answer += "\n";
+                continue;
             }
+            if (i % 3 == 1) {
+                for (int j = 0; j <= width * 2; j++) {
+                    if (j % 2 == 0) {
+                        answer += "|";
+                        continue;
+                    }
+                    if (miniMap[i/3][j/2].getObject() != null) {
+                        answer += Utils.sevenCharacterise(miniMap[i/3][j/2].getObject().getName());
+                    } else answer += "#######";
+                    answer += miniMap[i/3][j/2].getTexture().getBackGroundColorCodeWithTexture();
+                }
+            }
+            if (i % 3 == 2) {
+                for (int j = 0; j <= width * 2; j++) {
+                    if (j % 2 == 0) {
+                        answer += "|";
+                        continue;
+                    }
+                    if (miniMap[i/3][j/2].getObject() != null && miniMap[i/3][j/2].getObject().getOwner() != null) {
+                        answer += Utils.sevenCharacterise(miniMap[i/3][j/2].getObject().getOwner().getUsername());
+                    } else answer += "#######";
+                    answer += miniMap[i/3][j/2].getTexture().getBackGroundColorCodeWithTexture();
+                }
+            }
+            answer += "\n";
         }
-        return answer;
+        return answer.trim();
+    }
+
+    public String printMiniMap(int x, int y) {
+        return showMapAlgorithm(getMiniMap(x,y));
     }
 
     public int getWidth() {

@@ -73,4 +73,15 @@ public class Utils {
         }
         return result.toString();
     }
+
+    public static String sevenCharacterise(String string) {
+        if (string.length() < 7) {
+            for (int i = 0; i < 7 - string.length() ; i++) {
+                string += " ";
+            }
+            return string;
+        } else {
+            return string.substring(0,7);
+        }
+    }
 }

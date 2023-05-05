@@ -6,6 +6,7 @@ public class Rock extends MapObject {
     public Rock(Directions direction) {
         this.direction = direction;
         this.name = "rock";
+        this.owner = null;
     }
 
     public Directions getDirection() {

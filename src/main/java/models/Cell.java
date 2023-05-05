@@ -90,6 +90,13 @@ public class Cell {
 
     @Override
     public String toString() {
-        return null; // TODO the details for showing map
+        String object = "######";
+        String objectOwner = "######";
+        if (this.object != null) {
+            object = this.object.getName();
+            if (this.object.getOwner() != null)
+                objectOwner = this.object.getOwner().getUsername();
+        }
+        return object + "\n" + objectOwner + "\n" + texture.getName();
     }
 }

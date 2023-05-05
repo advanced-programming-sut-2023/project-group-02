@@ -139,7 +139,7 @@ public class GameMenuController {
         if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
 
-        // TODO handle the textures in which we cant drop rock
+        //TODO handle the textures in which we cant drop rock
         currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
