@@ -22,8 +22,8 @@ public class GameMenu {
                 runPreGameMenu(scanner);
                 break;
             } else if (parser.beginsWith("no")) {
-                // TODO : option to load a saved game
-                loadGame();
+                loadGame(scanner);
+                break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GameMenu");
             } else {
@@ -52,7 +52,9 @@ public class GameMenu {
                 System.out.println("You came back to the main menu!");
                 break;
             } else if (parser.beginsWith("next")) {
+                initGovernments(scanner);
                 runGameMenu(scanner);
+                GameMenuController.saveGame();
                 break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GameMenu");
@@ -63,8 +65,6 @@ public class GameMenu {
     }
 
     public void runGameMenu(Scanner scanner) {
-        initGovernments(scanner);
-        GameMenuController.saveGame();
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("select building")) {
@@ -125,7 +125,7 @@ public class GameMenu {
                     User player = UserController.findUserWithUsername(username);
                     int[] colors = new int[8];
                     Colors color = pickColor(colors, scanner);
-                    deploySmallStoneGate(player);
+                    dropSmallStoneGate(player);
                     GameMenuController.addPlayerToGame(player, color);
                     break;
                 }
@@ -133,7 +133,7 @@ public class GameMenu {
         }
     }
 
-    private void deploySmallStoneGate(User player) {
+    private void dropSmallStoneGate(User player) {
         // TODO : complete this
     }
 
@@ -153,22 +153,28 @@ public class GameMenu {
         }
     }
 
-    private void loadGame() {
-
+    private void loadGame(Scanner scanner) {
+        if (GameMenuController.loadGame()) {
+            System.out.println("game loaded. you can play now.");
+            runGameMenu(scanner);
+        } else {
+            System.out.println("no game is saved! a new game is started.");
+            runPreGameMenu(scanner);
+        }
     }
 
     private int setMapHeight(Scanner scanner) {
-        System.out.println("Enter the height of the map: ");
+        System.out.print("Enter the height of the map: ");
         return Utils.getValidInt(scanner);
     }
 
     private int setMapWidth(Scanner scanner) {
-        System.out.println("Enter the width of the map: ");
+        System.out.print("Enter the width of the map: ");
         return Utils.getValidInt(scanner);
     }
 
     private int setNumberOfTurns(Scanner scanner) {
-        System.out.println("Enter the number of turns: ");
+        System.out.print("Enter the number of turns: ");
         return Utils.getValidInt(scanner);
     }
 
