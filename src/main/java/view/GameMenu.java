@@ -67,7 +67,9 @@ public class GameMenu {
     public void runGameMenu(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("select building")) {
+            if (parser.beginsWith("drop building")) {
+                dropBuilding(parser);
+            } else if (parser.beginsWith("select building")) {
                 selectBuilding(parser, scanner);
             } else if (parser.beginsWith("show map")) {
                 showMap(parser, scanner);
@@ -269,7 +271,11 @@ public class GameMenu {
     }
 
     void dropBuilding(Parser parser) {
-
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        String type = parser.get("type");
+        GameMenuMessages message = GameMenuController.dropBuilding(x, y, type);
+        System.out.println(message.getMessage());
     }
 
     void selectBuilding(Parser parser, Scanner scanner) {

@@ -61,7 +61,22 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages dropBuilding(int x, int y, String buildingName) {
-        return null;
+        Building building = BuildingFactory.makeBuilding(buildingName);
+        if (building == null) {
+            return GameMenuMessages.INVALID_BUILDING_NAME;
+        }
+        if (!Validation.areCoordinatesValid(x, y)) {
+            return GameMenuMessages.INVALID_PLACE;
+        }
+        if (currentGame.getMap().findCellWithXAndY(x, y).isOccupied()) {
+            return GameMenuMessages.FULL_CELL;
+        }
+        if (!currentGame.getCurrentPlayersGovernment().hasEnoughMaterialsForBuilding(building)) {
+            return GameMenuMessages.NOT_ENOUGH_MATERIALS;
+        }
+        currentGame.addObject(building, x, y);
+        currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages selectBuilding(int x, int y, Scanner scanner) {

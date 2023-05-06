@@ -75,6 +75,22 @@ public class Government {
         }
     }
 
+    public boolean hasEnoughMaterialsForBuilding(Building building) {
+        MaterialInstance[] materialInstances = building.getBuildingMaterials();
+        for (MaterialInstance materialInstance : materialInstances) {
+            if (materialInstance.amount > getMaterialAmount(materialInstance.material))
+                return false;
+        }
+        return true;
+    }
+
+    public void reduceMaterialsForBuilding(Building building) {
+        MaterialInstance[] materialInstances = building.getBuildingMaterials();
+        for (MaterialInstance materialInstance : materialInstances) {
+            increaseMaterial(materialInstance.material, materialInstance.amount);
+        }
+    }
+
     public int getPopularity() {
         return popularity;
     }
