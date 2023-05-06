@@ -49,15 +49,27 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages setFoodRate(int rate) {
-        return null;
+        if (getCurrentGame().getCurrentPlayersGovernment().setFoodRate(rate)) {
+            return GameMenuMessages.DONE_SUCCESSFULLY;
+        } else {
+            return GameMenuMessages.OUT_OF_BOUNDS;
+        }
     }
 
     public static GameMenuMessages setTaxRate(int rate) {
-        return null;
+        if (getCurrentGame().getCurrentPlayersGovernment().setTaxRate(rate)) {
+            return GameMenuMessages.DONE_SUCCESSFULLY;
+        } else {
+            return GameMenuMessages.OUT_OF_BOUNDS;
+        }
     }
 
     public static GameMenuMessages setFearRate(int rate) {
-        return null;
+        if (getCurrentGame().getCurrentPlayersGovernment().setFearRate(rate)) {
+            return GameMenuMessages.DONE_SUCCESSFULLY;
+        } else {
+            return GameMenuMessages.OUT_OF_BOUNDS;
+        }
     }
 
     public static GameMenuMessages dropBuilding(int x, int y, String buildingName) {

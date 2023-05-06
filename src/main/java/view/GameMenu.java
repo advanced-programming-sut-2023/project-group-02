@@ -220,16 +220,12 @@ public class GameMenu {
 
     void setFoodRate(Parser parser) {
         String r = parser.get("r");
-        if (Utils.isInteger(r)) {
-            int rate = Integer.parseInt(r);
-            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFoodRate(rate)) {
-                System.out.println("Food rate changed");
-            } else {
-                System.out.println("Food rate out of bounds");
-            }
-        } else {
+        if (!Utils.isInteger(r)) {
             System.out.println("Invalid number!");
+            return;
         }
+        GameMenuMessages message = GameMenuController.setFoodRate(Integer.parseInt(r));
+        System.out.println(message.getMessage());
     }
 
     void showFoodRate() {
@@ -239,16 +235,12 @@ public class GameMenu {
 
     void setTaxRate(Parser parser) {
         String r = parser.get("r");
-        if (Utils.isInteger(r)) {
-            int rate = Integer.parseInt(r);
-            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setTaxRate(rate)) {
-                System.out.println("Tax rate changed");
-            } else {
-                System.out.println("Tax rate out of bounds");
-            }
-        } else {
+        if (!Utils.isInteger(r)) {
             System.out.println("Invalid number!");
+            return;
         }
+        GameMenuMessages message = GameMenuController.setTaxRate(Integer.parseInt(r));
+        System.out.println(message.getMessage());
     }
 
     void showTaxRate() {
@@ -258,16 +250,12 @@ public class GameMenu {
 
     void setFearRate(Parser parser) {
         String r = parser.get("r");
-        if (Utils.isInteger(r)) {
-            int rate = Integer.parseInt(r);
-            if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().setFearRate(rate)) {
-                System.out.println("Fear rate changed");
-            } else {
-                System.out.println("Fear rate out of bounds");
-            }
-        } else {
+        if (!Utils.isInteger(r)) {
             System.out.println("Invalid number!");
+            return;
         }
+        GameMenuMessages message = GameMenuController.setFearRate(Integer.parseInt(r));
+        System.out.println(message.getMessage());
     }
 
     void dropBuilding(Parser parser) {

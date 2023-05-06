@@ -16,7 +16,8 @@ public enum GameMenuMessages {
     INVALID_DIRECTION("Invalid direction!"),
     CANT_PUT_THERE("Unable to put there!"),
     INVALID_TREE_NAME("Invalid tree name!"),
-    DONE_SUCCESSFULLY("Operation is done successfully!");
+    DONE_SUCCESSFULLY("Operation is done successfully!"),
+    OUT_OF_BOUNDS("Out of bounds!");
 
     private final String message;
 
