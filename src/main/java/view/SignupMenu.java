@@ -62,15 +62,14 @@ public class SignupMenu {
         String email = parser.get("email");
         String nickname = parser.get("n");
         String slogan = parser.get("s");
-        SignUpMenuMessages error = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
             nickname, email, slogan);
 
-        if (error == null) {
-            state = State.SECURITY_QUESTION_NEEDED;
-            printSecurityQuestions();
-            return;
+        if (slogan.equals("random")) {
+            System.out.println("Your slogan is: " + SignUpMenuController.getSlogan());
         }
-        if (error == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
+
+        if (message == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
             if (password.equals("random")) {
                 System.out.println("Your password is: " + SignUpMenuController.getPassword());
             }
@@ -79,11 +78,17 @@ public class SignupMenu {
             return;
         }
 
-        if (error.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
+        if (message == null) {
+            state = State.SECURITY_QUESTION_NEEDED;
+            printSecurityQuestions();
+            return;
+        }
+
+        if (message.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
             System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
         }
         else
-            System.out.println(error.getMessage());
+            System.out.println(message.getMessage());
     }
 
     private void printSecurityQuestions() {

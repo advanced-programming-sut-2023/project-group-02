@@ -21,6 +21,7 @@ public class SignUpMenuController {
 
     private static User toBeSignedIn;
     private static String randomPassword;
+    private static String randomSlogan;
 
     public static SignUpMenuMessages initiateSignup(String username, String password, String passwordConfirmation,
             String nickname, String email, String slogan) {
@@ -55,18 +56,28 @@ public class SignUpMenuController {
         if (UserController.userWithEmailExists(email)) {
             return SignUpMenuMessages.EMAIL_EXISTS;
         }
-        int id = UserController.getNextId();
+        if (slogan.equals("random")) {
+            randomSlogan = Randoms.getSlogan();
+            slogan = randomSlogan;
+        }
         if (password.equals("random")) {
             randomPassword = Randoms.getPassword();
-            toBeSignedIn = new User(id, username, randomPassword, nickname, email, slogan, null, slogan);
-            return SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED;
+            password = randomPassword;
         }
-        toBeSignedIn = new User(id, username, password, nickname, email, slogan, null, slogan);
+
+        toBeSignedIn = new User(UserController.getNextId(), username, password, nickname, email, slogan, null, slogan);
+
+        if (randomPassword != null)
+            return SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED;
         return null;
     }
 
     public static String getPassword() {
         return randomPassword;
+    }
+
+    public static String getSlogan() {
+        return randomSlogan;
     }
 
     public static void setSecurityQuestion(SecurityQuestion question, String answer) {
