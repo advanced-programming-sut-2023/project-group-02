@@ -29,6 +29,10 @@ public class Parser {
         this.tokens = tokenize(input);
     }
 
+    public String getInput() {
+        return input;
+    }
+
     private String removeQuotations(String str) {
         if (str.charAt(0) == '"') {
             return str.substring(1, str.length() - 1);

@@ -46,28 +46,12 @@ public class LoginMenuController {
         return message;
     }
 
-    public static LoginMenuMessages forgotPassword(String username, Scanner scanner) {
-        User myUser;
-        if ((myUser = UserController.findUserWithUsername(username)) == null)
-            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
-
-        System.out.println(myUser.getSecurityQuestion().fullSentence);
-
-        String usersAnswer = scanner.nextLine();
-        if (!usersAnswer.equals(myUser.getSecurityAnswer()))
-            return LoginMenuMessages.WRONG_SECURITY_ANSWER;
-
-        return LoginMenuMessages.ENTER_NEW_PASSWORD;
-    }
-
-    public static LoginMenuMessages setNewPassword(String username, String newPassword) {
-        User myUser = UserController.findUserWithUsername(username);
+    public static LoginMenuMessages setNewPassword(User user, String newPassword) {
         if (Validation.validatePassword(newPassword).size() > 0) {
             passwordProblems = Validation.validatePassword(newPassword);
             return LoginMenuMessages.NEW_PASSWORD_WEAK;
         }
-
-        myUser.setPassword(newPassword);
+        user.setPassword(newPassword);
         return LoginMenuMessages.PASSWORD_IS_CHANGED;
     }
 }

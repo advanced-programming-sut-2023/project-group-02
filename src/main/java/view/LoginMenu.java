@@ -1,6 +1,8 @@
 package view;
 
 import controllers.LoginMenuController;
+import controllers.UserController;
+import models.User;
 import utils.Captcha;
 import utils.Parser;
 import utils.PasswordProblem;
@@ -9,10 +11,13 @@ import view.enums.LoginMenuMessages;
 import java.util.Scanner;
 
 public class LoginMenu {
+    private static User currentUser;
     enum State {
         LOGIN_SUCCESSFUL,
         WAIT_FOR_CAPTCHA,
         WAITING,
+        WAIT_FOR_SECURITY_ANSWER,
+        WAIT_FOR_NEW_PASSWORD,
     }
 
     private State state = State.WAITING;
@@ -20,16 +25,21 @@ public class LoginMenu {
     public void run(Scanner scanner) {
         while (true) {
             if (state.equals(State.LOGIN_SUCCESSFUL)) {
+                currentUser = null;
                 new MainMenu().run(scanner);
                 break;
             }
             Parser parser = new Parser(scanner.nextLine());
             if (state.equals(State.WAIT_FOR_CAPTCHA)) {
                 captcha(parser);
+            } else if (state.equals(State.WAIT_FOR_SECURITY_ANSWER)) {
+                securityAnswer(parser);
+            } else if (state.equals(State.WAIT_FOR_NEW_PASSWORD)) {
+                newPassword(parser);
             } else if (parser.beginsWith("user login")) {
                 login(parser);
             } else if (parser.beginsWith("forgot my password")) {
-                forgotPassword(parser, scanner);
+                forgotPassword(parser);
             } else if (parser.beginsWith("back")) {
                 System.out.println("You're back at the sign up menu");
                 break;
@@ -54,7 +64,7 @@ public class LoginMenu {
     }
 
     void captcha(Parser parser) {
-        String userInput = parser.getByIndex(0);
+        String userInput = parser.getInput();
         if (Captcha.inputEqualsCaptcha(userInput)) {
             state = State.LOGIN_SUCCESSFUL;
             System.out.println("You Logged in successfully!");
@@ -64,25 +74,34 @@ public class LoginMenu {
         }
     }
 
-    void forgotPassword(Parser parser, Scanner scanner) {
-        LoginMenuMessages message = LoginMenuController.forgotPassword(parser.get("u"), scanner);
-
-        System.out.println(message.getMessage());
-        if (message.equals(LoginMenuMessages.ENTER_NEW_PASSWORD)) {
-            newPassword(parser, scanner);
+    void forgotPassword(Parser parser) {
+        if ((currentUser = UserController.findUserWithUsername(parser.get("u"))) == null) {
+            System.out.println("Username doesn't exist!");
+            return;
         }
+        System.out.println(currentUser.getSecurityQuestion().fullSentence);
+        state = State.WAIT_FOR_SECURITY_ANSWER;
     }
 
-    void newPassword(Parser parser, Scanner scanner) {
-        LoginMenuMessages message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
-
-        while (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
-            System.out.println(PasswordProblem.showErrors(LoginMenuController.passwordProblems));
-            message = LoginMenuController.setNewPassword(parser.get("u"), scanner.nextLine());
+    void securityAnswer(Parser parser) {
+        String answer = parser.getInput();
+        if (!answer.equals(currentUser.getSecurityAnswer())) {
+            System.out.println("Incorrect Security Answer!");
+            return;
         }
+        System.out.println("Print enter your new password!");
+        state = State.WAIT_FOR_NEW_PASSWORD;
+    }
 
+    void newPassword(Parser parser) {
+        LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser, parser.getInput());
+        if (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
+            System.out.println(PasswordProblem.showErrors(LoginMenuController.passwordProblems));
+            return;
+        }
         if (message.equals(LoginMenuMessages.PASSWORD_IS_CHANGED))
-            System.out.println("Your password is changed successfully!");
+            System.out.println(message.getMessage());
+        state = State.WAITING;
     }
 
 }
