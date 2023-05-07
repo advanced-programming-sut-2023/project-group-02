@@ -201,7 +201,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
         }
         currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
-        currentGame.addObject(BuildingFactory.makeBuilding("stockPile"), x, y);
+        currentGame.addObject(BuildingFactory.makeBuilding("stockPile"), x + 1, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 }
