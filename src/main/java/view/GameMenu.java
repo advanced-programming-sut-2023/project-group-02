@@ -127,7 +127,7 @@ public class GameMenu {
                     User player = UserController.findUserWithUsername(username);
                     int[] colors = new int[8];
                     Colors color = pickColor(colors, scanner);
-                    dropSmallStoneGate(player);
+                    dropSmallStoneGate(player, scanner);
                     GameMenuController.addPlayerToGame(player, color);
                     break;
                 }
@@ -135,8 +135,8 @@ public class GameMenu {
         }
     }
 
-    private void dropSmallStoneGate(User player) {
-        // TODO : complete this
+    private void dropSmallStoneGate(User player, Scanner scanner) {
+        System.out.println();
     }
 
     private Colors pickColor(int[] colors, Scanner scanner) {
