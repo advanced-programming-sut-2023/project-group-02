@@ -2,6 +2,8 @@ package controllers;
 
 import models.*;
 import models.units.Unit;
+import utils.Parser;
+import utils.Utils;
 import utils.Validation;
 import view.BuildingMenu;
 import view.UnitMenu;
@@ -181,6 +183,25 @@ public class GameMenuController {
 
         // TODO handle the textures in which we cant drop tree
         currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y);
+        return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    public static GameMenuMessages dropSmallStoneGate(Parser parser) {
+        if ((!parser.getFlag("x") || !parser.getFlag("y")) ||
+            (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y")))) {
+            return GameMenuMessages.INVALID_INPUT_FORMAT;
+        }
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        if (!Validation.areCoordinatesValid(x, y)) {
+            return GameMenuMessages.INVALID_PLACE;
+        }
+        if (currentGame.getMap().findCellWithXAndY(x, y).isOccupied() ||
+            currentGame.getMap().findCellWithXAndY(x + 1, y).isOccupied()) {
+            return GameMenuMessages.FULL_CELL;
+        }
+        currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
+        currentGame.addObject(BuildingFactory.makeBuilding("stockPile"), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 }

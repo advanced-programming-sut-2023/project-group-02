@@ -136,7 +136,14 @@ public class GameMenu {
     }
 
     private void dropSmallStoneGate(User player, Scanner scanner) {
-        System.out.println();
+        System.out.println("select coordinates for this user's small stone gate\nthe format should be \"-x <x> -y <y>\"");
+        while (true) {
+            Parser parser = new Parser(scanner.nextLine());
+            GameMenuMessages message = GameMenuController.dropSmallStoneGate(parser);
+            System.out.println(message.getMessage());
+            if (message == GameMenuMessages.DONE_SUCCESSFULLY)
+                break;
+        }
     }
 
     private Colors pickColor(int[] colors, Scanner scanner) {

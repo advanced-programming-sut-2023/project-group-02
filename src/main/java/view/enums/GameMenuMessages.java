@@ -1,6 +1,7 @@
 package view.enums;
 
 public enum GameMenuMessages {
+    INVALID_INPUT_FORMAT("invalid input format!"),
     INVALID_PLACE("invalid coordinates"),
     INVALID_RATE("invalid rate"),
     INVALID_BUILDING_NAME("invalid building name"),
