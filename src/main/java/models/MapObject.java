@@ -8,10 +8,6 @@ public abstract class MapObject {
     protected User owner;
     private int x, y;
 
-    public MapObject() {
-        this.owner = UserController.getCurrentUser();
-    }
-
     public String getName() {
         return name;
     }
