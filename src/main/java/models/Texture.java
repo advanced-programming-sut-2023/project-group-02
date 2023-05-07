@@ -10,12 +10,19 @@ public enum Texture {
     IRON("iron",Colors.PURPLE),
     GRASS("grass",Colors.GREEN),
     MEADOW("meadow",Colors.YELLOW),
-    DENSE_MEADOW("dense meadow",Colors.YELLOW);
+    DENSE_MEADOW("dense meadow",Colors.YELLOW),
+    SEA("sea",Colors.BLUE),
+    BEACH("beach",Colors.YELLOW), //units cant pass
+    OIL("oil",Colors.RED),
+    SHALLOW_WATER("shallow water",Colors.BLUE), //units can pass
+    PLAIN("plain",Colors.GREEN), //kills units
+    ;
 
     private final String name;
     private final Colors color;
 
-    private final static Texture[] allTextures = {EARTH,EARTH_WITH_GRAVEL,SLATE,ROCK,IRON,GRASS,MEADOW,DENSE_MEADOW};
+    private final static Texture[] allTextures = {EARTH,EARTH_WITH_GRAVEL,SLATE,ROCK,IRON,GRASS,MEADOW,DENSE_MEADOW
+    ,SEA,BEACH,OIL,SHALLOW_WATER,PLAIN};
 
     Texture(String name, Colors color) {
         this.name = name;
