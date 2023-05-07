@@ -1,6 +1,7 @@
 package models;
 
 public enum Colors {
+    RESET("\u001B[0m","\u001B[0m"),
     BLUE("\u001B[34m","\u001B[44m"),
     RED("\u001B[31m","\u001B[41m"),
     YELLOW("\u001B[33m","\u001B[43m"),

@@ -90,13 +90,15 @@ public class Cell {
 
     @Override
     public String toString() {
-        String object = "######";
-        String objectOwner = "######";
-        if (this.object != null) {
-            object = this.object.getName();
-            if (this.object.getOwner() != null)
-                objectOwner = this.object.getOwner().getUsername();
-        }
-        return object + "\n" + objectOwner + "\n" + texture.getName();
+        String answer = "";
+        if (object instanceof Building)
+            answer += "Building: " + object.getName() + " - owner: " + object.getOwner().getUsername() + "\n";
+        else if (object instanceof Tree || object instanceof Rock)
+            answer += "Object: " + object.getName() + "\n";
+
+        //TODO add name and owner to units
+
+        answer += "Texture: " + texture.getName();
+        return answer;
     }
 }
