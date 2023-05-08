@@ -76,7 +76,7 @@ public class GameMenuController {
         }
     }
 
-    public static GameMenuMessages dropBuilding(int x, int y, String buildingName) {
+    public static GameMenuMessages dropBuilding(int x, int y, String buildingName, boolean useMaterials) {
         Building building = BuildingFactory.makeBuilding(buildingName);
         if (building == null) {
             return GameMenuMessages.INVALID_BUILDING_NAME;
@@ -87,11 +87,12 @@ public class GameMenuController {
         if (currentGame.getMap().findCellWithXAndY(x, y).isOccupied()) {
             return GameMenuMessages.FULL_CELL;
         }
-        if (!currentGame.getCurrentPlayersGovernment().hasEnoughMaterialsForBuilding(building)) {
+        if (useMaterials && !currentGame.getCurrentPlayersGovernment().hasEnoughMaterialsForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_MATERIALS;
         }
         currentGame.addObject(building, x, y);
-        currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
+        if (useMaterials)
+            currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 

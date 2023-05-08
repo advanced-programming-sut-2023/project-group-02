@@ -46,6 +46,8 @@ public class GameMenu {
                 dropTree(parser);
             } else if (parser.beginsWith("settexture")) {
                 setTexture(parser);
+            } else if (parser.beginsWith("drop building")) {
+                dropBuilding(parser, false);
             } else if (parser.beginsWith("clear")) {
                 clearBlock(parser);
             } else if (parser.beginsWith("exit")) {
@@ -68,7 +70,7 @@ public class GameMenu {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("drop building")) {
-                dropBuilding(parser);
+                dropBuilding(parser, true);
             } else if (parser.beginsWith("select building")) {
                 selectBuilding(parser, scanner);
             } else if (parser.beginsWith("show map")) {
@@ -266,11 +268,11 @@ public class GameMenu {
         System.out.println(message.getMessage());
     }
 
-    void dropBuilding(Parser parser) {
+    void dropBuilding(Parser parser, boolean useMaterials) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         String type = parser.get("type");
-        GameMenuMessages message = GameMenuController.dropBuilding(x, y, type);
+        GameMenuMessages message = GameMenuController.dropBuilding(x, y, type, useMaterials);
         System.out.println(message.getMessage());
     }
 
