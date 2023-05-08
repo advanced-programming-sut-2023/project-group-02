@@ -31,13 +31,13 @@ public enum Material {
         return buyPrice/2;
     }
 
-    public String getMaterialName() {
+    public String getName() {
         return materialName;
     }
 
     public static Material findMaterialByName(String name) {
         for (Material material : allMaterials) {
-            if (material.getMaterialName().equals(name))
+            if (material.getName().equals(name))
                 return material;
         }
         return null;

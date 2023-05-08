@@ -61,7 +61,7 @@ public class Trade {
     public String toString() {
         String answer = id + ". Requester: " + requester.getUsername();
         if (isAccepted()) answer += " Acceptor: " + acceptor.getUsername();
-        answer += "\nResourceType: " + resourceType.getMaterialName() +
+        answer += "\nResourceType: " + resourceType.getName() +
         " Amount: " + amount + " Price: " + price +
         "\nRequester Message: " + requesterMessage +
             "\nAcceptor Message: " + acceptorMessage;

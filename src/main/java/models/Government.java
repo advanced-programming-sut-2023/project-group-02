@@ -74,6 +74,32 @@ public class Government {
         }
     }
 
+    public void reduceFood(Food food, int amount) {
+        int amountLeft = amount;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (amountLeft == 0)
+                break;
+            InventoryBuilding<Food> inventoryBuilding = InventoryBuilding.castIfPossible(building, food);
+            if (inventoryBuilding != null) {
+                amountLeft = inventoryBuilding.decreaseItem(food, amountLeft);
+            }
+        }
+    }
+
+    public void increaseFood(Food food, int amount) {
+        int amountLeft = amount;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (amountLeft == 0)
+                break;
+            InventoryBuilding<Food> inventoryBuilding = InventoryBuilding.castIfPossible(building, food);
+            if (inventoryBuilding != null) {
+                amountLeft = inventoryBuilding.increaseItem(food, amountLeft);
+            }
+        }
+    }
+
     public boolean hasEnoughMaterialsForBuilding(Building building) {
         MaterialInstance[] materialInstances = building.getBuildingMaterials();
         for (MaterialInstance materialInstance : materialInstances) {
