@@ -1,6 +1,7 @@
 package models;
 
 import models.buildings.InventoryBuilding;
+import models.buildings.PlainBuilding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,8 +22,6 @@ public class Government {
     private int fearRate = 0;
     private static final int MIN_FEAR_RATE = -5;
     private static final int MAX_FEAR_RATE = 5;
-
-    private final ArrayList<People> people = new ArrayList<>();
 
     public Government(User user, Colors color) {
         this.user = user;
@@ -91,6 +90,17 @@ public class Government {
         }
     }
 
+    public int getPopulation() {
+        int population = 0;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building instanceof PlainBuilding) {
+                population += ((PlainBuilding) building).getPopulation();
+            }
+        }
+        return population;
+    }
+
     public int getPopularity() {
         return popularity;
     }
@@ -140,10 +150,6 @@ public class Government {
 
     public HashSet<Food> getFoodStock() {
         return foodStock;
-    }
-
-    public int getPopulation() {
-        return people.size();
     }
 
     public void addToFoodStock(Food food) {
