@@ -101,7 +101,9 @@ public class Cell {
         else if (object instanceof Tree || object instanceof Rock)
             answer += "Object: " + object.getName() + "\n";
 
-        //TODO add name and owner to units
+        for (Unit unit : units) {
+            answer += unit.getName() + " - " + unit.getOwner().getUsername() + "\n";
+        }
 
         answer += "Texture: " + texture.getName();
         return answer;

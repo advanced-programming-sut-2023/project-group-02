@@ -96,4 +96,8 @@ public class Unit {
         currentX = x;
         currentY = y;
     }
+
+    public String getName() {
+        return type.getName();
+    }
 }
