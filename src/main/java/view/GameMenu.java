@@ -97,6 +97,7 @@ public class GameMenu {
                 GameMenuController.saveGame();
                 System.out.println("Game saved successfully!");
             } else if (parser.beginsWith("exit")) {
+                System.out.println("You came back to the main menu!");
                 break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GameMenu");
