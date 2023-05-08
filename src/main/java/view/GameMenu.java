@@ -53,8 +53,8 @@ public class GameMenu {
                 break;
             } else if (parser.beginsWith("next")) {
                 initGovernments(scanner);
-                runGameMenu(scanner);
                 GameMenuController.saveGame();
+                runGameMenu(scanner);
                 break;
             } else if (parser.beginsWith("show current menu")) {
                 System.out.println("You are at GameMenu");
