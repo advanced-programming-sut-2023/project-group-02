@@ -15,8 +15,8 @@ public class Map {
         this.width = width;
         this.height = height;
         this.map = new Cell[height][width];
-        for (int i = 0; i < height ; i++) {
-            for (int j = 0; j < width ; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 map[i][j] = new Cell(Texture.EARTH);
             }
         }
@@ -28,8 +28,8 @@ public class Map {
 
     public ArrayList<Cell> findMoreThanOneCell(int x1, int y1, int x2, int y2) {
         ArrayList<Cell> answer = new ArrayList<>();
-        for (int i = y1; i <= y2 ; i++) {
-            for (int j = x1; j <= x2 ; j++) {
+        for (int i = y1; i <= y2; i++) {
+            for (int j = x1; j <= x2; j++) {
                 answer.add(map[i][j]);
             }
         }
@@ -47,6 +47,11 @@ public class Map {
     public void addObject(MapObject object, int x, int y) {
         findCellWithXAndY(x, y).setObject(object);
         object.setCoordinates(x, y);
+    }
+
+    public void addUnit(Unit unit, int x, int y) {
+        findCellWithXAndY(x, y).getUnits().add(unit);
+        unit.setCoordinates(x, y);
     }
 
     public ArrayList<Building> getPlayersBuildings(User player) {
@@ -90,19 +95,19 @@ public class Map {
                     answer += "---";
                     continue;
                 }
-                answer += miniMap[i/4][j/2].getTexture().getBackGroundColorCodeWithTexture();
+                answer += miniMap[i / 4][j / 2].getTexture().getBackGroundColorCodeWithTexture();
                 if (i % 4 == 1) {
-                    if (miniMap[i/4][j/2].getObject() instanceof Building) {
+                    if (miniMap[i / 4][j / 2].getObject() instanceof Building) {
                         answer += "  B  ";
                     } else answer += "#####";
                 } else if (i % 4 == 2) {
-                    if (miniMap[i/4][j/2].getUnits().size() > 0) {
+                    if (miniMap[i / 4][j / 2].getUnits().size() > 0) {
                         answer += "  S  ";
                     } else answer += "#####";
                 } else if (i % 4 == 3) {
-                    if (miniMap[i/4][j/2].getObject() instanceof Tree) {
+                    if (miniMap[i / 4][j / 2].getObject() instanceof Tree) {
                         answer += "  T  ";
-                    } else if (miniMap[i/4][j/2].getObject() instanceof Rock) {
+                    } else if (miniMap[i / 4][j / 2].getObject() instanceof Rock) {
                         answer += "  R  ";
                     } else answer += "#####";
                 }
@@ -113,7 +118,7 @@ public class Map {
     }
 
     public String printMiniMap(int x, int y) {
-        return showMapAlgorithm(getMiniMap(x,y));
+        return showMapAlgorithm(getMiniMap(x, y));
     }
 
     public int getWidth() {

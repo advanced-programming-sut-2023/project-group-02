@@ -101,6 +101,28 @@ public class Government {
         return population;
     }
 
+    public int numberOfUnemployed() {
+        int unemployed = 0;
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building instanceof PlainBuilding) {
+                unemployed += ((PlainBuilding) building).numberOfUnemployedPeople();
+            }
+        }
+        return unemployed;
+    }
+
+    public void recruitPeople(int number, Building workingPlace) {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building instanceof PlainBuilding) {
+                number = ((PlainBuilding) building).recruit(workingPlace, number);
+                if (number == 0)
+                    return;
+            }
+        }
+    }
+
     public int getPopularity() {
         return popularity;
     }
@@ -156,5 +178,14 @@ public class Government {
         if (foodStock.size() < 4) {
             foodStock.add(food);
         }
+    }
+
+    public Building getSmallStone() {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building.getName().equals("Small Stone Gate"))
+                return building;
+        }
+        return null;
     }
 }

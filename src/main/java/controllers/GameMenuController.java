@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Parser;
 import utils.Utils;
@@ -109,10 +110,6 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String unitName) {
-        return null;
-    }
-
     public static GameMenuMessages selectUnit(int x, int y, Scanner scanner) {
         ArrayList<Unit> selectedUnits = new ArrayList<>();
         if (!Validation.areCoordinatesValid(x, y))
@@ -204,7 +201,26 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
         }
         currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
-        currentGame.addObject(BuildingFactory.makeBuilding("stockPile"), x + 1, y);
+        currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y);
+        return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    public static GameMenuMessages dropUnit(int x, int y, String type, int count) {
+        Unit unit = MakeUnitInstances.createUnitInstance(type);
+        if (!Validation.areCoordinatesValid(x, y))
+            return GameMenuMessages.INVALID_PLACE;
+        if (count <= 0)
+            return GameMenuMessages.INVALID_NUMBER;
+        if (unit == null)
+            return GameMenuMessages.INVALID_UNIT_NAME;
+        Government currentPlayersGovernment = currentGame.getCurrentPlayersGovernment();
+        if (currentPlayersGovernment.numberOfUnemployed() < count)
+            return GameMenuMessages.NOT_ENOUGH_PEOPLE;
+        currentPlayersGovernment.recruitPeople(count, currentPlayersGovernment.getSmallStone());
+        for (int i = 0; i < count; i++) {
+            unit = MakeUnitInstances.createUnitInstance(type);
+            currentGame.addUnit(unit, x, y);
+        }
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 }

@@ -21,4 +21,25 @@ public class PlainBuilding extends Building {
     public int getPopulation() {
         return people.length;
     }
+
+    public int numberOfUnemployedPeople() {
+        int result = 0;
+        for (People person : this.people) {
+            if (!person.hasJob())
+                result++;
+        }
+        return result;
+    }
+
+    public int recruit(Building workingPlace, int number) {
+        for (People person : this.people) {
+            if (!person.hasJob()) {
+                person.recruit(workingPlace);
+                number--;
+            }
+            if (number == 0)
+                return 0;
+        }
+        return number;
+    }
 }

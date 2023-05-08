@@ -1,6 +1,7 @@
 package models;
 
 import controllers.UserController;
+import models.units.Unit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +50,11 @@ public class Game {
         map.addObject(object, x, y);
         if (!(object instanceof Tree) && !(object instanceof Rock))
             object.setOwner(currentPlayer);
+    }
+
+    public void addUnit(Unit unit, int x, int y) {
+        map.addUnit(unit, x, y);
+        unit.setOwner(currentPlayer);
     }
 
     public int getTurnCounter() {

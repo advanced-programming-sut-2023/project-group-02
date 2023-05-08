@@ -48,6 +48,8 @@ public class GameMenu {
                 setTexture(parser);
             } else if (parser.beginsWith("drop building")) {
                 dropBuilding(parser, false);
+            } else if (parser.beginsWith("drop unit")) {
+                dropUnit(parser);
             } else if (parser.beginsWith("clear")) {
                 clearBlock(parser);
             } else if (parser.beginsWith("exit")) {

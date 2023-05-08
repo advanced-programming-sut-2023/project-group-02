@@ -3,15 +3,15 @@ package models;
 import models.buildings.PlainBuilding;
 
 public class People {
-    private String workingPlace;
+    private Building workingPlace;
     boolean hasJob = false;
 
-    public void recruit(String workingPlace) {
+    public void recruit(Building workingPlace) {
         hasJob = true;
         this.workingPlace = workingPlace;
     }
 
-    public String getWorkingPlace() {
+    public Building getWorkingPlace() {
         return workingPlace;
     }
 

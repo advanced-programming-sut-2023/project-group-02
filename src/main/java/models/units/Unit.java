@@ -2,22 +2,26 @@ package models.units;
 
 import models.Building;
 import models.MartialEquipment;
+import models.User;
 
 import java.util.ArrayList;
 
 public class Unit {
-
-    private int damage; //out of 100
-    private int hitpoint; //out of 100
-    private int pace; //out of 100
-    private int price;
+    private User owner;
+    private int currentX;
+    private int currentY;
+    private final int damage; //out of 100
+    private final int hitpoint; //out of 100
+    private final int pace; //out of 100
+    private final int price;
     private UnitState state;
-    private UnitType type;
-    private boolean isLongRange;
-    private boolean canDigMoat;
-    private boolean canClimbLadder;
+    private final UnitType type;
+    private final boolean isLongRange;
+    private final boolean canDigMoat;
+    private final boolean canClimbLadder;
     private String whereCanBeTrained; // Barracks, Engineer guild or cathedral.
-    private ArrayList<MartialEquipment> equipments = new ArrayList<>();
+    private final ArrayList<MartialEquipment> equipments = new ArrayList<>();
+
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
                 boolean isLongRange, boolean canDigMoat, boolean canClimbLadder) {
@@ -70,5 +74,26 @@ public class Unit {
 
     public void setState(UnitState state) {
         this.state = state;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public void setCoordinates(int x, int y) {
+        currentX = x;
+        currentY = y;
     }
 }
