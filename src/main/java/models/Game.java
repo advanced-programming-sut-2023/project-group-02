@@ -67,6 +67,10 @@ public class Game {
         return governments;
     }
 
+    public ArrayList<User> getPlayers() {
+        return governments.stream().map(Government::getUser).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
     public User getPlayerByUsername(String username) {
         for (Government government : governments) {
             User player = government.getUser();
