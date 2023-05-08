@@ -48,7 +48,7 @@ public class SignUpTest {
     @Test
     public void emailValidation3() {
         SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Ofs..s@gmail.co.m","hello");
-        Assertions.assertNull(message);
+        Assertions.assertEquals(SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED, message);
     }
 
     @Test

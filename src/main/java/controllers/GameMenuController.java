@@ -10,19 +10,21 @@ import view.UnitMenu;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
-
-import controllers.database.Database;
 
 public class GameMenuController {
     private static Game currentGame;
+    private static HashMap<User, Game> savedGames = new HashMap<>();
 
     public static void saveGame() {
-        Database.write("game", currentGame, Game.class);
+        for (User user : currentGame.getPlayers()) {
+            savedGames.put(user, currentGame);
+        }
     }
 
     public static boolean loadGame() {
-        Game savedGame = Database.read("game", Game.class);
+        Game savedGame = savedGames.get(UserController.getCurrentUser());
         if (savedGame == null) {
             return false;
         }
