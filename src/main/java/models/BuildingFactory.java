@@ -239,6 +239,16 @@ public class BuildingFactory {
         return new PlainBuilding("Cathedral", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 2, 0);
     }
 
+    public static DefensiveBuilding shortWall() {
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE,5)};
+        return new DefensiveBuilding("short wall",BuildingType.CASTLE_BUILDINGS,buildingMaterials,0,0,0);
+    }
+
+    public static DefensiveBuilding tallWall() {
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE,10)};
+        return new DefensiveBuilding("tall wall",BuildingType.CASTLE_BUILDINGS,buildingMaterials,0,0,0);
+    }
+
     /**
      * @param name name of the building (case-insensitive)
      * @return a building with the given name, or `null` if not found

@@ -3,6 +3,7 @@ package models;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Cell {
@@ -72,12 +73,16 @@ public class Cell {
     }
 
     public boolean isPassable() {
-        // some ifs
+        Texture[] notPassableTextures = {Texture.SEA,Texture.ROCK};
+        String[] notPassableObjectsNames = {"short wall", "tall wall"}; //TODO add other buildings and textures if its needed
+        for (Texture texture1 : notPassableTextures) {
+            if (texture1.equals(texture)) return false;
+        }
+        if (hasLadder) return true;
+        for (String objectsName : notPassableObjectsNames) {
+            if (object.getName().equals(objectsName)) return false;
+        }
         return true;
-    }
-
-    public String cellInfo() {
-        return null;
     }
 
     public void clear() {
