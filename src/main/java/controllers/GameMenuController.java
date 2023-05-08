@@ -205,7 +205,8 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String type, int count) {
+    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useMaterials) {
+        //TODO decrease materials to create units
         Unit unit = MakeUnitInstances.createUnitInstance(type);
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;

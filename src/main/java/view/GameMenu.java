@@ -46,10 +46,6 @@ public class GameMenu {
                 dropTree(parser);
             } else if (parser.beginsWith("settexture")) {
                 setTexture(parser);
-            } else if (parser.beginsWith("drop building")) {
-                dropBuilding(parser, false);
-            } else if (parser.beginsWith("drop unit")) {
-                dropUnit(parser);
             } else if (parser.beginsWith("clear")) {
                 clearBlock(parser);
             } else if (parser.beginsWith("exit")) {
@@ -134,6 +130,7 @@ public class GameMenu {
                     Colors color = pickColor(colors, scanner);
                     dropSmallStoneGate(player, scanner);
                     GameMenuController.addPlayerToGame(player, color);
+                    dropBuildingAndUnit(scanner);
                     break;
                 }
             }
@@ -148,6 +145,22 @@ public class GameMenu {
             System.out.println(message.getMessage());
             if (message == GameMenuMessages.DONE_SUCCESSFULLY)
                 break;
+        }
+    }
+
+    private void dropBuildingAndUnit(Scanner scanner) {
+        System.out.println("Now you may drop buildings and units with no cost. type next to continue.");
+        while (true) {
+            Parser parser = new Parser(scanner.nextLine());
+            if (parser.beginsWith("drop building")) {
+                dropBuilding(parser, false);
+            } else if (parser.beginsWith("drop unit")) {
+                dropUnit(parser);
+            } else if (parser.beginsWith("next")) {
+                break;
+            } else {
+                System.out.println("invalid command!");
+            }
         }
     }
 
@@ -286,7 +299,17 @@ public class GameMenu {
     }
 
     void dropUnit(Parser parser) {
-
+        if (!parser.getFlag("x") || !parser.getFlag("y") || !parser.getFlag("t") || !parser.getFlag("c")) {
+            System.out.println("wrong format. some flags are missing");
+            return;
+        }
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y")) || !Utils.isInteger(parser.get("c"))) {
+            System.out.println("coordinates and count should be integers");
+            return;
+        }
+        GameMenuMessages outputMessage = GameMenuController.dropUnit(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")),
+            parser.get("t"), Integer.parseInt(parser.get("c")), false);
+        System.out.println(outputMessage.getMessage());
     }
 
     void selectUnit(Parser parser, Scanner scanner) {
