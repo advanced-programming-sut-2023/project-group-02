@@ -45,7 +45,7 @@ public class PathFinder {
             ArrayList<Coordinates> neighbors = getNeighbors(point);
             for (Coordinates neighbor : neighbors) {
                 Cell cell = map.findCellWithXAndY(neighbor.x, neighbor.y);
-                if (!visitedPoints.contains(neighbor) && !cell.isOccupied()) {
+                if (!visitedPoints.contains(neighbor) && cell.isPassable()) {
                     visitedPoints.add(neighbor);
                     LinkedList<Coordinates> newPath = new LinkedList<>(path);
                     newPath.add(neighbor);
