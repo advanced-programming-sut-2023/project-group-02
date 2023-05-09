@@ -116,24 +116,30 @@ public class GameMenu {
                 break;
             System.out.println("The number of governments should be at most 8!");
         }
+
+        int[] colors = new int[8];
         for (int i = 0; i < numberOfGovernments; i++) {
-            while (true) {
-                System.out.print("Enter the username of player you want to add: ");
-                String username = scanner.nextLine().trim();
-                if (!UserController.userWithUsernameExists(username))
-                    System.out.println("user with this username doesn't exist!");
-                else if (GameMenuController.getCurrentGame().getPlayerByUsername(username) != null)
-                    System.out.println("player already in game!");
-                else {
-                    User player = UserController.findUserWithUsername(username);
-                    int[] colors = new int[8];
-                    Colors color = pickColor(colors, scanner);
-                    dropSmallStoneGate(player, scanner);
-                    GameMenuController.addPlayerToGame(player, color);
-                    dropBuildingAndUnit(scanner);
-                    break;
+            User player;
+            if (i == 0) {
+                player = UserController.getCurrentUser();
+            } else {
+                while (true) {
+                    System.out.print("Enter the username of player you want to add: ");
+                    String username = scanner.nextLine().trim();
+                    if (!UserController.userWithUsernameExists(username))
+                        System.out.println("user with this username doesn't exist!");
+                    else if (GameMenuController.getCurrentGame().getPlayerByUsername(username) != null)
+                        System.out.println("player is already in game!");
+                    else {
+                        player = UserController.findUserWithUsername(username);
+                        break;
+                    }
                 }
             }
+            Colors color = pickColor(colors, scanner);
+            dropSmallStoneGate(player, scanner);
+            GameMenuController.addPlayerToGame(player, color);
+            dropBuildingAndUnit(scanner);
         }
     }
 
