@@ -99,17 +99,20 @@ public class Map {
                 if (i % 4 == 1) {
                     if (miniMap[i / 4][j / 2].getObject() instanceof Building) {
                         answer += "  B  ";
-                    } else answer += "#####";
+                    } else
+                        answer += "     ";
                 } else if (i % 4 == 2) {
                     if (miniMap[i / 4][j / 2].getUnits().size() > 0) {
                         answer += "  S  ";
-                    } else answer += "#####";
+                    } else
+                        answer += "     ";
                 } else if (i % 4 == 3) {
                     if (miniMap[i / 4][j / 2].getObject() instanceof Tree) {
                         answer += "  T  ";
                     } else if (miniMap[i / 4][j / 2].getObject() instanceof Rock) {
                         answer += "  R  ";
-                    } else answer += "#####";
+                    } else
+                        answer += "     ";
                 }
             }
             answer += ("\u001B[0m" + "\n");
