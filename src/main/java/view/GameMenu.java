@@ -325,7 +325,8 @@ public class GameMenu {
     void selectUnit(Parser parser, Scanner scanner) {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectUnit(x, y, scanner);
+        String type = parser.get("t");
+        GameMenuMessages message = GameMenuController.selectUnit(x, y, type, scanner);
         System.out.println(message.getMessage());
     }
 

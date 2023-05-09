@@ -110,12 +110,14 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages selectUnit(int x, int y, Scanner scanner) {
+    public static GameMenuMessages selectUnit(int x, int y, String type, Scanner scanner) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
 
-        ArrayList<Unit> selectedUnits = new ArrayList<>(currentGame.getMap().findUnitsWithXAndY(x, y).stream()
-                .filter(unit -> unit.getOwner().equals(currentGame.getCurrentPlayer())).toList());
+        ArrayList<Unit> selectedUnits = new ArrayList<>(currentGame.getMap().findUnitsWithXAndY(x, y).stream().filter(
+                unit -> unit.getOwner().equals(currentGame.getCurrentPlayer()))
+                .filter(unit -> type == null || unit.getName().equalsIgnoreCase(type))
+                .toList());
         if (selectedUnits.size() == 0) {
             return GameMenuMessages.NO_UNITS;
         }
