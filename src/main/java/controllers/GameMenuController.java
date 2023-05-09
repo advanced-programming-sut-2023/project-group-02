@@ -111,13 +111,14 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages selectUnit(int x, int y, Scanner scanner) {
-        ArrayList<Unit> selectedUnits = new ArrayList<>();
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-        if ((selectedUnits = currentGame.getMap().findUnitsWithXAndY(x, y)).size() == 0)
-            return GameMenuMessages.NO_UNITS;
-        // TODO do we have not yours here too?
 
+        ArrayList<Unit> selectedUnits = new ArrayList<>(currentGame.getMap().findUnitsWithXAndY(x, y).stream()
+                .filter(unit -> unit.getOwner().equals(currentGame.getCurrentPlayer())).toList());
+        if (selectedUnits.size() == 0) {
+            return GameMenuMessages.NO_UNITS;
+        }
         new UnitMenu(selectedUnits).run(scanner);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
