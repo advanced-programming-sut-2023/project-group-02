@@ -284,6 +284,10 @@ public class GameMenu {
     }
 
     void dropBuilding(Parser parser, boolean useMaterials) {
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Invalid x or y");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         String type = parser.get("type");
