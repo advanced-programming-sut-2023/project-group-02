@@ -1,19 +1,17 @@
 package view;
 
 import models.units.Unit;
+import models.units.UnitState;
 import utils.Parser;
+import view.enums.UnitMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import controllers.UnitMenuController;
+
 public class UnitMenu {
-    private final ArrayList<Unit> selectedUnits;
-
-    public UnitMenu(ArrayList<Unit> selectedUnits) {
-        this.selectedUnits = selectedUnits;
-    }
-
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
@@ -53,7 +51,21 @@ public class UnitMenu {
     }
 
     void setState(Parser parser) {
+        String stateName = parser.get("s");
+        UnitState state = switch (stateName) {
+            case "standing" -> UnitState.STANDING;
+            case "offensive" -> UnitState.OFFENSIVE;
+            case "defensive" -> UnitState.DEFENSIVE;
+            default -> null;
+        };
 
+        if (state == null) {
+            System.out.println("Invalid state");
+            return;
+        }
+
+        UnitMenuController.setState(state);
+        System.out.println("State set successfully");
     }
 
     void attack(Parser parser) {

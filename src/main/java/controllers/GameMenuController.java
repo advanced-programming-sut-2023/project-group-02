@@ -119,7 +119,8 @@ public class GameMenuController {
         if (selectedUnits.size() == 0) {
             return GameMenuMessages.NO_UNITS;
         }
-        new UnitMenu(selectedUnits).run(scanner);
+        UnitMenuController.setSelectedUnits(selectedUnits);
+        new UnitMenu().run(scanner);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
