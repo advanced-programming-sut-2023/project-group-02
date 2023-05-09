@@ -10,14 +10,14 @@ import java.util.List;
 
 public class ShopMenuController {
     public static String showPrice() {
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         for (Material material : ItemsController.getAllMaterials()) {
-            answer += material.getName() + " Buy: " + material.getBuyPrice() + " Sell: " + material.getSellPrice() + "\n";
+            answer.append(material.getName()).append(" Buy: ").append(material.getBuyPrice()).append(" Sell: ").append(material.getSellPrice()).append("\n");
         }
         for (Food food : ItemsController.getAllFoods()) {
-            answer += food.getName() + " Buy: " + food.getBuyPrice() + " Sell: " + food.getSellPrice() + "\n";
+            answer.append(food.getName()).append(" Buy: ").append(food.getBuyPrice()).append(" Sell: ").append(food.getSellPrice()).append("\n");
         }
-        return answer.trim();
+        return answer.toString().trim();
     }
 
     public static ShopMenuMessages buyItem(String itemName, int amount) {
