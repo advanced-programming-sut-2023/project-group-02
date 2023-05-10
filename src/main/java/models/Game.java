@@ -18,6 +18,7 @@ public class Game {
 
     public void addGovernment(Government government) {
         governments.add(government);
+        government.setMap(map);
     }
 
     public Government getPlayersGovernment(User player) {
