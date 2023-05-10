@@ -1,32 +1,19 @@
 package models;
 
-import controllers.UserController;
 import models.units.Unit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Game {
     private final ArrayList<Government> governments;
-    private HashMap<User, Colors> playersColors;
-    private User currentPlayer;
     private int turnCounter = 0;
     private final int numberOfTurns;
     private final Map map;
 
     public Game(ArrayList<Government> governments, int numberOfTurns, Map map) {
-        this.currentPlayer = UserController.getCurrentUser();
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
-    }
-
-    public void givePlayersColors(ArrayList<User> players) {
-
-    }
-
-    public void givePlayersGovernments(ArrayList<User> players) {
-
     }
 
     public void addGovernment(Government government) {
@@ -43,18 +30,18 @@ public class Game {
     }
 
     public Government getCurrentPlayersGovernment() {
-        return getPlayersGovernment(currentPlayer);
+        return getPlayersGovernment(getCurrentPlayer());
     }
 
     public void addObject(MapObject object, int x, int y) {
         map.addObject(object, x, y);
         if (!(object instanceof Tree) && !(object instanceof Rock))
-            object.setOwner(currentPlayer);
+            object.setOwner(getCurrentPlayer());
     }
 
     public void addUnit(Unit unit, int x, int y) {
         map.addUnit(unit, x, y);
-        unit.setOwner(currentPlayer);
+        unit.setOwner(getCurrentPlayer());
     }
 
     public int getTurnCounter() {
@@ -62,7 +49,9 @@ public class Game {
     }
 
     public User getCurrentPlayer() {
-        return currentPlayer;
+        if (governments.size() == 0)
+            return null;
+        return governments.get(turnCounter % governments.size()).getUser();
     }
 
     public Map getMap() {
@@ -94,15 +83,11 @@ public class Game {
         return null;
     }
 
-    public User nextPlayer(User currentPlayer) {
-        return null;
-    }
-
     public void nextTurn() {
-
+        turnCounter++;
     }
 
     public boolean isGameOver() {
-        return false;
+        return turnCounter >= numberOfTurns;
     }
 }

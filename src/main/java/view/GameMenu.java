@@ -65,6 +65,7 @@ public class GameMenu {
     }
 
     public void runGameMenu(Scanner scanner) {
+        printNowPlaying();
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("drop building")) {
@@ -96,6 +97,8 @@ public class GameMenu {
             } else if (parser.beginsWith("save")) {
                 GameMenuController.saveGame();
                 System.out.println("Game saved successfully!");
+            } else if (parser.beginsWith("next")) {
+                nextTurn();
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to the main menu!");
                 break;
@@ -137,8 +140,8 @@ public class GameMenu {
                 }
             }
             Colors color = pickColor(colors, scanner);
-            dropSmallStoneGate(player, scanner);
             GameMenuController.addPlayerToGame(player, color);
+            dropSmallStoneGate(player, scanner);
             dropBuildingAndUnit(scanner);
         }
     }
@@ -384,6 +387,11 @@ public class GameMenu {
     }
 
     void nextTurn() {
+        GameMenuController.nextTurn();
+        printNowPlaying();
+    }
 
+    private void printNowPlaying() {
+        System.out.println("Now playing: @" + GameMenuController.getCurrentGame().getCurrentPlayer().getUsername());
     }
 }

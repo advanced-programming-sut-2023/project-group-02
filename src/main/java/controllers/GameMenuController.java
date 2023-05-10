@@ -228,4 +228,8 @@ public class GameMenuController {
         }
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
+
+    public static void nextTurn() {
+        currentGame.nextTurn();
+    }
 }
