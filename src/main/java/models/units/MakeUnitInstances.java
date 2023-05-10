@@ -117,7 +117,7 @@ public class MakeUnitInstances {
 
     public static Unit createUnitInstance(String name) {
         name = Utils.toCamelCase("make " + name);
-        Method[] methods = BuildingFactory.class.getMethods();
+        Method[] methods = MakeUnitInstances.class.getMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {
                 try {
