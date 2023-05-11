@@ -28,17 +28,17 @@ public class TradeMenuController {
     }
 
     public static TradeMenuMessages tradeRequest(String resourceType, int amount, int price, String message) {
-        Material material;
-        if ((material = Material.findMaterialByName(resourceType)) == null)
+        Object item;
+        if ((item = ItemsController.findItemWithName(resourceType)) == null)
             return TradeMenuMessages.INVALID_RESOURCE;
         if (amount < 0)
             return TradeMenuMessages.INVALID_AMOUNT;
         if (price < 0)
             return TradeMenuMessages.INVALID_PRICE;
-        if (price > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getMaterialAmount(Material.GOLD))
+        if (price > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD))
             return TradeMenuMessages.NOT_ENOUGH_MONEY;
 
-        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(),material,amount,price,message));
+        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(),item,amount,price,message));
         return TradeMenuMessages.REQUEST_IS_MADE;
     }
 
@@ -46,7 +46,7 @@ public class TradeMenuController {
         Trade trade;
         if ((trade = findTradeById(id)) == null)
             return TradeMenuMessages.ID_DOESNT_EXIST;
-        if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getMaterialAmount(trade.getResourceType()) < trade.getAmount())
+        if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(trade.getResourceType()) < trade.getAmount())
             return TradeMenuMessages.NOT_ENOUGH_MATERIAL;
         if (trade.isAccepted())
             return TradeMenuMessages.ALREADY_ACCEPTED;
@@ -58,11 +58,11 @@ public class TradeMenuController {
     }
 
     static void tradeDone(Trade trade) {
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).increaseMaterial(trade.getResourceType(), trade.getAmount());
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).reduceMaterial(Material.GOLD, trade.getPrice());
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).increaseItem(trade.getResourceType(), trade.getAmount());
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).reduceItem(Material.GOLD, trade.getPrice());
         trade.getRequester().getUsersNewTrades().add(trade);
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).reduceMaterial(trade.getResourceType(),trade.getAmount());
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).increaseMaterial(Material.GOLD, trade.getPrice());
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).reduceItem(trade.getResourceType(),trade.getAmount());
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).increaseItem(Material.GOLD, trade.getPrice());
         trade.getAcceptor().getUsersNewTrades().add(trade);
     }
 

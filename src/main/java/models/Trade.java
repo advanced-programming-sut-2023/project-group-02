@@ -3,7 +3,7 @@ package models;
 public class Trade {
     public static int nowId = 1;
     private final int id;
-    private final Material resourceType;
+    private final Object resourceType;
     private final int amount;
     private final int price;
     private final String requesterMessage;
@@ -11,7 +11,7 @@ public class Trade {
     private final User requester;
     private User acceptor;
 
-    public Trade(User requester, Material resourceType, int amount, int price, String requesterMessage) {
+    public Trade(User requester, Object resourceType, int amount, int price, String requesterMessage) {
         this.requester = requester;
         this.resourceType = resourceType;
         this.amount = amount;
@@ -33,7 +33,7 @@ public class Trade {
         return acceptor;
     }
 
-    public Material getResourceType() {
+    public Object getResourceType() {
         return resourceType;
     }
 
@@ -61,8 +61,10 @@ public class Trade {
     public String toString() {
         String answer = id + ". Requester: " + requester.getUsername();
         if (isAccepted()) answer += " Acceptor: " + acceptor.getUsername();
-        answer += "\nResourceType: " + resourceType.getName() +
-        " Amount: " + amount + " Price: " + price +
+        if (resourceType instanceof Material) answer += "\nResourceType: " + ((Material) resourceType).getName();
+        else if (resourceType instanceof Food) answer += "\nResourceType: " + ((Food) resourceType).getName();
+        //TODO add material equipment later
+        answer += " Amount: " + amount + " Price: " + price +
         "\nRequester Message: " + requesterMessage +
             "\nAcceptor Message: " + acceptorMessage;
 

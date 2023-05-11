@@ -36,66 +36,40 @@ public class Government {
         return user;
     }
 
-    public int getMaterialAmount(Material material) {
+    public int getItemAmount(Object item) {
         int amount = 0;
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
-            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
             if (inventoryBuilding != null) {
-                amount += inventoryBuilding.getAmount(material);
+                amount += inventoryBuilding.getAmount(item);
             }
         }
         return amount;
     }
 
-    public void reduceMaterial(Material material, int amount) {
+    public void increaseItem(Object item, int amount) {
         int amountLeft = amount;
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
             if (amountLeft == 0)
                 break;
-            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
             if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.decreaseItem(material, amountLeft);
+                amountLeft = inventoryBuilding.increaseItem(item, amountLeft);
             }
         }
     }
 
-    public void increaseMaterial(Material material, int amount) {
+    public void reduceItem(Object item, int amount) {
         int amountLeft = amount;
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
             if (amountLeft == 0)
                 break;
-            InventoryBuilding<Material> inventoryBuilding = InventoryBuilding.castIfPossible(building, material);
+            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
             if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.increaseItem(material, amountLeft);
-            }
-        }
-    }
-
-    public void reduceFood(Food food, int amount) {
-        int amountLeft = amount;
-        ArrayList<Building> buildings = map.getPlayersBuildings(user);
-        for (Building building : buildings) {
-            if (amountLeft == 0)
-                break;
-            InventoryBuilding<Food> inventoryBuilding = InventoryBuilding.castIfPossible(building, food);
-            if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.decreaseItem(food, amountLeft);
-            }
-        }
-    }
-
-    public void increaseFood(Food food, int amount) {
-        int amountLeft = amount;
-        ArrayList<Building> buildings = map.getPlayersBuildings(user);
-        for (Building building : buildings) {
-            if (amountLeft == 0)
-                break;
-            InventoryBuilding<Food> inventoryBuilding = InventoryBuilding.castIfPossible(building, food);
-            if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.increaseItem(food, amountLeft);
+                amountLeft = inventoryBuilding.decreaseItem(item, amountLeft);
             }
         }
     }
@@ -103,7 +77,7 @@ public class Government {
     public boolean hasEnoughMaterialsForBuilding(Building building) {
         MaterialInstance[] materialInstances = building.getBuildingMaterials();
         for (MaterialInstance materialInstance : materialInstances) {
-            if (materialInstance.amount > getMaterialAmount(materialInstance.material))
+            if (materialInstance.amount > getItemAmount(materialInstance.material))
                 return false;
         }
         return true;
@@ -112,7 +86,7 @@ public class Government {
     public void reduceMaterialsForBuilding(Building building) {
         MaterialInstance[] materialInstances = building.getBuildingMaterials();
         for (MaterialInstance materialInstance : materialInstances) {
-            increaseMaterial(materialInstance.material, materialInstance.amount);
+            reduceItem(materialInstance.material, materialInstance.amount);
         }
     }
 

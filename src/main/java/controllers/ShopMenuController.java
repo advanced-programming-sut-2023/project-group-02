@@ -42,41 +42,19 @@ public class ShopMenuController {
         return ShopMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    private static void sellOperation(Object item, int amount) {
-        if (item instanceof Material)
-            sellMaterialOperation((Material) item,amount);
-        if (item instanceof Food)
-            sellFoodOperation((Food) item,amount);
-    }
-
-    private static void sellMaterialOperation(Material material, int amount) {
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseMaterial(Material.GOLD,
-            amount * material.getSellPrice());
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(material, amount);
-    }
-
-    private static void sellFoodOperation(Food food, int amount) {
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,
-            amount * food.getBuyPrice());
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceFood(food, amount);
+    public static void sellOperation(Object item, int amount) {
+        int price = 0;
+        if (item instanceof Food) price = ((Food) item).getSellPrice();
+        else if (item instanceof Material) price = ((Material) item).getSellPrice();
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseItem(Material.GOLD,price);
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceItem(item,amount);
     }
 
     private static void buyOperation(Object item, int amount) {
-        if (item instanceof Material)
-            buyMaterialOperation((Material) item,amount);
-        if (item instanceof Food)
-            buyFoodOperation((Food) item,amount);
-    }
-
-    private static void buyMaterialOperation(Material material, int amount) {
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,
-            amount * material.getBuyPrice());
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseMaterial(material, amount);
-    }
-
-    private static void buyFoodOperation(Food food, int amount) {
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(Material.GOLD,
-            amount * food.getBuyPrice());
-        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseFood(food, amount);
+        int price = 0;
+        if (item instanceof Food) price = ((Food) item).getBuyPrice();
+        if (item instanceof Material) price = ((Food) item).getSellPrice();
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseItem(Material.GOLD,price);
+        GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceItem(item,amount);
     }
 }

@@ -16,12 +16,12 @@ public class BuildingMenuController {
         }
         MaterialInstance[] neededMaterials = neededMaterial(building);
         for (MaterialInstance material : neededMaterials) {
-            if (material.amount > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getMaterialAmount(material.material)) {
+            if (material.amount > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(material.material)) {
                 return BuildingMenuMessages.NOT_ENOUGH_MATERIAL;
             }
         }
         for (MaterialInstance material : neededMaterials) {
-            GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceMaterial(material.material, material.amount);
+            GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceItem(material.material, material.amount);
         }
         building.setHitpoint(building.getInitialHitpoint());
         return BuildingMenuMessages.DONE_SUCCESSFULLY;

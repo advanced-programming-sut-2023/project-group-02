@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import models.Building;
 import models.BuildingType;
+import models.Food;
 import models.MaterialInstance;
 
 public class InventoryBuilding<T> extends Building {
