@@ -28,6 +28,10 @@ public class Government {
     public Government(User user, Colors color) {
         this.user = user;
         this.color = color;
+        increaseItem(Material.GOLD,50);
+        increaseItem(Material.WOOD,50);
+        increaseItem(Material.IRON,50);
+        increaseItem(Material.STONE,50);
     }
 
     public void setMap(Map map) {
