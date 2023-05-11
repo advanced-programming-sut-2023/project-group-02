@@ -2,14 +2,12 @@ package models.buildings;
 
 import java.util.HashMap;
 
-import models.Building;
-import models.BuildingType;
-import models.Food;
-import models.MaterialInstance;
+import models.*;
 
 public class InventoryBuilding<T> extends Building {
     private int capacity;
     private HashMap<T, Integer> items;
+
 
     public InventoryBuilding(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
             int workerCount, int effectOnPopularity, int capacity) {
@@ -33,11 +31,30 @@ public class InventoryBuilding<T> extends Building {
     }
 
     public int getAmount(T item) {
+        if (!items.containsKey(item))
+                return 0;
         return items.get(item);
     }
 
+    public boolean isItemTypeSuitable(T item) {
+        if (item instanceof Food && name.equals("Food Inventory"))
+            return true;
+        if (item instanceof Material && name.equals("Stockpile"))
+            return true;
+        if (item instanceof MartialEquipment && name.equals("Armoury"))
+            return true;
+        return false;
+    }
+
     public int increaseItem(T item, int amount) {
-        int currentAmount = items.get(item);
+        int currentAmount = 0;
+        if (items.containsKey(item)) {
+            currentAmount = items.get(item);
+        } else if (isItemTypeSuitable(item)) {
+            items.put(item,0);
+        } else {
+            return amount;
+        }
         if (currentAmount + amount > capacity) {
             items.put(item,capacity);
             return amount + currentAmount - capacity;
