@@ -101,6 +101,19 @@ public class Government {
         return population;
     }
 
+    // addPeople returns true if all the people are added
+    public boolean addPeople(int number) {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building instanceof PlainBuilding) {
+                number = ((PlainBuilding) building).addPeople(number);
+                if (number == 0)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public int numberOfUnemployed() {
         int unemployed = 0;
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
@@ -236,11 +249,11 @@ public class Government {
         }
     }
 
-    public Building getSmallStone() {
+    public PlainBuilding getSmallStone() {
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
             if (building.getName().equals("Small Stone Gate"))
-                return building;
+                return (PlainBuilding) building;
         }
         return null;
     }

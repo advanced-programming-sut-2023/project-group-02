@@ -42,4 +42,16 @@ public class PlainBuilding extends Building {
         }
         return number;
     }
+
+    public int addPeople(int number) {
+        if (maxPeople == 0 || number == 0)
+            return number;
+        int output = (number <= maxPeople - people.size()) ? 0 : number - (maxPeople - people.size());
+        for (int i = 0; i < number; i++) {
+            if (people.size() == maxPeople)
+                return output;
+            people.add(new People());
+        }
+        return output;
+    }
 }
