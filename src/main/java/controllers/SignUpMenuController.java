@@ -25,6 +25,7 @@ public class SignUpMenuController {
 
     public static SignUpMenuMessages initiateSignup(String username, String password, String passwordConfirmation,
             String nickname, String email, String slogan) {
+        reset();
         if (username == null || username.length() == 0) {
             return SignUpMenuMessages.EMPTY_USERNAME;
         }
@@ -88,6 +89,10 @@ public class SignUpMenuController {
 
     private static void done() {
         UserController.signup(toBeSignedIn);
+        reset();
+    }
+
+    public static void reset() {
         toBeSignedIn = null;
         randomPassword = null;
     }
