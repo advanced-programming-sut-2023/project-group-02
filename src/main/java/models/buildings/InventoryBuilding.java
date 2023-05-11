@@ -14,6 +14,7 @@ public class InventoryBuilding extends Building {
         super(name, type, buildingMaterials, initialHitpoint, workerCount, effectOnPopularity);
         this.capacity = capacity;
         this.itemClass = itemClass;
+        items = new HashMap<>();
     }
 
     public int getCapacity() {

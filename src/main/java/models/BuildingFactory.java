@@ -54,7 +54,7 @@ public class BuildingFactory {
     public static InventoryBuilding armoury() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Armoury", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0,
-                MartialEquipment.class, 0);
+                MartialEquipment.class, 40);
     }
 
     public static DamagingBuilding killingPit() {
@@ -106,7 +106,7 @@ public class BuildingFactory {
 
     public static InventoryBuilding stockpile() {
         return new InventoryBuilding("Stockpile", BuildingType.INDUSTRY, new MaterialInstance[0], 0, 0, 0,
-                Object.class, 0);
+                Material.class, 50);
     }
 
     public static ProductionBuilding<Material, Object> woodcutter() {
@@ -227,7 +227,7 @@ public class BuildingFactory {
     public static InventoryBuilding foodInventory() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0,
-                0, 0, Food.class, 0);
+                0, 0, Food.class, 60);
     }
 
     public static PlainBuilding church() {

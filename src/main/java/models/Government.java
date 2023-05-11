@@ -53,7 +53,7 @@ public class Government {
         for (Building building : buildings) {
             if (amountLeft == 0)
                 break;
-            if (!(building instanceof InventoryBuilding))
+            if (!(building instanceof InventoryBuilding) || !((InventoryBuilding) building).isItemTypeSuitable(item))
                 continue;
             amountLeft = ((InventoryBuilding) building).increaseItem(item, amountLeft);
         }
