@@ -51,9 +51,10 @@ public class BuildingFactory {
         return new DefensiveBuilding("Circle Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
     }
 
-    public static InventoryBuilding<MartialEquipment> armoury() {
+    public static InventoryBuilding armoury() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new InventoryBuilding<>("Armoury", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0, 0);
+        return new InventoryBuilding("Armoury", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0,
+                MartialEquipment.class, 0);
     }
 
     public static DamagingBuilding killingPit() {
@@ -103,8 +104,9 @@ public class BuildingFactory {
             new Material[]{Material.STONE}, 0);
     }
 
-    public static InventoryBuilding<Object> stockpile() {
-        return new InventoryBuilding<>("Stockpile", BuildingType.INDUSTRY, new MaterialInstance[0], 0, 0, 0, 0);
+    public static InventoryBuilding stockpile() {
+        return new InventoryBuilding("Stockpile", BuildingType.INDUSTRY, new MaterialInstance[0], 0, 0, 0,
+                Object.class, 0);
     }
 
     public static ProductionBuilding<Material, Object> woodcutter() {
@@ -222,11 +224,10 @@ public class BuildingFactory {
             Food.BEER);
     }
 
-    public static InventoryBuilding<Food> foodInventory() {
+    public static InventoryBuilding foodInventory() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new InventoryBuilding<>("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0,
-            0, 0,
-            0);
+        return new InventoryBuilding("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0,
+                0, 0, Food.class, 0);
     }
 
     public static PlainBuilding church() {

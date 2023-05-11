@@ -40,10 +40,9 @@ public class Government {
         int amount = 0;
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
-            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
-            if (inventoryBuilding != null) {
-                amount += inventoryBuilding.getAmount(item);
-            }
+            if (!(building instanceof InventoryBuilding))
+                continue;
+            amount += ((InventoryBuilding) building).getAmount(item);
         }
         return amount;
     }
@@ -54,10 +53,9 @@ public class Government {
         for (Building building : buildings) {
             if (amountLeft == 0)
                 break;
-            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
-            if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.increaseItem(item, amountLeft);
-            }
+            if (!(building instanceof InventoryBuilding))
+                continue;
+            amountLeft = ((InventoryBuilding) building).increaseItem(item, amountLeft);
         }
     }
 
@@ -67,10 +65,9 @@ public class Government {
         for (Building building : buildings) {
             if (amountLeft == 0)
                 break;
-            InventoryBuilding<Object> inventoryBuilding = InventoryBuilding.castIfPossible(building, item);
-            if (inventoryBuilding != null) {
-                amountLeft = inventoryBuilding.decreaseItem(item, amountLeft);
-            }
+            if (!(building instanceof InventoryBuilding))
+                continue;
+            amountLeft = ((InventoryBuilding) building).decreaseItem(item, amountLeft);
         }
     }
 
