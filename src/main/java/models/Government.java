@@ -2,8 +2,10 @@ package models;
 
 import models.buildings.InventoryBuilding;
 import models.buildings.PlainBuilding;
+import models.units.UnitType;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 
 public class Government {
@@ -78,6 +80,19 @@ public class Government {
                 return false;
         }
         return true;
+    }
+
+    public boolean hasEnoughEquipmentsForUnit(String unitType, int number) {
+        for (UnitType unitType1 : EnumSet.allOf(UnitType.class)) {
+            if (unitType1.getName().equals(unitType)) {
+                for (MartialEquipment martialEquipment : unitType1.getMartialEquipmentsNeeded()) {
+                    if (this.getItemAmount(martialEquipment) < number)
+                        return false;
+                }
+                return true;
+            }
+        }
+        throw new IllegalStateException("unitType is invalid!");
     }
 
     public void reduceMaterialsForBuilding(Building building) {
