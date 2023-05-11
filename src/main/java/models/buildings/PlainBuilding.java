@@ -54,4 +54,8 @@ public class PlainBuilding extends Building {
         }
         return output;
     }
+
+    public int getMaxPeople() {
+        return maxPeople;
+    }
 }

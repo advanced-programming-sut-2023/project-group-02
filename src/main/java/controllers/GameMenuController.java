@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.buildings.PlainBuilding;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Parser;
@@ -92,9 +93,17 @@ public class GameMenuController {
             return GameMenuMessages.NOT_ENOUGH_MATERIALS;
         }
         currentGame.addObject(building, x, y);
-        if (useMaterials)
+        if (useMaterials) {
             currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
+            initBuilding(building);
+        }
         return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    private static void initBuilding(Building building) {
+        //TODO complete this (workers...)
+        if (building instanceof PlainBuilding)
+            ((PlainBuilding) building).addPeople(((PlainBuilding) building).getMaxPeople());
     }
 
     public static GameMenuMessages selectBuilding(int x, int y) {
