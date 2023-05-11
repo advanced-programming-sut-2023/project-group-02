@@ -231,12 +231,12 @@ public class BuildingFactory {
 
     public static PlainBuilding church() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.GOLD, 250)};
-        return new PlainBuilding("Church", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 2, 0);
+        return new PlainBuilding("Church", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 5, 0);
     }
 
     public static PlainBuilding cathedral() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.GOLD, 1000)};
-        return new PlainBuilding("Cathedral", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 2, 0);
+        return new PlainBuilding("Cathedral", BuildingType.TOWN_BUILDINGS, buildingMaterials, 0, 0, 10, 0);
     }
 
     public static DefensiveBuilding shortWall() {
