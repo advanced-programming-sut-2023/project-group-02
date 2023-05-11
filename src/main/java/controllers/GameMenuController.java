@@ -167,7 +167,7 @@ public class GameMenuController {
     public static GameMenuMessages dropRock(int x, int y, String direction) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-        if (!direction.matches("north|south|east|west|random"))
+        if (direction == null || !direction.matches("north|south|east|west|random"))
             return GameMenuMessages.INVALID_DIRECTION;
         if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
@@ -180,7 +180,7 @@ public class GameMenuController {
     public static GameMenuMessages dropTree(int x, int y, String treeName) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-        if (TreeType.getTreeTypeWithName(treeName) == null)
+        if (treeName == null || TreeType.getTreeTypeWithName(treeName) == null)
             return GameMenuMessages.INVALID_TREE_NAME;
         if (GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).isOccupied())
             return GameMenuMessages.FULL_CELL;
