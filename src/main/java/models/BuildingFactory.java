@@ -54,12 +54,17 @@ public class BuildingFactory {
     public static InventoryBuilding armoury() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Armoury", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0,
-                MartialEquipment.class, 40);
+            MartialEquipment.class, 40);
     }
 
     public static DamagingBuilding killingPit() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 6)};
         return new DamagingBuilding("Killing Pit", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0, 0);
+    }
+
+    public static PlainBuilding barrack() {
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 15)};
+        return new PlainBuilding("Barrack", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0, 0);
     }
 
     public static ProductionBuilding<Food, Food> mill() {
@@ -106,7 +111,7 @@ public class BuildingFactory {
 
     public static InventoryBuilding stockpile() {
         return new InventoryBuilding("Stockpile", BuildingType.INDUSTRY, new MaterialInstance[0], 0, 0, 0,
-                Material.class, 50);
+            Material.class, 50);
     }
 
     public static ProductionBuilding<Material, Object> woodcutter() {
@@ -227,7 +232,7 @@ public class BuildingFactory {
     public static InventoryBuilding foodInventory() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 0,
-                0, 0, Food.class, 60);
+            0, 0, Food.class, 60);
     }
 
     public static PlainBuilding church() {
@@ -241,13 +246,13 @@ public class BuildingFactory {
     }
 
     public static DefensiveBuilding shortWall() {
-        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE,5)};
-        return new DefensiveBuilding("short wall",BuildingType.CASTLE_BUILDINGS,buildingMaterials,0,0,0);
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 5)};
+        return new DefensiveBuilding("short wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
     }
 
     public static DefensiveBuilding tallWall() {
-        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE,10)};
-        return new DefensiveBuilding("tall wall",BuildingType.CASTLE_BUILDINGS,buildingMaterials,0,0,0);
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 10)};
+        return new DefensiveBuilding("tall wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
     }
 
     /**
