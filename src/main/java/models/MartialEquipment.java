@@ -2,18 +2,18 @@ package models;
 
 public enum MartialEquipment {
     // made in Poleturner using wood:
-    SPEAR("Spear",5),
-    PIKE("Pike",8),
+    SPEAR("spear",5),
+    PIKE("pike",8),
     // made in Fletcher using wood:
-    BOW("Bow",10),
-    CROSSBOW("Crossbow",10),
+    BOW("bow",10),
+    CROSSBOW("crossbow",10),
     // made in Armourer:
-    METAL_ARMOUR("Metal Armour",8),
+    METAL_ARMOUR("metal armour",8),
     // made in Diary Farm:
-    LEATHER_ARMOUR("Leather Armour",7),
+    LEATHER_ARMOUR("leather armour",7),
     // made in Black Smith using Iron:
-    MACE("Mace",13),
-    SWORD("Sword",15),
+    MACE("mace",13),
+    SWORD("sword",15),
     // made in Stable:
     HORSE("horse",25);
 

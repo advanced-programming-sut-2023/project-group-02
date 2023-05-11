@@ -50,7 +50,10 @@ public class InventoryBuilding extends Building {
     }
 
     public int decreaseItem(Object item, int amount) {
-        int currentAmount = items.get(item);
+        int currentAmount = 0;
+        if (items.containsKey(item)) {
+            currentAmount = items.get(item);
+        }
         if (amount > currentAmount) {
             items.put(item,0);
             return amount - currentAmount;

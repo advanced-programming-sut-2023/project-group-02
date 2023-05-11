@@ -6,7 +6,7 @@ import java.util.List;
 public enum Material {
     WOOD(4,"wood"),
     STONE(6,"stone"),
-    GOLD(0,"gold"),
+    GOLD(1,"gold"),
     IRON(10,"iron"),
     TAR(3,"tar");
 

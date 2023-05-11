@@ -1,7 +1,6 @@
 package view;
 
 import controllers.ShopMenuController;
-import models.Material;
 import utils.Parser;
 import view.enums.ShopMenuMessages;
 

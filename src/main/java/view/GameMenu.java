@@ -315,7 +315,7 @@ public class GameMenu {
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.selectBuilding(x, y);
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
-            System.out.println("You entered this Building: \""+ BuildingMenuController.getSelectedBuilding().getName() + "\"menu!");
+            System.out.println("You entered this Building: \""+ BuildingMenuController.getSelectedBuilding().getName() + "\" menu!");
             new BuildingMenu(BuildingMenuController.getSelectedBuilding()).run(scanner);
         } else System.out.println(message.getMessage());
     }

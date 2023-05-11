@@ -14,7 +14,11 @@ public class ItemsController {
     private final static ArrayList<MartialEquipment> allMaterialEquipments = new ArrayList<>(EnumSet.allOf(MartialEquipment.class));
 
     public static ArrayList<Object> getAllItems() {
-        return new ArrayList<>(List.of(allMaterials,allFoods,allMaterialEquipments));
+        ArrayList<Object> allItems = new ArrayList<>();
+        allItems.addAll(allMaterials);
+        allItems.addAll(allFoods);
+        allItems.addAll(allMaterialEquipments);
+        return allItems;
     }
 
     public static ArrayList<Food> getAllFoods() {
