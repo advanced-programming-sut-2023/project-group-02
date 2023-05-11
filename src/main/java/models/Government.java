@@ -265,6 +265,27 @@ public class Government {
         }
     }
 
+    public void givePeopleFood() {
+        float foodAmountPerPopulation = switch (foodRate) {
+            case -2 -> 0;
+            case -1 -> 0.5f;
+            case 0 -> 1;
+            case 1 -> 1.5f;
+            case 2 -> 2;
+            default -> 0; // unreachable
+        };
+        int foodAmount = Math.round(foodAmountPerPopulation * getPopulation());
+        for (Food food : foodStock) {
+            int totalAmount = getItemAmount(food);
+            if (totalAmount >= foodAmount) {
+                reduceItem(food, foodAmount);
+            }
+            if (totalAmount <= foodAmount) {
+                foodStock.remove(food);
+            }
+        }
+    }
+
     public PlainBuilding getSmallStone() {
         ArrayList<Building> buildings = map.getPlayersBuildings(user);
         for (Building building : buildings) {
