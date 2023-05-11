@@ -5,6 +5,16 @@ import models.MaterialInstance;
 import view.enums.BuildingMenuMessages;
 
 public class BuildingMenuController {
+    private static Building selectedBuilding;
+
+    public static Building getSelectedBuilding() {
+        return selectedBuilding;
+    }
+
+    public static void setSelectedBuilding(Building selectedBuilding) {
+        BuildingMenuController.selectedBuilding = selectedBuilding;
+    }
+
     public static BuildingMenuMessages createUnit(String typeOfUnit, int count) {
         //errors are page 21
         return null;

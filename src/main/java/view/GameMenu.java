@@ -1,5 +1,6 @@
 package view;
 
+import controllers.BuildingMenuController;
 import controllers.GameMenuController;
 import controllers.MapMenuController;
 import controllers.UserController;
@@ -312,8 +313,11 @@ public class GameMenu {
         }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectBuilding(x, y, scanner);
-        System.out.println(message.getMessage());
+        GameMenuMessages message = GameMenuController.selectBuilding(x, y);
+        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
+            System.out.println("You entered this Building: \""+ BuildingMenuController.getSelectedBuilding().getName() + "\"menu!");
+            new BuildingMenu(BuildingMenuController.getSelectedBuilding()).run(scanner);
+        } else System.out.println(message.getMessage());
     }
 
     void dropUnit(Parser parser) {
@@ -331,11 +335,19 @@ public class GameMenu {
     }
 
     void selectUnit(Parser parser, Scanner scanner) {
+        String[] strings = {parser.get("y"), parser.get("x")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         String type = parser.get("t");
-        GameMenuMessages message = GameMenuController.selectUnit(x, y, type, scanner);
-        System.out.println(message.getMessage());
+        GameMenuMessages message = GameMenuController.selectUnit(x, y, type);
+        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
+            System.out.println("You entered unit menu!");
+            new UnitMenu().run(scanner);
+        } else System.out.println(message.getMessage());
     }
 
     void setTexture(Parser parser) {
@@ -373,8 +385,8 @@ public class GameMenu {
             System.out.println("Please import numbers!");
             return;
         }
-        int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
+        int x = Integer.parseInt(parser.get("x"));
         GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
         System.out.println(message.getMessage());
     }

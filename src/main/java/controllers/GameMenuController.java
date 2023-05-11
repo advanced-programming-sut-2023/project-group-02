@@ -78,8 +78,8 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages dropBuilding(int x, int y, String buildingName, boolean useMaterials) {
-        Building building = BuildingFactory.makeBuilding(buildingName);
-        if (building == null) {
+        Building building;
+        if (buildingName == null || ((building = BuildingFactory.makeBuilding(buildingName)) == null)) {
             return GameMenuMessages.INVALID_BUILDING_NAME;
         }
         if (!Validation.areCoordinatesValid(x, y)) {
@@ -97,7 +97,7 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages selectBuilding(int x, int y, Scanner scanner) {
+    public static GameMenuMessages selectBuilding(int x, int y) {
         Building selectedBuilding;
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
@@ -106,11 +106,11 @@ public class GameMenuController {
         if (!selectedBuilding.getOwner().equals(currentGame.getCurrentPlayer()))
             return GameMenuMessages.NOT_YOURS;
 
-        new BuildingMenu(selectedBuilding).run(scanner);
+        BuildingMenuController.setSelectedBuilding(selectedBuilding);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages selectUnit(int x, int y, String type, Scanner scanner) {
+    public static GameMenuMessages selectUnit(int x, int y, String type) {
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
 
@@ -122,7 +122,6 @@ public class GameMenuController {
             return GameMenuMessages.NO_UNITS;
         }
         UnitMenuController.setSelectedUnits(selectedUnits);
-        new UnitMenu().run(scanner);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
