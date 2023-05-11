@@ -171,7 +171,20 @@ public class Government {
             case 8 -> 2;
             default -> 0; // unreachable
         };
-        increaseItem(Material.GOLD, Math.round(taxForEveryPerson * getPopulation()));
+        int totalAmount = Math.round(taxForEveryPerson * getPopulation());
+        if (totalAmount >= 0) {
+            // add gold
+            increaseItem(Material.GOLD, totalAmount);
+        } else {
+            int availableAmount = getItemAmount(Material.GOLD);
+            if (totalAmount > availableAmount) {
+                // there's not enough gold to give to people, so set the tax rate to zero
+                setTaxRate(0);
+            } else {
+                // since `totalAmount` is negative we can't use `increaseItem`
+                reduceItem(Material.GOLD, -totalAmount);
+            }
+        }
     }
 
     public int getFoodRate() {
