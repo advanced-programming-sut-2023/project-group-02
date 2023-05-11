@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Food;
+import models.MartialEquipment;
 import models.Material;
 import utils.Utils;
 import view.enums.ShopMenuMessages;
@@ -16,6 +17,9 @@ public class ShopMenuController {
         }
         for (Food food : ItemsController.getAllFoods()) {
             answer.append(food.getName()).append(" Buy: ").append(food.getBuyPrice()).append(" Sell: ").append(food.getSellPrice()).append("\n");
+        }
+        for (MartialEquipment materialEquipment : ItemsController.getAllMaterialEquipments()) {
+            answer.append(materialEquipment.getName()).append(" Buy: ").append(materialEquipment.getBuyPrice()).append(" Sell: ").append(materialEquipment.getSellPrice()).append("\n");
         }
         return answer.toString().trim();
     }
@@ -46,6 +50,7 @@ public class ShopMenuController {
         int price = 0;
         if (item instanceof Food) price = ((Food) item).getSellPrice();
         else if (item instanceof Material) price = ((Material) item).getSellPrice();
+        else if (item instanceof MartialEquipment) price = ((MartialEquipment) item).getSellPrice();
         GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseItem(Material.GOLD,price);
         GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceItem(item,amount);
     }
@@ -53,7 +58,8 @@ public class ShopMenuController {
     private static void buyOperation(Object item, int amount) {
         int price = 0;
         if (item instanceof Food) price = ((Food) item).getBuyPrice();
-        if (item instanceof Material) price = ((Food) item).getSellPrice();
+        else if (item instanceof Material) price = ((Material) item).getBuyPrice();
+        else if (item instanceof MartialEquipment) price = ((MartialEquipment) item).getBuyPrice();
         GameMenuController.getCurrentGame().getCurrentPlayersGovernment().increaseItem(Material.GOLD,price);
         GameMenuController.getCurrentGame().getCurrentPlayersGovernment().reduceItem(item,amount);
     }
