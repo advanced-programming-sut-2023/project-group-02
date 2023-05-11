@@ -86,6 +86,9 @@ public class Game {
 
     public void nextTurn() {
         turnCounter++;
+        for (Government government : governments) {
+            government.updatePopularity();
+        }
     }
 
     public boolean isGameOver() {

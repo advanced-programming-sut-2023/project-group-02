@@ -157,6 +157,27 @@ public class Government {
         this.popularity = popularity;
     }
 
+    public void updatePopularity() {
+        popularity += foodRate * 4;
+        popularity += switch (taxRate) {
+            case -3 -> 7;
+            case -2 -> 5;
+            case -1 -> 3;
+            case 0 -> 1;
+            case 1 -> -2;
+            case 2 -> -4;
+            case 3 -> -6;
+            case 4 -> -8;
+            case 5 -> -12;
+            case 6 -> -16;
+            case 7 -> -20;
+            case 8 -> -24;
+            default -> 0; // unreachable
+        };
+        popularity += foodStock.size() - 1;
+        popularity -= fearRate;
+    }
+
     public int getFoodRate() {
         return foodRate;
     }
