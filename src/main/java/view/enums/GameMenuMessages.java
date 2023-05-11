@@ -8,6 +8,7 @@ public enum GameMenuMessages {
     INVALID_UNIT_NAME("invalid unit name"),
     FULL_CELL("This cell is full!"),
     NOT_ENOUGH_MATERIALS("You don't have enough materials for this building!"),
+    NOT_ENOUGH_EQUIPMENTS("You don't have enough value of required martial equipments to build this unit"),
     NOT_ENOUGH_PEOPLE("You don't have enough unemployed people"),
     SAME_CELL("Cell's texture is already this!"),
     SAME_BLOCK("Block's texture is already this!"),

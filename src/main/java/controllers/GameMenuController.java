@@ -4,6 +4,7 @@ import models.*;
 import models.buildings.PlainBuilding;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
+import models.units.UnitType;
 import utils.Parser;
 import utils.Utils;
 import utils.Validation;
@@ -12,6 +13,7 @@ import view.UnitMenu;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -218,8 +220,7 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useMaterials) {
-        //TODO decrease materials to create units
+    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useEquipments) {
         Unit unit = MakeUnitInstances.createUnitInstance(type);
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
@@ -230,12 +231,28 @@ public class GameMenuController {
         Government currentPlayersGovernment = currentGame.getCurrentPlayersGovernment();
         if (currentPlayersGovernment.numberOfUnemployed() < count)
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
+        if (useEquipments && !currentPlayersGovernment.hasEnoughEquipmentsForUnit(type, count)) {
+            return GameMenuMessages.NOT_ENOUGH_EQUIPMENTS;
+        }
         currentPlayersGovernment.recruitPeople(count, currentPlayersGovernment.getSmallStone());
+        // we assume that units working place is small stone gate.
         for (int i = 0; i < count; i++) {
             unit = MakeUnitInstances.createUnitInstance(type);
             currentGame.addUnit(unit, x, y);
         }
+        if (useEquipments)
+            reduceEquipmentForUnit(type, currentPlayersGovernment, count);
         return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    private static void reduceEquipmentForUnit(String type, Government government, int numberOfUnits) {
+        for (UnitType unitType : EnumSet.allOf(UnitType.class)) {
+            if (unitType.getName().equals(type)) {
+                for (MartialEquipment martialEquipment : unitType.getMartialEquipmentsNeeded())
+                    government.reduceItem(martialEquipment, numberOfUnits);
+                return;
+            }
+        }
     }
 
     public static void nextTurn() {
