@@ -152,6 +152,25 @@ public class Government {
         popularity -= fearRate;
     }
 
+    public void collectTax() {
+        float taxForEveryPerson = switch (taxRate) {
+            case -3 -> -1;
+            case -2 -> -0.8f;
+            case -1 -> -0.6f;
+            case 0 -> 0;
+            case 1 -> 0.6f;
+            case 2 -> 0.8f;
+            case 3 -> 1;
+            case 4 -> 1.2f;
+            case 5 -> 1.4f;
+            case 6 -> 1.6f;
+            case 7 -> 1.8f;
+            case 8 -> 2;
+            default -> 0; // unreachable
+        };
+        increaseItem(Material.GOLD, Math.round(taxForEveryPerson * getPopulation()));
+    }
+
     public int getFoodRate() {
         return foodRate;
     }

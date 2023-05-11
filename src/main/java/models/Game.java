@@ -10,6 +10,8 @@ public class Game {
     private final int numberOfTurns;
     private final Map map;
 
+    private static final int MONTH_TO_TURN = 30;
+
     public Game(ArrayList<Government> governments, int numberOfTurns, Map map) {
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
@@ -86,8 +88,15 @@ public class Game {
 
     public void nextTurn() {
         turnCounter++;
+        if (turnCounter % MONTH_TO_TURN == 0) {
+            nextMonth();
+        }
+    }
+
+    public void nextMonth() {
         for (Government government : governments) {
             government.updatePopularity();
+            government.collectTax();
         }
     }
 
