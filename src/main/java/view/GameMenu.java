@@ -305,6 +305,11 @@ public class GameMenu {
     }
 
     void selectBuilding(Parser parser, Scanner scanner) {
+        String[] strings = {parser.get("x"), parser.get("y")};
+        if (!Utils.areIntegers(strings)) {
+            System.out.println("Please import numbers in x and y field!");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.selectBuilding(x, y, scanner);
