@@ -150,6 +150,9 @@ public class Government {
         };
         popularity += foodStock.size() - 1;
         popularity -= fearRate;
+        for (Building building : map.getPlayersBuildings(user)) {
+            popularity += building.getEffectOnPopularity();
+        }
     }
 
     public void collectTax() {
