@@ -1,9 +1,13 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import models.Coordinates;
+import models.Map;
 import models.units.Unit;
 import models.units.UnitState;
+import utils.PathFinder;
 import view.enums.UnitMenuMessages;
 
 public class UnitMenuController {
@@ -18,7 +22,18 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages moveUnit(int x, int y) {
-        return null;
+        Map map = GameMenuController.getCurrentGame().getMap();
+        // since all of the selected units are located in the same cell, we can bring
+        // this line out of the loop
+        Coordinates startingPoint = map.locateUnit(selectedUnits.get(0));
+        for (Unit unit : selectedUnits) {
+            LinkedList<Coordinates> path = PathFinder.getPath(map, startingPoint.x, startingPoint.y, x, y);
+            int length = path.size() - 1;
+            if (length <= unit.getPace() / 10) {
+                map.moveUnit(unit, x, y);
+            }
+        }
+        return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static UnitMenuMessages patrolUnit(int x1, int y1, int x2, int y2) {

@@ -44,6 +44,24 @@ public class Map {
         return map[y][x].getUnits();
     }
 
+    public Coordinates locateUnit(Unit unit) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Cell cell = map[i][j];
+                if (cell.getUnits().contains(unit)) {
+                    return new Coordinates(j, i);
+                }
+            }
+        }
+        return null;
+    }
+
+    public void moveUnit(Unit unit, int x, int y) {
+        Coordinates prev = locateUnit(unit);
+        findUnitsWithXAndY(prev.x, prev.y).remove(unit);
+        findUnitsWithXAndY(x, y).add(unit);
+    }
+
     public void addObject(MapObject object, int x, int y) {
         findCellWithXAndY(x, y).setObject(object);
         object.setCoordinates(x, y);
