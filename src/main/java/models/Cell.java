@@ -80,7 +80,7 @@ public class Cell {
         }
         if (hasLadder) return true;
         for (String objectsName : notPassableObjectsNames) {
-            if (object.getName().equals(objectsName)) return false;
+            if (object != null && object.getName().equals(objectsName)) return false;
         }
         return true;
     }
