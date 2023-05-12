@@ -26,17 +26,21 @@ public class UnitMenuController {
         // since all of the selected units are located in the same cell, we can bring
         // this line out of the loop
         Coordinates startingPoint = map.locateUnit(selectedUnits.get(0));
+        // All units are of the same type, so they have the same pace
+        int pace = selectedUnits.get(0).getPace();
+        LinkedList<Coordinates> path = PathFinder.getPath(map, startingPoint.x, startingPoint.y, x, y);
+        int length = path.size() - 1;
+        if (length == 0) {
+            return UnitMenuMessages.ALREADY_DONE;
+        }
+        if (length < 0 || length > pace / 10) {
+            return UnitMenuMessages.CANT_GO_THERE;
+        }
+
         for (Unit unit : selectedUnits) {
-            LinkedList<Coordinates> path = PathFinder.getPath(map, startingPoint.x, startingPoint.y, x, y);
-            int length = path.size() - 1;
-            if (length == 0) {
-                return UnitMenuMessages.ALREADY_DONE;
-            }
-            if (length < 0 || length > unit.getPace() / 10) {
-                return UnitMenuMessages.CANT_GO_THERE;
-            }
             map.moveUnit(unit, x, y);
         }
+        startingPoint = new Coordinates(x, y);
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 

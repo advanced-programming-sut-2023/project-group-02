@@ -340,9 +340,13 @@ public class GameMenu {
             System.out.println("Please import numbers!");
             return;
         }
+        String type = parser.get("t");
+        if (type == null || type.equals("")) {
+            System.out.println("Unit type is required");
+            return;
+        }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        String type = parser.get("t");
         GameMenuMessages message = GameMenuController.selectUnit(x, y, type);
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
             System.out.println("You entered unit menu!");

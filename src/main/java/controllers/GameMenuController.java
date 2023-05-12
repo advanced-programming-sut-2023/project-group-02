@@ -127,7 +127,7 @@ public class GameMenuController {
 
         ArrayList<Unit> selectedUnits = new ArrayList<>(currentGame.getMap().findUnitsWithXAndY(x, y).stream().filter(
                 unit -> unit.getOwner().equals(currentGame.getCurrentPlayer()))
-            .filter(unit -> type == null || unit.getName().equalsIgnoreCase(type))
+                .filter(unit -> unit.getName().equalsIgnoreCase(type))
             .toList());
         if (selectedUnits.size() == 0) {
             return GameMenuMessages.NO_UNITS;
