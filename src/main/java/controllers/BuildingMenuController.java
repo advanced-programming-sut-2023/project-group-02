@@ -1,23 +1,36 @@
 package controllers;
 
-import models.Building;
-import models.MaterialInstance;
+import models.*;
+import models.units.MakeUnitInstances;
+import models.units.Unit;
+import models.units.UnitType;
 import view.enums.BuildingMenuMessages;
+
+import java.util.EnumSet;
 
 public class BuildingMenuController {
     private static Building selectedBuilding;
+    private static int selectedBuildingX;
+    private static int selectedBuildingY;
 
     public static Building getSelectedBuilding() {
         return selectedBuilding;
     }
 
-    public static void setSelectedBuilding(Building selectedBuilding) {
-        BuildingMenuController.selectedBuilding = selectedBuilding;
+    public static void setSelectedBuilding(Building selectedBuilding, int x, int y) {
+        selectedBuilding = selectedBuilding;
+        selectedBuildingX = x;
+        selectedBuildingY = y;
     }
 
-    public static BuildingMenuMessages createUnit(String typeOfUnit, int count) {
-        //errors are page 21
-        return null;
+    public static String createUnit(String typeOfUnit, int count) {
+        for (UnitType unitType : EnumSet.allOf(UnitType.class)) {
+            if (unitType.getName().equals(typeOfUnit)) {
+                if (!unitType.getWhereCanBeTrained().equals(selectedBuilding.getName()))
+                    return "This troop can't be trained at this building";
+            }
+        }
+        return GameMenuController.dropUnit(selectedBuildingX, selectedBuildingY, typeOfUnit, count, true).getMessage();
     }
 
     public static BuildingMenuMessages repair(Building building) {
@@ -42,8 +55,8 @@ public class BuildingMenuController {
         int initialHitpoint = building.getInitialHitpoint();
         MaterialInstance[] usedMaterials = building.getBuildingMaterials();
         MaterialInstance[] neededMaterials = new MaterialInstance[usedMaterials.length];
-        for (int i = 0; i < usedMaterials.length ; i++) {
-            neededMaterials[i] = new MaterialInstance(usedMaterials[i].material , (int) ((initialHitpoint - hitpoint) / initialHitpoint) * usedMaterials[i].amount);
+        for (int i = 0; i < usedMaterials.length; i++) {
+            neededMaterials[i] = new MaterialInstance(usedMaterials[i].material, (int) ((initialHitpoint - hitpoint) / initialHitpoint) * usedMaterials[i].amount);
         }
         return neededMaterials;
     }

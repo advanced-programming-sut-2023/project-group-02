@@ -3,6 +3,7 @@ package view;
 import controllers.BuildingMenuController;
 import models.Building;
 import utils.Parser;
+import utils.Utils;
 import view.enums.BuildingMenuMessages;
 
 import java.util.Scanner;
@@ -41,7 +42,16 @@ public class BuildingMenu {
     }
 
     void createUnit(Parser parser) {
-
+        if (!parser.getFlag("-t") || !parser.getFlag("-c") || !Utils.isInteger(parser.get("-c"))) {
+            System.out.println("Some fields aren't filled or filled wrong!");
+            return;
+        }
+        if (!(selectedBuilding.getName().equals("Barracks") || selectedBuilding.getName().equals("Mercenary Post")
+            || selectedBuilding.getName().equals("Engineer Guild"))) {
+            System.out.println("You can't create unit from this building!");
+            return;
+        }
+        System.out.println(BuildingMenuController.createUnit(parser.get("-t"), Integer.parseInt(parser.get("-c"))));
     }
 
     void repair() {

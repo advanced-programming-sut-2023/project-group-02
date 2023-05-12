@@ -4,6 +4,7 @@ public enum BuildingMenuMessages {
     INVALID_TYPE("Invalid type!"),
     INVALID_COUNT("Invalid count!"),
     NOT_ENOUGH_MATERIAL("You don't have enough material!"),
+    NOT_ENOUGH_EQUIPMENT("You don't have enough equipment!"),
     NOT_ENOUGH_PEOPLE("You don't have enough people!"),
     DONE_SUCCESSFULLY("Operation is done successfully!"),
     HP_IS_FULL("Hitpoint is already full!"),

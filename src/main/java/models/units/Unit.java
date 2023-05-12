@@ -19,7 +19,6 @@ public class Unit {
     private final boolean isLongRange;
     private final boolean canDigMoat;
     private final boolean canClimbLadder;
-    private String whereCanBeTrained; // Barracks, Engineer guild or cathedral.
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,

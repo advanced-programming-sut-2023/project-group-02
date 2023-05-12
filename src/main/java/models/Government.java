@@ -91,6 +91,8 @@ public class Government {
                     if (this.getItemAmount(martialEquipment) < number)
                         return false;
                 }
+                if (this.getItemAmount(Material.GOLD) < unitType1.getPrice() * number)
+                    return false;
                 return true;
             }
         }

@@ -14,7 +14,7 @@ import utils.Utils;
 public class BuildingFactory {
     public static PlainBuilding smallStoneGate() {
         return new PlainBuilding("Small Stone Gate", BuildingType.CASTLE_BUILDINGS, new MaterialInstance[0], 300, 0, 0,
-                8);
+            8);
     }
 
     public static PlainBuilding largeStoneGate() {
@@ -68,10 +68,21 @@ public class BuildingFactory {
         return new PlainBuilding("Barrack", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 200, 0, 0, 0);
     }
 
+    public static PlainBuilding mercenaryPost() {
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 10)};
+        return new PlainBuilding("Mercenary Post", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 130, 0, 0, 0);
+    }
+
+    public static PlainBuilding engineerGuild() {
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 10),
+            new MaterialInstance(Material.GOLD, 100)};
+        return new PlainBuilding("Engineer Guild", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 150, 0, 0, 0);
+    }
+
     public static ProductionBuilding mill() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
         return new ProductionBuilding("Mill", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 150, 3, 0, 15,
-                new Food[] { Food.FLOUR }, Food.WHEAT);
+            new Food[]{Food.FLOUR}, Food.WHEAT);
     }
 
     public static ProductionBuilding inn() {
@@ -107,7 +118,7 @@ public class BuildingFactory {
     public static LimitedProductionBuilding stoneMine() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
         return new LimitedProductionBuilding("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 40, 3, 0, 10,
-                new Material[] { Material.STONE }, 10);
+            new Material[]{Material.STONE}, 10);
     }
 
     public static InventoryBuilding stockpile() {
@@ -180,7 +191,8 @@ public class BuildingFactory {
     }
 
     public static ProductionBuilding stable() {
-        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
+        MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
+            new MaterialInstance(Material.GOLD, 400)};
         return new ProductionBuilding("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 100, 1, 0, 1,
             new MartialEquipment[]{MartialEquipment.HORSE});
     }
@@ -233,7 +245,7 @@ public class BuildingFactory {
     public static InventoryBuilding foodInventory() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 130,
-                0, 0, Food.class, 100);
+            0, 0, Food.class, 100);
     }
 
     public static PlainBuilding church() {

@@ -116,7 +116,7 @@ public class GameMenuController {
         if (!selectedBuilding.getOwner().equals(currentGame.getCurrentPlayer()))
             return GameMenuMessages.NOT_YOURS;
 
-        BuildingMenuController.setSelectedBuilding(selectedBuilding);
+        BuildingMenuController.setSelectedBuilding(selectedBuilding, x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -230,9 +230,8 @@ public class GameMenuController {
         Government currentPlayersGovernment = currentGame.getCurrentPlayersGovernment();
         if (currentPlayersGovernment.numberOfUnemployed() < count)
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
-        if (useEquipments && !currentPlayersGovernment.hasEnoughEquipmentsForUnit(type, count)) {
+        if (useEquipments && !currentPlayersGovernment.hasEnoughEquipmentsForUnit(type, count))
             return GameMenuMessages.NOT_ENOUGH_EQUIPMENTS;
-        }
         currentPlayersGovernment.recruitPeople(count, currentPlayersGovernment.getSmallStone());
         // we assume that units working place is small stone gate.
         for (int i = 0; i < count; i++) {
@@ -249,6 +248,7 @@ public class GameMenuController {
             if (unitType.getName().equals(type)) {
                 for (MartialEquipment martialEquipment : unitType.getMartialEquipmentsNeeded())
                     government.reduceItem(martialEquipment, numberOfUnits);
+                government.reduceItem(Material.GOLD, numberOfUnits * unitType.getPrice());
                 return;
             }
         }
