@@ -247,12 +247,12 @@ public class BuildingFactory {
 
     public static DefensiveBuilding shortWall() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 5)};
-        return new DefensiveBuilding("short wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
+        return new DefensiveBuilding("Short Wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
     }
 
     public static DefensiveBuilding tallWall() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 10)};
-        return new DefensiveBuilding("tall wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
+        return new DefensiveBuilding("Tall Wall", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 0, 0, 0);
     }
 
     /**

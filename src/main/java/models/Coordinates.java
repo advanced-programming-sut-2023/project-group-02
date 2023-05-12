@@ -37,4 +37,8 @@ public class Coordinates {
             case WEST -> new Coordinates(x - 1, y);
         };
     }
+
+    public Cell getCellWithCoordinates(Map map) {
+        return map.findCellWithXAndY(x,y);
+    }
 }

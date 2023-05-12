@@ -2,6 +2,7 @@ package view;
 
 import models.units.Unit;
 import models.units.UnitState;
+import models.units.UnitType;
 import utils.Parser;
 import utils.Utils;
 import view.enums.UnitMenuMessages;
@@ -84,7 +85,18 @@ public class UnitMenu {
     }
 
     void digTunnel(Parser parser) {
-
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Please import valid numbers in x and y field!");
+            return;
+        }
+        if (!UnitMenuController.selectedUnitsType().equals(UnitType.TUNNELER)) {
+            System.out.println("Selected unit cannot dig tunnels!");
+            return;
+        }
+        int x = Integer.parseInt(parser.get("x"));
+        int y = Integer.parseInt(parser.get("y"));
+        UnitMenuMessages message = UnitMenuController.digTunnel(x,y);
+        System.out.println(message.getMessage());
     }
 
     void build(Parser parser) {
