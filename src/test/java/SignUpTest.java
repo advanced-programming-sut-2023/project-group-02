@@ -30,31 +30,36 @@ public class SignUpTest {
     @Test
     void checkPasswordErrors() {
         ArrayList<PasswordProblem> problems = Validation.validatePassword("1Nima");
-        ArrayList<PasswordProblem> expectedProblems = new ArrayList<>(List.of(PasswordProblem.TOO_SHORT,PasswordProblem.NO_SPECIAL_CHARACTER));
-        Assertions.assertEquals(problems,expectedProblems);
+        Assertions.assertTrue(problems.contains(PasswordProblem.TOO_SHORT));
+        Assertions.assertTrue(problems.contains(PasswordProblem.NO_SPECIAL_CHARACTER));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_LOWERCASE));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_UPPERCASE));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_DIGIT));
     }
 
     @Test
     void usernameValidation() {
         Assertions.assertFalse(Validation.isValidUsername("Nima?"));
+        Assertions.assertTrue(Validation.isValidUsername("Nima"));
+        Assertions.assertTrue(Validation.isValidUsername("NimaNM7"));
+        Assertions.assertTrue(Validation.isValidUsername("Nima____NM7"));
+        Assertions.assertFalse(Validation.isValidUsername("Nima-NM7"));
+        Assertions.assertFalse(Validation.isValidUsername("Nima.NM7"));
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("Nima?", "Pass123!", "Pass123!", "NM7", "n@i.ma", "random"),
+                SignUpMenuMessages.INVALID_USERNAME);
     }
 
     @Test
-    void emailValidation1() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Oos.gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.INVALID_EMAIL);
-    }
-
-    @Test
-    void emailValidation2() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Oos@gmailcom","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.INVALID_EMAIL);
-    }
-
-    @Test
-    void emailValidation3() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Ofs..s@gmail.co.m","hello");
-        Assertions.assertNull(message);
+    void emailValidation() {
+        Assertions.assertFalse(Validation.isValidEmail("Oos.gmail.com"));
+        Assertions.assertFalse(Validation.isValidEmail("Oos@gmailcom"));
+        Assertions.assertFalse(Validation.isValidEmail("Ofs..s@gmail.co.m"));
+        Assertions.assertTrue(Validation.isValidEmail("Ofs.s@gmail.c.o.m"));
+        Assertions.assertTrue(Validation.isValidEmail("Ofss@gmail.com"));
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("Nima", "%1Nima", "%1Nima", "Moazzen", "Oos.gmail.com", "hello"),
+                SignUpMenuMessages.INVALID_EMAIL);
     }
 
     @Test
@@ -73,7 +78,7 @@ public class SignUpTest {
     }
 
     @Test
-    void emptyField1() {
+    void emptyFields() {
         Assertions.assertEquals(
                 SignUpMenuController.initiateSignup("Nima", "%1Nima", "%1Nima", "", "Oos@gmail.com", "hello"),
                 SignUpMenuMessages.EMPTY_NICKNAME);
