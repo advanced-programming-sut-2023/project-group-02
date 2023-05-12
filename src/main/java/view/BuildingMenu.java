@@ -22,6 +22,13 @@ public class BuildingMenu {
                 createUnit(parser);
             } else if (parser.beginsWith("repair")) {
                 repair();
+            } else if (parser.beginsWith("enter shop menu")) {
+                if (!selectedBuilding.getName().equals("Shop")) {
+                    System.out.println("You can't enter shop menu from other buildings!");
+                } else {
+                    System.out.println("You entered shop menu!");
+                    new ShopMenu().run(scanner);
+                }
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to Game!");
                 break;
