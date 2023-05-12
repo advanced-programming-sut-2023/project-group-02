@@ -309,7 +309,7 @@ public class Government {
                 reduceItem(productionBuilding.getMaterial(), amount);
             }
             for (Object product : productionBuilding.getProducts()) {
-                increaseItem(product, amount);
+                increaseItem(product, Math.round(amount * (1 + fearRate * 4 / 100)));
             }
         }
     }
