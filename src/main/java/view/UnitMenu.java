@@ -3,6 +3,7 @@ package view;
 import models.units.Unit;
 import models.units.UnitState;
 import utils.Parser;
+import utils.Utils;
 import view.enums.UnitMenuMessages;
 
 import java.util.ArrayList;
@@ -43,7 +44,12 @@ public class UnitMenu {
     }
 
     void moveUnit(Parser parser) {
-
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Invalid numbers for x and y");
+            return;
+        }
+        UnitMenuMessages message = UnitMenuController.moveUnit(0, 0);
+        System.out.println(message.getMessage());
     }
 
     void patrolUnit(Parser parser) {

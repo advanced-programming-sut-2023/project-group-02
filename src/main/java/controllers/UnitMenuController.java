@@ -29,9 +29,13 @@ public class UnitMenuController {
         for (Unit unit : selectedUnits) {
             LinkedList<Coordinates> path = PathFinder.getPath(map, startingPoint.x, startingPoint.y, x, y);
             int length = path.size() - 1;
-            if (length <= unit.getPace() / 10) {
-                map.moveUnit(unit, x, y);
+            if (length == 0) {
+                return UnitMenuMessages.ALREADY_DONE;
             }
+            if (length < 0 || length > unit.getPace() / 10) {
+                return UnitMenuMessages.CANT_GO_THERE;
+            }
+            map.moveUnit(unit, x, y);
         }
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
