@@ -48,7 +48,8 @@ public class UnitMenu {
             System.out.println("Invalid numbers for x and y");
             return;
         }
-        UnitMenuMessages message = UnitMenuController.moveUnit(0, 0);
+        UnitMenuMessages message = UnitMenuController.moveUnit(Integer.parseInt(parser.get("x")),
+                Integer.parseInt(parser.get("y")));
         System.out.println(message.getMessage());
     }
 
