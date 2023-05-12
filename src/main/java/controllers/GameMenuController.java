@@ -95,17 +95,12 @@ public class GameMenuController {
             return GameMenuMessages.NOT_ENOUGH_MATERIALS;
         }
         currentGame.addObject(building, x, y);
-        if (useMaterials) {
+        if (useMaterials)
             currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
-            initBuilding(building);
-        }
-        return GameMenuMessages.DONE_SUCCESSFULLY;
-    }
-
-    private static void initBuilding(Building building) {
-        //TODO complete this (workers...)
-        if (building instanceof PlainBuilding)
+        else if (building instanceof PlainBuilding)
             ((PlainBuilding) building).addPeople(((PlainBuilding) building).getMaxPeople());
+
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     public static GameMenuMessages selectBuilding(int x, int y) {
@@ -127,7 +122,7 @@ public class GameMenuController {
 
         ArrayList<Unit> selectedUnits = new ArrayList<>(currentGame.getMap().findUnitsWithXAndY(x, y).stream().filter(
                 unit -> unit.getOwner().equals(currentGame.getCurrentPlayer()))
-                .filter(unit -> unit.getName().equalsIgnoreCase(type))
+            .filter(unit -> unit.getName().equalsIgnoreCase(type))
             .toList());
         if (selectedUnits.size() == 0) {
             return GameMenuMessages.NO_UNITS;
