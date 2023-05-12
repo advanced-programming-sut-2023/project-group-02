@@ -8,24 +8,24 @@ import java.util.Arrays;
 public enum UnitType {
     //  EUROPEAN TROOPS
     ARCHER("Archer", "Barrack", 12, MartialEquipment.BOW),
-    CROSSBOWMEN("Crossbowman", "Barrack", 20, MartialEquipment.CROSSBOW, MartialEquipment.LEATHER_ARMOUR),
-    SPEARMEN("Spearman", "Barrack", 8, MartialEquipment.SPEAR),
-    PIKEMEN("Pikeman", "Barrack", 20, MartialEquipment.PIKE, MartialEquipment.METAL_ARMOUR),
-    MACEMEN("Maceman", "Barrack", 20, MartialEquipment.MACE, MartialEquipment.LEATHER_ARMOUR),
-    SWORDSMEN("Swordman", "Barrack", 40, MartialEquipment.SWORD, MartialEquipment.METAL_ARMOUR),
+    CROSSBOWMEN("Crossbowmen", "Barrack", 20, MartialEquipment.CROSSBOW, MartialEquipment.LEATHER_ARMOUR),
+    SPEARMEN("Spearmen", "Barrack", 8, MartialEquipment.SPEAR),
+    PIKEMEN("Pikemen", "Barrack", 20, MartialEquipment.PIKE, MartialEquipment.METAL_ARMOUR),
+    MACEMEN("Macemen", "Barrack", 20, MartialEquipment.MACE, MartialEquipment.LEATHER_ARMOUR),
+    SWORDSMEN("Swordmen", "Barrack", 40, MartialEquipment.SWORD, MartialEquipment.METAL_ARMOUR),
     KNIGHT("Knight", "Barrack", 40, MartialEquipment.SWORD, MartialEquipment.METAL_ARMOUR, MartialEquipment.HORSE),
     TUNNELER("Tunneler", "Engineer Guild", 30),
-    LADDERMEN("Ladderman", "Engineer Guild", 4),
+    LADDERMEN("Laddermen", "Engineer Guild", 4),
     ENGINEER("Engineer", "Engineer Guild", 30),
     BLACK_MONK("Black Monk", "Cathedral", 10),
     // ARABIAN TROOPS
     ARCHER_BOW("Archer Bow", "Mercenary Post", 75),
-    SLAVES("Slave", "Mercenary Post", 5),
-    SLINGERS("Slinger", "Mercenary Post", 12),
-    ASSASSINS("Assassin", "Mercenary Post", 60),
-    HORSE_ARCHERS("Horse Archer", "Mercenary Post", 80),
-    ARABIAN_SWORDSMEN("Arabian Swordman", "Mercenary Post", 80),
-    FIRE_THROWERS("Fire Thrower", "Mercenary Post", 100);
+    SLAVES("Slaves", "Mercenary Post", 5),
+    SLINGERS("Slingers", "Mercenary Post", 12),
+    ASSASSINS("Assassins", "Mercenary Post", 60),
+    HORSE_ARCHERS("Horse Archers", "Mercenary Post", 80),
+    ARABIAN_SWORDSMEN("Arabian Swordmen", "Mercenary Post", 80),
+    FIRE_THROWERS("Fire Throwers", "Mercenary Post", 100);
 
     private final String name;
     private final String whereCanBeTrained;
