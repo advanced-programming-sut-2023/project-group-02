@@ -37,6 +37,7 @@ public class UnitMenuController {
             }
             map.moveUnit(unit, x, y);
         }
+        startingPoint = new Coordinates(x, y);
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 
