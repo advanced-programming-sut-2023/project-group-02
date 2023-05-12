@@ -97,6 +97,7 @@ public class Game {
         for (Government government : governments) {
             government.updatePopularity();
             government.collectTax();
+            government.doTheProductions();
             government.givePeopleFood();
         }
     }

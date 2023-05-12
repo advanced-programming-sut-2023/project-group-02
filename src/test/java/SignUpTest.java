@@ -8,8 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SignUpTest {
+    @BeforeEach
+    void beforeEach() {
+        SignUpMenuController.reset();
+    }
+
     @Test
-    public void testRandomPasswordValidation() {
+    void testRandomPasswordValidation() {
         for (int i = 0; i < 100; i++) {
             Assertions.assertEquals(Validation.validatePassword(Randoms.getPassword()).size(),0);
         }
@@ -17,66 +22,75 @@ public class SignUpTest {
 
 
     @Test
-    public void passwordValidation() {
+    void passwordValidation() {
         SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%Nima","%Nima","Moazzen","Oos@gmail.com","hello");
         Assertions.assertEquals(message,SignUpMenuMessages.WEAK_PASSWORD);
     }
 
     @Test
-    public void checkPasswordErrors() {
+    void checkPasswordErrors() {
         ArrayList<PasswordProblem> problems = Validation.validatePassword("1Nima");
-        ArrayList<PasswordProblem> expectedProblems = new ArrayList<>(List.of(PasswordProblem.TOO_SHORT,PasswordProblem.NO_SPECIAL_CHARACTER));
-        Assertions.assertEquals(problems,expectedProblems);
+        Assertions.assertTrue(problems.contains(PasswordProblem.TOO_SHORT));
+        Assertions.assertTrue(problems.contains(PasswordProblem.NO_SPECIAL_CHARACTER));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_LOWERCASE));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_UPPERCASE));
+        Assertions.assertFalse(problems.contains(PasswordProblem.NO_DIGIT));
     }
+
     @Test
-    public void usernameValidation() {
+    void usernameValidation() {
         Assertions.assertFalse(Validation.isValidUsername("Nima?"));
+        Assertions.assertTrue(Validation.isValidUsername("Nima"));
+        Assertions.assertTrue(Validation.isValidUsername("NimaNM7"));
+        Assertions.assertTrue(Validation.isValidUsername("Nima____NM7"));
+        Assertions.assertFalse(Validation.isValidUsername("Nima-NM7"));
+        Assertions.assertFalse(Validation.isValidUsername("Nima.NM7"));
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("Nima?", "Pass123!", "Pass123!", "NM7", "n@i.ma", "random"),
+                SignUpMenuMessages.INVALID_USERNAME);
     }
 
     @Test
-    public void emailValidation1() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Oos.gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.INVALID_EMAIL);
+    void emailValidation() {
+        Assertions.assertFalse(Validation.isValidEmail("Oos.gmail.com"));
+        Assertions.assertFalse(Validation.isValidEmail("Oos@gmailcom"));
+        Assertions.assertFalse(Validation.isValidEmail("Ofs..s@gmail.co.m"));
+        Assertions.assertTrue(Validation.isValidEmail("Ofs.s@gmail.c.o.m"));
+        Assertions.assertTrue(Validation.isValidEmail("Ofss@gmail.com"));
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("Nima", "%1Nima", "%1Nima", "Moazzen", "Oos.gmail.com", "hello"),
+                SignUpMenuMessages.INVALID_EMAIL);
     }
 
     @Test
-    public void emailValidation2() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Oos@gmailcom","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.INVALID_EMAIL);
-    }
-
-    @Test
-    public void emailValidation3() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","Ofs..s@gmail.co.m","hello");
-        Assertions.assertEquals(SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED, message);
-    }
-
-    @Test
-    public void getRandomPassword() {
+    void getRandomPassword() {
         SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","random",null,"Moazzen","Oos@gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED);
+        Assertions.assertNotNull(SignUpMenuController.getPassword());
+        Assertions.assertEquals(message, SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED);
     }
 
     @Test
-    public void emptyField1() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","","Oos@gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.EMPTY_NICKNAME);
+    void getRandomSlogan() {
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima", "Pass123!", "Pass123!", "Moazzen",
+                "Oos@gmail.com", "random");
+        Assertions.assertNotNull(SignUpMenuController.getSlogan());
+        Assertions.assertNull(message);
     }
 
     @Test
-    public void emptyField2() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("","%1Nima","%1Nima","Moazzen","Oos@gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.EMPTY_USERNAME);
+    void emptyFields() {
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("Nima", "%1Nima", "%1Nima", "", "Oos@gmail.com", "hello"),
+                SignUpMenuMessages.EMPTY_NICKNAME);
+        Assertions.assertEquals(SignUpMenuController.initiateSignup("Nima", "%1Nima", "%1Nima", "Moazzen", "", "hello"),
+                SignUpMenuMessages.EMPTY_EMAIL);
+        Assertions.assertEquals(
+                SignUpMenuController.initiateSignup("", "%1Nima", "%1Nima", "Moazzen", "i@d.c", "hello"),
+                SignUpMenuMessages.EMPTY_USERNAME);
     }
 
     @Test
-    public void emptyField3() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%1Nima","Moazzen","","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.EMPTY_EMAIL);
-    }
-
-    @Test
-    public void confirmationWrong() {
+    void confirmationWrong() {
         SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%fs1Nima","Moazzen","Oos@gmail.com","hello");
         Assertions.assertEquals(message,SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG);
     }

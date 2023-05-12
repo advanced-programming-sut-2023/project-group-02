@@ -1,7 +1,9 @@
 package models;
 
 import models.buildings.InventoryBuilding;
+import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
+import models.buildings.ProductionBuilding;
 import models.units.UnitType;
 
 import java.util.ArrayList;
@@ -278,6 +280,27 @@ public class Government {
             }
             if (totalAmount <= foodAmount) {
                 foodStock.remove(food);
+            }
+        }
+    }
+
+    public void doTheProductions() {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (!(building instanceof ProductionBuilding))
+                continue;
+            ProductionBuilding productionBuilding = (ProductionBuilding) building;
+            int amount = productionBuilding.getRate(); // perhaps the rate is per month
+            if (building instanceof LimitedProductionBuilding) {
+                amount = Math.min(amount, ((LimitedProductionBuilding) building).getCapacity());
+            }
+
+            if (productionBuilding.needsMaterial()) {
+                // TODO: use a variable amount
+                reduceItem(productionBuilding.getMaterial(), amount);
+            }
+            for (Object product : productionBuilding.getProducts()) {
+                increaseItem(product, amount);
             }
         }
     }
