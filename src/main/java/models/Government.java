@@ -2,6 +2,7 @@ package models;
 
 import models.buildings.InventoryBuilding;
 import models.buildings.PlainBuilding;
+import models.buildings.ProductionBuilding;
 import models.units.UnitType;
 
 import java.util.ArrayList;
@@ -278,6 +279,22 @@ public class Government {
             }
             if (totalAmount <= foodAmount) {
                 foodStock.remove(food);
+            }
+        }
+    }
+
+    public void doTheProductions() {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (!(building instanceof ProductionBuilding))
+                continue;
+            ProductionBuilding productionBuilding = (ProductionBuilding) building;
+            if (productionBuilding.needsMaterial()) {
+                // TODO: use a variable amount
+                reduceItem(productionBuilding.getMaterial(), productionBuilding.getRate());
+            }
+            for (Object product : productionBuilding.getProducts()) {
+                increaseItem(product, productionBuilding.getRate());
             }
         }
     }
