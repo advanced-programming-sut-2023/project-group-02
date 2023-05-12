@@ -302,6 +302,9 @@ public class Government {
             }
 
             if (productionBuilding.needsMaterial()) {
+                if (getItemAmount(productionBuilding.getMaterial()) < amount) {
+                    continue;
+                }
                 // TODO: use a variable amount
                 reduceItem(productionBuilding.getMaterial(), amount);
             }
