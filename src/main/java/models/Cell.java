@@ -12,6 +12,7 @@ public class Cell {
     private ArrayList<Unit> units;
     private boolean hasLadder;
 
+
     public Cell(Texture texture) {
         this.texture = texture;
         this.units = new ArrayList<>();
@@ -109,6 +110,14 @@ public class Cell {
                 return false;
         }
         return true;
+    }
+
+    public void setHasLadder(boolean hasLadder) {
+        this.hasLadder = hasLadder;
+    }
+
+    public boolean hasLadder() {
+        return hasLadder;
     }
 
     @Override

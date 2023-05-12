@@ -2,6 +2,7 @@ package view.enums;
 
 public enum UnitMenuMessages {
     WRONG_UNIT("Wrong unit type"),
+    NOT_ENGINEER("You need to select engineers to build equipments!"),
     CANT_GO_THERE("Can't go there"),
     NO_UNIT_THERE("No unit is here"),
     ALREADY_DONE("Already done"),

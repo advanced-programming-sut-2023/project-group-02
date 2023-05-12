@@ -106,6 +106,20 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages build(String equipmentName) {
+        if (!selectedUnits.get(0).getType().equals(UnitType.ENGINEER))
+            return UnitMenuMessages.NOT_ENGINEER;
+
         return null;
+    }
+
+    public static UnitMenuMessages dropLadder(int x, int y) {
+        if (!Validation.areCoordinatesValid(x,y))
+            return UnitMenuMessages.INVALID_PLACE;
+        LinkedList<Coordinates> path = PathFinder.getPath(GameMenuController.getCurrentGame().getMap(), unitsX, unitsY, x, y);
+        int length = path.size() - 1;
+        if (length == -1 || length > selectedUnits.get(0).getPace()/10)
+            return UnitMenuMessages.CANT_GO_THERE;
+        GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x,y).setHasLadder(true);
+        return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 }
