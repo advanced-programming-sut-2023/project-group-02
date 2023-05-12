@@ -9,7 +9,8 @@ public enum TradeMenuMessages {
     INVALID_PRICE("Please import a valid price!"),
     INVALID_AMOUNT("Please import a valid amount!"),
     REQUEST_IS_MADE("Your request is made!"),
-    ACCEPTED("You accepted this trade!");
+    ACCEPTED("You accepted this trade!"),
+    CANT_ACCEPT_YOUR_TRADE("You can't accept your own trades!");
 
     private final String message;
 

@@ -60,13 +60,14 @@ public class Trade {
     @Override
     public String toString() {
         String answer = id + ". Requester: " + requester.getUsername();
-        if (isAccepted()) answer += " Acceptor: " + acceptor.getUsername();
+        if (isAccepted()) answer += " - Acceptor: " + acceptor.getUsername();
         if (resourceType instanceof Material) answer += "\nResourceType: " + ((Material) resourceType).getName();
         else if (resourceType instanceof Food) answer += "\nResourceType: " + ((Food) resourceType).getName();
         //TODO add material equipment later
         answer += " Amount: " + amount + " Price: " + price +
-        "\nRequester Message: " + requesterMessage +
-            "\nAcceptor Message: " + acceptorMessage;
+        "\nRequester Message: " + requesterMessage;
+        if (acceptor != null)
+            answer += "\nAcceptor Message: " + acceptorMessage;
 
         return answer;
     }

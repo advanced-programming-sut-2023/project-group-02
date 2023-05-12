@@ -50,6 +50,8 @@ public class TradeMenuController {
             return TradeMenuMessages.NOT_ENOUGH_MATERIAL;
         if (trade.isAccepted())
             return TradeMenuMessages.ALREADY_ACCEPTED;
+        if (trade.getRequester().equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+            return TradeMenuMessages.CANT_ACCEPT_YOUR_TRADE;
 
         trade.setAcceptor(GameMenuController.getCurrentGame().getCurrentPlayer());
         trade.setAcceptorMessage(message);

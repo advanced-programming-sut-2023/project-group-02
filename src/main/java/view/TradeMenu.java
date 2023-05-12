@@ -30,7 +30,7 @@ public class TradeMenu {
     }
 
     void tradeRequest(Parser parser) {
-        String[] strings = {parser.get("t"), parser.get("a"), parser.get("p"),parser.get("m")};
+        String[] strings = {parser.get("a"), parser.get("p")};
         if (!Utils.areIntegers(strings)) {
             System.out.println("Please import numbers!");
             return;
