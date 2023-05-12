@@ -63,7 +63,7 @@ public class Trade {
         if (isAccepted()) answer += " - Acceptor: " + acceptor.getUsername();
         if (resourceType instanceof Material) answer += "\nResourceType: " + ((Material) resourceType).getName();
         else if (resourceType instanceof Food) answer += "\nResourceType: " + ((Food) resourceType).getName();
-        //TODO add material equipment later
+        else if (resourceType instanceof MartialEquipment) answer += "\nResourceType: " + ((MartialEquipment) resourceType).getName();
         answer += " Amount: " + amount + " Price: " + price +
         "\nRequester Message: " + requesterMessage;
         if (acceptor != null)
