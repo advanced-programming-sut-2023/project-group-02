@@ -29,27 +29,27 @@ public class BuildingFactory {
 
     public static DefensiveBuilding lookoutTower() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 10)};
-        return new DefensiveBuilding("Lookout Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 400, 0, 0);
+        return new DefensiveBuilding("Lookout Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 400, 4, 6);
     }
 
     public static DefensiveBuilding perimeterTower() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 10)};
-        return new DefensiveBuilding("Perimeter Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 600, 0, 0);
+        return new DefensiveBuilding("Perimeter Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 600, 4, 5);
     }
 
     public static DefensiveBuilding defenseTurret() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 15)};
-        return new DefensiveBuilding("Defense Turret", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 600, 0, 0);
+        return new DefensiveBuilding("Defense Turret", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 650, 4, 5);
     }
 
     public static DefensiveBuilding squareTower() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 35)};
-        return new DefensiveBuilding("Square Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 650, 0, 0);
+        return new DefensiveBuilding("Square Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 700, 3, 5);
     }
 
     public static DefensiveBuilding circleTower() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.STONE, 40)};
-        return new DefensiveBuilding("Circle Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 650, 0, 0);
+        return new DefensiveBuilding("Circle Tower", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 750, 3, 6);
     }
 
     public static InventoryBuilding armoury() {
@@ -70,21 +70,21 @@ public class BuildingFactory {
 
     public static ProductionBuilding mill() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
-        return new ProductionBuilding("Mill", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 150, 3, 0, 0,
+        return new ProductionBuilding("Mill", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 150, 3, 0, 15,
                 new Food[] { Food.FLOUR }, Food.WHEAT);
     }
 
     public static ProductionBuilding inn() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
             new MaterialInstance(Material.GOLD, 100)};
-        return new ProductionBuilding("Inn", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 300, 1, 0, 0,
+        return new ProductionBuilding("Inn", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 300, 1, 10, 3,
             null,
             Food.BEER);
     }
 
     public static ProductionBuilding ironMine() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
-        return new ProductionBuilding("Iron Mine", BuildingType.INDUSTRY, buildingMaterials, 170, 2, 0, 0,
+        return new ProductionBuilding("Iron Mine", BuildingType.INDUSTRY, buildingMaterials, 170, 2, 0, 10,
             new Material[]{Material.IRON});
     }
 
@@ -95,19 +95,19 @@ public class BuildingFactory {
 
     public static RatedBuilding oxTether() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new RatedBuilding("Ox Tether", BuildingType.INDUSTRY, buildingMaterials, 50, 1, 0, 0);
+        return new RatedBuilding("Ox Tether", BuildingType.INDUSTRY, buildingMaterials, 50, 1, 0, 1);
     }
 
     public static ProductionBuilding pitchRig() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
-        return new ProductionBuilding("Pitch Rig", BuildingType.INDUSTRY, buildingMaterials, 100, 1, 0, 0,
+        return new ProductionBuilding("Pitch Rig", BuildingType.INDUSTRY, buildingMaterials, 100, 1, 0, 3,
             new Material[]{Material.TAR});
     }
 
     public static LimitedProductionBuilding stoneMine() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20)};
-        return new LimitedProductionBuilding("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 40, 3, 0, 0,
-            new Material[]{Material.STONE}, 0);
+        return new LimitedProductionBuilding("Stone Mine", BuildingType.INDUSTRY, buildingMaterials, 40, 3, 0, 10,
+                new Material[] { Material.STONE }, 10);
     }
 
     public static InventoryBuilding stockpile() {
@@ -117,7 +117,7 @@ public class BuildingFactory {
 
     public static ProductionBuilding woodcutter() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 3)};
-        return new ProductionBuilding("Woodcutter", BuildingType.INDUSTRY, buildingMaterials, 40, 3, 0, 0,
+        return new ProductionBuilding("Woodcutter", BuildingType.INDUSTRY, buildingMaterials, 40, 3, 0, 20,
             new Material[]{Material.WOOD});
     }
 
@@ -129,28 +129,28 @@ public class BuildingFactory {
     public static ProductionBuilding armourer() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
             new MaterialInstance(Material.GOLD, 100)};
-        return new ProductionBuilding("Armourer", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Armourer", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 3,
             new MartialEquipment[]{MartialEquipment.METAL_ARMOUR}, Material.IRON);
     }
 
     public static ProductionBuilding blacksmith() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
             new MaterialInstance(Material.GOLD, 100)};
-        return new ProductionBuilding("Blacksmith", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Blacksmith", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 3,
             new MartialEquipment[]{MartialEquipment.SWORD, MartialEquipment.MACE}, Material.IRON);
     }
 
     public static ProductionBuilding fletcher() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
             new MaterialInstance(Material.GOLD, 100)};
-        return new ProductionBuilding("Fletcher", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Fletcher", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 3,
             new MartialEquipment[]{MartialEquipment.BOW, MartialEquipment.CROSSBOW}, Material.WOOD);
     }
 
     public static ProductionBuilding poleturner() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 20),
             new MaterialInstance(Material.GOLD, 100)};
-        return new ProductionBuilding("Poleturner", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Poleturner", BuildingType.WEAPON_BUILDINGS, buildingMaterials, 70, 1, 0, 3,
             new MartialEquipment[]{MartialEquipment.PIKE}, Material.IRON);
     }
 
@@ -181,51 +181,51 @@ public class BuildingFactory {
 
     public static ProductionBuilding stable() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new ProductionBuilding("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 100, 1, 0, 0,
+        return new ProductionBuilding("Stable", BuildingType.CASTLE_BUILDINGS, buildingMaterials, 100, 1, 0, 1,
             new MartialEquipment[]{MartialEquipment.HORSE});
     }
 
     public static ProductionBuilding appleGarden() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new ProductionBuilding("Apple Garden", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 0,
+        return new ProductionBuilding("Apple Garden", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 20,
             new Food[]{Food.APPLES});
     }
 
     public static ProductionBuilding dairy() {
         // TODO: leather
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 10)};
-        return new ProductionBuilding("Dairy", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 0,
+        return new ProductionBuilding("Dairy", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 15,
             new Food[]{Food.CHEESE});
     }
 
     public static ProductionBuilding barleyField() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 15)};
-        return new ProductionBuilding("Barley Field", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 0,
+        return new ProductionBuilding("Barley Field", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 15,
             new Food[]{Food.BARLEY});
     }
 
     public static ProductionBuilding huntingPost() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
-        return new ProductionBuilding("Hunting Post", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 0,
+        return new ProductionBuilding("Hunting Post", BuildingType.FARM_BUILDINGS, buildingMaterials, 60, 1, 0, 5,
             new Food[]{Food.MEAT});
     }
 
     public static ProductionBuilding wheatFarm() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 15)};
-        return new ProductionBuilding("Wheat Farm", BuildingType.FARM_BUILDINGS, buildingMaterials, 90, 1, 0, 0,
+        return new ProductionBuilding("Wheat Farm", BuildingType.FARM_BUILDINGS, buildingMaterials, 90, 1, 0, 20,
             new Food[]{Food.WHEAT});
     }
 
     public static ProductionBuilding bakery() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 10)};
-        return new ProductionBuilding("Bakery", BuildingType.FARM_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Bakery", BuildingType.FARM_BUILDINGS, buildingMaterials, 70, 1, 0, 20,
             new Food[]{Food.BREAD},
             Food.FLOUR);
     }
 
     public static ProductionBuilding brewery() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 10)};
-        return new ProductionBuilding("Brewery", BuildingType.FARM_BUILDINGS, buildingMaterials, 70, 1, 0, 0,
+        return new ProductionBuilding("Brewery", BuildingType.FARM_BUILDINGS, buildingMaterials, 70, 1, 0, 10,
             new Food[]{Food.BARLEY},
             Food.BEER);
     }
@@ -233,7 +233,7 @@ public class BuildingFactory {
     public static InventoryBuilding foodInventory() {
         MaterialInstance[] buildingMaterials = {new MaterialInstance(Material.WOOD, 5)};
         return new InventoryBuilding("Food Inventory", BuildingType.FOOD_PROCESSING_BUILDINGS, buildingMaterials, 130,
-            0, 0, Food.class, 60);
+                0, 0, Food.class, 100);
     }
 
     public static PlainBuilding church() {
