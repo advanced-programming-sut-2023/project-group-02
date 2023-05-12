@@ -115,13 +115,23 @@ public class MakeUnitInstances {
             true, false, false);
     }
 
+    public static Unit makeLord() {
+        return new Unit(100, 100, 100,
+                0, UnitState.STANDING, UnitType.LORD,
+                false, false, false);
+    }
+
     public static Unit createUnitInstance(String name) {
         name = Utils.toCamelCase("make " + name);
         Method[] methods = MakeUnitInstances.class.getMethods();
         for (Method method : methods) {
             if (method.getName().equals(name)) {
                 try {
-                    return (Unit) method.invoke(null);
+                    Unit unit = (Unit) method.invoke(null);
+                    if (unit.getType().equals(UnitType.LORD)) {
+                        continue;
+                    }
+                    return unit;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

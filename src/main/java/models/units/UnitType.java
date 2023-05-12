@@ -25,7 +25,8 @@ public enum UnitType {
     ASSASSINS("Assassins", "Mercenary Post", 60),
     HORSE_ARCHERS("Horse Archers", "Mercenary Post", 80),
     ARABIAN_SWORDSMEN("Arabian Swordmen", "Mercenary Post", 80),
-    FIRE_THROWERS("Fire Throwers", "Mercenary Post", 100);
+    FIRE_THROWERS("Fire Throwers", "Mercenary Post", 100),
+    LORD("Lord", null, 0);
 
     private final String name;
     private final String whereCanBeTrained;
