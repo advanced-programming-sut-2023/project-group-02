@@ -79,8 +79,11 @@ public class Cell {
             if (texture1.equals(texture)) return false;
         }
         if (hasLadder) return true;
-        for (String objectsName : notPassableObjectsNames) {
-            if (object.getName().equals(objectsName)) return false;
+        if (object != null) {
+            for (String objectsName : notPassableObjectsNames) {
+                if (object.getName().equals(objectsName))
+                    return false;
+            }
         }
         return true;
     }
