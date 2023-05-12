@@ -9,6 +9,7 @@ public enum UnitMenuMessages {
     INVALID_PLACE("Invalid place"),
     INVALID_EQUIPMENT("Invalid equipment"),
     NOT_ENOUGH_MATERIAL("You don't have enough materials"),
+    CANT_DIG("You can't dig this cell"),
     DONE_SUCCESSFULLY("Done");
 
     private final String message;
