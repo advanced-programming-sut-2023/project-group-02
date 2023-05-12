@@ -8,7 +8,7 @@ public class Validation {
     private static final int MIN_PASSWORD_LENGTH = 6;
 
     public static boolean isValidEmail(String email) {
-        return email.matches("^[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+\\.[a-zA-Z0-9_.]+$");
+        return email.matches("^[a-zA-Z0-9_]+(?:\\.[a-zA-Z0-9_]+)*@(?:[a-zA-Z0-9_]+\\.)+[a-zA-Z0-9_]+$");
     }
 
     public static boolean isValidUsername(String username) {
