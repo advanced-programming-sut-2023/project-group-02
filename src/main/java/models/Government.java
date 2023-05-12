@@ -150,6 +150,10 @@ public class Government {
         }
     }
 
+    public boolean hasEnoughWorkerForBuilding(Building building) {
+        return building.getWorkerCount() <= numberOfUnemployed();
+    }
+
     public int getPopularity() {
         return popularity;
     }

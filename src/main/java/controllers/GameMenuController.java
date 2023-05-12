@@ -94,7 +94,11 @@ public class GameMenuController {
         if (useMaterials && !currentGame.getCurrentPlayersGovernment().hasEnoughMaterialsForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_MATERIALS;
         }
+        if (building instanceof PlainBuilding && !currentGame.getCurrentPlayersGovernment().hasEnoughWorkerForBuilding(building)) {
+            return GameMenuMessages.NOT_ENOUGH_PEOPLE;
+        }
         currentGame.addObject(building, x, y);
+        currentGame.getCurrentPlayersGovernment().recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
             currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
         else if (building instanceof PlainBuilding)
