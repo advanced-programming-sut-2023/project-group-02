@@ -216,6 +216,7 @@ public class GameMenuController {
         currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
         currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y);
         currentGame.getCurrentPlayersGovernment().getSmallStone().addPeople(8);
+        GameMenuController.getCurrentGame().addUnit(MakeUnitInstances.makeLord(), x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
