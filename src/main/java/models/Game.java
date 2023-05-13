@@ -1,6 +1,7 @@
 package models;
 
 import models.units.Unit;
+import models.units.UnitState;
 import utils.PathFinder;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Game {
     private HashMap<Unit, Coordinates> startingPoints = new HashMap<>();
     private HashMap<Unit, Coordinates> destinations = new HashMap<>();
 
-    private static final int MONTH_TO_TURN = 30;
+    private static final int MONTH_TO_TURN = 3;
 
     public Game(ArrayList<Government> governments, int numberOfTurns, Map map) {
         this.governments = governments;
@@ -97,12 +98,36 @@ public class Game {
     }
 
     public void nextTurn() {
-        turnCounter++;
-
         moveAllUnits();
+        doAllTheFights();
+        resetUnitsMoves();
+        turnCounter++;
 
         if (turnCounter % MONTH_TO_TURN == 0) {
             nextMonth();
+        }
+    }
+
+    private void resetUnitsMoves() {
+        for (Unit unit : map.getAllUnits()) {
+            unit.setHasMoved(false);
+        }
+    }
+
+    private void doAllTheFights() {
+        for (Unit unit : map.getAllUnits()) {
+            if (unit.engageWithEnemies(map))
+                continue;
+            if (destinations.containsKey(unit))
+                continue;
+            if (unit.getState() == UnitState.DEFENSIVE) {
+                unit.attackCloseEnemies(map);
+                continue;
+            }
+            if (unit.getState() == UnitState.OFFENSIVE) {
+                unit.attackFarEnemies(map);
+                continue;
+            }
         }
     }
 
@@ -114,7 +139,14 @@ public class Game {
     private void moveAllUnits() {
         HashMap<Unit, Coordinates> newDestinations = new HashMap<>();
         HashMap<Unit, Coordinates> newStartingPoints = new HashMap<>();
+        if (destinations == null)
+            return;
         for (Unit movingUnit : destinations.keySet()) {
+            if (movingUnit.getOwner() != getCurrentPlayer()) {
+                newDestinations.put(movingUnit, destinations.get(movingUnit));
+                newStartingPoints.put(movingUnit, startingPoints.get(movingUnit));
+                continue;
+            }
             Coordinates destination = destinations.get(movingUnit);
             Coordinates start = startingPoints.get(movingUnit);
             LinkedList<Coordinates> path = PathFinder.getPath(map, start.x, start.y, destination.x, destination.y);
@@ -140,5 +172,9 @@ public class Game {
 
     public boolean isGameOver() {
         return turnCounter >= numberOfTurns;
+    }
+
+    public HashMap<Unit, Coordinates> getDestinations() {
+        return destinations;
     }
 }

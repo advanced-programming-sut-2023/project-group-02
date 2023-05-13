@@ -6,6 +6,7 @@ public enum UnitMenuMessages {
     CANT_GO_THERE("Can't go there"),
     NO_UNIT_THERE("No unit is here"),
     ALREADY_DONE("Already done"),
+    ALREADY_MOVED("this unit has already moved this turn!"),
     INVALID_DIRECTION("Invalid direction"),
     INVALID_PLACE("Invalid place"),
     INVALID_EQUIPMENT("Invalid equipment"),

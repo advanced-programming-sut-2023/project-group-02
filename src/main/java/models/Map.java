@@ -3,6 +3,7 @@ package models;
 import models.buildings.InventoryBuilding;
 import models.units.Unit;
 import utils.Utils;
+import utils.Validation;
 
 import java.util.ArrayList;
 
@@ -81,6 +82,16 @@ public class Map {
             }
         }
         return playersBuildings;
+    }
+
+    public ArrayList<Unit> getAllUnits() {
+        ArrayList<Unit> allUnits = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                allUnits.addAll(map[i][j].getUnits());
+            }
+        }
+        return allUnits;
     }
 
     private Cell[][] getMiniMap(int x, int y) {
@@ -165,5 +176,40 @@ public class Map {
             neighbors.add(new Coordinates(point.x, point.y + 1));
         }
         return neighbors;
+    }
+
+    public ArrayList<Coordinates> getMoreNeighbors(Coordinates point, int n) {
+        ArrayList<Coordinates> neighbors = new ArrayList<>();
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < n - i; j++) {
+                if (Validation.areCoordinatesValid(point.x + i, point.y + j)) {
+                    neighbors.add(new Coordinates(point.x - i, point.y - j));
+                }
+                if (Validation.areCoordinatesValid(point.x - i, point.y - j)) {
+                    neighbors.add(new Coordinates(point.x + i, point.y + j));
+                }
+                if (Validation.areCoordinatesValid(point.x - i, point.y + j)) {
+                    neighbors.add(new Coordinates(point.x - i, point.y + j));
+                }
+                if (Validation.areCoordinatesValid(point.x + i, point.y - j)) {
+                    neighbors.add(new Coordinates(point.x + i, point.y - j));
+                }
+            }
+        }
+        return neighbors;
+    }
+
+    public Coordinates findEnemyNear(Unit unit, int distance) {
+        ArrayList<Coordinates> neighbors = getMoreNeighbors(unit.getCoordinates(), distance);
+        for (Coordinates neighbor : neighbors) {
+            if (findCellWithXAndY(neighbor.x, neighbor.y).getUnits().size() > 0) {
+                for (Unit enemy : findCellWithXAndY(neighbor.x, neighbor.y).getUnits()) {
+                    if (!enemy.getOwner().getUsername().equals(unit.getOwner().getUsername())) {
+                        return neighbor;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

@@ -17,7 +17,7 @@ public class UnitMenuController {
     private static ArrayList<Unit> selectedUnits;
     private static int unitsX;
     private static int unitsY;
-    private static boolean haveMoved = false;
+
 
     public static ArrayList<Unit> getSelectedUnits() {
         return selectedUnits;
@@ -43,7 +43,6 @@ public class UnitMenuController {
     public static void init(ArrayList<Unit> selectedUnits, int x, int y) {
         setSelectedUnits(selectedUnits);
         setUnitsXAndY(x, y);
-        haveMoved = false;
     }
 
     public static UnitType selectedUnitsType() {
@@ -51,12 +50,13 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages moveUnit(int x, int y) {
-        if (haveMoved) {
+        Game game = GameMenuController.getCurrentGame();
+        Map map = game.getMap();
+
+        if (selectedUnits.get(0).hasMoved() || game.getDestinations().containsKey(selectedUnits.get(0))) {
             return UnitMenuMessages.ALREADY_DONE;
         }
 
-        Game game = GameMenuController.getCurrentGame();
-        Map map = game.getMap();
         LinkedList<Coordinates> path = PathFinder.getPath(map, unitsX, unitsY, x, y);
         int length = path.size() - 1;
         if (length == 0) {
@@ -69,13 +69,13 @@ public class UnitMenuController {
         int maxDistance = selectedUnits.get(0).getMaxDistance();
         Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, maxDistance));
         for (Unit unit : selectedUnits) {
+            unit.setHasMoved(true);
             map.moveUnit(unit, finalPointForThisTurn.x, finalPointForThisTurn.y);
             if (!finalPointForThisTurn.equals(path.getLast())) {
                 game.scheduleMovement(unit, finalPointForThisTurn.x, finalPointForThisTurn.y, x, y);
             }
         }
         setUnitsXAndY(finalPointForThisTurn.x, finalPointForThisTurn.y);
-        haveMoved = true;
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -99,9 +99,9 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages digTunnel(int x, int y) {
-        if (!Validation.areCoordinatesValid(x,y))
+        if (!Validation.areCoordinatesValid(x, y))
             return UnitMenuMessages.INVALID_PLACE;
-        if (!GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x,y).canDigTunnel())
+        if (!GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).canDigTunnel())
             return UnitMenuMessages.CANT_DIG;
         LinkedList<Coordinates> path = PathFinder.getPath(GameMenuController.getCurrentGame().getMap(), unitsX, unitsY, x, y);
         int length = path.size() - 1;
@@ -116,7 +116,7 @@ public class UnitMenuController {
         for (Unit unit : selectedUnits) {
             GameMenuController.getCurrentGame().getMap().moveUnit(unit, x, y);
         }
-        setUnitsXAndY(x,y);
+        setUnitsXAndY(x, y);
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -128,13 +128,13 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages dropLadder(int x, int y) {
-        if (!Validation.areCoordinatesValid(x,y))
+        if (!Validation.areCoordinatesValid(x, y))
             return UnitMenuMessages.INVALID_PLACE;
         LinkedList<Coordinates> path = PathFinder.getPath(GameMenuController.getCurrentGame().getMap(), unitsX, unitsY, x, y);
         int length = path.size() - 1;
-        if (length == -1 || length > selectedUnits.get(0).getPace()/10)
+        if (length == -1 || length > selectedUnits.get(0).getPace() / 10)
             return UnitMenuMessages.CANT_GO_THERE;
-        GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x,y).setHasLadder(true);
+        GameMenuController.getCurrentGame().getMap().findCellWithXAndY(x, y).setHasLadder(true);
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 }
