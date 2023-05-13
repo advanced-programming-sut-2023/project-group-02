@@ -23,8 +23,10 @@ public class UnitMenu {
                 patrolUnit(parser);
             } else if (parser.beginsWith("set")) {
                 setState(parser);
+            } else if (parser.beginsWith("attack enemy")) {
+                attack(parser, false);
             } else if (parser.beginsWith("attack")) {
-                attack(parser);
+                attack(parser, true);
             } else if (parser.beginsWith("pouroil")) {
                 pourOil(parser);
             } else if (parser.beginsWith("dig tunnel")) {
@@ -52,7 +54,7 @@ public class UnitMenu {
             return;
         }
         UnitMenuMessages message = UnitMenuController.moveUnit(Integer.parseInt(parser.get("x")),
-                Integer.parseInt(parser.get("y")));
+            Integer.parseInt(parser.get("y")));
         System.out.println(message.getMessage());
     }
 
@@ -78,8 +80,13 @@ public class UnitMenu {
         System.out.println("State set successfully");
     }
 
-    void attack(Parser parser) {
-
+    void attack(Parser parser, boolean isAerial) {
+        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
+            System.out.println("Invalid numbers for x and y");
+            return;
+        }
+        UnitMenuMessages message = UnitMenuController.attack(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")));
+        System.out.println(message.getMessage());
     }
 
     void pourOil(Parser parser) {
@@ -97,7 +104,7 @@ public class UnitMenu {
         }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        UnitMenuMessages message = UnitMenuController.digTunnel(x,y);
+        UnitMenuMessages message = UnitMenuController.digTunnel(x, y);
         System.out.println(message.getMessage());
     }
 
@@ -116,7 +123,7 @@ public class UnitMenu {
         }
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
-        UnitMenuMessages message = UnitMenuController.dropLadder(x,y);
+        UnitMenuMessages message = UnitMenuController.dropLadder(x, y);
         System.out.println(message.getMessage());
     }
 

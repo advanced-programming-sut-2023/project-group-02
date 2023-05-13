@@ -51,6 +51,11 @@ public class SignupMenu {
     }
 
     private void createUser(Parser parser) {
+        if (!parser.getFlag("-u") || !parser.getFlag("-p") || !parser.getFlag("--email") ||
+            !parser.getFlag("-s") || parser.getFlag("-n")) {
+            System.out.println("Some fields are empty.");
+            return;
+        }
         String username = parser.get("u");
         ArrayList<String> passwords = parser.getAll("p");
         if (passwords.size() == 0) {
@@ -86,8 +91,7 @@ public class SignupMenu {
 
         if (message.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
             System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
-        }
-        else
+        } else
             System.out.println(message.getMessage());
     }
 
