@@ -349,7 +349,6 @@ public class GameMenu {
         GameMenuMessages message = GameMenuController.selectUnit(x, y, type);
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
             System.out.println("You entered unit menu!");
-            UnitMenuController.setUnitsXAndY(x,y);
             new UnitMenu().run(scanner);
         } else System.out.println(message.getMessage());
     }
