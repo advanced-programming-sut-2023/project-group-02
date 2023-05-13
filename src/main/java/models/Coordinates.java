@@ -29,6 +29,11 @@ public class Coordinates {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return 1; // this is totally legal and safe
+    }
+
     public Coordinates getNeighbour(Directions direction) {
         return switch (direction) {
             case NORTH -> new Coordinates(x, y - 1);
