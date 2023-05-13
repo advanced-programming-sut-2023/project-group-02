@@ -80,7 +80,7 @@ public class GameMenuController {
         }
     }
 
-    public static GameMenuMessages dropBuilding(int x, int y, String buildingName, boolean useMaterials) {
+    public static GameMenuMessages dropBuilding(int x, int y, User player, String buildingName, boolean useMaterials) {
         Building building;
         if (buildingName == null || ((building = BuildingFactory.makeBuilding(buildingName)) == null)) {
             return GameMenuMessages.INVALID_BUILDING_NAME;
@@ -91,20 +91,25 @@ public class GameMenuController {
         if (currentGame.getMap().findCellWithXAndY(x, y).isOccupied()) {
             return GameMenuMessages.FULL_CELL;
         }
-        if (useMaterials && !currentGame.getCurrentPlayersGovernment().hasEnoughMaterialsForBuilding(building)) {
+        Government government = currentGame.getPlayersGovernment(player);
+        if (useMaterials && !government.hasEnoughMaterialsForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_MATERIALS;
         }
-        if (building instanceof PlainBuilding && !currentGame.getCurrentPlayersGovernment().hasEnoughWorkerForBuilding(building)) {
+        if (building instanceof PlainBuilding && !government.hasEnoughWorkerForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         }
         currentGame.addObject(building, x, y);
-        currentGame.getCurrentPlayersGovernment().recruitPeople(building.getWorkerCount(), building);
+        government.recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
-            currentGame.getCurrentPlayersGovernment().reduceMaterialsForBuilding(building);
+            government.reduceMaterialsForBuilding(building);
         else if (building instanceof PlainBuilding)
             ((PlainBuilding) building).addPeople(((PlainBuilding) building).getMaxPeople());
 
         return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    public static GameMenuMessages dropBuilding(int x, int y, String buildingName, boolean useMaterials) {
+        return dropBuilding(x, y, currentGame.getCurrentPlayer(), buildingName, useMaterials);
     }
 
     public static GameMenuMessages selectBuilding(int x, int y) {
@@ -199,7 +204,7 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropSmallStoneGate(Parser parser) {
+    public static GameMenuMessages dropSmallStoneGate(User player, Parser parser) {
         if ((!parser.getFlag("x") || !parser.getFlag("y")) ||
             (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y")))) {
             return GameMenuMessages.INVALID_INPUT_FORMAT;
@@ -216,11 +221,11 @@ public class GameMenuController {
         currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
         currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y);
         currentGame.getCurrentPlayersGovernment().getSmallStone().addPeople(8);
-        GameMenuController.getCurrentGame().addUnit(MakeUnitInstances.makeLord(), x, y);
+        GameMenuController.getCurrentGame().addUnit(MakeUnitInstances.makeLord(), player, x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useEquipments) {
+    public static GameMenuMessages dropUnit(int x, int y, String type, int count, User player, boolean useEquipments) {
         Unit unit = MakeUnitInstances.createUnitInstance(type);
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
@@ -242,6 +247,10 @@ public class GameMenuController {
         if (useEquipments)
             reduceEquipmentForUnit(type, currentPlayersGovernment, count);
         return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useEquipments) {
+        return dropUnit(x, y, type, count, currentGame.getCurrentPlayer(), useEquipments);
     }
 
     private static void reduceEquipmentForUnit(String type, Government government, int numberOfUnits) {

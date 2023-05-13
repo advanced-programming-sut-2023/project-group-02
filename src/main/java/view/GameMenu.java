@@ -142,7 +142,7 @@ public class GameMenu {
             Colors color = pickColor(colors, scanner);
             GameMenuController.addPlayerToGame(player, color);
             dropSmallStoneGate(player, scanner);
-            dropBuildingAndUnit(scanner);
+            dropBuildingAndUnit(player, scanner);
         }
     }
 
@@ -150,21 +150,21 @@ public class GameMenu {
         System.out.println("select coordinates for this user's small stone gate\nthe format should be \"-x <x> -y <y>\"");
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
-            GameMenuMessages message = GameMenuController.dropSmallStoneGate(parser);
+            GameMenuMessages message = GameMenuController.dropSmallStoneGate(player, parser);
             System.out.println(message.getMessage());
             if (message == GameMenuMessages.DONE_SUCCESSFULLY)
                 break;
         }
     }
 
-    private void dropBuildingAndUnit(Scanner scanner) {
+    private void dropBuildingAndUnit(User player, Scanner scanner) {
         System.out.println("Now you may drop buildings and units with no cost. type next to continue.");
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
             if (parser.beginsWith("drop building")) {
-                dropBuilding(parser, false);
+                dropBuilding(player, parser, false);
             } else if (parser.beginsWith("drop unit")) {
-                dropUnit(parser);
+                dropUnit(player, parser);
             } else if (parser.beginsWith("next")) {
                 break;
             } else {
@@ -292,7 +292,7 @@ public class GameMenu {
         System.out.println(message.getMessage());
     }
 
-    void dropBuilding(Parser parser, boolean useMaterials) {
+    void dropBuilding(User player, Parser parser, boolean useMaterials) {
         if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
             System.out.println("Invalid x or y");
             return;
@@ -302,6 +302,10 @@ public class GameMenu {
         String type = parser.get("type");
         GameMenuMessages message = GameMenuController.dropBuilding(x, y, type, useMaterials);
         System.out.println(message.getMessage());
+    }
+
+    void dropBuilding(Parser parser, boolean useMaterials) {
+        dropBuilding(GameMenuController.getCurrentGame().getCurrentPlayer(), parser, useMaterials);
     }
 
     void selectBuilding(Parser parser, Scanner scanner) {
@@ -319,7 +323,7 @@ public class GameMenu {
         } else System.out.println(message.getMessage());
     }
 
-    void dropUnit(Parser parser) {
+    void dropUnit(User player, Parser parser) {
         if (!parser.getFlag("x") || !parser.getFlag("y") || !parser.getFlag("t") || !parser.getFlag("c")) {
             System.out.println("wrong format. some flags are missing");
             return;
@@ -329,7 +333,7 @@ public class GameMenu {
             return;
         }
         GameMenuMessages outputMessage = GameMenuController.dropUnit(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")),
-            parser.get("t"), Integer.parseInt(parser.get("c")), false);
+                parser.get("t"), Integer.parseInt(parser.get("c")), player, false);
         System.out.println(outputMessage.getMessage());
     }
 

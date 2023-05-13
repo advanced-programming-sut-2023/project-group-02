@@ -48,9 +48,13 @@ public class Game {
             object.setOwner(getCurrentPlayer());
     }
 
-    public void addUnit(Unit unit, int x, int y) {
+    public void addUnit(Unit unit, User player, int x, int y) {
         map.addUnit(unit, x, y);
-        unit.setOwner(getCurrentPlayer());
+        unit.setOwner(player);
+    }
+
+    public void addUnit(Unit unit, int x, int y) {
+        addUnit(unit, getCurrentPlayer(), x, y);
     }
 
     public int getTurnCounter() {
