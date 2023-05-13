@@ -97,6 +97,8 @@ public class GameMenu {
                 System.out.println("Game saved successfully!");
             } else if (parser.beginsWith("next")) {
                 nextTurn();
+            } else if (parser.beginsWith("turns")) {
+                System.out.println("Turns passed: " + GameMenuController.getCurrentGame().getTurnCounter());
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to the main menu!");
                 break;
