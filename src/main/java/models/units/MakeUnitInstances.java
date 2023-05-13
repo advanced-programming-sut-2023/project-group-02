@@ -116,7 +116,7 @@ public class MakeUnitInstances {
     }
 
     public static Unit makeLord() {
-        return new Unit(100, 100, 100,
+        return new Unit(100, 100, 55,
                 0, UnitState.STANDING, UnitType.LORD,
                 false, false, false);
     }
