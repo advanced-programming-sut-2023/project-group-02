@@ -15,12 +15,13 @@ import view.enums.UnitMenuMessages;
 
 public class UnitMenuController {
     private static ArrayList<Unit> selectedUnits;
+    private static int unitsX;
+    private static int unitsY;
+    private static boolean haveMoved = false;
 
     public static ArrayList<Unit> getSelectedUnits() {
         return selectedUnits;
     }
-    private static int unitsX;
-    private static int unitsY;
 
     public static int getUnitsX() {
         return unitsX;
@@ -30,13 +31,19 @@ public class UnitMenuController {
         return unitsY;
     }
 
-    public static void setUnitsXAndY(int x, int y) {
+    private static void setUnitsXAndY(int x, int y) {
         unitsX = x;
         unitsY = y;
     }
 
-    public static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
+    private static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
         UnitMenuController.selectedUnits = selectedUnits;
+    }
+
+    public static void init(ArrayList<Unit> selectedUnits, int x, int y) {
+        setSelectedUnits(selectedUnits);
+        setUnitsXAndY(x, y);
+        haveMoved = false;
     }
 
     public static UnitType selectedUnitsType() {
@@ -44,6 +51,10 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages moveUnit(int x, int y) {
+        if (haveMoved) {
+            return UnitMenuMessages.ALREADY_DONE;
+        }
+
         Game game = GameMenuController.getCurrentGame();
         Map map = game.getMap();
         LinkedList<Coordinates> path = PathFinder.getPath(map, unitsX, unitsY, x, y);
@@ -55,14 +66,16 @@ public class UnitMenuController {
             return UnitMenuMessages.CANT_GO_THERE;
         }
 
+        int maxDistance = selectedUnits.get(0).getMaxDistance();
+        Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, maxDistance));
         for (Unit unit : selectedUnits) {
-            Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, unit.getMaxDistance()));
             map.moveUnit(unit, finalPointForThisTurn.x, finalPointForThisTurn.y);
             if (!finalPointForThisTurn.equals(path.getLast())) {
                 game.scheduleMovement(unit, finalPointForThisTurn.x, finalPointForThisTurn.y, x, y);
             }
         }
-        setUnitsXAndY(x,y);
+        setUnitsXAndY(finalPointForThisTurn.x, finalPointForThisTurn.y);
+        haveMoved = true;
         return UnitMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -94,7 +107,7 @@ public class UnitMenuController {
         int length = path.size() - 1;
         if (length == 0)
             return UnitMenuMessages.ALREADY_DONE;
-        if (length == -1 || length > selectedUnits.get(0).getPace()/10)
+        if (length == -1 || length > selectedUnits.get(0).getMaxDistance())
             return UnitMenuMessages.CANT_GO_THERE;
 
         for (Coordinates coordinate : path) {
