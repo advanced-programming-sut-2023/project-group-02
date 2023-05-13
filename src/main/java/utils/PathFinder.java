@@ -42,7 +42,7 @@ public class PathFinder {
                 return;
             }
 
-            ArrayList<Coordinates> neighbors = getNeighbors(point);
+            ArrayList<Coordinates> neighbors = map.getNeighbors(point);
             for (Coordinates neighbor : neighbors) {
                 Cell cell = map.findCellWithXAndY(neighbor.x, neighbor.y);
                 if (!visitedPoints.contains(neighbor) && cell.isPassable()) {
@@ -53,23 +53,6 @@ public class PathFinder {
                 }
             }
         }
-    }
-
-    private ArrayList<Coordinates> getNeighbors(Coordinates point) {
-        ArrayList<Coordinates> neighbors = new ArrayList<>();
-        if (point.x > 0) {
-            neighbors.add(new Coordinates(point.x - 1, point.y));
-        }
-        if (point.x < map.getWidth() - 1) {
-            neighbors.add(new Coordinates(point.x + 1, point.y));
-        }
-        if (point.y > 0) {
-            neighbors.add(new Coordinates(point.x, point.y - 1));
-        }
-        if (point.y < map.getHeight() - 1) {
-            neighbors.add(new Coordinates(point.x, point.y + 1));
-        }
-        return neighbors;
     }
 
     public static LinkedList<Coordinates> getPath(Map map, int sx, int sy, int ex, int ey) {

@@ -149,4 +149,21 @@ public class Map {
     public int getHeight() {
         return height;
     }
+
+    public ArrayList<Coordinates> getNeighbors(Coordinates point) {
+        ArrayList<Coordinates> neighbors = new ArrayList<>();
+        if (point.x > 0) {
+            neighbors.add(new Coordinates(point.x - 1, point.y));
+        }
+        if (point.x < width - 1) {
+            neighbors.add(new Coordinates(point.x + 1, point.y));
+        }
+        if (point.y > 0) {
+            neighbors.add(new Coordinates(point.x, point.y - 1));
+        }
+        if (point.y < height - 1) {
+            neighbors.add(new Coordinates(point.x, point.y + 1));
+        }
+        return neighbors;
+    }
 }
