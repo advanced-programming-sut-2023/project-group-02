@@ -1,14 +1,20 @@
 package models;
 
 import models.units.Unit;
+import utils.PathFinder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Game {
     private final ArrayList<Government> governments;
     private int turnCounter = 0;
     private final int numberOfTurns;
     private final Map map;
+
+    private HashMap<Unit, Coordinates> startingPoints = new HashMap<>();
+    private HashMap<Unit, Coordinates> destinations = new HashMap<>();
 
     private static final int MONTH_TO_TURN = 30;
 
@@ -88,9 +94,35 @@ public class Game {
 
     public void nextTurn() {
         turnCounter++;
+
+        moveAllUnits();
+
         if (turnCounter % MONTH_TO_TURN == 0) {
             nextMonth();
         }
+    }
+
+    public void scheduleMovement(Unit unit, int startX, int startY, int destinationX, int destinationY) {
+        startingPoints.put(unit, new Coordinates(startX, startY));
+        destinations.put(unit, new Coordinates(destinationX, destinationY));
+    }
+
+    private void moveAllUnits() {
+        HashMap<Unit, Coordinates> newDestinations = new HashMap<>();
+        HashMap<Unit, Coordinates> newStartingPoints = new HashMap<>();
+        for (Unit movingUnit : destinations.keySet()) {
+            Coordinates destination = destinations.get(movingUnit);
+            Coordinates start = startingPoints.get(movingUnit);
+            LinkedList<Coordinates> path = PathFinder.getPath(map, start.x, start.y, destination.x, destination.y);
+            Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, movingUnit.getMaxDistance()));
+            map.moveUnit(movingUnit, finalPointForThisTurn.x, finalPointForThisTurn.y);
+            if (!finalPointForThisTurn.equals(path.getLast())) {
+                newStartingPoints.put(movingUnit, finalPointForThisTurn);
+                newDestinations.put(movingUnit, destination);
+            }
+        }
+        this.destinations = newDestinations;
+        this.startingPoints = newStartingPoints;
     }
 
     public void nextMonth() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import models.Coordinates;
+import models.Game;
 import models.Map;
 import models.units.Unit;
 import models.units.UnitState;
@@ -43,22 +44,23 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages moveUnit(int x, int y) {
-        Map map = GameMenuController.getCurrentGame().getMap();
-        // since all of the selected units are located in the same cell, we can bring
-        // this line out of the loop
-        // All units are of the same type, so they have the same pace
-        int pace = selectedUnits.get(0).getPace();
+        Game game = GameMenuController.getCurrentGame();
+        Map map = game.getMap();
         LinkedList<Coordinates> path = PathFinder.getPath(map, unitsX, unitsY, x, y);
         int length = path.size() - 1;
         if (length == 0) {
             return UnitMenuMessages.ALREADY_DONE;
         }
-        if (length < 0 || length > pace / 10) {
+        if (length < 0) {
             return UnitMenuMessages.CANT_GO_THERE;
         }
 
         for (Unit unit : selectedUnits) {
-            map.moveUnit(unit, x, y);
+            Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, unit.getMaxDistance()));
+            map.moveUnit(unit, finalPointForThisTurn.x, finalPointForThisTurn.y);
+            if (!finalPointForThisTurn.equals(path.getLast())) {
+                game.scheduleMovement(unit, finalPointForThisTurn.x, finalPointForThisTurn.y, x, y);
+            }
         }
         setUnitsXAndY(x,y);
         return UnitMenuMessages.DONE_SUCCESSFULLY;

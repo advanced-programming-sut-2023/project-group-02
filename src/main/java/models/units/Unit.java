@@ -1,10 +1,6 @@
 package models.units;
 
-import models.Building;
-import models.MartialEquipment;
 import models.User;
-
-import java.util.ArrayList;
 
 public class Unit {
     private User owner;
@@ -44,6 +40,10 @@ public class Unit {
 
     public int getPace() {
         return pace;
+    }
+
+    public int getMaxDistance() {
+        return pace / 10;
     }
 
     public UnitType getType() {
