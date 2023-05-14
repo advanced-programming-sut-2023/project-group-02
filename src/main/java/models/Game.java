@@ -48,12 +48,10 @@ public class Game {
     }
 
     public void addObject(MapObject object, int x, int y) {
-        map.addObject(object, x, y);
-        if (!(object instanceof Tree) && !(object instanceof Rock))
-            object.setOwner(getCurrentPlayer());
+        addObject(object, getCurrentPlayer(), x, y);
     }
 
-    public void addObject(MapObject object, int x, int y, User owner) {
+    public void addObject(MapObject object, User owner, int x, int y) {
         map.addObject(object, x, y);
         if (!(object instanceof Tree) && !(object instanceof Rock))
             object.setOwner(owner);

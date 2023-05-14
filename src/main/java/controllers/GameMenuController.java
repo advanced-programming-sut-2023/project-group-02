@@ -221,8 +221,8 @@ public class GameMenuController {
         }
         Building building = BuildingFactory.makeBuilding("small stone gate");
         ((PlainBuilding) building).addPeople(8);
-        currentGame.addObject(building, x, y, player);
-        currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y, player);
+        currentGame.addObject(building, player, x, y);
+        currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), player, x + 1, y);
         GameMenuController.getCurrentGame().addUnit(MakeUnitInstances.makeLord(), player, x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
