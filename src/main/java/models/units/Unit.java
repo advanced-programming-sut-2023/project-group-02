@@ -2,6 +2,7 @@ package models.units;
 
 import controllers.GameMenuController;
 import controllers.UnitMenuController;
+import models.Colors;
 import models.Coordinates;
 import models.Map;
 import models.User;
@@ -24,6 +25,7 @@ public class Unit {
     private ArrayList<Unit> unitsInSight = new ArrayList<>();
     private boolean isInBattle = false;
     private boolean hasMoved = false;
+    private Coordinates[] patrollingPoint = new Coordinates[2];
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
@@ -137,6 +139,7 @@ public class Unit {
         findUnitsInSight(map);
         if (!isInBattle)
             return false;
+        patrollingPoint = new Coordinates[2];
         for (Unit enemyUnit : unitsInSight) {
             enemyUnit.setHitpoint(enemyUnit.getHitpoint() - (int) Math.ceil(damage / unitsInSight.size()));
         }
@@ -163,5 +166,21 @@ public class Unit {
 
     public boolean hasMoved() {
         return hasMoved;
+    }
+
+    public void patrol() {
+        if (patrollingPoint[0] == null)
+            return;
+        Coordinates beginningPoint = patrollingPoint[0];
+        Coordinates endingPoint = patrollingPoint[1];
+        Coordinates currentPoint = getCoordinates();
+        if (currentPoint.equals(beginningPoint))
+            UnitMenuController.moveUnit(endingPoint.x, endingPoint.y);
+        else
+            UnitMenuController.moveUnit(beginningPoint.x, beginningPoint.y);
+    }
+
+    public void setPatrollingPoint(Coordinates[] patrollingPoint) {
+        this.patrollingPoint = patrollingPoint;
     }
 }

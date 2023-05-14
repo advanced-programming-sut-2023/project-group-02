@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GameMenu {
+    private boolean isGameOver = false;
+
     public void run(Scanner scanner) {
         while (true) {
             System.out.print("Do you want to start a new game? (yes or no): ");
@@ -99,7 +101,7 @@ public class GameMenu {
                 nextTurn();
             } else if (parser.beginsWith("turns")) {
                 System.out.println("Turns passed: " + GameMenuController.getCurrentGame().getTurnCounter());
-            } else if (parser.beginsWith("exit")) {
+            } else if (parser.beginsWith("exit") || isGameOver) {
                 System.out.println("You came back to the main menu!");
                 break;
             } else if (parser.beginsWith("show current menu")) {
@@ -318,7 +320,7 @@ public class GameMenu {
         int y = Integer.parseInt(parser.get("y"));
         GameMenuMessages message = GameMenuController.selectBuilding(x, y);
         if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
-            System.out.println("You entered this Building: \""+ BuildingMenuController.getSelectedBuilding().getName() + "\" menu!");
+            System.out.println("You entered this Building: \"" + BuildingMenuController.getSelectedBuilding().getName() + "\" menu!");
             new BuildingMenu(BuildingMenuController.getSelectedBuilding()).run(scanner);
         } else System.out.println(message.getMessage());
     }
@@ -333,7 +335,7 @@ public class GameMenu {
             return;
         }
         GameMenuMessages outputMessage = GameMenuController.dropUnit(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")),
-                parser.get("t"), Integer.parseInt(parser.get("c")), player, false);
+            parser.get("t"), Integer.parseInt(parser.get("c")), player, false);
         System.out.println(outputMessage.getMessage());
     }
 
@@ -411,11 +413,16 @@ public class GameMenu {
     }
 
     void nextTurn() {
-        GameMenuController.nextTurn();
+        GameMenuController.nextTurn(this);
         printNowPlaying();
     }
 
     private void printNowPlaying() {
         System.out.println("Now playing: @" + GameMenuController.getCurrentGame().getCurrentPlayer().getUsername());
+    }
+
+    public void endGame(User winner) {
+        System.out.println("Game over!\nUser" + winner.getUsername() + "is the winner of the game!");
+        isGameOver = true;
     }
 }

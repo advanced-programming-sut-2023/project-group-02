@@ -58,4 +58,8 @@ public class PlainBuilding extends Building {
     public int getMaxPeople() {
         return maxPeople;
     }
+
+    public ArrayList<People> getPeople() {
+        return people;
+    }
 }

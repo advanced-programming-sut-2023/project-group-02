@@ -73,6 +73,10 @@ public class Map {
         unit.setCoordinates(x, y);
     }
 
+    public void removeUnit(Unit unit, int x, int y) {
+        findCellWithXAndY(x, y).getUnits().remove(unit);
+    }
+
     public ArrayList<Building> getPlayersBuildings(User player) {
         ArrayList<Building> playersBuildings = new ArrayList<>();
         for (int i = 0; i < height; i++) {

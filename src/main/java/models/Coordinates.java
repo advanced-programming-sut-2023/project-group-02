@@ -19,7 +19,7 @@ public class Coordinates {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Coordinates))
             return false;
         Coordinates other = (Coordinates) obj;
         if (x != other.x)
@@ -44,6 +44,6 @@ public class Coordinates {
     }
 
     public Cell getCellWithCoordinates(Map map) {
-        return map.findCellWithXAndY(x,y);
+        return map.findCellWithXAndY(x, y);
     }
 }

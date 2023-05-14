@@ -37,6 +37,7 @@ public class UnitMenu {
                 build(parser);
             } else if (parser.beginsWith("disband unit")) {
                 disbandUnit();
+                break;
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to the game!");
                 break;
@@ -59,7 +60,15 @@ public class UnitMenu {
     }
 
     void patrolUnit(Parser parser) {
-
+        if (!parser.getFlag("-x1") || !parser.getFlag("-y1") || !parser.getFlag("-x2") || !parser.getFlag("-y2")
+            || !Utils.isInteger(parser.get("-x1")) || !Utils.isInteger(parser.get("-y1"))
+            || !Utils.isInteger(parser.get("-x2")) || !Utils.isInteger(parser.get("-y2"))) {
+            System.out.println("invalid coordinates");
+            return;
+        }
+        UnitMenuMessages message = UnitMenuController.patrolUnit(Integer.parseInt(parser.get("-x1")), Integer.parseInt(parser.get("-y1")),
+            Integer.parseInt(parser.get("-x2")), Integer.parseInt(parser.get("-y2")));
+        System.out.println(message.getMessage());
     }
 
     void setState(Parser parser) {
@@ -85,7 +94,7 @@ public class UnitMenu {
             System.out.println("Invalid numbers for x and y");
             return;
         }
-        UnitMenuMessages message = UnitMenuController.attack(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")));
+        UnitMenuMessages message = UnitMenuController.attack(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), isAerial);
         System.out.println(message.getMessage());
     }
 
@@ -128,6 +137,6 @@ public class UnitMenu {
     }
 
     void disbandUnit() {
-
+        System.out.println(UnitMenuController.disbandUnit());
     }
 }

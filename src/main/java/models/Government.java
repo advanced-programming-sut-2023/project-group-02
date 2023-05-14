@@ -27,6 +27,8 @@ public class Government {
     private static final int MIN_FEAR_RATE = -5;
     private static final int MAX_FEAR_RATE = 5;
 
+    private boolean isLordAlive = true;
+
     public Government(User user, Colors color) {
         this.user = user;
         this.color = color;
@@ -321,5 +323,27 @@ public class Government {
                 return (PlainBuilding) building;
         }
         return null;
+    }
+
+    public boolean isLordAlive() {
+        return isLordAlive;
+    }
+
+    public void lordDied() {
+        isLordAlive = false;
+    }
+
+    public void removeTroop() {
+        ArrayList<Building> buildings = map.getPlayersBuildings(user);
+        for (Building building : buildings) {
+            if (building instanceof PlainBuilding) {
+                for (People people : ((PlainBuilding) building).getPeople()) {
+                    if (people.getWorkingPlace().equals(getSmallStone())) {
+                        ((PlainBuilding) building).getPeople().remove(people);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

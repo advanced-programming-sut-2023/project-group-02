@@ -1,8 +1,12 @@
 package models;
 
+import controllers.GameMenuController;
 import models.units.Unit;
 import models.units.UnitState;
+import models.units.UnitType;
 import utils.PathFinder;
+import view.GameMenu;
+import view.MainMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +51,12 @@ public class Game {
         map.addObject(object, x, y);
         if (!(object instanceof Tree) && !(object instanceof Rock))
             object.setOwner(getCurrentPlayer());
+    }
+
+    public void addObject(MapObject object, int x, int y, User owner) {
+        map.addObject(object, x, y);
+        if (!(object instanceof Tree) && !(object instanceof Rock))
+            object.setOwner(owner);
     }
 
     public void addUnit(Unit unit, User player, int x, int y) {
@@ -97,14 +107,33 @@ public class Game {
         return null;
     }
 
-    public void nextTurn() {
+    public void nextTurn(GameMenu gameMenu) {
         moveAllUnits();
         doAllTheFights();
+        deleteDeadTroops();
         resetUnitsMoves();
-        turnCounter++;
+        do {
+            turnCounter++;
+        } while (!getCurrentPlayersGovernment().isLordAlive());
+
 
         if (turnCounter % MONTH_TO_TURN == 0) {
             nextMonth();
+        }
+
+        if (isGameOver()) {
+            gameMenu.endGame(findWinner());
+        }
+    }
+
+    private void deleteDeadTroops() {
+        for (Unit unit : map.getAllUnits()) {
+            if (unit.getHitpoint() <= 0) {
+                map.removeUnit(unit, unit.getCurrentX(), unit.getCurrentY());
+                getPlayersGovernment(unit.getOwner()).removeTroop();
+                if (unit.getType() == UnitType.LORD)
+                    getCurrentPlayersGovernment().lordDied();
+            }
         }
     }
 
@@ -128,6 +157,7 @@ public class Game {
                 unit.attackFarEnemies(map);
                 continue;
             }
+            unit.patrol();
         }
     }
 
@@ -171,7 +201,34 @@ public class Game {
     }
 
     public boolean isGameOver() {
-        return turnCounter >= numberOfTurns;
+        if (turnCounter > numberOfTurns)
+            return true;
+        int governmentsInGame = 0;
+        for (Government government : governments) {
+            if (government.isLordAlive())
+                governmentsInGame++;
+        }
+        if (governmentsInGame <= 1)
+            return true;
+        return false;
+    }
+
+    public User findWinner() {
+        ArrayList<Government> governmentsInGame = new ArrayList<>();
+        for (Government government : governments) {
+            if (government.isLordAlive())
+                governmentsInGame.add(government);
+        }
+        if (governmentsInGame.size() == 0)
+            return null;
+        if (governmentsInGame.size() == 1)
+            return governmentsInGame.get(0).getUser();
+        Government winner = governmentsInGame.get(0);
+        for (Government government : governmentsInGame) {
+            if (government.getItemAmount(Material.GOLD) > winner.getItemAmount(Material.GOLD))
+                winner = government;
+        }
+        return winner.getUser();
     }
 
     public HashMap<Unit, Coordinates> getDestinations() {

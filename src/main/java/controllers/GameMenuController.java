@@ -9,6 +9,7 @@ import utils.Parser;
 import utils.Utils;
 import utils.Validation;
 import view.BuildingMenu;
+import view.GameMenu;
 import view.UnitMenu;
 import view.enums.GameMenuMessages;
 
@@ -218,9 +219,10 @@ public class GameMenuController {
             currentGame.getMap().findCellWithXAndY(x + 1, y).isOccupied()) {
             return GameMenuMessages.FULL_CELL;
         }
-        currentGame.addObject(BuildingFactory.makeBuilding("small stone gate"), x, y);
-        currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y);
-        currentGame.getCurrentPlayersGovernment().getSmallStone().addPeople(8);
+        Building building = BuildingFactory.makeBuilding("small stone gate");
+        ((PlainBuilding) building).addPeople(8);
+        currentGame.addObject(building, x, y, player);
+        currentGame.addObject(BuildingFactory.makeBuilding("stockpile"), x + 1, y, player);
         GameMenuController.getCurrentGame().addUnit(MakeUnitInstances.makeLord(), player, x, y);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
@@ -233,7 +235,7 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_NUMBER;
         if (unit == null)
             return GameMenuMessages.INVALID_UNIT_NAME;
-        Government currentPlayersGovernment = currentGame.getCurrentPlayersGovernment();
+        Government currentPlayersGovernment = currentGame.getPlayersGovernment(player);
         if (currentPlayersGovernment.numberOfUnemployed() < count)
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         if (useEquipments && !currentPlayersGovernment.hasEnoughEquipmentsForUnit(type, count))
@@ -242,7 +244,7 @@ public class GameMenuController {
         // we assume that units working place is small stone gate.
         for (int i = 0; i < count; i++) {
             unit = MakeUnitInstances.createUnitInstance(type);
-            currentGame.addUnit(unit, x, y);
+            currentGame.addUnit(unit, player, x, y);
         }
         if (useEquipments)
             reduceEquipmentForUnit(type, currentPlayersGovernment, count);
@@ -264,7 +266,7 @@ public class GameMenuController {
         }
     }
 
-    public static void nextTurn() {
-        currentGame.nextTurn();
+    public static void nextTurn(GameMenu gameMenu) {
+        currentGame.nextTurn(gameMenu);
     }
 }
