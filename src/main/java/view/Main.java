@@ -1,3 +1,9 @@
+package view;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import view.MainMenu;
 import view.SignupMenu;
 
@@ -7,8 +13,9 @@ import java.util.Scanner;
 import controllers.UserController;
 import controllers.database.Database;
 
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
+        launch(args);
         try {
             Database.init();
         } catch (IOException e) {
@@ -24,6 +31,14 @@ public class Main {
             new SignupMenu().run(scanner);
         }
         scanner.close();
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Pane root = new Pane();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        // stage.show();
     }
 }
 
