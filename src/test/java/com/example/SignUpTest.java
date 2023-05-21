@@ -1,3 +1,5 @@
+package com.example;
+
 import org.junit.jupiter.api.*;
 
 import controllers.*;
@@ -16,15 +18,15 @@ public class SignUpTest {
     @Test
     void testRandomPasswordValidation() {
         for (int i = 0; i < 100; i++) {
-            Assertions.assertEquals(Validation.validatePassword(Randoms.getPassword()).size(),0);
+            Assertions.assertEquals(Validation.validatePassword(Randoms.getPassword()).size(), 0);
         }
     }
 
-
     @Test
     void passwordValidation() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%Nima","%Nima","Moazzen","Oos@gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.WEAK_PASSWORD);
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima", "%Nima", "%Nima", "Moazzen",
+                "Oos@gmail.com", "hello");
+        Assertions.assertEquals(message, SignUpMenuMessages.WEAK_PASSWORD);
     }
 
     @Test
@@ -64,7 +66,8 @@ public class SignUpTest {
 
     @Test
     void getRandomPassword() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","random",null,"Moazzen","Oos@gmail.com","hello");
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima", "random", null, "Moazzen",
+                "Oos@gmail.com", "hello");
         Assertions.assertNotNull(SignUpMenuController.getPassword());
         Assertions.assertEquals(message, SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED);
     }
@@ -91,7 +94,8 @@ public class SignUpTest {
 
     @Test
     void confirmationWrong() {
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima","%1Nima","%fs1Nima","Moazzen","Oos@gmail.com","hello");
-        Assertions.assertEquals(message,SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG);
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup("Nima", "%1Nima", "%fs1Nima", "Moazzen",
+                "Oos@gmail.com", "hello");
+        Assertions.assertEquals(message, SignUpMenuMessages.PASSWORD_CONFIRMATION_WRONG);
     }
 }
