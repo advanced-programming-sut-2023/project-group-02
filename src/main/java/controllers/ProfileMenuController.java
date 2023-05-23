@@ -29,7 +29,7 @@ public class ProfileMenuController {
         if (oldPassword.equals(newPassword)) {
             return ProfileMenuMessages.SAME_THING;
         }
-        if (Validation.validatePassword(newPassword).size() == 0) {
+        if (Validation.validatePassword(newPassword).size() != 0) {
             return ProfileMenuMessages.WEAK_NEW_PASSWORD;
         }
 

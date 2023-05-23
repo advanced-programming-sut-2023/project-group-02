@@ -60,14 +60,14 @@ public class UnitMenu {
     }
 
     void patrolUnit(Parser parser) {
-        if (!parser.getFlag("-x1") || !parser.getFlag("-y1") || !parser.getFlag("-x2") || !parser.getFlag("-y2")
-            || !Utils.isInteger(parser.get("-x1")) || !Utils.isInteger(parser.get("-y1"))
-            || !Utils.isInteger(parser.get("-x2")) || !Utils.isInteger(parser.get("-y2"))) {
+        if (!parser.getFlag("x1") || !parser.getFlag("y1") || !parser.getFlag("x2") || !parser.getFlag("y2")
+            || !Utils.isInteger(parser.get("x1")) || !Utils.isInteger(parser.get("y1"))
+            || !Utils.isInteger(parser.get("x2")) || !Utils.isInteger(parser.get("y2"))) {
             System.out.println("invalid coordinates");
             return;
         }
-        UnitMenuMessages message = UnitMenuController.patrolUnit(Integer.parseInt(parser.get("-x1")), Integer.parseInt(parser.get("-y1")),
-            Integer.parseInt(parser.get("-x2")), Integer.parseInt(parser.get("-y2")));
+        UnitMenuMessages message = UnitMenuController.patrolUnit(Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1")),
+            Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2")));
         System.out.println(message.getMessage());
     }
 

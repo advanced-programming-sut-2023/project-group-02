@@ -51,8 +51,8 @@ public class SignupMenu {
     }
 
     private void createUser(Parser parser) {
-        if (!parser.getFlag("-u") || !parser.getFlag("-p") || !parser.getFlag("--email") ||
-            !parser.getFlag("-s") || parser.getFlag("-n")) {
+        if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") ||
+            !parser.getFlag("s") || !parser.getFlag("n")) {
             System.out.println("Some fields are empty.");
             return;
         }

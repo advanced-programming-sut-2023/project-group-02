@@ -422,7 +422,7 @@ public class GameMenu {
     }
 
     public void endGame(User winner) {
-        System.out.println("Game over!\nUser" + winner.getUsername() + "is the winner of the game!");
+        System.out.println("Game over!\nUser " + winner.getUsername() + " is the winner of the game!");
         isGameOver = true;
     }
 }

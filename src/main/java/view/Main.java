@@ -15,7 +15,7 @@ import controllers.database.Database;
 
 public class Main extends Application {
     public static void main(String[] args) {
-        launch(args);
+        // launch(args);
         try {
             Database.init();
         } catch (IOException e) {

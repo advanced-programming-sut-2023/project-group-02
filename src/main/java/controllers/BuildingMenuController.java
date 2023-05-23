@@ -18,7 +18,7 @@ public class BuildingMenuController {
     }
 
     public static void setSelectedBuilding(Building selectedBuilding, int x, int y) {
-        selectedBuilding = selectedBuilding;
+        BuildingMenuController.selectedBuilding = selectedBuilding;
         selectedBuildingX = x;
         selectedBuildingY = y;
     }

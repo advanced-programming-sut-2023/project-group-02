@@ -170,11 +170,6 @@ public class Game {
         if (destinations == null)
             return;
         for (Unit movingUnit : destinations.keySet()) {
-            if (movingUnit.getOwner() != getCurrentPlayer()) {
-                newDestinations.put(movingUnit, destinations.get(movingUnit));
-                newStartingPoints.put(movingUnit, startingPoints.get(movingUnit));
-                continue;
-            }
             Coordinates destination = destinations.get(movingUnit);
             Coordinates start = startingPoints.get(movingUnit);
             LinkedList<Coordinates> path = PathFinder.getPath(map, start.x, start.y, destination.x, destination.y);
