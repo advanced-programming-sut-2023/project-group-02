@@ -1,0 +1,19 @@
+.title1 {
+    -fx-font-size: 25px;
+    -fx-font: "Arial";
+    -fx-fill: #EBECB8;
+}
+
+.text-field1 {
+    -fx-font-family: "Quicksand";
+    -fx-font-size: 14;
+    -fx-border-color: #975722;
+    -fx-background-color: #A6E0E7;
+    -fx-text-fill: brown;
+}
+
+.error {
+    -fx-font-size: 12px;
+    -fx-font: "Arial";
+    -fx-fill: #810000;
+}

@@ -1,17 +1,64 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 import controllers.SignUpMenuController;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Text;
 import models.SecurityQuestion;
-import utils.Captcha;
-import utils.Parser;
-import utils.PasswordProblem;
-import utils.Validation;
+import utils.*;
 import view.enums.SignUpMenuMessages;
 
 public class SignupMenu {
+    Text usernameText = new Text("Username:");
+    TextField usernameTextField = new TextField();
+    Text usernameErrors = new Text();
+
+    public Pane getPane() {
+        Pane SignupMenuPane = new Pane();
+        initPane(SignupMenuPane);
+        return SignupMenuPane;
+    }
+
+    private void initPane(Pane pane) {
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
+            "/images/backgrounds/signup-menu.jpg"))));
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.setPrefSize(960, 540);
+        addUsernameFields(pane);
+    }
+
+    private void addUsernameFields(Pane pane) {
+        usernameText.setLayoutX(100);
+        usernameText.setLayoutY(80);
+        usernameText.getStyleClass().add("title1");
+        usernameTextField.setPromptText("username");
+        usernameTextField.setLayoutX(240);
+        usernameTextField.setLayoutY(55);
+        usernameTextField.prefWidth(100);
+        usernameTextField.prefHeight(40);
+        usernameTextField.getStyleClass().add("text-field1");
+        usernameTextField.onKeyPressedProperty().addListener((observable, oldValue, newValue) -> {
+            usernameErrors.setText(newValue.toString());
+        });
+        usernameErrors.getStyleClass().add("error");
+        usernameErrors.setLayoutX(440);
+        usernameErrors.setLayoutY(75);
+        usernameErrors.setText("");
+        pane.getChildren().addAll(usernameText, usernameTextField, usernameErrors);
+    }
+
+    private void addPasswordFields(Pane pane) {
+
+    }
+
     enum State {
         PASSWORD_CONFIRMATION_NEEDED,
         SECURITY_QUESTION_NEEDED,

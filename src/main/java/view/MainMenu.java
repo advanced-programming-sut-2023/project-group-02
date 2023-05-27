@@ -1,12 +1,19 @@
 package view;
 
 import controllers.UserController;
+import javafx.scene.layout.Pane;
 import utils.Parser;
 import view.enums.MainMenuMessages;
 
 import java.util.Scanner;
 
 public class MainMenu {
+    public Pane getPane() {
+        Pane MainMenuPane = new Pane();
+
+        return MainMenuPane;
+    }
+
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());

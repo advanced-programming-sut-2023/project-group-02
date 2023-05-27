@@ -3,6 +3,7 @@ package view;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.MainMenu;
 import view.SignupMenu;
@@ -14,8 +15,9 @@ import controllers.UserController;
 import controllers.database.Database;
 
 public class Main extends Application {
+    private Stage stage;
+
     public static void main(String[] args) {
-        // launch(args);
         try {
             Database.init();
         } catch (IOException e) {
@@ -24,21 +26,31 @@ public class Main extends Application {
         UserController.loadUsersFromFile();
         UserController.loadCurrentUserFromFile();
 
-        Scanner scanner = new Scanner(System.in);
-        if (UserController.isAuthorized()) {
-            new MainMenu().run(scanner);
-        } else {
-            new SignupMenu().run(scanner);
-        }
-        scanner.close();
+        launch(args);
+
+//        Scanner scanner = new Scanner(System.in);
+//        if (UserController.isAuthorized()) {
+//            new MainMenu().run(scanner);
+//        } else {
+//            new SignupMenu().run(scanner);
+//        }
+//        scanner.close();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        Pane root = new Pane();
-        Scene scene = new Scene(root);
+        this.stage = stage;
+        if (UserController.isAuthorized()) {
+            setScene(new MainMenu().getPane());
+        } else {
+            setScene(new SignupMenu().getPane());
+        }
+    }
+
+    public void setScene(Pane pane) {
+        Scene scene = new Scene(pane);
         stage.setScene(scene);
-        // stage.show();
+        stage.show();
     }
 }
 

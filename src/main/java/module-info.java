@@ -9,7 +9,6 @@ module project {
     opens view to javafx.fxml;
     exports models;
     opens models to com.google.gson;
-
     exports models.units;
     exports models.buildings;
 }
