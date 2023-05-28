@@ -45,14 +45,17 @@ public class LoginMenu {
         form.setSpacing(20);
         form.setTranslateX(200);
         form.setTranslateY(150);
+
         usernameText.getStyleClass().add("title1");
         makeFields(usernameTextField);
         passwordText.getStyleClass().add("title1");
         makeFields(passwordField);
+
         HBox usernamePart = new HBox(usernameText,usernameTextField);
         usernamePart.setSpacing(10);
         HBox passwordPart = new HBox(passwordText,passwordField);
         passwordPart.setSpacing(17.5);
+
         handleSubmitButton(submitButton);
         handleForgotPasswordButton(forgotPasswordButton);
         form.getChildren().addAll(usernamePart,passwordPart,submitButton,forgotPasswordButton,errorText);
@@ -68,30 +71,24 @@ public class LoginMenu {
 
     private void handleSubmitButton(Button button) {
         button.getStyleClass().add("button1");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(),passwordField.getText(),true);
-                if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
-                    Main.getStage().setScene(new Scene(new MainMenu().getPane()));
-                    Main.getStage().show();
-                } else {
-                    usernameTextField.setText("");
-                    passwordField.setText("");
-                    errorText.getStyleClass().add("error");
-                    errorText.setText(message.getMessage());
-                }
+        button.setOnAction(event -> {
+            LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(),passwordField.getText(),true);
+            if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
+                Main.getStage().setScene(new Scene(new MainMenu().getPane()));
+                Main.getStage().show();
+            } else {
+                usernameTextField.setText("");
+                passwordField.setText("");
+                errorText.getStyleClass().add("error");
+                errorText.setText(message.getMessage());
             }
         });
     }
 
     private void handleForgotPasswordButton(Button button) {
         button.getStyleClass().add("button1");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO logic of forgot password
-            }
+        button.setOnAction(event -> {
+            //TODO logic of forgot password
         });
     }
 

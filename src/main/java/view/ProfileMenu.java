@@ -3,13 +3,56 @@ package view;
 import controllers.LoginMenuController;
 import controllers.ProfileMenuController;
 import controllers.UserController;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import utils.Parser;
 import view.enums.LoginMenuMessages;
 import view.enums.ProfileMenuMessages;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ProfileMenu {
+    public Pane getPane() {
+        Pane profileMenuPane = new Pane();
+        initializePane(profileMenuPane);
+        return profileMenuPane;
+    }
+
+    private void initializePane(Pane pane) {
+        //TODO add a background
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
+        pane.setPrefSize(960, 540);
+        VBox buttons = new VBox();
+        buttons.setTranslateX(400);
+        buttons.setTranslateY(200);
+        buttons.setSpacing(15);
+
+        Button changeInformation = makeButton(buttons,"Change Information");
+        changeInformation.setOnAction(event -> {
+            //TODO
+        });
+
+        Button displayInformation = makeButton(buttons,"Display Information");
+        displayInformation.setOnAction(event -> {
+            //TODO
+        });
+
+        pane.getChildren().add(buttons);
+    }
+
+    private Button makeButton(VBox buttons, String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("button1");
+        buttons.getChildren().add(button);
+        return button;
+    }
+
+
     public void run(Scanner scanner) {
         while (true) {
             Parser parser = new Parser(scanner.nextLine());
