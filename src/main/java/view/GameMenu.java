@@ -1,9 +1,14 @@
 package view;
 
 import controllers.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import jdk.jshell.execution.Util;
 import models.*;
 import utils.Parser;
+import utils.PasswordProblem;
 import utils.Utils;
 import view.enums.GameMenuMessages;
 
@@ -13,6 +18,20 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
+
+    public Pane getPane() {
+        GridPane gridPane = new GridPane();
+        gridPane.setPrefSize(960, 540);
+        for (int row = 0; row < 11; row++) {
+            for (int col = 0; col < 20; col++) {
+                Rectangle rect = new Rectangle(50, 50);
+                rect.setFill(Color.BROWN);
+                rect.setStroke(Color.BLACK);
+                gridPane.add(rect, col, row);
+            }
+        }
+        return gridPane;
+    }
 
     public void run(Scanner scanner) {
         while (true) {

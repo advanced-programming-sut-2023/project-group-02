@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import models.Game;
 import utils.Parser;
 import view.enums.MainMenuMessages;
 
@@ -36,6 +37,7 @@ public class MainMenu {
 
         Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
         enterGameMenu.setOnAction(event -> {
+            Main.setScene(new GameMenu().getPane());
             //TODO enter game menu in a clean way
         });
 
