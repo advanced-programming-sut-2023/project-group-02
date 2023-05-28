@@ -3,17 +3,21 @@ package view;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
 import controllers.SignUpMenuController;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import models.SecurityQuestion;
 import utils.*;
+import utils.Graphics;
 import view.enums.SignUpMenuMessages;
 
 public class SignupMenu {
@@ -21,7 +25,7 @@ public class SignupMenu {
     TextField usernameTextField = new TextField();
     Text usernameErrors = new Text();
     Text passwordText = new Text("Password:");
-    TextField passwordTextField = new TextField();
+    PasswordField passwordField = new PasswordField();
     Text passwordErrors = new Text();
     Text nickname = new Text("Nickname:");
     TextField nicknameTextField = new TextField();
@@ -33,6 +37,10 @@ public class SignupMenu {
     public Pane getPane() {
         Pane SignupMenuPane = new Pane();
         initPane(SignupMenuPane);
+        SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getTarget() == SignupMenuPane)
+                SignupMenuPane.requestFocus();
+        });
         return SignupMenuPane;
     }
 
@@ -71,11 +79,14 @@ public class SignupMenu {
         usernameTextField.getStyleClass().add("text-field2");
         usernameTextField.setFocusTraversable(false);
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            usernameErrors.setText(newValue);
+            if (Validation.isValidUsername(newValue))
+                usernameErrors.setText("");
+            else
+                usernameErrors.setText("forbidden character is used.");
         });
 
         usernameErrors.getStyleClass().add("error");
-        usernameErrors.setLayoutX(440);
+        usernameErrors.setLayoutX(460);
         usernameErrors.setLayoutY(115);
         usernameErrors.setText("");
         pane.getChildren().addAll(usernameText, usernameTextField, usernameErrors);
@@ -85,18 +96,54 @@ public class SignupMenu {
         passwordText.setLayoutX(100);
         passwordText.setLayoutY(160);
         passwordText.getStyleClass().add("title1");
-        passwordTextField.setPromptText("password");
-        passwordTextField.setLayoutX(240);
-        passwordTextField.setLayoutY(135);
-        passwordTextField.prefWidth(100);
-        passwordTextField.prefHeight(40);
-        passwordTextField.getStyleClass().add("text-field2");
-        passwordTextField.setFocusTraversable(false);
+
+        passwordField.setPromptText("password");
+        passwordField.setLayoutX(240);
+        passwordField.setLayoutY(135);
+        passwordField.prefWidth(100);
+        passwordField.prefHeight(40);
+        passwordField.getStyleClass().add("text-field2");
+        passwordField.setFocusTraversable(false);
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (Validation.validatePassword(newValue).size() == 0 || newValue.equals(""))
+                passwordErrors.setText("");
+            else
+                passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
+        });
+
+        ToggleButton showPassword = getShowPassToggle(passwordField, passwordErrors);
+
         passwordErrors.getStyleClass().add("error");
-        passwordErrors.setLayoutX(440);
-        passwordErrors.setLayoutY(155);
+        passwordErrors.setLayoutX(460);
+        passwordErrors.setLayoutY(145);
         passwordErrors.setText("");
-        pane.getChildren().addAll(passwordText, passwordTextField, passwordErrors);
+        passwordErrors.setWrappingWidth(500);
+        pane.getChildren().addAll(passwordText, passwordField, showPassword, passwordErrors);
+    }
+
+    private ToggleButton getShowPassToggle(PasswordField passwordField, Text passwordErrors) {
+        AtomicReference<String> password = new AtomicReference<>();
+        AtomicReference<String> passwordError = new AtomicReference<>();
+        ToggleButton showPassword = new ToggleButton();
+        showPassword.prefWidth(300);
+        showPassword.prefHeight(300);
+        showPassword.setLayoutX(430);
+        showPassword.setLayoutY(140);
+        showPassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
+            "/images/buttons/show-password.png"))));
+        showPassword.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            password.set(passwordField.getText());
+            passwordError.set(passwordErrors.getText());
+            passwordField.clear();
+            passwordField.setPromptText(password.get());
+            passwordErrors.setText(passwordError.get());
+        });
+        showPassword.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+            passwordErrors.setText("");
+            passwordField.setText(password.get());
+            passwordField.setPromptText("password");
+        });
+        return showPassword;
     }
 
     private void addNicknameFields(Pane pane) {
