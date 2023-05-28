@@ -10,7 +10,18 @@
     -fx-border-color: #975722;
     -fx-background-color: #A6E0E7;
     -fx-text-fill: brown;
+
+    -fx-border-radius: 5;
+    -fx-padding: 10 10 10 10;
+    -fx-background-insets: 0 0 10 0;
+
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 3, 0, 1);
 }
+
+:hover {
+     -fx-text-fill: #975722;
+     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 5, 3, 0, 1);
+ }
 
 .error {
     -fx-font-size: 12px;

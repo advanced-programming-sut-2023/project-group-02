@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import utils.Graphics;
 import utils.Parser;
 import view.enums.MainMenuMessages;
 
@@ -17,7 +14,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class MainMenu {
-    Button helloButton = new Button("hello button");
     public Pane getPane() {
         Pane MainMenuPane = new Pane();
         initPane(MainMenuPane);
@@ -30,7 +26,6 @@ public class MainMenu {
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         VBox buttons = new VBox();
-        buttons.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         buttons.setSpacing(15);
         buttons.setTranslateX(400);
         buttons.setTranslateY(170);

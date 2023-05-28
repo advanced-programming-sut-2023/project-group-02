@@ -47,7 +47,7 @@ public class Main extends Application {
         if (UserController.isAuthorized()) {
             setScene(new MainMenu().getPane());
         } else {
-            setScene(new SignupMenu().getPane());
+            setScene(new LoginMenu().getPane());
         }
     }
 

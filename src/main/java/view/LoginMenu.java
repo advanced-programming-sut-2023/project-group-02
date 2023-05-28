@@ -2,16 +2,61 @@ package view;
 
 import controllers.LoginMenuController;
 import controllers.UserController;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import models.User;
 import utils.Captcha;
 import utils.Parser;
 import utils.PasswordProblem;
 import view.enums.LoginMenuMessages;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class LoginMenu {
     private static User currentUser;
+    Text usernameText = new Text("Username: ");
+    Text passwordText = new Text("Password: ");
+    TextField usernameTextField = new TextField();
+    PasswordField passwordField = new PasswordField();
+
+    public Pane getPane() {
+        Pane loginMenuPane = new Pane();
+        initPane(loginMenuPane);
+        return loginMenuPane;
+    }
+
+    private void initPane(Pane pane) {
+        //TODO add a background
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.setPrefSize(960, 540);
+        VBox form = new VBox();
+        form.setSpacing(20);
+        form.setTranslateX(200);
+        form.setTranslateY(150);
+        usernameText.getStyleClass().add("title1");
+        makeFields(usernameTextField);
+        passwordText.getStyleClass().add("title1");
+        makeFields(passwordField);
+        HBox usernamePart = new HBox(usernameText,usernameTextField);
+        usernamePart.setSpacing(10);
+        HBox passwordPart = new HBox(passwordText,passwordField);
+        passwordPart.setSpacing(17.5);
+        form.getChildren().addAll(usernamePart,passwordPart);
+        pane.getChildren().add(form);
+    }
+
+    private void makeFields(TextField textField) {
+        textField.prefHeight(40);
+        textField.prefWidth(100);
+        textField.getStyleClass().add("text-field1");
+    }
+
+
     enum State {
         LOGIN_SUCCESSFUL,
         WAIT_FOR_CAPTCHA,
