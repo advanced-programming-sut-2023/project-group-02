@@ -219,34 +219,6 @@ public class SignupMenu {
 
     private State state = State.WAITING;
 
-    public void run(Scanner scanner) {
-        while (true) {
-            if (state == State.SIGNUP_SUCCESSFUL) {
-                state = State.WAITING;
-                new MainMenu().run(scanner);
-            }
-            Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("user create")) {
-                createUser(parser);
-            } else if (parser.beginsWith("enter login menu")) {
-                System.out.println("You successfully entered LoginMenu!");
-                new LoginMenu().run(scanner);
-            } else if (state == State.SECURITY_QUESTION_NEEDED && parser.beginsWith("question pick")) {
-                pickQuestion(parser);
-            } else if (state == State.PASSWORD_CONFIRMATION_NEEDED) {
-                confirmPassword(parser.input);
-            } else if (state == State.CAPTCHA_ANSWER_NEEDED) {
-                captcha(parser);
-            } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at SignupMenu");
-            } else if (parser.beginsWith("exit")) {
-                break;
-            } else {
-                System.out.println("Invalid command!");
-            }
-        }
-    }
-
     private void createUser(Parser parser) {
         if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") ||
             !parser.getFlag("s") || !parser.getFlag("n")) {

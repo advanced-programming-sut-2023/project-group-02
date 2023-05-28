@@ -2,8 +2,6 @@ package view;
 
 import controllers.LoginMenuController;
 import controllers.UserController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -101,35 +99,6 @@ public class LoginMenu {
     }
 
     private State state = State.WAITING;
-
-    public void run(Scanner scanner) {
-        while (true) {
-            if (state.equals(State.LOGIN_SUCCESSFUL)) {
-                currentUser = null;
-                new MainMenu().run(scanner);
-                break;
-            }
-            Parser parser = new Parser(scanner.nextLine());
-            if (state.equals(State.WAIT_FOR_CAPTCHA)) {
-                captcha(parser);
-            } else if (state.equals(State.WAIT_FOR_SECURITY_ANSWER)) {
-                securityAnswer(parser);
-            } else if (state.equals(State.WAIT_FOR_NEW_PASSWORD)) {
-                newPassword(parser);
-            } else if (parser.beginsWith("user login")) {
-                login(parser);
-            } else if (parser.beginsWith("forgot my password")) {
-                forgotPassword(parser);
-            } else if (parser.beginsWith("back")) {
-                System.out.println("You're back at the sign up menu");
-                break;
-            } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at LoginMenu");
-            } else {
-                System.out.println("Invalid command!");
-            }
-        }
-    }
 
     void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),

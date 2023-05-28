@@ -93,6 +93,12 @@
     -fx-fill: #6B8E23; /* Olive Drab */
 }
 
+.text-content2 {
+    -fx-fill: #e6e6e6;
+    -fx-font-family: sans-serif;
+    -fx-font-size: 20px;
+}
+
 /* Button styles */
 .button2 {
     -fx-font-family: "Arial";
