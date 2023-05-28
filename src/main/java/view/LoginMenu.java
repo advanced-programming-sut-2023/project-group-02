@@ -2,6 +2,10 @@ package view;
 
 import controllers.LoginMenuController;
 import controllers.UserController;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -23,6 +27,9 @@ public class LoginMenu {
     Text passwordText = new Text("Password: ");
     TextField usernameTextField = new TextField();
     PasswordField passwordField = new PasswordField();
+    Button submitButton = new Button("Login");
+    Button forgotPasswordButton = new Button("Forgot My Password");
+    Text errorText = new Text();
 
     public Pane getPane() {
         Pane loginMenuPane = new Pane();
@@ -46,9 +53,12 @@ public class LoginMenu {
         usernamePart.setSpacing(10);
         HBox passwordPart = new HBox(passwordText,passwordField);
         passwordPart.setSpacing(17.5);
-        form.getChildren().addAll(usernamePart,passwordPart);
+        handleSubmitButton(submitButton);
+        handleForgotPasswordButton(forgotPasswordButton);
+        form.getChildren().addAll(usernamePart,passwordPart,submitButton,forgotPasswordButton,errorText);
         pane.getChildren().add(form);
     }
+
 
     private void makeFields(TextField textField) {
         textField.prefHeight(40);
@@ -56,6 +66,34 @@ public class LoginMenu {
         textField.getStyleClass().add("text-field1");
     }
 
+    private void handleSubmitButton(Button button) {
+        button.getStyleClass().add("button1");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(),passwordField.getText(),true);
+                if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
+                    Main.getStage().setScene(new Scene(new MainMenu().getPane()));
+                    Main.getStage().show();
+                } else {
+                    usernameTextField.setText("");
+                    passwordField.setText("");
+                    errorText.getStyleClass().add("error");
+                    errorText.setText(message.getMessage());
+                }
+            }
+        });
+    }
+
+    private void handleForgotPasswordButton(Button button) {
+        button.getStyleClass().add("button1");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO logic of forgot password
+            }
+        });
+    }
 
     enum State {
         LOGIN_SUCCESSFUL,
