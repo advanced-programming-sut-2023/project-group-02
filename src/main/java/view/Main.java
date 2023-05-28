@@ -15,7 +15,11 @@ import controllers.UserController;
 import controllers.database.Database;
 
 public class Main extends Application {
-    private Stage stage;
+    private static Stage stage;
+
+    public static Stage getStage() {
+        return stage;
+    }
 
     public static void main(String[] args) {
         try {
@@ -39,11 +43,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
+        Main.stage = stage;
         if (UserController.isAuthorized()) {
             setScene(new MainMenu().getPane());
         } else {
-            setScene(new MainMenu().getPane());
+            setScene(new SignupMenu().getPane());
         }
     }
 

@@ -3,6 +3,7 @@ package view;
 import controllers.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class MainMenu {
+    Button helloButton = new Button("hello button");
     public Pane getPane() {
         Pane MainMenuPane = new Pane();
         initPane(MainMenuPane);
@@ -24,14 +26,14 @@ public class MainMenu {
 
     private void initPane(Pane pane) {
         //TODO add a background
-        //TODO add a stylesheet
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         VBox buttons = new VBox();
         buttons.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         buttons.setSpacing(15);
         buttons.setTranslateX(400);
-        buttons.setTranslateY(100);
+        buttons.setTranslateY(170);
         Button enterProfileMenuButton = makeButton(buttons,"Enter Profile Menu");
         enterProfileMenuButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -51,10 +53,11 @@ public class MainMenu {
             @Override
             public void handle(ActionEvent event) {
                 MainMenuMessages output = logout();
+                Main.getStage().setScene(new Scene(new SignupMenu().getPane()));
+                Main.getStage().show();
                 //TODO going to sign up menu in a clean way
             }
         });
-
         pane.getChildren().add(buttons);
     }
 

@@ -19,11 +19,18 @@
 }
 
 .button1 {
-    max-width: 300px;
-    background-color: darkred;
-    color: gold;
-    font-size: 20px;
-    font-family: sans-serif;
-    border-radius: 5px;
-    cursor: pointer;
+    -fx-max-width: 300px;
+    -fx-background-color: darkred;
+    -fx-text-fill: gold;
+    -fx-font-size: 20px;
+    -fx-font-family: sans-serif;
+    -fx-border-radius: 5px;
+    -fx-cursor: pointer;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 3, 0, 1);
+    -fx-background-insets: 0 0 10 0;
+    -fx-background-radius: 10;
+    -fx-padding: 10 10 10 10;
+    -fx-text-alignment: center;
+    -fx-font-weight: bold;
 }
+
