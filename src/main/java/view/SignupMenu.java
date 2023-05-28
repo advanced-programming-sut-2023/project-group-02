@@ -34,20 +34,22 @@ public class SignupMenu {
     Text email = new Text("Email:");
     TextField emailTextField = new TextField();
     Text emailErrors = new Text();
+    Text slogan = new Text("Slogan:");
+    TextField sloganTextField = new TextField();
+    ToggleButton sloganGenerator = new ToggleButton();
+    Text signupError = new Text();
 
     public Pane getPane() {
         Pane SignupMenuPane = new Pane();
         initPane(SignupMenuPane);
         SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getTarget() == SignupMenuPane)
-                SignupMenuPane.requestFocus();
+            if (event.getTarget() == SignupMenuPane) SignupMenuPane.requestFocus();
         });
         return SignupMenuPane;
     }
 
     private void initPane(Pane pane) {
-        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
-            "/images/backgrounds/signup-menu.jpg"))));
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         addTitleText(pane);
@@ -55,8 +57,10 @@ public class SignupMenu {
         addPasswordFields(pane);
         addNicknameFields(pane);
         addEmailFields(pane);
-
+        addSloganField(pane);
         addBackButton(pane);
+        addSignupButton(pane);
+        addSignupError(pane);
     }
 
     private void addTitleText(Pane pane) {
@@ -75,15 +79,11 @@ public class SignupMenu {
         usernameTextField.setPromptText("username");
         usernameTextField.setLayoutX(240);
         usernameTextField.setLayoutY(95);
-        usernameTextField.prefWidth(100);
-        usernameTextField.prefHeight(40);
         usernameTextField.getStyleClass().add("text-field2");
         usernameTextField.setFocusTraversable(false);
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (Validation.isValidUsername(newValue) || newValue.equals(""))
-                usernameErrors.setText("");
-            else
-                usernameErrors.setText("forbidden character is used.");
+            if (Validation.isValidUsername(newValue) || newValue.equals("")) usernameErrors.setText("");
+            else usernameErrors.setText("forbidden character is used.");
         });
 
         usernameErrors.getStyleClass().add("error");
@@ -101,15 +101,11 @@ public class SignupMenu {
         passwordField.setPromptText("password");
         passwordField.setLayoutX(240);
         passwordField.setLayoutY(135);
-        passwordField.prefWidth(100);
-        passwordField.prefHeight(40);
         passwordField.getStyleClass().add("text-field2");
         passwordField.setFocusTraversable(false);
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (Validation.validatePassword(newValue).size() == 0 || newValue.equals(""))
-                passwordErrors.setText("");
-            else
-                passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
+            if (Validation.validatePassword(newValue).size() == 0 || newValue.equals("")) passwordErrors.setText("");
+            else passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
         });
 
         ToggleButton showPassword = getShowPassToggle(passwordField, passwordErrors);
@@ -129,8 +125,7 @@ public class SignupMenu {
         ToggleButton showPassword = new ToggleButton();
         showPassword.setLayoutX(430);
         showPassword.setLayoutY(140);
-        showPassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
-            "/images/buttons/show-password.png"))));
+        showPassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/show-password.png"))));
         showPassword.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             password.set(passwordField.getText());
             passwordError.set(passwordErrors.getText());
@@ -150,11 +145,11 @@ public class SignupMenu {
         ToggleButton generatePassword = new ToggleButton();
         generatePassword.setLayoutX(70);
         generatePassword.setLayoutY(140);
-        generatePassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
-            "/images/buttons/generate-random.png"))));
+        generatePassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
         generatePassword.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             passwordField.setText(Randoms.getPassword());
-            passwordErrors.setText("Password generated successfully: " + passwordField.getText());
+            passwordErrors.setText("");
+            new Alert(Alert.AlertType.INFORMATION, "Password generated successfully: " + passwordField.getText()).showAndWait();
         });
         return generatePassword;
     }
@@ -166,8 +161,6 @@ public class SignupMenu {
         nicknameTextField.setPromptText("nickname");
         nicknameTextField.setLayoutX(240);
         nicknameTextField.setLayoutY(175);
-        nicknameTextField.prefWidth(100);
-        nicknameTextField.prefHeight(40);
         nicknameTextField.getStyleClass().add("text-field2");
         nicknameTextField.setFocusTraversable(false);
         pane.getChildren().addAll(nickname, nicknameTextField);
@@ -180,15 +173,11 @@ public class SignupMenu {
         emailTextField.setPromptText("email");
         emailTextField.setLayoutX(240);
         emailTextField.setLayoutY(215);
-        emailTextField.prefWidth(100);
-        emailTextField.prefHeight(40);
         emailTextField.getStyleClass().add("text-field2");
         emailTextField.setFocusTraversable(false);
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (Validation.isValidEmail(newValue) || newValue.equals(""))
-                emailErrors.setText("");
-            else
-                emailErrors.setText("invalid email format.");
+            if (Validation.isValidEmail(newValue) || newValue.equals("")) emailErrors.setText("");
+            else emailErrors.setText("invalid email format.");
         });
 
         emailErrors.getStyleClass().add("error");
@@ -198,10 +187,62 @@ public class SignupMenu {
         pane.getChildren().addAll(email, emailTextField, emailErrors);
     }
 
+    private void addSloganField(Pane pane) {
+        slogan.setLayoutX(100);
+        slogan.setLayoutY(280);
+        slogan.getStyleClass().add("title1");
+        sloganTextField.setPromptText("slogan");
+        sloganTextField.setLayoutX(240);
+        sloganTextField.setLayoutY(255);
+        sloganTextField.setMinWidth(500);
+        sloganTextField.getStyleClass().add("text-field2");
+        sloganTextField.setFocusTraversable(false);
+        sloganGenerator = getSloganGenerate();
+        ToggleButton sloganToggle = getSloganToggle();
+        slogan.setVisible(false);
+        sloganTextField.clear();
+        sloganTextField.setVisible(false);
+        sloganGenerator.setVisible(false);
+        pane.getChildren().addAll(slogan, sloganTextField, sloganGenerator, sloganToggle);
+    }
+
+    private ToggleButton getSloganToggle() {
+        ToggleButton sloganToggle = new ToggleButton();
+        sloganToggle.setLayoutX(70);
+        sloganToggle.setLayoutY(260);
+        sloganToggle.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/slogan.png"))));
+        sloganToggle.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if (slogan.isVisible()) {
+                slogan.setVisible(false);
+                sloganTextField.clear();
+                sloganTextField.setVisible(false);
+                sloganGenerator.setVisible(false);
+                sloganToggle.setLayoutX(70);
+            } else {
+                slogan.setVisible(true);
+                sloganTextField.setVisible(true);
+                sloganGenerator.setVisible(true);
+                sloganToggle.setLayoutX(40);
+            }
+        });
+        return sloganToggle;
+    }
+
+    private ToggleButton getSloganGenerate() {
+        ToggleButton toggleButton = new ToggleButton();
+        toggleButton.setLayoutX(70);
+        toggleButton.setLayoutY(260);
+        toggleButton.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
+        toggleButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            sloganTextField.setText(Randoms.getSlogan());
+        });
+        return toggleButton;
+    }
+
     private void addBackButton(Pane pane) {
         Text back = new Text("Back");
         back.setLayoutX(100);
-        back.setLayoutY(300);
+        back.setLayoutY(350);
         back.getStyleClass().add("title1-with-hover");
         back.setOnMouseClicked(event -> {
             Main.setScene(Main.getTitlePane());
@@ -209,12 +250,41 @@ public class SignupMenu {
         pane.getChildren().add(back);
     }
 
+    private void addSignupButton(Pane pane) {
+        Text signup = new Text("Signup");
+        signup.setLayoutX(240);
+        signup.setLayoutY(350);
+        signup.getStyleClass().add("title1-with-hover");
+        signup.setOnMouseClicked(event -> {
+            if (!usernameErrors.getText().isEmpty() || !passwordErrors.getText().isEmpty() || !emailErrors.getText().isEmpty()) {
+                signupError.setText("Please fix the errors.");
+            } else if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || nicknameTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || (slogan.isVisible() && sloganTextField.getText().isEmpty())) {
+                signupError.setText("Please fill all the fields.");
+            } else {
+                SignUpMenuMessages message = SignUpMenuController.initiateSignup(usernameTextField.getText(),
+                    passwordField.getText(), passwordField.getText(), nicknameTextField.getText(),
+                    emailTextField.getText(), sloganTextField.getText());
+                if (message != null)
+                    signupError.setText(message.getMessage());
+                else {
+                    signupError.setText("");
+
+                }
+            }
+        });
+        pane.getChildren().add(signup);
+    }
+
+    private void addSignupError(Pane pane) {
+        signupError.setText("");
+        signupError.setLayoutX(240);
+        signupError.setLayoutY(315);
+        signupError.getStyleClass().add("error");
+        pane.getChildren().add(signupError);
+    }
+
     enum State {
-        PASSWORD_CONFIRMATION_NEEDED,
-        SECURITY_QUESTION_NEEDED,
-        CAPTCHA_ANSWER_NEEDED,
-        SIGNUP_SUCCESSFUL,
-        WAITING
+        PASSWORD_CONFIRMATION_NEEDED, SECURITY_QUESTION_NEEDED, CAPTCHA_ANSWER_NEEDED, SIGNUP_SUCCESSFUL, WAITING
     }
 
     private State state = State.WAITING;
@@ -248,8 +318,7 @@ public class SignupMenu {
     }
 
     private void createUser(Parser parser) {
-        if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") ||
-            !parser.getFlag("s") || !parser.getFlag("n")) {
+        if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") || !parser.getFlag("s") || !parser.getFlag("n")) {
             System.out.println("Some fields are empty.");
             return;
         }
@@ -264,8 +333,7 @@ public class SignupMenu {
         String email = parser.get("email");
         String nickname = parser.get("n");
         String slogan = parser.get("s");
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
-            nickname, email, slogan);
+        SignUpMenuMessages message = SignUpMenuController.initiateSignup(username, password, passwordConfirmation, nickname, email, slogan);
 
         if (slogan.equals("random")) {
             System.out.println("Your slogan is: " + SignUpMenuController.getSlogan());
@@ -288,8 +356,7 @@ public class SignupMenu {
 
         if (message.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
             System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
-        } else
-            System.out.println(message.getMessage());
+        } else System.out.println(message.getMessage());
     }
 
     private void printSecurityQuestions() {
