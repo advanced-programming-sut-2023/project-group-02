@@ -62,6 +62,7 @@ public class SignupMenu {
         usernameText.setLayoutX(100);
         usernameText.setLayoutY(120);
         usernameText.getStyleClass().add("title1");
+
         usernameTextField.setPromptText("username");
         usernameTextField.setLayoutX(240);
         usernameTextField.setLayoutY(95);
@@ -69,6 +70,10 @@ public class SignupMenu {
         usernameTextField.prefHeight(40);
         usernameTextField.getStyleClass().add("text-field2");
         usernameTextField.setFocusTraversable(false);
+        usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            usernameErrors.setText(newValue);
+        });
+
         usernameErrors.getStyleClass().add("error");
         usernameErrors.setLayoutX(440);
         usernameErrors.setLayoutY(115);

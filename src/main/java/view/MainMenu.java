@@ -47,6 +47,7 @@ public class MainMenu {
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                MainMenuMessages output = logout();
                 Main.setScene(Main.getTitlePane());
             }
         });
