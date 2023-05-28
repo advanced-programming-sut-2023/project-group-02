@@ -23,6 +23,12 @@ public class SignupMenu {
     Text passwordText = new Text("Password:");
     TextField passwordTextField = new TextField();
     Text passwordErrors = new Text();
+    Text nickname = new Text("Nickname:");
+    TextField nicknameTextField = new TextField();
+    Text nicknameErrors = new Text();
+    Text email = new Text("Email:");
+    TextField emailTextField = new TextField();
+    Text emailErrors = new Text();
 
     public Pane getPane() {
         Pane SignupMenuPane = new Pane();
@@ -35,42 +41,104 @@ public class SignupMenu {
             "/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
+        addTitleText(pane);
         addUsernameFields(pane);
         addPasswordFields(pane);
+        addNicknameFields(pane);
+        addEmailFields(pane);
+
+        addBackButton(pane);
+    }
+
+    private void addTitleText(Pane pane) {
+        Text text = new Text("Sign Up");
+        text.setLayoutX(100);
+        text.setLayoutY(65);
+        text.getStyleClass().add("text-title2");
+        pane.getChildren().add(text);
     }
 
     private void addUsernameFields(Pane pane) {
         usernameText.setLayoutX(100);
-        usernameText.setLayoutY(80);
+        usernameText.setLayoutY(120);
         usernameText.getStyleClass().add("title1");
         usernameTextField.setPromptText("username");
         usernameTextField.setLayoutX(240);
-        usernameTextField.setLayoutY(55);
+        usernameTextField.setLayoutY(95);
         usernameTextField.prefWidth(100);
         usernameTextField.prefHeight(40);
         usernameTextField.getStyleClass().add("text-field2");
+        usernameTextField.setFocusTraversable(false);
         usernameErrors.getStyleClass().add("error");
         usernameErrors.setLayoutX(440);
-        usernameErrors.setLayoutY(75);
+        usernameErrors.setLayoutY(115);
         usernameErrors.setText("");
         pane.getChildren().addAll(usernameText, usernameTextField, usernameErrors);
     }
 
     private void addPasswordFields(Pane pane) {
         passwordText.setLayoutX(100);
-        passwordText.setLayoutY(130);
+        passwordText.setLayoutY(160);
         passwordText.getStyleClass().add("title1");
         passwordTextField.setPromptText("password");
         passwordTextField.setLayoutX(240);
-        passwordTextField.setLayoutY(105);
+        passwordTextField.setLayoutY(135);
         passwordTextField.prefWidth(100);
         passwordTextField.prefHeight(40);
         passwordTextField.getStyleClass().add("text-field2");
+        passwordTextField.setFocusTraversable(false);
         passwordErrors.getStyleClass().add("error");
         passwordErrors.setLayoutX(440);
-        passwordErrors.setLayoutY(125);
+        passwordErrors.setLayoutY(155);
         passwordErrors.setText("");
         pane.getChildren().addAll(passwordText, passwordTextField, passwordErrors);
+    }
+
+    private void addNicknameFields(Pane pane) {
+        nickname.setLayoutX(100);
+        nickname.setLayoutY(200);
+        nickname.getStyleClass().add("title1");
+        nicknameTextField.setPromptText("nickname");
+        nicknameTextField.setLayoutX(240);
+        nicknameTextField.setLayoutY(175);
+        nicknameTextField.prefWidth(100);
+        nicknameTextField.prefHeight(40);
+        nicknameTextField.getStyleClass().add("text-field2");
+        nicknameTextField.setFocusTraversable(false);
+        nicknameErrors.getStyleClass().add("error");
+        nicknameErrors.setLayoutX(440);
+        nicknameErrors.setLayoutY(195);
+        nicknameErrors.setText("");
+        pane.getChildren().addAll(nickname, nicknameTextField, nicknameErrors);
+    }
+
+    private void addEmailFields(Pane pane) {
+        email.setLayoutX(100);
+        email.setLayoutY(240);
+        email.getStyleClass().add("title1");
+        emailTextField.setPromptText("email");
+        emailTextField.setLayoutX(240);
+        emailTextField.setLayoutY(215);
+        emailTextField.prefWidth(100);
+        emailTextField.prefHeight(40);
+        emailTextField.getStyleClass().add("text-field2");
+        emailTextField.setFocusTraversable(false);
+        emailErrors.getStyleClass().add("error");
+        emailErrors.setLayoutX(440);
+        emailErrors.setLayoutY(235);
+        emailErrors.setText("");
+        pane.getChildren().addAll(email, emailTextField, emailErrors);
+    }
+
+    private void addBackButton(Pane pane) {
+        Text back = new Text("Back");
+        back.setLayoutX(100);
+        back.setLayoutY(300);
+        back.getStyleClass().add("title1-with-hover");
+        back.setOnMouseClicked(event -> {
+            Main.setScene(Main.getTitlePane());
+        });
+        pane.getChildren().add(back);
     }
 
     enum State {

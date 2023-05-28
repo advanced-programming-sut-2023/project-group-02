@@ -63,7 +63,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    private static Pane getTitlePane() {
+    public static Pane getTitlePane() {
         Pane pane = new Pane();
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(MainMenu.class.getResource(
             "/images/backgrounds/signup-menu.jpg"))));
