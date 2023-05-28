@@ -29,28 +29,25 @@ public class MainMenu {
         buttons.setSpacing(15);
         buttons.setTranslateX(400);
         buttons.setTranslateY(170);
-        Button enterProfileMenuButton = makeButton(buttons,"Enter Profile Menu");
+        Button enterProfileMenuButton = makeButton(buttons, "Enter Profile Menu");
         enterProfileMenuButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 //TODO enter profile menu in a clean way
             }
         });
-        Button enterGameMenu = makeButton(buttons,"Enter Game Menu");
+        Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
         enterGameMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 //TODO enter game menu in a clean way
             }
         });
-        Button logout = makeButton(buttons,"logout");
+        Button logout = makeButton(buttons, "logout");
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MainMenuMessages output = logout();
-                Main.getStage().setScene(new Scene(new SignupMenu().getPane()));
-                Main.getStage().show();
-                //TODO going to sign up menu in a clean way
+                Main.setScene(Main.getTitlePane());
             }
         });
         pane.getChildren().add(buttons);
