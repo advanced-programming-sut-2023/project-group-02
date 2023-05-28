@@ -17,3 +17,13 @@
     -fx-font: "Arial";
     -fx-fill: #810000;
 }
+
+.button1 {
+    max-width: 300px;
+    background-color: darkred;
+    color: gold;
+    font-size: 20px;
+    font-family: sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+}
