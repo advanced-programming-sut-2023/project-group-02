@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 import controllers.SignUpMenuController;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import models.SecurityQuestion;
 import utils.*;
 import utils.Graphics;
@@ -29,7 +31,6 @@ public class SignupMenu {
     Text passwordErrors = new Text();
     Text nickname = new Text("Nickname:");
     TextField nicknameTextField = new TextField();
-    Text nicknameErrors = new Text();
     Text email = new Text("Email:");
     TextField emailTextField = new TextField();
     Text emailErrors = new Text();
@@ -79,7 +80,7 @@ public class SignupMenu {
         usernameTextField.getStyleClass().add("text-field2");
         usernameTextField.setFocusTraversable(false);
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (Validation.isValidUsername(newValue))
+            if (Validation.isValidUsername(newValue) || newValue.equals(""))
                 usernameErrors.setText("");
             else
                 usernameErrors.setText("forbidden character is used.");
@@ -112,21 +113,20 @@ public class SignupMenu {
         });
 
         ToggleButton showPassword = getShowPassToggle(passwordField, passwordErrors);
+        ToggleButton generatePassword = getGeneratePassToggle(passwordField, passwordErrors);
 
         passwordErrors.getStyleClass().add("error");
         passwordErrors.setLayoutX(460);
         passwordErrors.setLayoutY(145);
         passwordErrors.setText("");
         passwordErrors.setWrappingWidth(500);
-        pane.getChildren().addAll(passwordText, passwordField, showPassword, passwordErrors);
+        pane.getChildren().addAll(passwordText, passwordField, showPassword, generatePassword, passwordErrors);
     }
 
     private ToggleButton getShowPassToggle(PasswordField passwordField, Text passwordErrors) {
         AtomicReference<String> password = new AtomicReference<>();
         AtomicReference<String> passwordError = new AtomicReference<>();
         ToggleButton showPassword = new ToggleButton();
-        showPassword.prefWidth(300);
-        showPassword.prefHeight(300);
         showPassword.setLayoutX(430);
         showPassword.setLayoutY(140);
         showPassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
@@ -146,6 +146,19 @@ public class SignupMenu {
         return showPassword;
     }
 
+    private ToggleButton getGeneratePassToggle(PasswordField passwordField, Text passwordErrors) {
+        ToggleButton generatePassword = new ToggleButton();
+        generatePassword.setLayoutX(70);
+        generatePassword.setLayoutY(140);
+        generatePassword.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource(
+            "/images/buttons/generate-random.png"))));
+        generatePassword.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            passwordField.setText(Randoms.getPassword());
+            passwordErrors.setText("Password generated successfully: " + passwordField.getText());
+        });
+        return generatePassword;
+    }
+
     private void addNicknameFields(Pane pane) {
         nickname.setLayoutX(100);
         nickname.setLayoutY(200);
@@ -157,11 +170,7 @@ public class SignupMenu {
         nicknameTextField.prefHeight(40);
         nicknameTextField.getStyleClass().add("text-field2");
         nicknameTextField.setFocusTraversable(false);
-        nicknameErrors.getStyleClass().add("error");
-        nicknameErrors.setLayoutX(440);
-        nicknameErrors.setLayoutY(195);
-        nicknameErrors.setText("");
-        pane.getChildren().addAll(nickname, nicknameTextField, nicknameErrors);
+        pane.getChildren().addAll(nickname, nicknameTextField);
     }
 
     private void addEmailFields(Pane pane) {
@@ -175,8 +184,15 @@ public class SignupMenu {
         emailTextField.prefHeight(40);
         emailTextField.getStyleClass().add("text-field2");
         emailTextField.setFocusTraversable(false);
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (Validation.isValidEmail(newValue) || newValue.equals(""))
+                emailErrors.setText("");
+            else
+                emailErrors.setText("invalid email format.");
+        });
+
         emailErrors.getStyleClass().add("error");
-        emailErrors.setLayoutX(440);
+        emailErrors.setLayoutX(460);
         emailErrors.setLayoutY(235);
         emailErrors.setText("");
         pane.getChildren().addAll(email, emailTextField, emailErrors);
