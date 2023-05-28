@@ -20,6 +20,9 @@ public class SignupMenu {
     Text usernameText = new Text("Username:");
     TextField usernameTextField = new TextField();
     Text usernameErrors = new Text();
+    Text passwordText = new Text("Password:");
+    TextField passwordTextField = new TextField();
+    Text passwordErrors = new Text();
 
     public Pane getPane() {
         Pane SignupMenuPane = new Pane();
@@ -33,6 +36,7 @@ public class SignupMenu {
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         addUsernameFields(pane);
+        addPasswordFields(pane);
     }
 
     private void addUsernameFields(Pane pane) {
@@ -44,10 +48,7 @@ public class SignupMenu {
         usernameTextField.setLayoutY(55);
         usernameTextField.prefWidth(100);
         usernameTextField.prefHeight(40);
-        usernameTextField.getStyleClass().add("text-field1");
-        usernameTextField.onKeyPressedProperty().addListener((observable, oldValue, newValue) -> {
-            usernameErrors.setText(newValue.toString());
-        });
+        usernameTextField.getStyleClass().add("text-field2");
         usernameErrors.getStyleClass().add("error");
         usernameErrors.setLayoutX(440);
         usernameErrors.setLayoutY(75);
@@ -56,7 +57,20 @@ public class SignupMenu {
     }
 
     private void addPasswordFields(Pane pane) {
-
+        passwordText.setLayoutX(100);
+        passwordText.setLayoutY(130);
+        passwordText.getStyleClass().add("title1");
+        passwordTextField.setPromptText("password");
+        passwordTextField.setLayoutX(240);
+        passwordTextField.setLayoutY(105);
+        passwordTextField.prefWidth(100);
+        passwordTextField.prefHeight(40);
+        passwordTextField.getStyleClass().add("text-field2");
+        passwordErrors.getStyleClass().add("error");
+        passwordErrors.setLayoutX(440);
+        passwordErrors.setLayoutY(125);
+        passwordErrors.setText("");
+        pane.getChildren().addAll(passwordText, passwordTextField, passwordErrors);
     }
 
     enum State {

@@ -1,5 +1,8 @@
 package utils;
 
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Text;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -76,12 +79,12 @@ public class Utils {
 
     public static String sevenCharacterise(String string) {
         if (string.length() < 7) {
-            for (int i = 0; i < 7 - string.length() ; i++) {
+            for (int i = 0; i < 7 - string.length(); i++) {
                 string += " ";
             }
             return string;
         } else {
-            return string.substring(0,7);
+            return string.substring(0, 7);
         }
     }
 }
