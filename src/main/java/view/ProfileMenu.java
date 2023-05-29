@@ -48,71 +48,71 @@ public class ProfileMenu {
         info.getStyleClass().add("text-content2");
         buttons.getChildren().add(info);
 
-        Button changeUsernameButton = makeButton(buttons,"Change Username");
+        Button changeUsernameButton = makeButton(buttons, "Change Username");
         changeUsernameButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
             Dialog<String> dialog = makeDialog();
             dialog.setWidth(400);
-            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog,dialogButton));
-            addTextFieldToDialog2(dialog,"Username",gridPane);
+            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog, dialogButton));
+            addTextFieldToDialog2(dialog, "Username", gridPane);
             dialog.getDialogPane().setContent(gridPane);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(value -> {
                 ProfileMenuMessages message = ProfileMenuController.changeUsername(value);
-                showMessagePopup(message,"Changing Username was successful!","Invalid Username!");
+                showMessagePopup(message, "Changing Username was successful!", "Invalid Username!");
             });
             info.setText(showProfile());
         });
 
-        Button changePasswordButton = makeButton(buttons,"Change Password");
+        Button changePasswordButton = makeButton(buttons, "Change Password");
         changePasswordButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
 
         });
 
-        Button changeNickNameButton = makeButton(buttons,"Change Nickname");
+        Button changeNickNameButton = makeButton(buttons, "Change Nickname");
         changeNickNameButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
             Dialog<String> dialog = makeDialog();
-            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog,dialogButton));
-            addTextFieldToDialog1(dialog,"Slogan",gridPane);
+            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog, dialogButton));
+            addTextFieldToDialog1(dialog, "Slogan", gridPane);
             dialog.getDialogPane().setContent(gridPane);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(value -> {
                 ProfileMenuMessages message = ProfileMenuController.changeNickname(value);
-                showMessagePopup(message,"Changing nickname was successful!","Invalid Nickname!");
+                showMessagePopup(message, "Changing nickname was successful!", "Invalid Nickname!");
             });
             info.setText(showProfile());
         });
 
-        Button changeAvatarButton = makeButton(buttons,"Change Avatar");
+        Button changeAvatarButton = makeButton(buttons, "Change Avatar");
         changeAvatarButton.setOnAction(event -> {
 
         });
 
-        Button changeSloganButton = makeButton(buttons,"Change Slogan");
+        Button changeSloganButton = makeButton(buttons, "Change Slogan");
         changeSloganButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
             Dialog<String> dialog = makeDialog();
-            addTextFieldToDialog1(dialog,"Slogan",gridPane);
+            addTextFieldToDialog1(dialog, "Slogan", gridPane);
             dialog.getDialogPane().setContent(gridPane);
-            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog,dialogButton));
+            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog, dialogButton));
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(value -> {
                 ProfileMenuMessages message = ProfileMenuController.changeSlogan(value);
-                showMessagePopup(message,"Changing slogan was successful!","Invalid Slogan!");
+                showMessagePopup(message, "Changing slogan was successful!", "Invalid Slogan!");
             });
             info.setText(showProfile());
         });
 
-        Button removeSloganButton = makeButton(buttons,"Remove Slogan");
+        Button removeSloganButton = makeButton(buttons, "Remove Slogan");
         removeSloganButton.setOnAction(event -> {
             ProfileMenuMessages message = ProfileMenuController.removeSlogan();
-            showMessagePopup(message,"Removing slogan was successful!","You don't have a Slogan!");
+            showMessagePopup(message, "Removing slogan was successful!", "You don't have a Slogan!");
             info.setText(showProfile());
         });
 
-        Button back = makeButton(buttons,"Back");
+        Button back = makeButton(buttons, "Back");
         back.setOnAction(event -> {
             Main.getStage().setScene(new Scene(new MainMenu().getPane()));
         });
@@ -155,8 +155,8 @@ public class ProfileMenu {
         TextField textField = new TextField();
         Text errorText = new Text();
         textField.setPromptText("New " + changingThing);
-        gridPane.add(textField,0,0);
-        gridPane.add(errorText,0,1);
+        gridPane.add(textField, 0, 0);
+        gridPane.add(errorText, 0, 1);
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Validation.isValidUsername(newValue) || newValue.equals("")) errorText.setText("");
             else errorText.setText("forbidden character is used.");
@@ -166,7 +166,7 @@ public class ProfileMenu {
     private String getResultOfDialog(Dialog<String> dialog, ButtonType dialogButton) {
         if (dialogButton == dialog.getDialogPane().getButtonTypes().get(0)) {
             if (dialog.getDialogPane().getContent() instanceof Pane &&
-                ((Pane) dialog.getDialogPane().getContent()).getChildren().get(0) instanceof TextField )
+                ((Pane) dialog.getDialogPane().getContent()).getChildren().get(0) instanceof TextField)
                 return ((TextField) ((Pane) dialog.getDialogPane().getContent()).getChildren().get(0)).getText();
         }
         return null;
@@ -178,7 +178,7 @@ public class ProfileMenu {
         popup.setWidth(100);
         Label messageLabel = new Label();
         messageLabel.setStyle("-fx-background-color: white");
-        messageLabel.setFont(new Font("Arial",30));
+        messageLabel.setFont(new Font("Arial", 30));
         if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
             messageLabel.setText(firstMessage);
         } else {
@@ -247,7 +247,7 @@ public class ProfileMenu {
 
     String showSlogan() {
         String slogan = UserController.getCurrentUser().getSlogan();
-        if (slogan != null) {
+        if (slogan != null && !slogan.isEmpty()) {
             return "Slogan: " + slogan;
         } else {
             return "No slogan";
@@ -257,19 +257,19 @@ public class ProfileMenu {
     String showProfile() {
         //TODO players avatar
         return UserController.getCurrentUser().getUsername() + "\n" + UserController.getCurrentUser().getNickname() + "\n" +
-             showRank() + "\n" + showHighScore() + "\n" + showSlogan();
+            showRank() + "\n" + showHighScore() + "\n" + showSlogan();
     }
 
     void changePassword(Parser parser) {
         ProfileMenuMessages message = ProfileMenuController.changePassword(parser.get("o"), parser.get("n"));
 
         System.out.println(
-        switch (message) {
-            case SAME_THING -> "Please enter a new password!";
-            case WEAK_NEW_PASSWORD -> "Your new pass is weak";
-            case INCORRECT_OLD_PASSWORD -> "Current password is incorrect!";
-            case SUCCESSFUL -> "Password is changed successfully";
-            default -> "";
-        });
+            switch (message) {
+                case SAME_THING -> "Please enter a new password!";
+                case WEAK_NEW_PASSWORD -> "Your new pass is weak";
+                case INCORRECT_OLD_PASSWORD -> "Current password is incorrect!";
+                case SUCCESSFUL -> "Password is changed successfully";
+                default -> "";
+            });
     }
 }

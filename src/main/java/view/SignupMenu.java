@@ -77,7 +77,6 @@ public class SignupMenu {
         usernameTextField.setLayoutX(240);
         usernameTextField.setLayoutY(95);
         usernameTextField.getStyleClass().add("text-field2");
-        usernameTextField.setFocusTraversable(false);
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Validation.isValidUsername(newValue) || newValue.equals("")) usernameErrors.setText("");
             else usernameErrors.setText("forbidden character is used.");
@@ -99,7 +98,6 @@ public class SignupMenu {
         passwordField.setLayoutX(240);
         passwordField.setLayoutY(135);
         passwordField.getStyleClass().add("text-field2");
-        passwordField.setFocusTraversable(false);
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Validation.validatePassword(newValue).size() == 0 || newValue.equals("")) passwordErrors.setText("");
             else passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
@@ -135,6 +133,7 @@ public class SignupMenu {
             passwordField.setText(password.get());
             passwordField.setPromptText("password");
         });
+        showPassword.setFocusTraversable(false);
         return showPassword;
     }
 
@@ -148,6 +147,7 @@ public class SignupMenu {
             passwordErrors.setText("");
             new Alert(Alert.AlertType.INFORMATION, "Password generated successfully: " + passwordField.getText()).showAndWait();
         });
+        generatePassword.setFocusTraversable(false);
         return generatePassword;
     }
 
@@ -159,7 +159,6 @@ public class SignupMenu {
         nicknameTextField.setLayoutX(240);
         nicknameTextField.setLayoutY(175);
         nicknameTextField.getStyleClass().add("text-field2");
-        nicknameTextField.setFocusTraversable(false);
         pane.getChildren().addAll(nickname, nicknameTextField);
     }
 
@@ -171,7 +170,6 @@ public class SignupMenu {
         emailTextField.setLayoutX(240);
         emailTextField.setLayoutY(215);
         emailTextField.getStyleClass().add("text-field2");
-        emailTextField.setFocusTraversable(false);
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Validation.isValidEmail(newValue) || newValue.equals("")) emailErrors.setText("");
             else emailErrors.setText("invalid email format.");
@@ -193,7 +191,6 @@ public class SignupMenu {
         sloganTextField.setLayoutY(255);
         sloganTextField.setMinWidth(500);
         sloganTextField.getStyleClass().add("text-field2");
-        sloganTextField.setFocusTraversable(false);
         sloganGenerator = getSloganGenerate();
         ToggleButton sloganToggle = getSloganToggle();
         slogan.setVisible(false);
@@ -222,6 +219,7 @@ public class SignupMenu {
                 sloganToggle.setLayoutX(40);
             }
         });
+        sloganToggle.setFocusTraversable(false);
         return sloganToggle;
     }
 
@@ -233,6 +231,7 @@ public class SignupMenu {
         toggleButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             sloganTextField.setText(Randoms.getSlogan());
         });
+        toggleButton.setFocusTraversable(false);
         return toggleButton;
     }
 
@@ -303,7 +302,6 @@ public class SignupMenu {
         Text title = getSecurityQuestionTitle();
         ChoiceBox<String> questionBox = getChoiceBox();
         TextField answerField = getSecurityQuestionField();
-
         addBackButton(pane, false);
         addSubmitButton(pane, questionBox, answerField);
         addSignupError(pane);
