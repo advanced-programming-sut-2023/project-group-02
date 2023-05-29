@@ -1,5 +1,6 @@
 package controllers;
 
+import models.User;
 import utils.Validation;
 import view.enums.ProfileMenuMessages;
 

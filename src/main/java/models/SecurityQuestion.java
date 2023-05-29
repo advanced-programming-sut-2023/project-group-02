@@ -20,4 +20,13 @@ public enum SecurityQuestion {
         }
         return questions;
     }
+
+    public static SecurityQuestion getSecurityQuestion(String question) {
+        for (SecurityQuestion securityQuestion : SecurityQuestion.values()) {
+            if (securityQuestion.fullSentence.equals(question)) {
+                return securityQuestion;
+            }
+        }
+        return null;
+    }
 }

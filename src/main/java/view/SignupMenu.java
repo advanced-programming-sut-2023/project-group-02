@@ -37,13 +37,12 @@ public class SignupMenu {
     Text signupError = new Text();
 
     public Pane getPane() {
-        return getSecurityQuestionPane();
-//        Pane SignupMenuPane = new Pane();
-//        initPane(SignupMenuPane);
-//        SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-//            if (event.getTarget() == SignupMenuPane) SignupMenuPane.requestFocus();
-//        });
-//        return SignupMenuPane;
+        Pane SignupMenuPane = new Pane();
+        initPane(SignupMenuPane);
+        SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getTarget() == SignupMenuPane) SignupMenuPane.requestFocus();
+        });
+        return SignupMenuPane;
     }
 
     private void initPane(Pane pane) {
@@ -56,7 +55,7 @@ public class SignupMenu {
         addNicknameFields(pane);
         addEmailFields(pane);
         addSloganField(pane);
-        addBackButton(pane);
+        addBackButton(pane, true);
         addSignupButton(pane);
         addSignupError(pane);
     }
@@ -237,13 +236,18 @@ public class SignupMenu {
         return toggleButton;
     }
 
-    private void addBackButton(Pane pane) {
+    private void addBackButton(Pane pane, boolean backToMain) {
         Text back = new Text("Back");
         back.setLayoutX(100);
         back.setLayoutY(350);
         back.getStyleClass().add("title1-with-hover");
         back.setOnMouseClicked(event -> {
-            Main.setScene(Main.getTitlePane());
+            if (backToMain)
+                Main.setScene(Main.getTitlePane());
+            else {
+                Main.setScene(this.getPane());
+                signupError.setText("");
+            }
         });
         pane.getChildren().add(back);
     }
@@ -298,8 +302,11 @@ public class SignupMenu {
         pane.setPrefSize(960, 540);
         Text title = getSecurityQuestionTitle();
         ChoiceBox<String> questionBox = getChoiceBox();
-        TextField answerField = getSecurityQuestionField(pane);
+        TextField answerField = getSecurityQuestionField();
 
+        addBackButton(pane, false);
+        addSubmitButton(pane, questionBox, answerField);
+        addSignupError(pane);
         pane.getChildren().addAll(title, questionBox, answerField);
     }
 
@@ -323,7 +330,7 @@ public class SignupMenu {
         return choiceBox;
     }
 
-    private TextField getSecurityQuestionField(Pane pane) {
+    private TextField getSecurityQuestionField() {
         TextField textField = new TextField();
         textField.setLayoutX(500);
         textField.setLayoutY(102);
@@ -332,6 +339,24 @@ public class SignupMenu {
         textField.setFocusTraversable(false);
         textField.setPromptText("answer");
         return textField;
+    }
+
+    private void addSubmitButton(Pane pane, ChoiceBox<String> questionBox, TextField answer) {
+        Text submit = new Text("Submit");
+        submit.setLayoutX(240);
+        submit.setLayoutY(350);
+        submit.getStyleClass().add("title1-with-hover");
+        submit.setOnMouseClicked(event -> {
+            if (answer.getText().isEmpty()) {
+                signupError.setText("Please fill the answer field.");
+            } else {
+                SignUpMenuController.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(questionBox.getValue()), answer.getText());
+                signupError.setText("");
+                new Alert(Alert.AlertType.INFORMATION, "user created successfully").showAndWait();
+                Main.setScene(new MainMenu().getPane());
+            }
+        });
+        pane.getChildren().add(submit);
     }
 
 

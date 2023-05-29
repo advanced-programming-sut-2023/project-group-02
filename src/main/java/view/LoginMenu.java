@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import models.User;
 import utils.Captcha;
+import utils.Graphics;
 import utils.Parser;
 import utils.PasswordProblem;
 import view.enums.LoginMenuMessages;
@@ -36,7 +37,7 @@ public class LoginMenu {
     }
 
     private void initPane(Pane pane) {
-        //TODO add a background
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         VBox form = new VBox();
@@ -49,15 +50,15 @@ public class LoginMenu {
         passwordText.getStyleClass().add("title1");
         makeFields(passwordField);
 
-        HBox usernamePart = new HBox(usernameText,usernameTextField);
+        HBox usernamePart = new HBox(usernameText, usernameTextField);
         usernamePart.setSpacing(10);
-        HBox passwordPart = new HBox(passwordText,passwordField);
+        HBox passwordPart = new HBox(passwordText, passwordField);
         passwordPart.setSpacing(17.5);
 
         handleSubmitButton(submitButton);
         submitButton.requestFocus();
         handleForgotPasswordButton(forgotPasswordButton);
-        form.getChildren().addAll(usernamePart,passwordPart,submitButton,forgotPasswordButton,errorText);
+        form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, errorText);
         pane.getChildren().add(form);
     }
 
@@ -71,7 +72,7 @@ public class LoginMenu {
     private void handleSubmitButton(Button button) {
         button.getStyleClass().add("button1");
         button.setOnAction(event -> {
-            LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(),passwordField.getText(),true);
+            LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
             if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
                 Main.getStage().setScene(new Scene(new MainMenu().getPane()));
                 Main.getStage().show();
@@ -103,7 +104,7 @@ public class LoginMenu {
 
     void login(Parser parser) {
         LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-                parser.getFlag("stay-logged-in"));
+            parser.getFlag("stay-logged-in"));
 
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
             state = State.WAIT_FOR_CAPTCHA;
