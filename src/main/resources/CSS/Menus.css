@@ -63,6 +63,12 @@
     -fx-font-weight: bold;
 }
 
+.button1:hover {
+    -fx-background-color: maroon;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 5, 3, 0, 1);
+}
+
 /* Text styles */
 .text-title {
     -fx-font-family: "Arial";

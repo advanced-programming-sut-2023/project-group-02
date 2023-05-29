@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.util.Pair;
+import utils.Graphics;
 import utils.Parser;
 import view.enums.LoginMenuMessages;
 import view.enums.ProfileMenuMessages;
@@ -33,7 +34,7 @@ public class ProfileMenu {
     }
 
     private void initializePane(Pane pane) {
-        //TODO add a background
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/main-menu.png"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
         pane.setPrefSize(960, 540);

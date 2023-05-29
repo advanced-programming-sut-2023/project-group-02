@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import models.Game;
+import utils.Graphics;
 import utils.Parser;
 import view.enums.MainMenuMessages;
 
@@ -20,7 +21,7 @@ public class MainMenu {
     }
 
     private void initPane(Pane pane) {
-        //TODO add a background
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/main-menu.png"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
         pane.setPrefSize(960, 540);
