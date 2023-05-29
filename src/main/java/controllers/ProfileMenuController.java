@@ -47,7 +47,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages removeSlogan() {
-        if (UserController.getCurrentUser().getSlogan().equals(null))
+        if (UserController.getCurrentUser().getSlogan() == null)
             return ProfileMenuMessages.EMPTY_FIELD;
         UserController.getCurrentUser().setSlogan(null);
         return ProfileMenuMessages.SUCCESSFUL;

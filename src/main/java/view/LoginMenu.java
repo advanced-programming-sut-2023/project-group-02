@@ -55,6 +55,7 @@ public class LoginMenu {
         passwordPart.setSpacing(17.5);
 
         handleSubmitButton(submitButton);
+        submitButton.requestFocus();
         handleForgotPasswordButton(forgotPasswordButton);
         form.getChildren().addAll(usernamePart,passwordPart,submitButton,forgotPasswordButton,errorText);
         pane.getChildren().add(form);
