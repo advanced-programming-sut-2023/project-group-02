@@ -21,7 +21,7 @@ public enum PasswordProblem {
 
     public static String showErrors(ArrayList<PasswordProblem> passwordProblems) {
         int arrayListLength = passwordProblems.size();
-        String errorsAndSolutions = "Password is weak. You must ";
+        String errorsAndSolutions = "You must ";
         for (int i = 0; i < arrayListLength - 2; i++) {
             errorsAndSolutions = errorsAndSolutions + passwordProblems.get(i).solution + ", ";
         }

@@ -1,15 +1,11 @@
 package view;
 
-import controllers.LoginMenuController;
 import controllers.ProfileMenuController;
 import controllers.UserController;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -19,13 +15,13 @@ import javafx.stage.Popup;
 import javafx.util.Pair;
 import utils.Graphics;
 import utils.Parser;
+import utils.PasswordProblem;
 import utils.Validation;
-import view.enums.LoginMenuMessages;
+import view.enums.MainMenuMessages;
 import view.enums.ProfileMenuMessages;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class ProfileMenu {
     public Pane getPane() {
@@ -35,9 +31,9 @@ public class ProfileMenu {
     }
 
     private void initializePane(Pane pane) {
-        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/main-menu.png"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/MainMenu.css")).toExternalForm());
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/main-menu.png"))));
         pane.setPrefSize(960, 540);
         VBox buttons = new VBox();
         buttons.setTranslateX(400);
@@ -52,9 +48,8 @@ public class ProfileMenu {
         changeUsernameButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
             Dialog<String> dialog = makeDialog();
-            dialog.setWidth(400);
             dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog,dialogButton));
-            addTextFieldToDialog2(dialog,"Username",gridPane);
+            addTextFieldToDialogForUsername(dialog,"Username",gridPane);
             dialog.getDialogPane().setContent(gridPane);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(value -> {
@@ -67,7 +62,24 @@ public class ProfileMenu {
         Button changePasswordButton = makeButton(buttons,"Change Password");
         changePasswordButton.setOnAction(event -> {
             GridPane gridPane = makeGridPane();
+            Dialog<String> dialog = new Dialog<>();
+            ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+            dialog.setResultConverter(dialogButton -> getResultOfDialog(dialog,dialogButton));
+            addTextFieldToDialogForPassword(dialog,gridPane);
+            dialog.getDialogPane().setContent(gridPane);
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                System.out.println(value);
+                String oldPassword = "", newPassword = "";
+                if (gridPane.getChildren().get(0) instanceof TextField)
+                    oldPassword = ((TextField) gridPane.getChildren().get(0)).getText();
+                if (gridPane.getChildren().get(2) instanceof TextField)
+                    newPassword = ((TextField) gridPane.getChildren().get(2)).getText();
 
+                ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword,newPassword);
+                showErrorOrPopup(message,gridPane);
+            });
         });
 
         Button changeNickNameButton = makeButton(buttons,"Change Nickname");
@@ -120,6 +132,7 @@ public class ProfileMenu {
         pane.getChildren().add(buttons);
     }
 
+
     private Button makeButton(VBox buttons, String text) {
         Button button = new Button(text);
         button.getStyleClass().add("button1");
@@ -150,7 +163,7 @@ public class ProfileMenu {
         Platform.runLater(textField::requestFocus);
     }
 
-    private void addTextFieldToDialog2(Dialog<String> dialog, String changingThing, GridPane gridPane) {
+    private void addTextFieldToDialogForUsername(Dialog<String> dialog, String changingThing, GridPane gridPane) {
         dialog.setTitle("Change " + changingThing);
         TextField textField = new TextField();
         Text errorText = new Text();
@@ -161,6 +174,23 @@ public class ProfileMenu {
             if (Validation.isValidUsername(newValue) || newValue.equals("")) errorText.setText("");
             else errorText.setText("forbidden character is used.");
         });
+    }
+
+    private void addTextFieldToDialogForPassword(Dialog<String> dialog, GridPane gridPane) {
+        dialog.setTitle("Change Password");
+        PasswordField oldPassword = new PasswordField();
+        oldPassword.setPromptText("Old Password");
+        gridPane.add(oldPassword,0,0);
+        Text passwordErrors = new Text();
+        gridPane.add(passwordErrors,0,2);
+        PasswordField newPassword = new PasswordField();
+        newPassword.setPromptText("New Password");
+        newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (Validation.validatePassword(newValue).size() == 0 || newValue.equals("")) passwordErrors.setText("");
+            else passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
+        });
+        gridPane.add(newPassword,0,1);
+        //TODO captcha is left
     }
 
     private String getResultOfDialog(Dialog<String> dialog, ButtonType dialogButton) {
@@ -187,6 +217,35 @@ public class ProfileMenu {
         popup.getContent().add(messageLabel);
         popup.setAutoHide(true);
         popup.show(Main.getStage());
+    }
+
+    private void showErrorOrPopup(ProfileMenuMessages message,GridPane gridPane) {
+        if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
+            showMessagePopup(message,"Password changed successfully!","");
+        } else {
+            showMessagePopup(message,"",switch (message) {
+                case SAME_THING -> "Please enter a new password!";
+                case WEAK_NEW_PASSWORD -> "Your new pass is weak";
+                case INCORRECT_OLD_PASSWORD -> "Current password is incorrect!";
+                default -> "";
+            });
+        }
+    }
+
+    private Button makeButtonForChangingPassword(GridPane gridPane) {
+        Button button = new Button("Change");
+        gridPane.add(button,0,4);
+        button.setOnAction(event1 -> {
+            String oldPassword = "", newPassword = "";
+            if (gridPane.getChildren().get(0) instanceof TextField)
+                oldPassword = ((TextField) gridPane.getChildren().get(0)).getText();
+            if (gridPane.getChildren().get(1) instanceof TextField)
+                newPassword = ((TextField) gridPane.getChildren().get(1)).getText();
+
+            ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword,newPassword);
+            showErrorOrPopup(message,gridPane);
+        });
+        return button;
     }
 
     void removeSlogan() {
@@ -247,7 +306,7 @@ public class ProfileMenu {
 
     String showSlogan() {
         String slogan = UserController.getCurrentUser().getSlogan();
-        if (slogan != null) {
+        if (slogan != null && slogan.length() != 0) {
             return "Slogan: " + slogan;
         } else {
             return "No slogan";
