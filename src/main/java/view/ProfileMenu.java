@@ -232,70 +232,6 @@ public class ProfileMenu {
         }
     }
 
-    private Button makeButtonForChangingPassword(GridPane gridPane) {
-        Button button = new Button("Change");
-        gridPane.add(button,0,4);
-        button.setOnAction(event1 -> {
-            String oldPassword = "", newPassword = "";
-            if (gridPane.getChildren().get(0) instanceof TextField)
-                oldPassword = ((TextField) gridPane.getChildren().get(0)).getText();
-            if (gridPane.getChildren().get(1) instanceof TextField)
-                newPassword = ((TextField) gridPane.getChildren().get(1)).getText();
-
-            ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword,newPassword);
-            showErrorOrPopup(message,gridPane);
-        });
-        return button;
-    }
-
-    void removeSlogan() {
-        ProfileMenuMessages message = ProfileMenuController.removeSlogan();
-        if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
-            System.out.println("Slogan is removed successfully!");
-        } else if (message.equals(ProfileMenuMessages.EMPTY_FIELD)) {
-            System.out.println("Slogan field is already empty!");
-        }
-    }
-
-    void changeSlogan(Parser parser) {
-        ProfileMenuMessages message = ProfileMenuController.changeSlogan(parser.get("s"));
-
-        if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
-            System.out.println("Slogan is changed successfully!");
-        } else {
-            System.out.println("Invalid command!");
-        }
-    }
-
-    void changeInfo(Parser parser) {
-        ProfileMenuMessages message;
-        if (parser.get("u") != null) {
-            message = ProfileMenuController.changeUsername(parser.get("u"));
-            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
-                System.out.println("Changing username was successful!");
-            } else {
-                System.out.println("Invalid username format!");
-            }
-
-        } else if (parser.get("n") != null) {
-            message = ProfileMenuController.changeNickname(parser.get("n"));
-            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
-                System.out.println("Changing nickname was successful!");
-            } else {
-                System.out.println("Invalid nickname!");
-            }
-        } else if (parser.get("e") != null) {
-            message = ProfileMenuController.changeEmail(parser.get("e"));
-            if (message.equals(ProfileMenuMessages.SUCCESSFUL)) {
-                System.out.println("Email is changed successfully!");
-            } else {
-                System.out.println("Invalid email format!");
-            }
-        } else {
-            System.out.println("Invalid command!");
-        }
-    }
-
     String showHighScore() {
         return "HighScore: " + UserController.getCurrentUser().getHighScore();
     }
@@ -317,18 +253,5 @@ public class ProfileMenu {
         //TODO players avatar
         return UserController.getCurrentUser().getUsername() + "\n" + UserController.getCurrentUser().getNickname() + "\n" +
              showRank() + "\n" + showHighScore() + "\n" + showSlogan();
-    }
-
-    void changePassword(Parser parser) {
-        ProfileMenuMessages message = ProfileMenuController.changePassword(parser.get("o"), parser.get("n"));
-
-        System.out.println(
-        switch (message) {
-            case SAME_THING -> "Please enter a new password!";
-            case WEAK_NEW_PASSWORD -> "Your new pass is weak";
-            case INCORRECT_OLD_PASSWORD -> "Current password is incorrect!";
-            case SUCCESSFUL -> "Password is changed successfully";
-            default -> "";
-        });
     }
 }
