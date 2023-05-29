@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public enum SecurityQuestion {
     FATHERS_NAME("What's your father's name?"),
     PET_NAME("What was your first pet's name?"),
@@ -9,5 +11,13 @@ public enum SecurityQuestion {
 
     SecurityQuestion(String fullSentence) {
         this.fullSentence = fullSentence;
+    }
+
+    public static ArrayList<String> getSecurityQuestions() {
+        ArrayList<String> questions = new ArrayList<>();
+        for (SecurityQuestion securityQuestion : SecurityQuestion.values()) {
+            questions.add(securityQuestion.fullSentence);
+        }
+        return questions;
     }
 }

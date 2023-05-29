@@ -6,10 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 import controllers.SignUpMenuController;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -40,12 +37,13 @@ public class SignupMenu {
     Text signupError = new Text();
 
     public Pane getPane() {
-        Pane SignupMenuPane = new Pane();
-        initPane(SignupMenuPane);
-        SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getTarget() == SignupMenuPane) SignupMenuPane.requestFocus();
-        });
-        return SignupMenuPane;
+        return getSecurityQuestionPane();
+//        Pane SignupMenuPane = new Pane();
+//        initPane(SignupMenuPane);
+//        SignupMenuPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+//            if (event.getTarget() == SignupMenuPane) SignupMenuPane.requestFocus();
+//        });
+//        return SignupMenuPane;
     }
 
     private void initPane(Pane pane) {
@@ -268,7 +266,9 @@ public class SignupMenu {
                     signupError.setText(message.getMessage());
                 else {
                     signupError.setText("");
-
+                    new Alert(Alert.AlertType.INFORMATION, "information filled successfully. " +
+                        "now you have to set a security question.").showAndWait();
+                    Main.setScene(this.getSecurityQuestionPane());
                 }
             }
         });
@@ -282,6 +282,58 @@ public class SignupMenu {
         signupError.getStyleClass().add("error");
         pane.getChildren().add(signupError);
     }
+
+    private Pane getSecurityQuestionPane() {
+        Pane securityQuestionPane = new Pane();
+        initSecurityQuestionPane(securityQuestionPane);
+        securityQuestionPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.getTarget() == securityQuestionPane) securityQuestionPane.requestFocus();
+        });
+        return securityQuestionPane;
+    }
+
+    private void initSecurityQuestionPane(Pane pane) {
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.setPrefSize(960, 540);
+        Text title = getSecurityQuestionTitle();
+        ChoiceBox<String> questionBox = getChoiceBox();
+        TextField answerField = getSecurityQuestionField(pane);
+
+        pane.getChildren().addAll(title, questionBox, answerField);
+    }
+
+    private Text getSecurityQuestionTitle() {
+        Text title = new Text("Security Question");
+        title.setLayoutX(100);
+        title.setLayoutY(65);
+        title.getStyleClass().add("text-title2");
+        return title;
+    }
+
+    private ChoiceBox<String> getChoiceBox() {
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.setLayoutX(100);
+        choiceBox.setLayoutY(100);
+        choiceBox.setMinWidth(350);
+        choiceBox.getStyleClass().add("text-content");
+        choiceBox.getItems().addAll(SecurityQuestion.getSecurityQuestions());
+        choiceBox.setValue(SecurityQuestion.getSecurityQuestions().get(0));
+        choiceBox.setFocusTraversable(false);
+        return choiceBox;
+    }
+
+    private TextField getSecurityQuestionField(Pane pane) {
+        TextField textField = new TextField();
+        textField.setLayoutX(500);
+        textField.setLayoutY(102);
+        textField.setMinWidth(150);
+        textField.getStyleClass().add("text-field2");
+        textField.setFocusTraversable(false);
+        textField.setPromptText("answer");
+        return textField;
+    }
+
 
     enum State {
         PASSWORD_CONFIRMATION_NEEDED, SECURITY_QUESTION_NEEDED, CAPTCHA_ANSWER_NEEDED, SIGNUP_SUCCESSFUL, WAITING
