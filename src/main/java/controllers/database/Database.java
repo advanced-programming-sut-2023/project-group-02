@@ -36,8 +36,9 @@ public class Database {
     public static <T> void write(String tableName, T value, Class<T> classOfT) {
         Path path = getTablePath(tableName);
         try {
-            Files.write(path, gson.toJson(value).getBytes(), StandardOpenOption.CREATE);
-        } catch (JsonSyntaxException | IOException e) {
+            Files.write(path, gson.toJson(value).getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
+                    StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
