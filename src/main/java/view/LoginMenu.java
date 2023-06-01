@@ -18,7 +18,6 @@ import utils.PasswordProblem;
 import view.enums.LoginMenuMessages;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 public class LoginMenu {
     private static User currentUser;

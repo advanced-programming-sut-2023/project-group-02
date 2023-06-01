@@ -7,11 +7,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import models.Game;
 import utils.Graphics;
-import utils.Parser;
 import view.enums.MainMenuMessages;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 public class MainMenu {
     public Pane getPane() {

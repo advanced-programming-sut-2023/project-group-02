@@ -38,14 +38,6 @@ public class Main extends Application {
         UserController.loadCurrentUserFromFile();
 
         launch(args);
-
-//        Scanner scanner = new Scanner(System.in);
-//        if (UserController.isAuthorized()) {
-//            new MainMenu().run(scanner);
-//        } else {
-//            new SignupMenu().run(scanner);
-//        }
-//        scanner.close();
     }
 
     @Override
@@ -104,12 +96,3 @@ public class Main extends Application {
         pane.getChildren().addAll(title, signup, login, exit);
     }
 }
-
-/*
- * samples
- * user create -u danial -p Danial01* Danial01* --email danielparnian@gmail.com -n Dani -s random
- * question pick -q 2 -a jack -c jack
- * enter login menu
- * user login -u danial -p Danial01*
- *
- */
