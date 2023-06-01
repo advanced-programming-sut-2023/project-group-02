@@ -1,20 +1,42 @@
 package view;
 
 import controllers.*;
+import javafx.geometry.Bounds;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import jdk.jshell.execution.Util;
 import models.*;
 import utils.Parser;
-import utils.PasswordProblem;
 import utils.Utils;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+
+class PivotScrollPane extends ScrollPane {
+
+    private double pivotX;
+    private double pivotY;
+
+    public void setPivot(double x, double y) {
+        pivotX = x;
+        pivotY = y;
+    }
+
+    public void setScaleXWithPivot(double scaleX) {
+        double oldScaleX = getScaleX();
+        super.setScaleX(scaleX);
+        setTranslateX(getTranslateX() + (pivotX - getTranslateX()) * (scaleX / oldScaleX - 1));
+    }
+
+    public void setScaleYWithPivot(double scaleY) {
+        double oldScaleY = getScaleY();
+        super.setScaleY(scaleY);
+        setTranslateY(getTranslateY() + (pivotY - getTranslateY()) * (scaleY / oldScaleY - 1));
+    }
+}
 
 public class GameMenu {
     private boolean isGameOver = false;
@@ -30,7 +52,14 @@ public class GameMenu {
                 gridPane.add(rect, col, row);
             }
         }
-        return gridPane;
+
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setPrefSize(600, 400);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        Pane pane = new Pane(scrollPane);
+        return pane;
     }
 
     public void run(Scanner scanner) {
