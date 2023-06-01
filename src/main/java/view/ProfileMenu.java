@@ -70,7 +70,6 @@ public class ProfileMenu {
             dialog.getDialogPane().setContent(gridPane);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(value -> {
-                System.out.println(value);
                 String oldPassword = "", newPassword = "";
                 if (gridPane.getChildren().get(0) instanceof TextField)
                     oldPassword = ((TextField) gridPane.getChildren().get(0)).getText();
@@ -187,7 +186,7 @@ public class ProfileMenu {
         newPassword.setPromptText("New Password");
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Validation.validatePassword(newValue).size() == 0 || newValue.equals("")) passwordErrors.setText("");
-            else passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
+            else passwordErrors.setText(Validation.validatePassword(newValue).get(0).getSolution());
         });
         gridPane.add(newPassword,0,1);
         //TODO captcha is left
