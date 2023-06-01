@@ -26,7 +26,7 @@ public enum PasswordProblem {
             errorsAndSolutions = errorsAndSolutions + passwordProblems.get(i).solution + ", ";
         }
         if (arrayListLength > 1)
-            errorsAndSolutions = errorsAndSolutions + passwordProblems.get(arrayListLength - 2).solution + " and ";
+            errorsAndSolutions = errorsAndSolutions + passwordProblems.get(arrayListLength - 2).solution + " and\n";
         errorsAndSolutions = errorsAndSolutions + passwordProblems.get(arrayListLength - 1).solution + " to make your password stronger.";
         return errorsAndSolutions;
     }

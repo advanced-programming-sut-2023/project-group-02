@@ -4,17 +4,18 @@ import controllers.LoginMenuController;
 import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import models.User;
-import utils.Captcha;
-import utils.Graphics;
-import utils.Parser;
-import utils.PasswordProblem;
+import utils.*;
 import view.enums.LoginMenuMessages;
 
 import java.util.Objects;
@@ -28,12 +29,26 @@ public class LoginMenu {
     Button submitButton = new Button("Login");
     Button forgotPasswordButton = new Button("Forgot My Password");
     Text errorText = new Text();
+    TextField usernameTextField2 = new TextField();
+    Text noUserError = new Text();
+    TextField securityAnswerField = new TextField();
+    PasswordField newPasswordField = new PasswordField();
+    Text securityAnswerError = new Text();
+    int countOfWrongAnswers = 0;
 
     public Pane getPane() {
         Pane loginMenuPane = new Pane();
         initPane(loginMenuPane);
         return loginMenuPane;
     }
+
+    private Pane getForgotPasswordPane() {
+        Pane forgotPasswordPane = new Pane();
+        initForgotPasswordPane(forgotPasswordPane);
+        return forgotPasswordPane;
+    }
+
+
 
     private void initPane(Pane pane) {
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
@@ -57,10 +72,36 @@ public class LoginMenu {
         handleSubmitButton(submitButton);
         submitButton.requestFocus();
         handleForgotPasswordButton(forgotPasswordButton);
-        form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, errorText);
+        Button backButton = new Button("Back");
+        backButton.getStyleClass().add("button2");
+        backButton.setOnAction(event -> Main.setScene(Main.getTitlePane()));
+
+        form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, backButton, errorText);
         pane.getChildren().add(form);
     }
 
+    private void initForgotPasswordPane(Pane pane) {
+        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
+        pane.setPrefSize(960, 540);
+        VBox form = new VBox();
+        form.setTranslateX(200);
+        form.setTranslateY(150);
+        form.setSpacing(20);
+
+        makeFields(usernameTextField2);
+        usernameTextField2.setPromptText("Username...");
+        Button checkUsernameExistButton = checkUsernameExistsButton(pane);
+        form.getChildren().addAll(usernameTextField2,checkUsernameExistButton,makeBackButton(),noUserError);
+        pane.getChildren().add(form);
+    }
+
+    private Button makeBackButton() {
+        Button button = new Button("Back");
+        button.getStyleClass().add("button2");
+        button.setOnAction(event -> Main.setScene(getPane()));
+        return button;
+    }
 
     private void makeFields(TextField textField) {
         textField.prefHeight(40);
@@ -69,54 +110,116 @@ public class LoginMenu {
     }
 
     private void handleSubmitButton(Button button) {
-        button.getStyleClass().add("button1");
-        button.setOnAction(event -> {
-            LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
-            if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
-                Main.getStage().setScene(new Scene(new MainMenu().getPane()));
-                Main.getStage().show();
-            } else {
-                usernameTextField.setText("");
-                passwordField.setText("");
-                errorText.getStyleClass().add("error");
-                errorText.setText(message.getMessage());
-            }
-        });
+        button.getStyleClass().add("button2");
+        button.setOnAction(event -> login());
     }
 
     private void handleForgotPasswordButton(Button button) {
-        button.getStyleClass().add("button1");
+        button.getStyleClass().add("button2");
         button.setOnAction(event -> {
+            Main.setScene(getForgotPasswordPane());
             //TODO logic of forgot password
         });
     }
 
-    enum State {
-        LOGIN_SUCCESSFUL,
-        WAIT_FOR_CAPTCHA,
-        WAITING,
-        WAIT_FOR_SECURITY_ANSWER,
-        WAIT_FOR_NEW_PASSWORD,
+    private Button checkUsernameExistsButton(Pane pane) {
+        Button button = new Button("Check Username");
+        button.getStyleClass().add("button2");
+        button.setOnAction(event -> {
+            if (UserController.findUserWithUsername(usernameTextField2.getText()) == null) {
+                noUserError.setText("No user with this username exists!!");
+            } else {
+                resetForSecurityAnswer(pane);
+            }
+        });
+        return button;
     }
 
-    private State state = State.WAITING;
+    private void resetForSecurityAnswer(Pane pane) {
+        VBox myVbox = new VBox();
+        if (pane.getChildren().get(0) instanceof VBox) myVbox = (VBox) pane.getChildren().get(0);
+        currentUser = UserController.findUserWithUsername(usernameTextField2.getText());
+        Text questionText = new Text(currentUser.getSecurityQuestion().fullSentence);
+        questionText.getStyleClass().add("text-title2");
+        makeFields(securityAnswerField);
+        securityAnswerField.setPromptText("Write Your Answer...");
+        securityAnswerField.setMaxWidth(300);
+        Button checkSecurityAnswerButton = checkSecurityAnswerButton(pane);
+        myVbox.getChildren().clear();
+        myVbox.getChildren().addAll(questionText,securityAnswerField,checkSecurityAnswerButton,makeBackButton(),securityAnswerError);
+    }
 
-    void login(Parser parser) {
-        LoginMenuMessages message = LoginMenuController.login(parser.get("u"), parser.get("p"),
-            parser.getFlag("stay-logged-in"));
+    private Button checkSecurityAnswerButton(Pane pane) {
+        Button button = new Button("Check");
+        button.getStyleClass().add("button2");
+        button.setOnAction(event -> {
+            if (!securityAnswerField.getText().equals(currentUser.getSecurityAnswer())) {
+                securityAnswerError.setText("Wrong Security Answer!!");
+                securityAnswerField.setText("");
+                countOfWrongAnswers++;
+                if (countOfWrongAnswers == 5) {
+                    showPopup("You tried too much!!");
+                    Main.setScene(getPane());
+                }
+            } else {
+                resetForNewPassword(pane);
+            }
+        });
+        return button;
+    }
 
+    private void resetForNewPassword(Pane pane) {
+        VBox myVbox = new VBox();
+        if (pane.getChildren().get(0) instanceof VBox) myVbox = (VBox) pane.getChildren().get(0);
+
+        Text informText = new Text("Import Your New Password");
+        informText.getStyleClass().add("text-title2");
+        makeFields(newPasswordField);
+        newPasswordField.setMaxWidth(300);
+        Text passwordErrors = new Text();
+        newPasswordField.setPromptText("New Password...");
+        newPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (Validation.validatePassword(newValue).size() == 0 || newValue.equals("")) passwordErrors.setText("");
+            else passwordErrors.setText(PasswordProblem.showErrors(Validation.validatePassword(newValue)));
+        });
+
+        Button finalButton = new Button("Submit Password");
+        finalButton.getStyleClass().add("button2");
+        finalButton.setOnAction(event -> newPassword());
+        passwordErrors.setFont(new Font("Arial",20));
+        passwordErrors.setFill(Color.WHITE);
+
+        myVbox.getChildren().clear();
+        myVbox.getChildren().addAll(informText,newPasswordField,finalButton,makeBackButton(),passwordErrors);
+    }
+
+
+    private void showPopup(String message) {
+        Popup outOfChoicePopup = new Popup();
+        Label label = new Label(message);
+        label.setFont(new Font("Arial",30));
+        label.setStyle("-fx-background-color: white");
+        outOfChoicePopup.getContent().add(label);
+        outOfChoicePopup.setAutoHide(true);
+        outOfChoicePopup.show(Main.getStage());
+    }
+
+    void login() {
+        LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
-            state = State.WAIT_FOR_CAPTCHA;
-            System.out.println(Captcha.showCaptcha());
+            Main.getStage().setScene(new Scene(new MainMenu().getPane()));
+            Main.getStage().show();
         } else {
-            System.out.println(message.getMessage());
+            usernameTextField.setText("");
+            passwordField.setText("");
+            errorText.getStyleClass().add("error");
+            errorText.setText(message.getMessage());
         }
     }
 
     void captcha(Parser parser) {
         String userInput = parser.getInput();
         if (Captcha.inputEqualsCaptcha(userInput)) {
-            state = State.LOGIN_SUCCESSFUL;
             System.out.println("You Logged in successfully!");
         } else {
             System.out.println("Please enter the numbers more carefully!");
@@ -124,34 +227,15 @@ public class LoginMenu {
         }
     }
 
-    void forgotPassword(Parser parser) {
-        if ((currentUser = UserController.findUserWithUsername(parser.get("u"))) == null) {
-            System.out.println("Username doesn't exist!");
-            return;
-        }
-        System.out.println(currentUser.getSecurityQuestion().fullSentence);
-        state = State.WAIT_FOR_SECURITY_ANSWER;
-    }
-
-    void securityAnswer(Parser parser) {
-        String answer = parser.getInput();
-        if (!answer.equals(currentUser.getSecurityAnswer())) {
-            System.out.println("Incorrect Security Answer!");
-            return;
-        }
-        System.out.println("Print enter your new password!");
-        state = State.WAIT_FOR_NEW_PASSWORD;
-    }
-
-    void newPassword(Parser parser) {
-        LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser, parser.getInput());
+    void newPassword() {
+        LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser,newPasswordField.getText());
         if (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
-            System.out.println(PasswordProblem.showErrors(LoginMenuController.passwordProblems));
+            newPasswordField.setText("");
             return;
         }
         if (message.equals(LoginMenuMessages.PASSWORD_IS_CHANGED))
-            System.out.println(message.getMessage());
-        state = State.WAITING;
+            showPopup("Password Changed Successfully!");
+        Main.setScene(getPane());
     }
 
 }
