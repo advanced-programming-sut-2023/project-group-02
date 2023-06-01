@@ -4,7 +4,6 @@ import controllers.LoginMenuController;
 import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -13,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import models.User;
 import utils.*;
 import view.enums.LoginMenuMessages;
@@ -47,8 +45,6 @@ public class LoginMenu {
         initForgotPasswordPane(forgotPasswordPane);
         return forgotPasswordPane;
     }
-
-
 
     private void initPane(Pane pane) {
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
@@ -158,7 +154,7 @@ public class LoginMenu {
                 securityAnswerField.setText("");
                 countOfWrongAnswers++;
                 if (countOfWrongAnswers == 5) {
-                    showPopup("You tried too much!!");
+                    Graphics.showMessagePopup("You tried too much!!");
                     Main.setScene(getPane());
                 }
             } else {
@@ -193,17 +189,6 @@ public class LoginMenu {
         myVbox.getChildren().addAll(informText,newPasswordField,finalButton,makeBackButton(),passwordErrors);
     }
 
-
-    private void showPopup(String message) {
-        Popup outOfChoicePopup = new Popup();
-        Label label = new Label(message);
-        label.setFont(new Font("Arial",30));
-        label.setStyle("-fx-background-color: white");
-        outOfChoicePopup.getContent().add(label);
-        outOfChoicePopup.setAutoHide(true);
-        outOfChoicePopup.show(Main.getStage());
-    }
-
     void login() {
         LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
@@ -233,9 +218,9 @@ public class LoginMenu {
             newPasswordField.setText("");
             return;
         }
-        if (message.equals(LoginMenuMessages.PASSWORD_IS_CHANGED))
-            showPopup("Password Changed Successfully!");
-        Main.setScene(getPane());
+        if (message.equals(LoginMenuMessages.PASSWORD_IS_CHANGED)) {
+            Graphics.showMessagePopup("Password Changed Successfully!");
+            Main.setScene(getPane());
+        }
     }
-
 }
