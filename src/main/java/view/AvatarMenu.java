@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import models.User;
 import utils.Graphics;
 
 import java.io.File;
@@ -40,7 +41,9 @@ public class AvatarMenu {
         leftVbox.setSpacing(20);
         leftVbox.setTranslateX(10);
         leftVbox.setTranslateY(5);
-        VBox rightVbox = new VBox();
+
+        VBox rightVbox = new VBox(makeText("You can choose other players' avatars!"));
+        makeListOfPlayers(rightVbox);
 
         HBox generalHBox = new HBox(leftVbox,rightVbox);
         generalHBox.setSpacing(10);
@@ -92,5 +95,24 @@ public class AvatarMenu {
         button.getStyleClass().add("button1");
         button.setOnAction(event -> Main.setScene(new ProfileMenu().getPane()));
         return button;
+    }
+
+    private void makeListOfPlayers(VBox rightVbox) {
+        for (User user : UserController.getUsers()) {
+            if (user.equals(UserController.getCurrentUser())) continue;
+            ImageView avatar = user.getAvatar();
+            avatar.setFitHeight(50);
+            avatar.setFitWidth(50);
+            Text name = new Text(user.getUsername());
+            name.setFont(new Font("Arial",20));
+            name.setFill(Color.WHITE);
+            HBox playerHBox = new HBox(avatar,name);
+            playerHBox.setSpacing(5);
+            rightVbox.getChildren().add(playerHBox);
+            playerHBox.setOnMouseClicked(event -> {
+                UserController.changeAvatar(UserController.getCurrentUser(), user.getAvatarPath());
+                Main.setScene(getPane());
+            });
+        }
     }
 }

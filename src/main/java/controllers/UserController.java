@@ -10,6 +10,11 @@ import models.UserCredentials;
 
 public class UserController {
     private static final ArrayList<User> users = new ArrayList<>();
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
     private static User currentUser;
 
     public static User getCurrentUser() {
