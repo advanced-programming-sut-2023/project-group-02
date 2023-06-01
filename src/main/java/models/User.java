@@ -2,6 +2,8 @@ package models;
 
 import java.util.ArrayList;
 
+import javafx.scene.image.ImageView;
+import utils.Graphics;
 import utils.Utils;
 
 public class User {
@@ -11,6 +13,7 @@ public class User {
     private String securityAnswer;
     private int highScore;
     private ArrayList<Trade> usersNewTrades = new ArrayList<>();
+    private String avatarPath;
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
             SecurityQuestion securityQuestion, String securityAnswer) {
@@ -117,5 +120,17 @@ public class User {
 
     private static String encrypt(String password) {
         return Utils.encryptUsingSHA256(password);
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public ImageView getAvatar() {
+        return Graphics.getAvatarWithPath(avatarPath);
     }
 }

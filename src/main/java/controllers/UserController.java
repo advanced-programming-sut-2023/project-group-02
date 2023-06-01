@@ -149,6 +149,11 @@ public class UserController {
         saveUsers();
     }
 
+    public static void changeAvatar(User user, String avatarPath) {
+        user.setAvatarPath(avatarPath);
+        saveUsers();
+    }
+
     public static int getNextId() {
         return users.size() + 1;
     }

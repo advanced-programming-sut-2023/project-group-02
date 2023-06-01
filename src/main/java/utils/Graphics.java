@@ -2,6 +2,7 @@ package utils;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
@@ -38,5 +39,17 @@ public class Graphics {
         popup.getContent().add(messageLabel);
         popup.setAutoHide(true);
         popup.show(Main.getStage());
+    }
+
+    public static ImageView getAvatarWithPath(String path) {
+        return new ImageView(new Image(path,160,160,false,false));
+    }
+
+    public static ImageView[] getDefaultAvatars() {
+        ImageView[] defaultAvatars = new ImageView[4];
+        for (int i = 0; i < 4; i++) {
+            defaultAvatars[i] = getAvatarWithPath(Graphics.class.getResource("/images/avatars/" + (i+1) + ".png").toExternalForm());
+        }
+        return defaultAvatars;
     }
 }

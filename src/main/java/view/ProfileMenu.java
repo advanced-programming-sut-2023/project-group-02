@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -98,7 +99,7 @@ public class ProfileMenu {
 
         Button changeAvatarButton = makeButton(buttons,"Change Avatar");
         changeAvatarButton.setOnAction(event -> {
-
+            Main.setScene(new AvatarMenu().getPane());
         });
 
         Button changeSloganButton = makeButton(buttons,"Change Slogan");
@@ -127,8 +128,14 @@ public class ProfileMenu {
         back.setOnAction(event -> {
             Main.getStage().setScene(new Scene(new MainMenu().getPane()));
         });
-
-        pane.getChildren().add(buttons);
+        if (UserController.getCurrentUser().getAvatarPath() == null) {
+            pane.getChildren().add(buttons);
+            return;
+        }
+        ImageView avatar = Graphics.getAvatarWithPath(UserController.getCurrentUser().getAvatarPath());
+        avatar.setTranslateX(10);
+        avatar.setTranslateY(10);
+        pane.getChildren().addAll(buttons,avatar);
     }
 
 
@@ -249,7 +256,6 @@ public class ProfileMenu {
     }
 
     String showProfile() {
-        //TODO players avatar
         return UserController.getCurrentUser().getUsername() + "\n" + UserController.getCurrentUser().getNickname() + "\n" +
              showRank() + "\n" + showHighScore() + "\n" + showSlogan();
     }
