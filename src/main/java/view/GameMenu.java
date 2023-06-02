@@ -1,7 +1,6 @@
 package view;
 
 import controllers.*;
-import javafx.geometry.Bounds;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -14,29 +13,6 @@ import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
-class PivotScrollPane extends ScrollPane {
-
-    private double pivotX;
-    private double pivotY;
-
-    public void setPivot(double x, double y) {
-        pivotX = x;
-        pivotY = y;
-    }
-
-    public void setScaleXWithPivot(double scaleX) {
-        double oldScaleX = getScaleX();
-        super.setScaleX(scaleX);
-        setTranslateX(getTranslateX() + (pivotX - getTranslateX()) * (scaleX / oldScaleX - 1));
-    }
-
-    public void setScaleYWithPivot(double scaleY) {
-        double oldScaleY = getScaleY();
-        super.setScaleY(scaleY);
-        setTranslateY(getTranslateY() + (pivotY - getTranslateY()) * (scaleY / oldScaleY - 1));
-    }
-}
 
 public class GameMenu {
     private boolean isGameOver = false;
