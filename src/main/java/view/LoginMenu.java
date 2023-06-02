@@ -271,12 +271,12 @@ public class LoginMenu {
 
     private void addRefreshCaptcha(Pane pane) {
         ToggleButton refresh = new ToggleButton();
-        refresh.setLayoutX(553);
+        refresh.setLayoutX(653);
         refresh.setLayoutY(185);
         refresh.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/refresh.png"))));
         refresh.setOnMouseClicked(event -> {
             try {
-                captcha = Graphics.generateCaptcha(100, 180);
+                captcha = Graphics.generateCaptcha(550, 180);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
