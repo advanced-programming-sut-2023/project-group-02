@@ -34,6 +34,12 @@ public class Main extends Application {
         } catch (IOException e) {
         }
 
+        try {
+            Graphics.generateCaptcha(10, 20);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         UserController.loadUsersFromFile();
         UserController.loadCurrentUserFromFile();
 

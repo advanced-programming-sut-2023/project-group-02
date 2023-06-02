@@ -88,7 +88,7 @@ public class LoginMenu {
         makeFields(usernameTextField2);
         usernameTextField2.setPromptText("Username...");
         Button checkUsernameExistButton = checkUsernameExistsButton(pane);
-        form.getChildren().addAll(usernameTextField2,checkUsernameExistButton,makeBackButton(),noUserError);
+        form.getChildren().addAll(usernameTextField2, checkUsernameExistButton, makeBackButton(), noUserError);
         pane.getChildren().add(form);
     }
 
@@ -142,7 +142,7 @@ public class LoginMenu {
         securityAnswerField.setMaxWidth(300);
         Button checkSecurityAnswerButton = checkSecurityAnswerButton(pane);
         myVbox.getChildren().clear();
-        myVbox.getChildren().addAll(questionText,securityAnswerField,checkSecurityAnswerButton,makeBackButton(),securityAnswerError);
+        myVbox.getChildren().addAll(questionText, securityAnswerField, checkSecurityAnswerButton, makeBackButton(), securityAnswerError);
     }
 
     private Button checkSecurityAnswerButton(Pane pane) {
@@ -182,11 +182,11 @@ public class LoginMenu {
         Button finalButton = new Button("Submit Password");
         finalButton.getStyleClass().add("button2");
         finalButton.setOnAction(event -> newPassword());
-        passwordErrors.setFont(new Font("Arial",20));
+        passwordErrors.setFont(new Font("Arial", 20));
         passwordErrors.setFill(Color.WHITE);
 
         myVbox.getChildren().clear();
-        myVbox.getChildren().addAll(informText,newPasswordField,finalButton,makeBackButton(),passwordErrors);
+        myVbox.getChildren().addAll(informText, newPasswordField, finalButton, makeBackButton(), passwordErrors);
     }
 
     void login() {
@@ -202,18 +202,18 @@ public class LoginMenu {
         }
     }
 
-    void captcha(Parser parser) {
-        String userInput = parser.getInput();
-        if (Captcha.inputEqualsCaptcha(userInput)) {
-            System.out.println("You Logged in successfully!");
-        } else {
-            System.out.println("Please enter the numbers more carefully!");
-            System.out.println(Captcha.showCaptcha());
-        }
-    }
+//    void captcha(Parser parser) {
+//        String userInput = parser.getInput();
+//        if (Captcha.inputEqualsCaptcha(userInput)) {
+//            System.out.println("You Logged in successfully!");
+//        } else {
+//            System.out.println("Please enter the numbers more carefully!");
+//            System.out.println(Captcha.showCaptcha());
+//        }
+//    }
 
     void newPassword() {
-        LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser,newPasswordField.getText());
+        LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser, newPasswordField.getText());
         if (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {
             newPasswordField.setText("");
             return;

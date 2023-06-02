@@ -1,16 +1,24 @@
 package utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Randoms {
     static String[] slogans = {
-            "I shall have my revenge, in this life or the next",
-            "I can do whatever I want",
-            "I am the greatest player of the game",
-            "The only impossible thing is the word \"impossible\"!",
-            "This is where the magic happens",
-            "I can, so I do",
-            "A liar is enemy of God"
+        "I shall have my revenge, in this life or the next",
+        "I can do whatever I want",
+        "I am the greatest player of the game",
+        "The only impossible thing is the word \"impossible\"!",
+        "This is where the magic happens",
+        "I can, so I do",
+        "A liar is enemy of God"
     };
 
     public static String getPassword() {
@@ -34,5 +42,18 @@ public class Randoms {
     public static String getSlogan() {
         Random random = new Random();
         return slogans[random.nextInt(slogans.length)];
+    }
+
+    public static File getRandomFileFromDirectory(URL directory) throws IOException {
+        File dir = new File(directory.getPath());
+        File[] files = dir.listFiles();
+
+        Random rand = new Random();
+
+        if (files != null) {
+            return files[rand.nextInt(files.length)];
+        } else {
+            throw new IOException("Directory is empty");
+        }
     }
 }

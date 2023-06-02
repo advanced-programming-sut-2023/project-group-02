@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -20,21 +21,23 @@ import utils.Graphics;
 import view.enums.SignUpMenuMessages;
 
 public class SignupMenu {
-    Text usernameText = new Text("Username:");
-    TextField usernameTextField = new TextField();
-    Text usernameErrors = new Text();
-    Text passwordText = new Text("Password:");
-    PasswordField passwordField = new PasswordField();
-    Text passwordErrors = new Text();
-    Text nickname = new Text("Nickname:");
-    TextField nicknameTextField = new TextField();
-    Text email = new Text("Email:");
-    TextField emailTextField = new TextField();
-    Text emailErrors = new Text();
-    Text slogan = new Text("Slogan:");
-    TextField sloganTextField = new TextField();
-    ToggleButton sloganGenerator = new ToggleButton();
-    Text signupError = new Text();
+    private final Text usernameText = new Text("Username:");
+    private final TextField usernameTextField = new TextField();
+    private final Text usernameErrors = new Text();
+    private final Text passwordText = new Text("Password:");
+    private final PasswordField passwordField = new PasswordField();
+    private final Text passwordErrors = new Text();
+    private final Text nickname = new Text("Nickname:");
+    private final TextField nicknameTextField = new TextField();
+    private final Text email = new Text("Email:");
+    private final TextField emailTextField = new TextField();
+    private final Text emailErrors = new Text();
+    private final Text slogan = new Text("Slogan:");
+    private final TextField sloganTextField = new TextField();
+    private ToggleButton sloganGenerator = new ToggleButton();
+    private final Text signupError = new Text();
+    private Captcha captcha;
+    private final TextField captchaTextField = new TextField();
 
     public Pane getPane() {
         Pane SignupMenuPane = new Pane();
@@ -305,6 +308,7 @@ public class SignupMenu {
         addBackButton(pane, false);
         addSubmitButton(pane, questionBox, answerField);
         addSignupError(pane);
+        addCaptcha(pane);
         pane.getChildren().addAll(title, questionBox, answerField);
     }
 
@@ -345,8 +349,18 @@ public class SignupMenu {
         submit.setLayoutY(350);
         submit.getStyleClass().add("title1-with-hover");
         submit.setOnMouseClicked(event -> {
-            if (answer.getText().isEmpty()) {
-                signupError.setText("Please fill the answer field.");
+            if (answer.getText().isEmpty() || captchaTextField.getText().isEmpty()) {
+                signupError.setText("Please fill all the field.");
+            } else if (!captchaTextField.getText().equals(captcha.getCaptchaAnswer())) {
+                try {
+                    captcha = Graphics.generateCaptcha(100, 180);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                captchaTextField.setText("");
+                pane.getChildren().remove(captcha.getCaptchaImage());
+                pane.getChildren().add(captcha.getCaptchaImage());
+                signupError.setText("Captcha is wrong.");
             } else {
                 SignUpMenuController.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(questionBox.getValue()), answer.getText());
                 signupError.setText("");
@@ -355,6 +369,40 @@ public class SignupMenu {
             }
         });
         pane.getChildren().add(submit);
+    }
+
+    private void addCaptcha(Pane pane) {
+        try {
+            captcha = Graphics.generateCaptcha(100, 180);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        captchaTextField.setLayoutX(100);
+        captchaTextField.setLayoutY(230);
+        captchaTextField.setMaxWidth(100);
+        captchaTextField.setPromptText("captcha");
+        captchaTextField.setText("");
+        captchaTextField.getStyleClass().add("text-field2");
+        addRefreshCaptcha(pane);
+        pane.getChildren().addAll(captcha.getCaptchaImage(), captchaTextField);
+    }
+
+    private void addRefreshCaptcha(Pane pane) {
+        ToggleButton refresh = new ToggleButton();
+        refresh.setLayoutX(203);
+        refresh.setLayoutY(185);
+        refresh.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/refresh.png"))));
+        refresh.setOnMouseClicked(event -> {
+            try {
+                captcha = Graphics.generateCaptcha(100, 180);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            captchaTextField.setText("");
+            pane.getChildren().remove(captcha.getCaptchaImage());
+            pane.getChildren().add(captcha.getCaptchaImage());
+        });
+        pane.getChildren().add(refresh);
     }
 
 
@@ -413,28 +461,28 @@ public class SignupMenu {
         }
     }
 
-    private void pickQuestion(Parser parser) {
-        int questionNumber;
-        SecurityQuestion question;
-        try {
-            questionNumber = Integer.parseInt(parser.get("q"));
-            question = SecurityQuestion.values()[questionNumber - 1];
-        } catch (Exception e) {
-            System.out.println("Invalid question number!");
-            return;
-        }
-
-        String answer = parser.get("a");
-        String answerConfirmation = parser.get("c");
-        if (!answer.equals(answerConfirmation)) {
-            System.out.println("Answers don't match!");
-            return;
-        }
-
-        SignUpMenuController.setSecurityQuestion(question, answer);
-        state = State.CAPTCHA_ANSWER_NEEDED;
-        System.out.println(Captcha.showCaptcha());
-    }
+//    private void pickQuestion(Parser parser) {
+//        int questionNumber;
+//        SecurityQuestion question;
+//        try {
+//            questionNumber = Integer.parseInt(parser.get("q"));
+//            question = SecurityQuestion.values()[questionNumber - 1];
+//        } catch (Exception e) {
+//            System.out.println("Invalid question number!");
+//            return;
+//        }
+//
+//        String answer = parser.get("a");
+//        String answerConfirmation = parser.get("c");
+//        if (!answer.equals(answerConfirmation)) {
+//            System.out.println("Answers don't match!");
+//            return;
+//        }
+//
+//        SignUpMenuController.setSecurityQuestion(question, answer);
+//        state = State.CAPTCHA_ANSWER_NEEDED;
+//        System.out.println(Captcha.showCaptcha());
+//    }
 
     public void confirmPassword(String password) {
         if (password.equals(SignUpMenuController.getPassword())) {
@@ -445,14 +493,14 @@ public class SignupMenu {
         }
     }
 
-    public void captcha(Parser parser) {
-        String userInput = parser.getByIndex(0);
-        if (Captcha.inputEqualsCaptcha(userInput)) {
-            state = State.SIGNUP_SUCCESSFUL;
-            System.err.println("Done!");
-        } else {
-            System.out.println("Please enter the numbers correctly!");
-            System.out.println(Captcha.showCaptcha());
-        }
-    }
+//    public void captcha(Parser parser) {
+//        String userInput = parser.getByIndex(0);
+//        if (Captcha.inputEqualsCaptcha(userInput)) {
+//            state = State.SIGNUP_SUCCESSFUL;
+//            System.err.println("Done!");
+//        } else {
+//            System.out.println("Please enter the numbers correctly!");
+//            System.out.println(Captcha.showCaptcha());
+//        }
+//    }
 }
