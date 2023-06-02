@@ -2,10 +2,12 @@ package view;
 
 import controllers.*;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import models.*;
 import utils.Parser;
 import utils.Utils;
@@ -25,6 +27,12 @@ public class GameMenu {
                 Rectangle rect = new Rectangle(50, 50);
                 rect.setFill(Color.BROWN);
                 rect.setStroke(Color.BLACK);
+
+                Tooltip tooltip = new Tooltip();
+                tooltip.setShowDelay(Duration.ZERO);
+                tooltip.setText("x: " + col + "\ny: " + row); // TODO
+                Tooltip.install(rect, tooltip);
+
                 gridPane.add(rect, col, row);
             }
         }
