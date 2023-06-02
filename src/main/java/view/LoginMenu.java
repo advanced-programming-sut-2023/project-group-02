@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,7 @@ import models.User;
 import utils.*;
 import view.enums.LoginMenuMessages;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class LoginMenu {
@@ -33,6 +35,8 @@ public class LoginMenu {
     PasswordField newPasswordField = new PasswordField();
     Text securityAnswerError = new Text();
     int countOfWrongAnswers = 0;
+    private Captcha captcha;
+    private final TextField captchaTextField = new TextField();
 
     public Pane getPane() {
         Pane loginMenuPane = new Pane();
@@ -65,12 +69,15 @@ public class LoginMenu {
         HBox passwordPart = new HBox(passwordText, passwordField);
         passwordPart.setSpacing(17.5);
 
-        handleSubmitButton(submitButton);
+        handleSubmitButton(submitButton, pane);
         submitButton.requestFocus();
         handleForgotPasswordButton(forgotPasswordButton);
         Button backButton = new Button("Back");
         backButton.getStyleClass().add("button2");
         backButton.setOnAction(event -> Main.setScene(Main.getTitlePane()));
+
+        initCaptcha(pane);
+        errorText.getStyleClass().add("error");
 
         form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, backButton, errorText);
         pane.getChildren().add(form);
@@ -105,9 +112,9 @@ public class LoginMenu {
         textField.getStyleClass().add("text-field1");
     }
 
-    private void handleSubmitButton(Button button) {
+    private void handleSubmitButton(Button button, Pane pane) {
         button.getStyleClass().add("button2");
-        button.setOnAction(event -> login());
+        button.setOnAction(event -> login(pane));
     }
 
     private void handleForgotPasswordButton(Button button) {
@@ -189,7 +196,16 @@ public class LoginMenu {
         myVbox.getChildren().addAll(informText, newPasswordField, finalButton, makeBackButton(), passwordErrors);
     }
 
-    void login() {
+    void login(Pane pane) {
+        if (captchaTextField.getText().isEmpty() || usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+            errorText.setText("please fill all the fields");
+            return;
+        }
+        if (!captchaTextField.getText().equals(captcha.getCaptchaAnswer())) {
+            refreshCaptcha(pane);
+            errorText.setText("Captcha is wrong.");
+            return;
+        }
         LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
             Main.getStage().setScene(new Scene(new MainMenu().getPane()));
@@ -197,9 +213,20 @@ public class LoginMenu {
         } else {
             usernameTextField.setText("");
             passwordField.setText("");
-            errorText.getStyleClass().add("error");
             errorText.setText(message.getMessage());
+            refreshCaptcha(pane);
         }
+    }
+
+    private void refreshCaptcha(Pane pane) {
+        try {
+            captcha = Graphics.generateCaptcha(550, 180);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        captchaTextField.setText("");
+        pane.getChildren().remove(captcha.getCaptchaImage());
+        pane.getChildren().add(captcha.getCaptchaImage());
     }
 
 //    void captcha(Parser parser) {
@@ -222,5 +249,39 @@ public class LoginMenu {
             Graphics.showMessagePopup("Password Changed Successfully!");
             Main.setScene(getPane());
         }
+    }
+
+    private void initCaptcha(Pane pane) {
+        try {
+            captcha = Graphics.generateCaptcha(550, 180);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        captchaTextField.setLayoutX(550);
+        captchaTextField.setLayoutY(230);
+        captchaTextField.setMaxWidth(100);
+        captchaTextField.setPromptText("captcha");
+        captchaTextField.setText("");
+        captchaTextField.getStyleClass().add("text-field2");
+        addRefreshCaptcha(pane);
+        pane.getChildren().addAll(captcha.getCaptchaImage(), captchaTextField);
+    }
+
+    private void addRefreshCaptcha(Pane pane) {
+        ToggleButton refresh = new ToggleButton();
+        refresh.setLayoutX(553);
+        refresh.setLayoutY(185);
+        refresh.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/refresh.png"))));
+        refresh.setOnMouseClicked(event -> {
+            try {
+                captcha = Graphics.generateCaptcha(100, 180);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            captchaTextField.setText("");
+            pane.getChildren().remove(captcha.getCaptchaImage());
+            pane.getChildren().add(captcha.getCaptchaImage());
+        });
+        pane.getChildren().add(refresh);
     }
 }
