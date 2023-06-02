@@ -1,8 +1,11 @@
 package view;
 
 import controllers.*;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -18,6 +21,9 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
+
+    private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
+    private Point2D selectionStart;
 
     public Pane getPane() {
         GridPane gridPane = new GridPane();
@@ -42,8 +48,50 @@ public class GameMenu {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+        gridPane.setOnMousePressed(event -> {
+            handleMousePressed(event, gridPane, scrollPane);
+        });
+        gridPane.setOnMouseDragged(event -> {
+            handleMouseDragged(event, gridPane, scrollPane);
+        });
+
         Pane pane = new Pane(scrollPane);
         return pane;
+    }
+
+    private void handleMousePressed(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+        if (!event.isPrimaryButtonDown())
+            return;
+        for (Rectangle tile : selectedTiles) {
+            tile.setFill(Color.BROWN);
+        }
+        selectedTiles.clear();
+        selectionStart = new Point2D(event.getX(), event.getY());
+    }
+
+    private void handleMouseDragged(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+        if (!event.isPrimaryButtonDown())
+            return;
+
+        Point2D currentPoint = new Point2D(event.getX(), event.getY());
+
+        double minX = Math.min(selectionStart.getX(), currentPoint.getX());
+        double minY = Math.min(selectionStart.getY(), currentPoint.getY());
+        double maxX = Math.max(selectionStart.getX(), currentPoint.getX());
+        double maxY = Math.max(selectionStart.getY(), currentPoint.getY());
+
+        for (Node node : gridPane.getChildren()) {
+            if (!(node instanceof Rectangle))
+                continue;
+            Rectangle tile = (Rectangle) node;
+            if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
+                tile.setFill(Color.RED);
+                selectedTiles.add(tile);
+            } else {
+                tile.setFill(Color.BROWN);
+                selectedTiles.remove(tile);
+            }
+        }
     }
 
     public void run(Scanner scanner) {
