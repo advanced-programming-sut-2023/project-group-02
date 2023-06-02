@@ -78,9 +78,11 @@ public class LoginMenu {
 
         initCaptcha(pane);
         errorText.getStyleClass().add("error");
+        errorText.setLayoutX(200);
+        errorText.setLayoutY(440);
 
-        form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, backButton, errorText);
-        pane.getChildren().add(form);
+        form.getChildren().addAll(usernamePart, passwordPart, submitButton, forgotPasswordButton, backButton);
+        pane.getChildren().addAll(form, errorText);
     }
 
     private void initForgotPasswordPane(Pane pane) {
