@@ -27,7 +27,6 @@ public class GameMenu {
 
     public Pane getPane() {
         GridPane gridPane = new GridPane();
-        gridPane.setPrefSize(960, 540);
         for (int row = 0; row < 11; row++) {
             for (int col = 0; col < 20; col++) {
                 Rectangle rect = new Rectangle(50, 50);
@@ -84,6 +83,27 @@ public class GameMenu {
             return;
 
         Point2D currentPoint = new Point2D(event.getX(), event.getY());
+
+        // scroll farther if the mouse is at the corners
+        double gridPaneHeight = gridPane.getBoundsInLocal().getHeight();
+        double scrollPaneHeight = scrollPane.getBoundsInLocal().getHeight();
+        double scrollableHeight = gridPaneHeight - scrollPaneHeight;
+        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight < 50) {
+            scrollPane.setVvalue(scrollPane.getVvalue() - 0.02);
+        }
+        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight > scrollPaneHeight - 50) {
+            scrollPane.setVvalue(scrollPane.getVvalue() + 0.02);
+        }
+
+        double gridPaneWidth = gridPane.getBoundsInLocal().getWidth();
+        double scrollPaneWidth = scrollPane.getBoundsInLocal().getWidth();
+        double scrollableWidth = gridPaneWidth - scrollPaneWidth;
+        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth < 50) {
+            scrollPane.setHvalue(scrollPane.getHvalue() - 0.02);
+        }
+        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth > scrollPaneWidth - 50) {
+            scrollPane.setHvalue(scrollPane.getHvalue() + 0.02);
+        }
 
         double minX = Math.min(selectionStart.getX(), currentPoint.getX());
         double minY = Math.min(selectionStart.getY(), currentPoint.getY());
