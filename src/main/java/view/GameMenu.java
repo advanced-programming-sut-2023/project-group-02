@@ -56,6 +56,16 @@ public class GameMenu {
         });
 
         Pane pane = new Pane(scrollPane);
+
+        pane.setFocusTraversable(true);
+        pane.requestFocus();
+        pane.setOnKeyPressed(event -> {
+            // TODO: implement shortcuts
+            System.out.println(event.getCode());
+        });
+        // TODO: maybe we should lock the focus on this pane, or set the listener on the
+        // scene instead
+
         return pane;
     }
 
