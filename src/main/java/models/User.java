@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import controllers.UserController;
 import javafx.scene.image.ImageView;
 import utils.Graphics;
 import utils.Utils;
@@ -138,5 +139,9 @@ public class User {
     private String getDefaultAvatarPath() {
         ImageView defaultAvatar = Graphics.getAvatarWithPath(getClass().getResource("/images/avatars/0.jpg").toExternalForm());
         return defaultAvatar.getImage().getUrl();
+    }
+
+    public int getRank() {
+        return UserController.getUsersSorted().indexOf(this) + 1;
     }
 }

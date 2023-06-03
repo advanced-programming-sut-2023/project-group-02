@@ -243,7 +243,7 @@ public class ProfileMenu {
     }
 
     String showRank() {
-        return "Rank: " + UserController.getUserRank(UserController.getCurrentUser());
+        return "Rank: " + UserController.getCurrentUser().getRank();
     }
 
     String showSlogan() {

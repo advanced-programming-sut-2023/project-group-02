@@ -3,10 +3,12 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 
 import controllers.database.Database;
+import models.SecurityQuestion;
 import models.User;
 import models.UserCredentials;
 
@@ -108,16 +110,6 @@ public class UserController {
                 }
             }
         }
-    }
-
-    public static int getUserRank(User user) {
-        int rank = 1;
-        for (User otherUser : users) {
-            if (otherUser.getHighScore() > user.getHighScore()) {
-                rank++;
-            }
-        }
-        return rank;
     }
 
     public static void changeUsername(User user, String username) {
