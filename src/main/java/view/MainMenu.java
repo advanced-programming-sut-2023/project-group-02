@@ -35,14 +35,15 @@ public class MainMenu {
         });
 
         Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
-        enterGameMenu.setOnAction(event -> {
-            Main.setScene(new GameMenu().getPane());
-            //TODO enter game menu in a clean way
-        });
+        enterGameMenu.setOnAction(event -> Main.setScene(new GameMenu().getPane()));
+
+        Button scoreBoard = makeButton(buttons,"ScoreBoard");
+        scoreBoard.setOnAction(event -> System.out.println(UserController.getUsersSorted()));
+
 
         Button logout = makeButton(buttons, "logout");
         logout.setOnAction(event -> {
-            MainMenuMessages output = logout();
+            logout();
             Main.setScene(Main.getTitlePane());
         });
 
@@ -56,10 +57,7 @@ public class MainMenu {
         return button;
     }
 
-    public static MainMenuMessages logout() {
-        if (UserController.getCurrentUser() == null)
-            return MainMenuMessages.ALREADY_LOGGED_OUT;
+    public static void logout() {
         UserController.logout();
-        return MainMenuMessages.LOGOUT_SUCCESSFUL;
     }
 }

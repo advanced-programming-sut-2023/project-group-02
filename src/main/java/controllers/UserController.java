@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 
@@ -161,5 +163,21 @@ public class UserController {
 
     public static int getNextId() {
         return users.size() + 1;
+    }
+
+    public static ArrayList<User> getUsersSorted() {
+        ArrayList<User> usersSorted = (ArrayList<User>) users.clone();
+        Collections.sort(usersSorted, new Comparator<User>() {
+            @Override
+            public int compare(User u1, User u2) {
+                int highScoreCompare = u2.getHighScore() - u1.getHighScore();
+                if (highScoreCompare != 0) {
+                    return highScoreCompare;
+                } else {
+                    return u1.getUsername().compareToIgnoreCase(u2.getUsername());
+                }
+            }
+        });
+        return usersSorted;
     }
 }
