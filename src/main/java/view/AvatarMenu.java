@@ -2,6 +2,7 @@ package view;
 
 import controllers.UserController;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -42,11 +43,17 @@ public class AvatarMenu {
         leftVbox.setTranslateX(10);
         leftVbox.setTranslateY(5);
 
-        VBox rightVbox = new VBox(makeText("You can choose other players' avatars!"));
-        makeListOfPlayers(rightVbox);
+        VBox rightVBox2 = new VBox();
+        makeListOfPlayers(rightVBox2);
 
+        ScrollPane scrollPane = new ScrollPane(rightVBox2);
+        scrollPane.setPrefHeight(500);
+        scrollPane.setPrefWidth(300);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        VBox rightVbox = new VBox(makeText("You can choose others' avatars!"),scrollPane);
         HBox generalHBox = new HBox(leftVbox,rightVbox);
-        generalHBox.setSpacing(10);
+        generalHBox.setSpacing(40);
         pane.getChildren().add(generalHBox);
     }
 
@@ -104,9 +111,11 @@ public class AvatarMenu {
             avatar.setFitHeight(50);
             avatar.setFitWidth(50);
             Text name = new Text(user.getUsername());
-            name.setFont(new Font("Arial",20));
-            name.setFill(Color.WHITE);
+            name.getStyleClass().add("button1");
+            name.setFill(Color.GOLD);
             HBox playerHBox = new HBox(avatar,name);
+            playerHBox.getStyleClass().add("button1");
+            playerHBox.setPrefWidth(300);
             playerHBox.setSpacing(5);
             rightVbox.getChildren().add(playerHBox);
             playerHBox.setOnMouseClicked(event -> {
