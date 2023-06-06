@@ -1,36 +1,127 @@
 package view;
 
 import controllers.*;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import jdk.jshell.execution.Util;
+import javafx.util.Duration;
 import models.*;
 import utils.Parser;
-import utils.PasswordProblem;
 import utils.Utils;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
 
+    private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
+    private Point2D selectionStart;
+
     public Pane getPane() {
         GridPane gridPane = new GridPane();
-        gridPane.setPrefSize(960, 540);
         for (int row = 0; row < 11; row++) {
             for (int col = 0; col < 20; col++) {
                 Rectangle rect = new Rectangle(50, 50);
                 rect.setFill(Color.BROWN);
                 rect.setStroke(Color.BLACK);
+
+                Tooltip tooltip = new Tooltip();
+                tooltip.setShowDelay(Duration.ZERO);
+                tooltip.setText("x: " + col + "\ny: " + row); // TODO
+                Tooltip.install(rect, tooltip);
+
                 gridPane.add(rect, col, row);
             }
         }
-        return gridPane;
+
+        ScrollPane scrollPane = new ScrollPane(gridPane);
+        scrollPane.setPrefSize(600, 400);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        gridPane.setOnMousePressed(event -> {
+            handleMousePressed(event, gridPane, scrollPane);
+        });
+        gridPane.setOnMouseDragged(event -> {
+            handleMouseDragged(event, gridPane, scrollPane);
+        });
+
+        Pane pane = new Pane(scrollPane);
+
+        pane.setFocusTraversable(true);
+        pane.requestFocus();
+        pane.setOnKeyPressed(event -> {
+            // TODO: implement shortcuts
+            System.out.println(event.getCode());
+        });
+        // TODO: maybe we should lock the focus on this pane, or set the listener on the
+        // scene instead
+
+        return pane;
+    }
+
+    private void handleMousePressed(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+        if (!event.isPrimaryButtonDown())
+            return;
+        for (Rectangle tile : selectedTiles) {
+            tile.setFill(Color.BROWN);
+        }
+        selectedTiles.clear();
+        selectionStart = new Point2D(event.getX(), event.getY());
+    }
+
+    private void handleMouseDragged(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+        if (!event.isPrimaryButtonDown())
+            return;
+
+        Point2D currentPoint = new Point2D(event.getX(), event.getY());
+
+        // scroll farther if the mouse is at the corners
+        double gridPaneHeight = gridPane.getBoundsInLocal().getHeight();
+        double scrollPaneHeight = scrollPane.getBoundsInLocal().getHeight();
+        double scrollableHeight = gridPaneHeight - scrollPaneHeight;
+        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight < 50) {
+            scrollPane.setVvalue(scrollPane.getVvalue() - 0.02);
+        }
+        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight > scrollPaneHeight - 50) {
+            scrollPane.setVvalue(scrollPane.getVvalue() + 0.02);
+        }
+
+        double gridPaneWidth = gridPane.getBoundsInLocal().getWidth();
+        double scrollPaneWidth = scrollPane.getBoundsInLocal().getWidth();
+        double scrollableWidth = gridPaneWidth - scrollPaneWidth;
+        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth < 50) {
+            scrollPane.setHvalue(scrollPane.getHvalue() - 0.02);
+        }
+        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth > scrollPaneWidth - 50) {
+            scrollPane.setHvalue(scrollPane.getHvalue() + 0.02);
+        }
+
+        double minX = Math.min(selectionStart.getX(), currentPoint.getX());
+        double minY = Math.min(selectionStart.getY(), currentPoint.getY());
+        double maxX = Math.max(selectionStart.getX(), currentPoint.getX());
+        double maxY = Math.max(selectionStart.getY(), currentPoint.getY());
+
+        for (Node node : gridPane.getChildren()) {
+            if (!(node instanceof Rectangle))
+                continue;
+            Rectangle tile = (Rectangle) node;
+            if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
+                tile.setFill(Color.RED);
+                selectedTiles.add(tile);
+            } else {
+                tile.setFill(Color.BROWN);
+                selectedTiles.remove(tile);
+            }
+        }
     }
 
     public void run(Scanner scanner) {
