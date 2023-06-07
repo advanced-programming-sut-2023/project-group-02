@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import models.*;
 import utils.Parser;
@@ -25,23 +26,36 @@ public class GameMenu {
     private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
-    public Pane getPane() {
+    private GridPane getMapGridPane(Map map) {
         GridPane gridPane = new GridPane();
-        for (int row = 0; row < 11; row++) {
-            for (int col = 0; col < 20; col++) {
+        for (int row = 0; row < map.getHeight(); row++) {
+            for (int col = 0; col < map.getWidth(); col++) {
+                Cell cell = map.findCellWithXAndY(col, row);
+
                 Rectangle rect = new Rectangle(50, 50);
-                rect.setFill(Color.BROWN);
-                rect.setStroke(Color.BLACK);
+                rect.setFill(cell.getTexture().getPaint());
+                rect.setStrokeType(StrokeType.INSIDE);
+                rect.setStroke(Color.TRANSPARENT);
 
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.ZERO);
-                tooltip.setText("x: " + col + "\ny: " + row); // TODO
+                tooltip.setText(cell.toString());
                 Tooltip.install(rect, tooltip);
 
                 gridPane.add(rect, col, row);
             }
         }
+        return gridPane;
+    }
 
+    public Pane getPane() {
+        Game game = GameMenuController.getCurrentGame();
+        if (game == null) {
+            // TODO: remove this
+            game = new Game(new ArrayList<>(), 0, new Map(200, 200));
+        }
+
+        GridPane gridPane = getMapGridPane(game.getMap());
         ScrollPane scrollPane = new ScrollPane(gridPane);
         scrollPane.setPrefSize(600, 400);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -55,7 +69,6 @@ public class GameMenu {
         });
 
         Pane pane = new Pane(scrollPane);
-
         pane.setFocusTraversable(true);
         pane.requestFocus();
         pane.setOnKeyPressed(event -> {
@@ -72,7 +85,7 @@ public class GameMenu {
         if (!event.isPrimaryButtonDown())
             return;
         for (Rectangle tile : selectedTiles) {
-            tile.setFill(Color.BROWN);
+            tile.setStroke(Color.TRANSPARENT);
         }
         selectedTiles.clear();
         selectionStart = new Point2D(event.getX(), event.getY());
@@ -115,10 +128,10 @@ public class GameMenu {
                 continue;
             Rectangle tile = (Rectangle) node;
             if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
-                tile.setFill(Color.RED);
+                tile.setStroke(Color.WHITE);
                 selectedTiles.add(tile);
             } else {
-                tile.setFill(Color.BROWN);
+                tile.setStroke(Color.TRANSPARENT);
                 selectedTiles.remove(tile);
             }
         }
