@@ -3,18 +3,13 @@ package view;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 import controllers.SignUpMenuController;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import models.SecurityQuestion;
 import utils.*;
 import utils.Graphics;

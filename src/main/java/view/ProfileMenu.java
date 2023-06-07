@@ -13,12 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import javafx.util.Pair;
 import utils.Graphics;
-import utils.Parser;
-import utils.PasswordProblem;
 import utils.Validation;
-import view.enums.MainMenuMessages;
 import view.enums.ProfileMenuMessages;
 
 import java.util.Objects;
