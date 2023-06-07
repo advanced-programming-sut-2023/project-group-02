@@ -3,21 +3,26 @@ package view;
 import controllers.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import models.*;
+import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class GameMenu {
@@ -136,7 +141,46 @@ public class GameMenu {
             }
         });
 
+        HBox bottomMenuHBox = makeBottomMenuHBox();
+        rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
+    }
+
+    private HBox makeBottomMenuHBox() {
+        HBox hBox = new HBox();
+        hBox.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/game-images/bottomMenu.png"))));
+        hBox.setTranslateY(670);
+        hBox.setPrefWidth(1550);
+        hBox.setPrefHeight(200);
+        HBox buildingsHBox = new HBox();
+        buildingsHBox.setMaxHeight(120);
+        buildingsHBox.setTranslateY(22);
+        buildingsHBox.setSpacing(10);
+        ImageView buildingImage;
+        for (Building building : BuildingFactory.getAllBuildings()) {
+            if ((buildingImage = building.getBuildingImage()) != null) {
+                buildingsHBox.getChildren().add(buildingImage);
+                handelDropBuilding(building,buildingImage);
+            }
+        }
+        ScrollPane buildingsScrollPane = new ScrollPane(buildingsHBox);
+        buildingsScrollPane.setPrefWidth(550);
+        buildingsScrollPane.setMaxHeight(120);
+        buildingsScrollPane.setTranslateX(340);
+        buildingsScrollPane.setTranslateY(80);
+        hBox.getChildren().add(buildingsScrollPane);
+        return hBox;
+    }
+
+    private void handelDropBuilding(Building building, ImageView buildingImage) {
+        buildingImage.setOnMousePressed(event -> buildingImage.setMouseTransparent(true));
+
+        buildingImage.setOnMouseDragged(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            buildingImage.setX(x);
+            buildingImage.setY(y);
+        });
     }
 
     private void handleMousePressed(MouseEvent event, GridPane gridPane, Pane rootPane) {

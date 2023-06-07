@@ -63,7 +63,21 @@ public abstract class Building extends MapObject {
         this.hitpoint = hitpoint;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public ImageView getBuildingImage() {
-        return new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
+        //TODO: after adding all images humanize this method
+        String url = "";
+        try {
+            url = getClass().getResource(imagePath).toExternalForm();
+        } catch (Exception e) {
+            return null;
+        }
+        ImageView imageView = new ImageView(new Image(url));
+        imageView.setFitHeight(80);
+        imageView.setFitWidth(80);
+        return imageView;
     }
 }

@@ -1,6 +1,7 @@
 package models;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import models.buildings.DamagingBuilding;
 import models.buildings.DefensiveBuilding;
@@ -285,5 +286,24 @@ public class BuildingFactory {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Building> getAllBuildings() {
+        ArrayList<Building> allBuildings = new ArrayList<>();
+        Method[] methods = BuildingFactory.class.getMethods();
+        for (Method method : methods) {
+            if (Building.class.isAssignableFrom(method.getReturnType())) {
+                try {
+                    Building building = (Building) method.invoke(null);
+                    if (building != null) {
+                        allBuildings.add(building);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return allBuildings;
     }
 }
