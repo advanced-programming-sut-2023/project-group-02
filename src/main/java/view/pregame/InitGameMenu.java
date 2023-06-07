@@ -1,5 +1,7 @@
 package view.pregame;
 
+import controllers.SignUpMenuController;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
@@ -7,6 +9,7 @@ import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
 import utils.Graphics;
 import view.Main;
+import view.enums.SignUpMenuMessages;
 
 import java.util.Objects;
 
@@ -30,7 +33,7 @@ public class InitGameMenu {
         pane.setPrefSize(960, 540);
         initNumberOfTurnsFields(pane);
         initMapSizeFields(pane);
-
+        addConfirmButton(pane);
         addBackButton(pane);
     }
 
@@ -61,6 +64,17 @@ public class InitGameMenu {
         mapHeightField.setMaxWidth(45);
 
         pane.getChildren().addAll(mapWidthText, mapWidthField, mapHeightText, mapHeightField);
+    }
+
+    private void addConfirmButton(Pane pane) {
+        Text confirm = new Text("Confirm");
+        confirm.setLayoutX(240);
+        confirm.setLayoutY(350);
+        confirm.getStyleClass().add("title1-with-hover");
+        confirm.setOnMouseClicked(event -> {
+            //TODO complete this
+        });
+        pane.getChildren().add(confirm);
     }
 
     private void addBackButton(Pane pane) {
