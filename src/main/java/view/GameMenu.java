@@ -3,8 +3,8 @@ package view;
 import controllers.*;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -26,62 +26,120 @@ public class GameMenu {
     private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
-    private GridPane getMapGridPane(Map map) {
-        GridPane gridPane = new GridPane();
-        for (int row = 0; row < map.getHeight(); row++) {
-            for (int col = 0; col < map.getWidth(); col++) {
+    private final int TILE_SIZE = 50;
+    private int scrollX = 0, scrollY = 0;
+
+    private void renderMap(GridPane gridPane, Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
+            int offsetY) {
+        gridPane.getChildren().clear();
+
+        for (int row = fromRow; row <= toRow && row < map.getHeight(); row++) {
+            for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
                 Cell cell = map.findCellWithXAndY(col, row);
 
-                Rectangle rect = new Rectangle(50, 50);
+                Rectangle rect = new Rectangle(TILE_SIZE, TILE_SIZE);
                 rect.setFill(cell.getTexture().getPaint());
                 rect.setStrokeType(StrokeType.INSIDE);
                 rect.setStroke(Color.TRANSPARENT);
 
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.ZERO);
-                tooltip.setText(cell.toString());
+                tooltip.setText("x: " + col + ", y: " + row);
                 Tooltip.install(rect, tooltip);
 
-                gridPane.add(rect, col, row);
+                GridPane.setColumnIndex(rect, col - fromCol);
+                GridPane.setRowIndex(rect, row - fromRow);
+
+                rect.setTranslateX(-offsetX);
+                rect.setTranslateY(-offsetY);
+
+                gridPane.getChildren().add(rect);
             }
         }
-        return gridPane;
+    }
+
+    private void renderMapFromScrollPosition(Map map, GridPane gridPane, Pane rootPane) {
+        int offsetX = scrollX % TILE_SIZE;
+        int offsetY = scrollY % TILE_SIZE;
+
+        int windowWidth = (int) rootPane.getScene().getWindow().getWidth();
+        int windowHeight = (int) rootPane.getScene().getWindow().getHeight();
+
+        int fromRow = (int) (scrollY / gridPane.getHeight() * map.getHeight());
+        int toRow = fromRow + (int) (windowHeight / TILE_SIZE);
+        int fromCol = (int) (scrollX / gridPane.getWidth() * map.getWidth());
+        int toCol = fromCol + (int) (windowWidth / TILE_SIZE);
+
+        renderMap(gridPane, map, fromRow, toRow, fromCol, toCol, offsetX, offsetY);
     }
 
     public Pane getPane() {
         Game game = GameMenuController.getCurrentGame();
         if (game == null) {
             // TODO: remove this
-            game = new Game(new ArrayList<>(), 0, new Map(200, 200));
+            game = new Game(new ArrayList<>(), 0, new Map(50, 50));
         }
+        Map map = game.getMap();
 
-        GridPane gridPane = getMapGridPane(game.getMap());
-        ScrollPane scrollPane = new ScrollPane(gridPane);
-        scrollPane.setPrefSize(600, 400);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        GridPane gridPane = new GridPane();
+        gridPane.setPrefSize(TILE_SIZE * map.getWidth(), TILE_SIZE * map.getHeight());
+
+        Pane rootPane = new Pane(gridPane);
+        gridPane.setLayoutX(0);
+        gridPane.setLayoutY(0);
 
         gridPane.setOnMousePressed(event -> {
-            handleMousePressed(event, gridPane, scrollPane);
+            handleMousePressed(event, gridPane, rootPane);
         });
         gridPane.setOnMouseDragged(event -> {
-            handleMouseDragged(event, gridPane, scrollPane);
+            handleMouseDragged(event, gridPane, rootPane);
         });
 
-        Pane pane = new Pane(scrollPane);
-        pane.setFocusTraversable(true);
-        pane.requestFocus();
-        pane.setOnKeyPressed(event -> {
+        rootPane.setFocusTraversable(true);
+        rootPane.requestFocus();
+
+        rootPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.RIGHT) {
+                scrollX = Math.min(scrollX + TILE_SIZE / 2, map.getWidth() * TILE_SIZE - (int) rootPane.getWidth());
+                renderMapFromScrollPosition(map, gridPane, rootPane);
+            } else if (event.getCode() == KeyCode.LEFT) {
+                scrollX = Math.max(scrollX - TILE_SIZE / 2, 0);
+                renderMapFromScrollPosition(map, gridPane, rootPane);
+            } else if (event.getCode() == KeyCode.UP) {
+                scrollY = Math.max(scrollY - TILE_SIZE / 2, 0);
+                renderMapFromScrollPosition(map, gridPane, rootPane);
+            } else if (event.getCode() == KeyCode.DOWN) {
+                scrollY = Math.min(scrollY + TILE_SIZE / 2, map.getHeight() * TILE_SIZE - (int) rootPane.getHeight());
+                renderMapFromScrollPosition(map, gridPane, rootPane);
+            }
             // TODO: implement shortcuts
-            System.out.println(event.getCode());
         });
         // TODO: maybe we should lock the focus on this pane, or set the listener on the
         // scene instead
 
-        return pane;
+        // render when the pane is added to the scene
+        rootPane.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                newValue.windowProperty().addListener((observable2, oldWindow, newWindow) -> {
+                    if (newWindow != null) {
+                        newWindow.widthProperty().addListener((observable1, oldValue1, newValue1) -> {
+                            int width = newValue1.intValue();
+                            if (width > 0 && width < 10000) {
+                                renderMapFromScrollPosition(map, gridPane, rootPane);
+                            }
+                        });
+                        newWindow.heightProperty().addListener((observable1, oldValue1, newValue1) -> {
+                            renderMapFromScrollPosition(map, gridPane, rootPane);
+                        });
+                    }
+                });
+            }
+        });
+
+        return rootPane;
     }
 
-    private void handleMousePressed(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+    private void handleMousePressed(MouseEvent event, GridPane gridPane, Pane rootPane) {
         if (!event.isPrimaryButtonDown())
             return;
         for (Rectangle tile : selectedTiles) {
@@ -91,32 +149,11 @@ public class GameMenu {
         selectionStart = new Point2D(event.getX(), event.getY());
     }
 
-    private void handleMouseDragged(MouseEvent event, GridPane gridPane, ScrollPane scrollPane) {
+    private void handleMouseDragged(MouseEvent event, GridPane gridPane, Pane scrollPane) {
         if (!event.isPrimaryButtonDown())
             return;
 
         Point2D currentPoint = new Point2D(event.getX(), event.getY());
-
-        // scroll farther if the mouse is at the corners
-        double gridPaneHeight = gridPane.getBoundsInLocal().getHeight();
-        double scrollPaneHeight = scrollPane.getBoundsInLocal().getHeight();
-        double scrollableHeight = gridPaneHeight - scrollPaneHeight;
-        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight < 50) {
-            scrollPane.setVvalue(scrollPane.getVvalue() - 0.02);
-        }
-        if (currentPoint.getY() - scrollPane.getVvalue() * scrollableHeight > scrollPaneHeight - 50) {
-            scrollPane.setVvalue(scrollPane.getVvalue() + 0.02);
-        }
-
-        double gridPaneWidth = gridPane.getBoundsInLocal().getWidth();
-        double scrollPaneWidth = scrollPane.getBoundsInLocal().getWidth();
-        double scrollableWidth = gridPaneWidth - scrollPaneWidth;
-        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth < 50) {
-            scrollPane.setHvalue(scrollPane.getHvalue() - 0.02);
-        }
-        if (currentPoint.getX() - scrollPane.getHvalue() * scrollableWidth > scrollPaneWidth - 50) {
-            scrollPane.setHvalue(scrollPane.getHvalue() + 0.02);
-        }
 
         double minX = Math.min(selectionStart.getX(), currentPoint.getX());
         double minY = Math.min(selectionStart.getY(), currentPoint.getY());
