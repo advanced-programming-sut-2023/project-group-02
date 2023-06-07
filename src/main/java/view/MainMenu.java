@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.User;
 import utils.Graphics;
+import view.pregame.PreGameMenu;
 
 import java.util.Objects;
 
@@ -53,7 +54,7 @@ public class MainMenu {
         backButton.setTranslateY(5);
         backButton.setTranslateY(500);
 
-        pane.getChildren().addAll(scrollPane,backButton);
+        pane.getChildren().addAll(scrollPane, backButton);
     }
 
     private HBox playersInfoInHBox(User user) {
@@ -61,12 +62,12 @@ public class MainMenu {
         avatar.setFitWidth(30);
         avatar.setFitHeight(30);
 
-        Text rank = makeTextWithColor("" + user.getRank(),Color.GREEN);
-        Text username = makeTextWithColor(user.getUsername(),Color.YELLOW);
-        Text nickname = makeTextWithColor(user.getNickname(),Color.BLUE);
-        Text highScore = makeTextWithColor("" + user.getHighScore(),Color.WHITE);
+        Text rank = makeTextWithColor("" + user.getRank(), Color.GREEN);
+        Text username = makeTextWithColor(user.getUsername(), Color.YELLOW);
+        Text nickname = makeTextWithColor(user.getNickname(), Color.BLUE);
+        Text highScore = makeTextWithColor("" + user.getHighScore(), Color.WHITE);
 
-        HBox hBox = new HBox(rank,avatar,username,nickname,highScore);
+        HBox hBox = new HBox(rank, avatar, username, nickname, highScore);
         hBox.getStyleClass().add("button1");
         hBox.setSpacing(10);
         return hBox;
@@ -91,14 +92,13 @@ public class MainMenu {
 
         Button enterProfileMenuButton = makeButton(buttons, "Enter Profile Menu");
         enterProfileMenuButton.setOnAction(event -> {
-            Main.getStage().setScene(new Scene(new ProfileMenu().getPane()));
-            Main.getStage().show();
+            Main.setScene(new ProfileMenu().getPane());
         });
 
         Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
-        enterGameMenu.setOnAction(event -> Main.setScene(new GameMenu().getPane()));
+        enterGameMenu.setOnAction(event -> Main.setScene(new PreGameMenu().getPane()));
 
-        Button scoreBoard = makeButton(buttons,"ScoreBoard");
+        Button scoreBoard = makeButton(buttons, "ScoreBoard");
         scoreBoard.setOnAction(event -> Main.setScene(getScoreBoardPane()));
 
 
@@ -111,7 +111,7 @@ public class MainMenu {
         pane.getChildren().add(buttons);
     }
 
-    private Button makeButton(VBox buttons, String text) {
+    public static Button makeButton(VBox buttons, String text) {
         Button button = new Button(text);
         button.getStyleClass().add("button1");
         buttons.getChildren().add(button);

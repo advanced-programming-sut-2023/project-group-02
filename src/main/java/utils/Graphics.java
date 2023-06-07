@@ -33,10 +33,8 @@ public class Graphics {
         popup.setHeight(100);
         popup.setWidth(100);
         Label messageLabel = new Label();
-        messageLabel.setStyle("-fx-font-family: \"Arial\";" +
-            "-fx-font-size: 24px;" +
-            "-fx-font-weight: bold;" +
-            "-fx-fill: #A0522D;");
+        messageLabel.setStyle("-fx-background-color: white");
+        messageLabel.setFont(new Font("Arial", 30));
         messageLabel.setText(message);
         popup.getContent().add(messageLabel);
         popup.setAutoHide(true);
