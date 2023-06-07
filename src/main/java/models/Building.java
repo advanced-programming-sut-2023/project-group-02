@@ -1,6 +1,9 @@
 package models;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import models.units.Unit;
+import utils.Utils;
 
 public abstract class Building extends MapObject {
     protected BuildingType type;
@@ -9,6 +12,7 @@ public abstract class Building extends MapObject {
     protected int hitpoint;
     protected int workerCount = 0;
     protected int effectOnPopularity = 0;
+    protected final String imagePath;
     protected Unit unit;
 
     public Building(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
@@ -20,6 +24,7 @@ public abstract class Building extends MapObject {
         this.hitpoint = initialHitpoint;
         this.workerCount = workerCount;
         this.effectOnPopularity = effectOnPopularity;
+        this.imagePath = "/images/mainbuildings/" + Utils.toCamelCase(name) + ".png";
     }
 
     public String getName() {
@@ -56,5 +61,9 @@ public abstract class Building extends MapObject {
 
     public void setHitpoint(int hitpoint) {
         this.hitpoint = hitpoint;
+    }
+
+    public ImageView getBuildingImage() {
+        return new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
     }
 }
