@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
 import utils.Graphics;
+import view.Main;
 
 import java.util.Objects;
 
@@ -29,6 +30,8 @@ public class InitGameMenu {
         pane.setPrefSize(960, 540);
         initNumberOfTurnsFields(pane);
         initMapSizeFields(pane);
+
+        addBackButton(pane);
     }
 
     private void initNumberOfTurnsFields(Pane pane) {
@@ -58,5 +61,16 @@ public class InitGameMenu {
         mapHeightField.setMaxWidth(45);
 
         pane.getChildren().addAll(mapWidthText, mapWidthField, mapHeightText, mapHeightField);
+    }
+
+    private void addBackButton(Pane pane) {
+        Text back = new Text("Back");
+        back.setLayoutX(100);
+        back.setLayoutY(350);
+        back.getStyleClass().add("title1-with-hover");
+        back.setOnMouseClicked(event -> {
+            Main.setScene(new PreGameMenu().getPane());
+        });
+        pane.getChildren().add(back);
     }
 }
