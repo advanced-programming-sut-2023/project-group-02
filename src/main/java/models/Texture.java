@@ -6,8 +6,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 
 public enum Texture {
-    EARTH("earth", Colors.RED, "tiles/tile/desert_tile.jpg"),
-    EARTH_WITH_GRAVEL("earth with gravel", Colors.CYAN, "tiles/Tile/Plain3.jpg"),
+    EARTH("earth", Colors.RED, "tiles/Tiles/Plain1.jpg"),
+    EARTH_WITH_GRAVEL("earth with gravel", Colors.CYAN, "tiles/Tiles/Plain3.jpg"),
     SLATE("slate",Colors.BLACK),
     ROCK("rock",Colors.BLACK),
     IRON("iron",Colors.PURPLE),
