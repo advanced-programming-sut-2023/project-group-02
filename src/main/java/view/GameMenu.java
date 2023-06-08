@@ -1,6 +1,7 @@
 package view;
 
 import controllers.*;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -28,13 +29,14 @@ import java.util.Scanner;
 public class GameMenu {
     private boolean isGameOver = false;
 
-    private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
+    private ArrayList<Square> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
     private final int TILE_SIZE = Square.getSquareSize();
     private int scrollX = 0, scrollY = 0;
+    private GridPane gridPane;
 
-    private void renderMap(GridPane gridPane, Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
+    private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
             int offsetY) {
         gridPane.getChildren().clear();
 
@@ -57,13 +59,14 @@ public class GameMenu {
 
                 square.setTranslateX(-offsetX);
                 square.setTranslateY(-offsetY);
-
+                square.setX(col);
+                square.setY(row);
                 gridPane.getChildren().add(square);
             }
         }
     }
 
-    private void renderMapFromScrollPosition(Map map, GridPane gridPane, Pane rootPane) {
+    private void renderMapFromScrollPosition(Map map, Pane rootPane) {
         int offsetX = scrollX % TILE_SIZE;
         int offsetY = scrollY % TILE_SIZE;
 
@@ -74,8 +77,7 @@ public class GameMenu {
         int toRow = fromRow + (int) (windowHeight / TILE_SIZE);
         int fromCol = (int) (scrollX / gridPane.getWidth() * map.getWidth());
         int toCol = fromCol + (int) (windowWidth / TILE_SIZE);
-
-        renderMap(gridPane, map, fromRow, toRow, fromCol, toCol, offsetX, offsetY);
+        renderMap(map, fromRow, toRow, fromCol, toCol, offsetX, offsetY);
     }
 
     public Pane getPane() {
@@ -86,7 +88,7 @@ public class GameMenu {
         }
         Map map = game.getMap();
 
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         gridPane.setPrefSize(TILE_SIZE * map.getWidth(), TILE_SIZE * map.getHeight());
 
         Pane rootPane = new Pane(gridPane);
@@ -94,10 +96,10 @@ public class GameMenu {
         gridPane.setLayoutY(0);
 
         gridPane.setOnMousePressed(event -> {
-            handleMousePressed(event, gridPane, rootPane);
+            handleMousePressed(event, rootPane);
         });
         gridPane.setOnMouseDragged(event -> {
-            handleMouseDragged(event, gridPane, rootPane);
+            handleMouseDragged(event, rootPane);
         });
 
         rootPane.setFocusTraversable(true);
@@ -106,16 +108,16 @@ public class GameMenu {
         rootPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.RIGHT) {
                 scrollX = Math.min(scrollX + TILE_SIZE / 2, map.getWidth() * TILE_SIZE - (int) rootPane.getWidth());
-                renderMapFromScrollPosition(map, gridPane, rootPane);
+                renderMapFromScrollPosition(map, rootPane);
             } else if (event.getCode() == KeyCode.LEFT) {
                 scrollX = Math.max(scrollX - TILE_SIZE / 2, 0);
-                renderMapFromScrollPosition(map, gridPane, rootPane);
+                renderMapFromScrollPosition(map, rootPane);
             } else if (event.getCode() == KeyCode.UP) {
                 scrollY = Math.max(scrollY - TILE_SIZE / 2, 0);
-                renderMapFromScrollPosition(map, gridPane, rootPane);
+                renderMapFromScrollPosition(map, rootPane);
             } else if (event.getCode() == KeyCode.DOWN) {
                 scrollY = Math.min(scrollY + TILE_SIZE / 2, map.getHeight() * TILE_SIZE - (int) rootPane.getHeight());
-                renderMapFromScrollPosition(map, gridPane, rootPane);
+                renderMapFromScrollPosition(map, rootPane);
             }
             // TODO: implement shortcuts
         });
@@ -130,23 +132,23 @@ public class GameMenu {
                         newWindow.widthProperty().addListener((observable1, oldValue1, newValue1) -> {
                             int width = newValue1.intValue();
                             if (width > 0 && width < 10000) {
-                                renderMapFromScrollPosition(map, gridPane, rootPane);
+                                renderMapFromScrollPosition(map, rootPane);
                             }
                         });
                         newWindow.heightProperty().addListener((observable1, oldValue1, newValue1) -> {
-                            renderMapFromScrollPosition(map, gridPane, rootPane);
+                            renderMapFromScrollPosition(map, rootPane);
                         });
                     }
                 });
             }
         });
 
-        HBox bottomMenuHBox = makeBottomMenuHBox(gridPane);
+        HBox bottomMenuHBox = makeBottomMenuHBox();
         rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
     }
 
-    private HBox makeBottomMenuHBox(GridPane gridPane) {
+    private HBox makeBottomMenuHBox() {
         HBox hBox = new HBox();
         hBox.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/game-images/bottomMenu.png"))));
         hBox.setTranslateY(670);
@@ -160,7 +162,7 @@ public class GameMenu {
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
                 buildingsHBox.getChildren().add(buildingImage);
-                handelDropBuilding(gridPane,building,buildingImage);
+                handelDropBuilding(building,buildingImage);
             }
         }
         ScrollPane buildingsScrollPane = new ScrollPane(buildingsHBox);
@@ -172,14 +174,12 @@ public class GameMenu {
         return hBox;
     }
 
-    private void handelDropBuilding(GridPane gridPane, Building building, ImageView buildingImage) {
-        System.out.println("start gridPane size is " + gridPane.getChildren().size());
+    private void handelDropBuilding(Building building, ImageView buildingImage) {
         buildingImage.setOnDragDetected(event -> {
             Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
             Image image = buildingImage.getImage();
             content.putImage(image);
-            db.setDragView(image);
             db.setContent(content);
             event.consume();
         });
@@ -200,18 +200,12 @@ public class GameMenu {
             }
             event.setDropCompleted(success);
             event.consume();
-            System.out.println("the first x " + event.getX() + " y " + event.getY());
         });
 
-        buildingImage.setOnDragDone(event -> {
-            event.consume();
-            System.out.println("the second x " + event.getX() + " y " + event.getY());
-        });
-
-        System.out.println("end gridPane size is " + gridPane.getChildren().size());
+        buildingImage.setOnDragDone(Event::consume);
     }
 
-    private void handleMousePressed(MouseEvent event, GridPane gridPane, Pane rootPane) {
+    private void handleMousePressed(MouseEvent event, Pane rootPane) {
         if (!event.isPrimaryButtonDown())
             return;
         for (Rectangle tile : selectedTiles) {
@@ -221,7 +215,7 @@ public class GameMenu {
         selectionStart = new Point2D(event.getX(), event.getY());
     }
 
-    private void handleMouseDragged(MouseEvent event, GridPane gridPane, Pane scrollPane) {
+    private void handleMouseDragged(MouseEvent event, Pane scrollPane) {
         if (!event.isPrimaryButtonDown())
             return;
 
@@ -233,9 +227,8 @@ public class GameMenu {
         double maxY = Math.max(selectionStart.getY(), currentPoint.getY());
 
         for (Node node : gridPane.getChildren()) {
-            if (!(node instanceof Rectangle))
+            if (!(node instanceof Square tile))
                 continue;
-            Rectangle tile = (Rectangle) node;
             if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
                 tile.setStroke(Color.WHITE);
                 selectedTiles.add(tile);
