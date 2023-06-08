@@ -5,9 +5,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -31,7 +31,7 @@ public class GameMenu {
     private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
-    private final int TILE_SIZE = 50;
+    private final int TILE_SIZE = 70;
     private int scrollX = 0, scrollY = 0;
 
     private void renderMap(GridPane gridPane, Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
@@ -141,12 +141,12 @@ public class GameMenu {
             }
         });
 
-        HBox bottomMenuHBox = makeBottomMenuHBox();
+        HBox bottomMenuHBox = makeBottomMenuHBox(gridPane);
         rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
     }
 
-    private HBox makeBottomMenuHBox() {
+    private HBox makeBottomMenuHBox(GridPane gridPane) {
         HBox hBox = new HBox();
         hBox.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/game-images/bottomMenu.png"))));
         hBox.setTranslateY(670);
@@ -160,7 +160,7 @@ public class GameMenu {
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
                 buildingsHBox.getChildren().add(buildingImage);
-                handelDropBuilding(building,buildingImage);
+                handelDropBuilding(gridPane,building,buildingImage);
             }
         }
         ScrollPane buildingsScrollPane = new ScrollPane(buildingsHBox);
@@ -172,15 +172,43 @@ public class GameMenu {
         return hBox;
     }
 
-    private void handelDropBuilding(Building building, ImageView buildingImage) {
-        buildingImage.setOnMousePressed(event -> buildingImage.setMouseTransparent(true));
-
-        buildingImage.setOnMouseDragged(event -> {
-            double x = event.getX();
-            double y = event.getY();
-            buildingImage.setX(x);
-            buildingImage.setY(y);
+    private void handelDropBuilding(GridPane gridPane, Building building, ImageView buildingImage) {
+        System.out.println("start gridPane size is " + gridPane.getChildren().size());
+        buildingImage.setOnDragDetected(event -> {
+            Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
+            ClipboardContent content = new ClipboardContent();
+            Image image = buildingImage.getImage();
+            content.putImage(image);
+            db.setDragView(image);
+            db.setContent(content);
+            event.consume();
         });
+
+        buildingImage.setOnDragOver(event -> {
+            if (event.getGestureSource() != buildingImage && event.getDragboard().hasImage()) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+
+        buildingImage.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasImage()) {
+                buildingImage.setImage(db.getImage());
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+            System.out.println("the first x " + event.getX() + " y " + event.getY());
+        });
+
+        buildingImage.setOnDragDone(event -> {
+            event.consume();
+            System.out.println("the second x " + event.getX() + " y " + event.getY());
+        });
+
+        System.out.println("end gridPane size is " + gridPane.getChildren().size());
     }
 
     private void handleMousePressed(MouseEvent event, GridPane gridPane, Pane rootPane) {
