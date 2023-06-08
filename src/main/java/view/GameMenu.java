@@ -31,7 +31,7 @@ public class GameMenu {
     private ArrayList<Rectangle> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
-    private final int TILE_SIZE = 70;
+    private final int TILE_SIZE = Square.getSquareSize();
     private int scrollX = 0, scrollY = 0;
 
     private void renderMap(GridPane gridPane, Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
@@ -42,23 +42,23 @@ public class GameMenu {
             for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
                 Cell cell = map.findCellWithXAndY(col, row);
 
-                Rectangle rect = new Rectangle(TILE_SIZE, TILE_SIZE);
-                rect.setFill(cell.getTexture().getPaint());
-                rect.setStrokeType(StrokeType.INSIDE);
-                rect.setStroke(Color.TRANSPARENT);
+                Square square = new Square(cell);
+                square.setFill(cell.getTexture().getPaint());
+                square.setStrokeType(StrokeType.INSIDE);
+                square.setStroke(Color.TRANSPARENT);
 
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.ZERO);
                 tooltip.setText("x: " + col + ", y: " + row);
-                Tooltip.install(rect, tooltip);
+                Tooltip.install(square, tooltip);
 
-                GridPane.setColumnIndex(rect, col - fromCol);
-                GridPane.setRowIndex(rect, row - fromRow);
+                GridPane.setColumnIndex(square, col - fromCol);
+                GridPane.setRowIndex(square, row - fromRow);
 
-                rect.setTranslateX(-offsetX);
-                rect.setTranslateY(-offsetY);
+                square.setTranslateX(-offsetX);
+                square.setTranslateY(-offsetY);
 
-                gridPane.getChildren().add(rect);
+                gridPane.getChildren().add(square);
             }
         }
     }

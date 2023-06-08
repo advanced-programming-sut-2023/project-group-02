@@ -11,11 +11,23 @@ public class Cell {
     private MapObject object; // a building, a tree, a rock, ...
     private ArrayList<Unit> units;
     private boolean hasLadder;
+    private int x;
+    private int y;
 
 
-    public Cell(Texture texture) {
+    public Cell(Texture texture, int x, int y) {
         this.texture = texture;
         this.units = new ArrayList<>();
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public Texture getTexture() {

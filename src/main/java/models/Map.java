@@ -18,7 +18,7 @@ public class Map {
         this.map = new Cell[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                map[i][j] = new Cell(Texture.EARTH);
+                map[i][j] = new Cell(Texture.EARTH,j,i);
             }
         }
     }
