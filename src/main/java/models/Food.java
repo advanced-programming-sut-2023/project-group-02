@@ -1,5 +1,7 @@
 package models;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import utils.Utils;
 
 public enum Food {
@@ -15,10 +17,12 @@ public enum Food {
 
     private final String name;
     private final int price;
+    private final String imagePath;
 
     Food(String name, int price) {
         this.name = name;
         this.price = price;
+        imagePath = "/images/items/" + name + ".png";
     }
 
     public String getName() {
@@ -31,5 +35,9 @@ public enum Food {
 
     public int getSellPrice() {
         return price/2;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

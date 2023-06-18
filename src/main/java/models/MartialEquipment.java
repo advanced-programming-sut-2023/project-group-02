@@ -19,10 +19,12 @@ public enum MartialEquipment {
 
     private final String name;
     private final int price;
+    private final String imagePath;
 
     MartialEquipment(String name, int price) {
         this.name = name;
         this.price = price;
+        imagePath = "/images/items/" + name + ".png";
     }
 
     public String getName() {
@@ -35,5 +37,9 @@ public enum MartialEquipment {
 
     public int getSellPrice() {
         return price/2;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

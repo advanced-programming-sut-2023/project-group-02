@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import models.Food;
 import models.MartialEquipment;
 import models.Material;
@@ -7,6 +9,7 @@ import models.Material;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemsController {
     private final static ArrayList<Material> allMaterials = new ArrayList<>(EnumSet.allOf(Material.class));
@@ -40,5 +43,24 @@ public class ItemsController {
                 return item;
         }
         return null;
+    }
+
+    public static ImageView getItemsImage(Object item) {
+        String imagePath = null;
+        if (item instanceof Food) imagePath = ((Food) item).getImagePath();
+        else if (item instanceof Material) imagePath = ((Material) item).getImagePath();
+        else if (item instanceof MartialEquipment) imagePath = ((MartialEquipment) item).getImagePath();
+
+        //TODO: after adding all images humanize this method
+        String url = "";
+        try {
+            url = ItemsController.class.getResource(Objects.requireNonNull(imagePath)).toExternalForm();
+        } catch (Exception e) {
+            return null;
+        }
+        ImageView imageView = new ImageView(new Image(url));
+        imageView.setFitHeight(80);
+        imageView.setFitWidth(80);
+        return imageView;
     }
 }

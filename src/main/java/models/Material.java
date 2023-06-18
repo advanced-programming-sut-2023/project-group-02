@@ -12,11 +12,13 @@ public enum Material {
 
     private final int buyPrice;
     private final String materialName;
+    private final String imagePath;
     private static ArrayList<Material> allMaterials = new ArrayList<>(List.of(STONE,WOOD,IRON));
 
     private Material(int price, String materialName) {
         this.buyPrice = price;
         this.materialName = materialName;
+        imagePath = "/images/items/" + materialName + ".png";
     }
 
     public static ArrayList<Material> getAllMaterials() {
@@ -41,5 +43,9 @@ public enum Material {
                 return material;
         }
         return null;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
