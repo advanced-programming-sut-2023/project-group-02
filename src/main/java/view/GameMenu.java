@@ -30,10 +30,10 @@ import java.util.Scanner;
 public class GameMenu {
     private boolean isGameOver = false;
 
-    private ArrayList<Square> selectedTiles = new ArrayList<>();
+    private ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
-    private final int TILE_SIZE = Square.getSquareSize();
+    private final int TILE_SIZE = CellWrapper.getSquareSize();
     private int scrollX = 0, scrollY = 0;
     private GridPane gridPane;
 
@@ -45,28 +45,22 @@ public class GameMenu {
             for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
                 Cell cell = map.findCellWithXAndY(col, row);
 
-                Square square = new Square(cell);
-                square.setFill(cell.getTexture().getPaint());
-                square.setStrokeType(StrokeType.INSIDE);
-                square.setStroke(Color.TRANSPARENT);
+                CellWrapper cellWrapper = new CellWrapper(cell);
 
                 final int finalCol = col;
                 final int finalRow = row;
-                square.setOnDragOver(event -> {
+                cellWrapper.setOnDragOver(event -> {
                     if (event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                     }
                     System.out.println("over " + finalCol + " " + finalRow);
                     event.consume();
                 });
-                square.setOnDragDropped(event -> {
+                cellWrapper.setOnDragDropped(event -> {
                     System.out.println("dropped " + finalCol + " " + finalRow);
                     Dragboard db = event.getDragboard();
                     boolean success = false;
-                    if (db.hasImage()) {
-                        square.setFill(new ImagePattern(db.getImage()));
-                        success = true;
-                    }
+                    cellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
                     event.setDropCompleted(success);
                     event.consume();
                 });
@@ -74,16 +68,14 @@ public class GameMenu {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.ZERO);
                 tooltip.setText("x: " + col + ", y: " + row);
-                Tooltip.install(square, tooltip);
+                Tooltip.install(cellWrapper, tooltip);
 
-                GridPane.setColumnIndex(square, col - fromCol);
-                GridPane.setRowIndex(square, row - fromRow);
+                GridPane.setColumnIndex(cellWrapper, col - fromCol);
+                GridPane.setRowIndex(cellWrapper, row - fromRow);
 
-                square.setTranslateX(-offsetX);
-                square.setTranslateY(-offsetY);
-                square.setX(col);
-                square.setY(row);
-                gridPane.getChildren().add(square);
+                cellWrapper.setTranslateX(-offsetX);
+                cellWrapper.setTranslateY(-offsetY);
+                gridPane.getChildren().add(cellWrapper);
             }
         }
     }
@@ -200,8 +192,9 @@ public class GameMenu {
         buildingImage.setOnDragDetected(event -> {
             Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
-            Image image = buildingImage.getImage();
-            content.putImage(image);
+            content.putString(building.getName());
+            // the image is for decoration only
+            content.putImage(buildingImage.getImage());
             db.setContent(content);
             event.consume();
         });
@@ -212,7 +205,7 @@ public class GameMenu {
     private void handleMousePressed(MouseEvent event, Pane rootPane) {
         if (!event.isPrimaryButtonDown())
             return;
-        for (Rectangle tile : selectedTiles) {
+        for (CellWrapper tile : selectedTiles) {
             tile.setStroke(Color.TRANSPARENT);
         }
         selectedTiles.clear();
@@ -231,7 +224,7 @@ public class GameMenu {
         double maxY = Math.max(selectionStart.getY(), currentPoint.getY());
 
         for (Node node : gridPane.getChildren()) {
-            if (!(node instanceof Square tile))
+            if (!(node instanceof CellWrapper tile))
                 continue;
             if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
                 tile.setStroke(Color.WHITE);
