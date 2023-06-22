@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
@@ -48,6 +49,27 @@ public class GameMenu {
                 square.setFill(cell.getTexture().getPaint());
                 square.setStrokeType(StrokeType.INSIDE);
                 square.setStroke(Color.TRANSPARENT);
+
+                final int finalCol = col;
+                final int finalRow = row;
+                square.setOnDragOver(event -> {
+                    if (event.getDragboard().hasImage()) {
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    }
+                    System.out.println("over " + finalCol + " " + finalRow);
+                    event.consume();
+                });
+                square.setOnDragDropped(event -> {
+                    System.out.println("dropped " + finalCol + " " + finalRow);
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+                    if (db.hasImage()) {
+                        square.setFill(new ImagePattern(db.getImage()));
+                        success = true;
+                    }
+                    event.setDropCompleted(success);
+                    event.consume();
+                });
 
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.ZERO);
@@ -181,24 +203,6 @@ public class GameMenu {
             Image image = buildingImage.getImage();
             content.putImage(image);
             db.setContent(content);
-            event.consume();
-        });
-
-        buildingImage.setOnDragOver(event -> {
-            if (event.getGestureSource() != buildingImage && event.getDragboard().hasImage()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
-
-        buildingImage.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasImage()) {
-                buildingImage.setImage(db.getImage());
-                success = true;
-            }
-            event.setDropCompleted(success);
             event.consume();
         });
 
