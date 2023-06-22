@@ -4,6 +4,7 @@ import controllers.*;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -29,8 +30,8 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
-    private ArrayList<CellWrapper> allMadeCellWrappers = new ArrayList<>();
-    private ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
+    private final ArrayList<CellWrapper> allMadeCellWrappers = new ArrayList<>();
+    private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
     private final int TILE_SIZE = CellWrapper.getSquareSize();
@@ -200,8 +201,13 @@ public class GameMenu {
             Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
             content.putString(building.getName());
-            // the image is for decoration only
-            content.putImage(buildingImage.getImage());
+            Image image = buildingImage.getImage();
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(70);
+            imageView.setFitWidth(70);
+            SnapshotParameters params = new SnapshotParameters();
+            params.setFill(Color.GREEN);
+            content.putImage(imageView.snapshot(params, null));
             db.setContent(content);
             event.consume();
         });

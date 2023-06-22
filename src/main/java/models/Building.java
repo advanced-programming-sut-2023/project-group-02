@@ -76,8 +76,8 @@ public abstract class Building extends MapObject {
             return null;
         }
         ImageView imageView = new ImageView(new Image(url));
-        imageView.setFitHeight(80);
-        imageView.setFitWidth(80);
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(70);
         return imageView;
     }
 }
