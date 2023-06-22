@@ -12,7 +12,6 @@ public abstract class Building extends MapObject {
     protected int hitpoint;
     protected int workerCount = 0;
     protected int effectOnPopularity = 0;
-    protected final String imagePath;
     protected Unit unit;
 
     public Building(String name, BuildingType type, MaterialInstance[] buildingMaterials, int initialHitpoint,
@@ -61,10 +60,6 @@ public abstract class Building extends MapObject {
 
     public void setHitpoint(int hitpoint) {
         this.hitpoint = hitpoint;
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 
     public ImageView getBuildingImage() {

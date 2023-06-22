@@ -1,12 +1,16 @@
 package models;
 
-import controllers.GameMenuController;
-import controllers.UserController;
+import javafx.scene.image.ImageView;
 
 public abstract class MapObject {
     protected String name;
     protected User owner;
     private int x, y;
+    protected String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
 
     public String getName() {
         return name;
@@ -35,5 +39,13 @@ public abstract class MapObject {
     public void setCoordinates(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public ImageView getImage() {
+        if (this instanceof Building) return ((Building) this).getBuildingImage();
+        else {
+            //TODO when tree and rocks are added
+        }
+        return null;
     }
 }
