@@ -29,12 +29,13 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
-
+    private ArrayList<CellWrapper> allMadeCellWrappers = new ArrayList<>();
     private ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
     private final int TILE_SIZE = CellWrapper.getSquareSize();
     private int scrollX = 0, scrollY = 0;
+    private Pane rootPane;
     private GridPane gridPane;
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
@@ -43,9 +44,11 @@ public class GameMenu {
 
         for (int row = fromRow; row <= toRow && row < map.getHeight(); row++) {
             for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
-                Cell cell = map.findCellWithXAndY(col, row);
-
-                CellWrapper cellWrapper = new CellWrapper(cell);
+                CellWrapper cellWrapper;
+                if ((cellWrapper = CellWrapper.findCellWrapperWithXAndY(allMadeCellWrappers,col,row)) == null) {
+                    cellWrapper = new CellWrapper(map.findCellWithXAndY(col,row));
+                    allMadeCellWrappers.add(cellWrapper);
+                }
 
                 final int finalCol = col;
                 final int finalRow = row;
@@ -56,11 +59,12 @@ public class GameMenu {
                     System.out.println("over " + finalCol + " " + finalRow);
                     event.consume();
                 });
+                CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     System.out.println("dropped " + finalCol + " " + finalRow);
                     Dragboard db = event.getDragboard();
                     boolean success = false;
-                    cellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
+                    finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
                     event.setDropCompleted(success);
                     event.consume();
                 });
@@ -76,6 +80,7 @@ public class GameMenu {
                 cellWrapper.setTranslateX(-offsetX);
                 cellWrapper.setTranslateY(-offsetY);
                 gridPane.getChildren().add(cellWrapper);
+                rootPane.requestFocus();
             }
         }
     }
@@ -99,13 +104,14 @@ public class GameMenu {
         if (game == null) {
             // TODO: remove this
             game = new Game(new ArrayList<>(), 0, new Map(50, 50));
+            GameMenuController.setCurrentGame(game);
         }
         Map map = game.getMap();
 
         gridPane = new GridPane();
         gridPane.setPrefSize(TILE_SIZE * map.getWidth(), TILE_SIZE * map.getHeight());
 
-        Pane rootPane = new Pane(gridPane);
+        rootPane = new Pane(gridPane);
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
 
@@ -184,6 +190,7 @@ public class GameMenu {
         buildingsScrollPane.setMaxHeight(120);
         buildingsScrollPane.setTranslateX(340);
         buildingsScrollPane.setTranslateY(80);
+        gridPane.requestFocus();
         hBox.getChildren().add(buildingsScrollPane);
         return hBox;
     }

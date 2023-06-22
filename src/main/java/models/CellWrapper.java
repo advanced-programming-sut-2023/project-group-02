@@ -7,6 +7,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+import java.util.ArrayList;
+
 public class CellWrapper extends StackPane {
     private static final int squareSize = 70;
     private final Cell cell;
@@ -59,8 +61,17 @@ public class CellWrapper extends StackPane {
             imageView.setFitWidth(squareSize);
             imageView.setFitHeight(squareSize);
             getChildren().add(imageView);
+            cell.setObject(mapObject);
         } else {
             getChildren().remove(1);
         }
+    }
+
+    public static CellWrapper findCellWrapperWithXAndY(ArrayList<CellWrapper> cellWrappers, int x, int y) {
+        for (CellWrapper cellWrapper : cellWrappers) {
+            if (cellWrapper.getSquareX() == x && cellWrapper.getSquareY() == y)
+                return cellWrapper;
+        }
+        return null;
     }
 }
