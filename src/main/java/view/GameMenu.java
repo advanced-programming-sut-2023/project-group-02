@@ -2,6 +2,7 @@ package view;
 
 import controllers.*;
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -57,12 +58,10 @@ public class GameMenu {
                     if (event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                     }
-                    System.out.println("over " + finalCol + " " + finalRow);
                     event.consume();
                 });
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
-                    System.out.println("dropped " + finalCol + " " + finalRow);
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
@@ -183,6 +182,8 @@ public class GameMenu {
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
                 buildingsHBox.getChildren().add(buildingImage);
+                buildingImage.setOnMouseClicked(event -> {rootPane.requestFocus();});
+                buildingImage.setOnMouseDragged(event -> {rootPane.requestFocus();});
                 handelDropBuilding(building,buildingImage);
             }
         }
@@ -191,7 +192,9 @@ public class GameMenu {
         buildingsScrollPane.setMaxHeight(120);
         buildingsScrollPane.setTranslateX(340);
         buildingsScrollPane.setTranslateY(80);
-        gridPane.requestFocus();
+        buildingsScrollPane.setOnMouseClicked(event -> {rootPane.requestFocus();});
+        buildingsScrollPane.setOnMouseDragged(event -> {rootPane.requestFocus();});
+        rootPane.requestFocus();
         hBox.getChildren().add(buildingsScrollPane);
         return hBox;
     }
