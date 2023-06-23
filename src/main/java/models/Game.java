@@ -27,6 +27,7 @@ public class Game {
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
+        GameMenuController.getAllMadeCellWrappers().put(this,new ArrayList<>());
     }
 
     public void addGovernment(Government government) {

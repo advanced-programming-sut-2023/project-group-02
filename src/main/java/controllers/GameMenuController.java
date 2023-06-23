@@ -20,6 +20,7 @@ import java.util.Scanner;
 
 public class GameMenuController {
     private static Game currentGame;
+    private static HashMap<Game,ArrayList<CellWrapper>> allMadeCellWrappers = new HashMap<>();
     private static HashMap<User, Game> savedGames = new HashMap<>();
 
     public static void saveGame() {
@@ -39,6 +40,14 @@ public class GameMenuController {
 
     public static Game getCurrentGame() {
         return currentGame;
+    }
+
+    public static HashMap<Game, ArrayList<CellWrapper>> getAllMadeCellWrappers() {
+        return allMadeCellWrappers;
+    }
+
+    public static ArrayList<CellWrapper> getCurrentGameCellWrappers() {
+        return allMadeCellWrappers.get(currentGame);
     }
 
     public static void setCurrentGame(Game currentGame) {

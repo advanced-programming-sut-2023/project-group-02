@@ -2,9 +2,9 @@ package view;
 
 import controllers.*;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
@@ -15,9 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.*;
 import utils.Graphics;
@@ -31,7 +29,6 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
-    private final ArrayList<CellWrapper> allMadeCellWrappers = new ArrayList<>();
     private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
@@ -47,9 +44,10 @@ public class GameMenu {
         for (int row = fromRow; row <= toRow && row < map.getHeight(); row++) {
             for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
                 CellWrapper cellWrapper;
-                if ((cellWrapper = CellWrapper.findCellWrapperWithXAndY(allMadeCellWrappers,col,row)) == null) {
+                if ((cellWrapper = CellWrapper.findCellWrapperWithXAndY(GameMenuController.getCurrentGameCellWrappers()
+                    , col,row)) == null) {
                     cellWrapper = new CellWrapper(map.findCellWithXAndY(col,row));
-                    allMadeCellWrappers.add(cellWrapper);
+                    GameMenuController.getCurrentGameCellWrappers().add(cellWrapper);
                 }
 
                 final int finalCol = col;
@@ -138,6 +136,9 @@ public class GameMenu {
             } else if (event.getCode() == KeyCode.DOWN) {
                 scrollY = Math.min(scrollY + TILE_SIZE / 2, map.getHeight() * TILE_SIZE - (int) rootPane.getHeight());
                 renderMapFromScrollPosition(map, rootPane);
+            } else if (event.getCode() == KeyCode.S) {
+                Main.getStage().setScene(new Scene(new ShopMenu().getPane()));
+                Main.getStage().setFullScreen(true);
             }
             // TODO: implement shortcuts
         });
@@ -163,17 +164,22 @@ public class GameMenu {
             }
         });
 
-        HBox bottomMenuHBox = makeBottomMenuHBox();
+        HBox bottomMenuHBox = makeDefaultBottomMenuHBox();
         rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
     }
 
-    private HBox makeBottomMenuHBox() {
+    private HBox makeBaseOfBottomMenu() {
         HBox hBox = new HBox();
         hBox.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/game-images/bottomMenu.png"))));
         hBox.setTranslateY(670);
         hBox.setPrefWidth(1550);
         hBox.setPrefHeight(200);
+        return hBox;
+    }
+
+    private HBox makeDefaultBottomMenuHBox() {
+        HBox hBox = makeBaseOfBottomMenu();
         HBox buildingsHBox = new HBox();
         buildingsHBox.setMaxHeight(120);
         buildingsHBox.setTranslateY(22);
@@ -197,6 +203,16 @@ public class GameMenu {
         rootPane.requestFocus();
         hBox.getChildren().add(buildingsScrollPane);
         return hBox;
+    }
+
+    private void makeShopMenu() {
+        rootPane.getChildren().removeIf(child -> child instanceof HBox);
+        HBox hBox = makeBaseOfBottomMenu();
+        HBox shopHBox = new HBox();
+        shopHBox.setMaxHeight(120);
+        shopHBox.setTranslateY(22);
+        shopHBox.setSpacing(10);
+        rootPane.getChildren().add(hBox);
     }
 
     private void handelDropBuilding(Building building, ImageView buildingImage) {
