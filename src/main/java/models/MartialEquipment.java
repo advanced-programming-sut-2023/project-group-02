@@ -1,5 +1,7 @@
 package models;
 
+import utils.Utils;
+
 public enum MartialEquipment {
     // made in Poleturner using wood:
     SPEAR("spear",5),
@@ -24,7 +26,7 @@ public enum MartialEquipment {
     MartialEquipment(String name, int price) {
         this.name = name;
         this.price = price;
-        imagePath = "/images/items/" + name + ".png";
+        imagePath = "/images/items/" + Utils.toCamelCase(name) + ".png";
     }
 
     public String getName() {

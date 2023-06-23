@@ -231,16 +231,6 @@ public class LoginMenu {
         pane.getChildren().add(captcha.getCaptchaImage());
     }
 
-//    void captcha(Parser parser) {
-//        String userInput = parser.getInput();
-//        if (Captcha.inputEqualsCaptcha(userInput)) {
-//            System.out.println("You Logged in successfully!");
-//        } else {
-//            System.out.println("Please enter the numbers more carefully!");
-//            System.out.println(Captcha.showCaptcha());
-//        }
-//    }
-
     void newPassword() {
         LoginMenuMessages message = LoginMenuController.setNewPassword(currentUser, newPasswordField.getText());
         if (message.equals(LoginMenuMessages.NEW_PASSWORD_WEAK)) {

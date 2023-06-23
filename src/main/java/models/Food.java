@@ -11,8 +11,7 @@ public enum Food {
     BREAD("bread",3),
     MEAT("meat",8),
     BARLEY("barley",4),
-    BEER("beer",0),
-    // TODO: does this need to be here?
+    BEER("beer",3),
     CHEESE("cheese",5);
 
     private final String name;

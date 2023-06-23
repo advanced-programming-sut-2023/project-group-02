@@ -63,4 +63,35 @@ public class ItemsController {
         imageView.setFitWidth(80);
         return imageView;
     }
+
+    public static ArrayList<Object> getImagedItems() {
+        ArrayList<Object> imagedItems = new ArrayList<>();
+        for (Object item : getAllItems()) {
+            if (getItemsImage(item) != null) {
+                imagedItems.add(item);
+            }
+        }
+        return imagedItems;
+    }
+
+    public static int getItemSellPrice(Object item) {
+        if (item instanceof Food) return ((Food) item).getSellPrice();
+        else if (item instanceof Material) return ((Material) item).getSellPrice();
+        else if (item instanceof MartialEquipment) return ((MartialEquipment) item).getSellPrice();
+        return 0;
+    }
+
+    public static int getItemBuyPrice(Object item) {
+        if (item instanceof Food) return ((Food) item).getBuyPrice();
+        else if (item instanceof Material) return ((Material) item).getBuyPrice();
+        else if (item instanceof MartialEquipment) return ((MartialEquipment) item).getBuyPrice();
+        return 0;
+    }
+
+    public static String getItemName(Object item) {
+        if (item instanceof Food) return ((Food) item).getName();
+        else if (item instanceof Material) return ((Material) item).getName();
+        else if (item instanceof MartialEquipment) return ((MartialEquipment) item).getName();
+        return null;
+    }
 }
