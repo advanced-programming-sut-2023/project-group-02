@@ -292,7 +292,7 @@ public class BuildingFactory {
         ArrayList<Building> allBuildings = new ArrayList<>();
         Method[] methods = BuildingFactory.class.getMethods();
         for (Method method : methods) {
-            if (Building.class.isAssignableFrom(method.getReturnType())) {
+            if (method.getParameterCount() == 0 && Building.class.isAssignableFrom(method.getReturnType())) {
                 try {
                     Building building = (Building) method.invoke(null);
                     if (building != null) {
