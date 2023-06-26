@@ -139,8 +139,11 @@ public class GameMenu {
             } else if (event.getCode() == KeyCode.S) {
                 Main.getStage().setScene(new Scene(new ShopMenu().getPane()));
                 Main.getStage().setFullScreen(true);
+            } else if (event.getCode() == KeyCode.C && event.isShortcutDown()) {
+                copy();
+            } else if (event.getCode() == KeyCode.V && event.isShortcutDown()) {
+                paste();
             }
-            // TODO: implement shortcuts
         });
         // TODO: maybe we should lock the focus on this pane, or set the listener on the
         // scene instead
@@ -167,6 +170,36 @@ public class GameMenu {
         HBox bottomMenuHBox = makeDefaultBottomMenuHBox();
         rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
+    }
+
+    private void paste() {
+        if (selectedTiles.size() != 1)
+            return;
+
+        CellWrapper cellWrapper = selectedTiles.get(0);
+        if (cellWrapper.getObject() == null) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            String name = clipboard.getString();
+            if (name != null) {
+                Building building = BuildingFactory.makeBuilding(name);
+                if (building != null) {
+                    cellWrapper.setObject(building);
+                }
+            }
+        }
+    }
+
+    private void copy() {
+        if (selectedTiles.size() != 1)
+            return;
+
+        CellWrapper cellWrapper = selectedTiles.get(0);
+        if (cellWrapper.getObject() instanceof Building building) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(building.getName());
+            clipboard.setContent(content);
+        }
     }
 
     private HBox makeBaseOfBottomMenu() {
