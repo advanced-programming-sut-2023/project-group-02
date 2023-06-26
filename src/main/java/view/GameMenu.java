@@ -190,7 +190,7 @@ public class GameMenu {
                 buildingsHBox.getChildren().add(buildingImage);
                 buildingImage.setOnMouseClicked(event -> {rootPane.requestFocus();});
                 buildingImage.setOnMouseDragged(event -> {rootPane.requestFocus();});
-                handelDropBuilding(building,buildingImage);
+                handleDropBuilding(building, buildingImage);
             }
         }
         ScrollPane buildingsScrollPane = new ScrollPane(buildingsHBox);
@@ -215,7 +215,7 @@ public class GameMenu {
         rootPane.getChildren().add(hBox);
     }
 
-    private void handelDropBuilding(Building building, ImageView buildingImage) {
+    private void handleDropBuilding(Building building, ImageView buildingImage) {
         buildingImage.setOnDragDetected(event -> {
             Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
