@@ -38,7 +38,7 @@ public class TradeMenuController {
         if (price > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD))
             return TradeMenuMessages.NOT_ENOUGH_MONEY;
 
-        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(),item,amount,price,message));
+//        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(),item,amount,price,message));
         return TradeMenuMessages.REQUEST_IS_MADE;
     }
 
@@ -53,7 +53,7 @@ public class TradeMenuController {
         if (trade.getRequester().equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
             return TradeMenuMessages.CANT_ACCEPT_YOUR_TRADE;
 
-        trade.setAcceptor(GameMenuController.getCurrentGame().getCurrentPlayer());
+//        trade.setReceptionist(GameMenuController.getCurrentGame().getCurrentPlayer());
         trade.setAcceptorMessage(message);
         tradeDone(trade);
         return TradeMenuMessages.ACCEPTED;
@@ -63,9 +63,9 @@ public class TradeMenuController {
         GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).increaseItem(trade.getResourceType(), trade.getAmount());
         GameMenuController.getCurrentGame().getPlayersGovernment(trade.getRequester()).reduceItem(Material.GOLD, trade.getPrice());
         trade.getRequester().getUsersNewTrades().add(trade);
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).reduceItem(trade.getResourceType(),trade.getAmount());
-        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getAcceptor()).increaseItem(Material.GOLD, trade.getPrice());
-        trade.getAcceptor().getUsersNewTrades().add(trade);
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getReceptionist()).reduceItem(trade.getResourceType(),trade.getAmount());
+        GameMenuController.getCurrentGame().getPlayersGovernment(trade.getReceptionist()).increaseItem(Material.GOLD, trade.getPrice());
+        trade.getReceptionist().getUsersNewTrades().add(trade);
     }
 
     public static String showTradeHistory() {

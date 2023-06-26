@@ -74,6 +74,16 @@ public class ItemsController {
         return imagedItems;
     }
 
+    public static ArrayList<Object> getImagedItemsWithType(String itemType) {
+        ArrayList<Object> items = new ArrayList<>();
+        for (Object item : getImagedItems()) {
+            if (itemType.equals("material") && item instanceof Material) items.add(item);
+            else if (itemType.equals("food") && item instanceof Food) items.add(item);
+            else if (itemType.equals("martialEquipment") && item instanceof MartialEquipment) items.add(item);
+        }
+        return items;
+    }
+
     public static int getItemSellPrice(Object item) {
         if (item instanceof Food) return ((Food) item).getSellPrice();
         else if (item instanceof Material) return ((Material) item).getSellPrice();
