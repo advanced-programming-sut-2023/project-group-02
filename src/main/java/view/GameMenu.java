@@ -143,6 +143,8 @@ public class GameMenu {
                 copy();
             } else if (event.getCode() == KeyCode.V && event.isShortcutDown()) {
                 paste();
+            } else if (event.getCode() == KeyCode.BACK_SPACE) {
+                delete();
             }
         });
         // TODO: maybe we should lock the focus on this pane, or set the listener on the
@@ -199,6 +201,12 @@ public class GameMenu {
             ClipboardContent content = new ClipboardContent();
             content.putString(building.getName());
             clipboard.setContent(content);
+        }
+    }
+
+    private void delete() {
+        for (CellWrapper cellWrapper : selectedTiles) {
+            cellWrapper.setObject(null);
         }
     }
 
@@ -411,7 +419,7 @@ public class GameMenu {
             } else if (parser.beginsWith("select unit")) {
                 selectUnit(parser, scanner);
             } else if (parser.beginsWith("enter trade menu")) {
-                new TradeMenu().run(scanner);
+                // new TradeMenu().run(scanner);
             } else if (parser.beginsWith("show popularity factors")) {
                 showPopularityFactors();
             } else if (parser.beginsWith("show popularity")) {

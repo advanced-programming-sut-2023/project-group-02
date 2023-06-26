@@ -73,7 +73,8 @@ public class CellWrapper extends StackPane {
             getChildren().add(imageView);
             cell.setObject(mapObject);
         } else {
-            getChildren().remove(1);
+            getChildren().removeIf(node -> node instanceof ImageView);
+            cell.setObject(null);
         }
     }
 
