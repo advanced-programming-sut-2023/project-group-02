@@ -64,13 +64,13 @@ public class CellWrapper extends StackPane {
 
     public void setObject(MapObject mapObject) {
         cell.setObject(mapObject);
-        // TODO: every MapObject should have a method to get its image, not just
-        // Building
-        if (mapObject != null && mapObject instanceof Building) {
-            ImageView imageView = ((Building) mapObject).getBuildingImage();
-            imageView.setFitWidth(squareSize);
-            imageView.setFitHeight(squareSize);
-            getChildren().add(imageView);
+        if (mapObject != null) {
+            ImageView imageView = mapObject.getImage();
+            if (imageView != null) {
+                imageView.setFitWidth(squareSize);
+                imageView.setFitHeight(squareSize);
+                getChildren().add(imageView);
+            }
             cell.setObject(mapObject);
         } else {
             getChildren().removeIf(node -> node instanceof ImageView);
