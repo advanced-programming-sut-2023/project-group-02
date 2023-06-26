@@ -50,8 +50,6 @@ public class GameMenu {
                     GameMenuController.getCurrentGameCellWrappers().add(cellWrapper);
                 }
 
-                final int finalCol = col;
-                final int finalRow = row;
                 cellWrapper.setOnDragOver(event -> {
                     if (event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -61,9 +59,8 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    boolean success = false;
                     finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
-                    event.setDropCompleted(success);
+                    event.setDropCompleted(true);
                     event.consume();
                 });
 
