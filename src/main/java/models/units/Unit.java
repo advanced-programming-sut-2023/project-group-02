@@ -192,8 +192,8 @@ public class Unit {
         if (this.getType().equals(UnitType.LORD)) return null;
         String url = getClass().getResource(imagePath).toExternalForm();
         ImageView imageView = new javafx.scene.image.ImageView(new Image(url));
-        imageView.setFitWidth(70);
-        imageView.setFitHeight(70);
+        imageView.setFitWidth(40);
+        imageView.setFitHeight(40);
         return imageView;
     }
 }

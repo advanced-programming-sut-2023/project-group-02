@@ -28,7 +28,6 @@ public class BuildingMenu {
                     System.out.println("You can't enter shop menu from other buildings!");
                 } else {
                     System.out.println("You entered shop menu!");
-                    new ShopMenu().run(scanner);
                 }
             } else if (parser.beginsWith("exit")) {
                 System.out.println("You came back to Game!");
