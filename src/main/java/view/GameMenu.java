@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -15,8 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 import models.*;
 import utils.Graphics;
 import utils.Parser;
@@ -63,11 +60,6 @@ public class GameMenu {
                     event.setDropCompleted(true);
                     event.consume();
                 });
-
-                Tooltip tooltip = new Tooltip();
-                tooltip.setShowDelay(Duration.ZERO);
-                tooltip.setText("x: " + col + ", y: " + row);
-                Tooltip.install(cellWrapper, tooltip);
 
                 GridPane.setColumnIndex(cellWrapper, col - fromCol);
                 GridPane.setRowIndex(cellWrapper, row - fromRow);

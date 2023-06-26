@@ -1,9 +1,9 @@
 package models;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
@@ -27,6 +27,12 @@ public class CellWrapper extends StackPane {
         rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(Color.TRANSPARENT);
         getChildren().add(rectangle);
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.setOnShowing(event -> {
+            tooltip.setText(getTooltipText());
+        });
+        Tooltip.install(this, tooltip);
     }
 
     public boolean isSelected() {
@@ -84,5 +90,21 @@ public class CellWrapper extends StackPane {
                 return cellWrapper;
         }
         return null;
+    }
+
+    private String getTooltipText() {
+        StringBuilder tooltipText = new StringBuilder();
+        tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
+        if (getObject() != null) {
+            MapObject object = getObject();
+            if (object instanceof Building building) {
+                tooltipText.append("Building: ");
+            } else {
+                tooltipText.append("Object: ");
+            }
+            tooltipText.append(object.getName()).append("\n");
+        }
+        // TODO: show unit info
+        return tooltipText.toString();
     }
 }
