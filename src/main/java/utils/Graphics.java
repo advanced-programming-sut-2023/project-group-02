@@ -1,6 +1,7 @@
 package utils;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -57,5 +58,16 @@ public class Graphics {
         File randomCaptcha = Randoms.getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha/")));
         Captcha captcha = new Captcha(randomCaptcha.getName().substring(0, 4), layoutX, layoutY);
         return captcha;
+    }
+
+    public static void forceTextFieldsAcceptNumbersOnly(TextField textField, int maxLength) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                return;
+            }
+            if (!Utils.isInteger(newValue) || newValue.length() > maxLength) {
+                textField.setText(oldValue);
+            }
+        });
     }
 }

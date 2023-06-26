@@ -4,6 +4,14 @@
     -fx-fill: #EBECB8;
 }
 
+.title2 {
+    -fx-font-size: 25px;
+    -fx-font: "Arial";
+    -fx-fill: #EBECB8;
+    -fx-stroke: #340000;
+    -fx-stroke-width: 0.6;
+}
+
 .title1-with-hover {
     -fx-font-size: 25px;
     -fx-font: "Arial";
@@ -11,6 +19,18 @@
 }
 
 .title1-with-hover:hover {
+    -fx-fill: #975722;
+}
+
+.title2-with-hover {
+    -fx-font-size: 25px;
+    -fx-font: "Arial";
+    -fx-fill: #EBECB8;
+    -fx-stroke: #340000;
+    -fx-stroke-width: 0.6;
+}
+
+.title2-with-hover:hover {
     -fx-fill: #975722;
 }
 
