@@ -1,11 +1,12 @@
 package models.units;
 
-import controllers.GameMenuController;
 import controllers.UnitMenuController;
-import models.Colors;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import models.Coordinates;
 import models.Map;
 import models.User;
+import utils.Utils;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class Unit {
     private boolean isInBattle = false;
     private boolean hasMoved = false;
     private Coordinates[] patrollingPoint = new Coordinates[2];
+    private String imagePath;
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
@@ -39,6 +41,7 @@ public class Unit {
         this.isLongRange = isLongRange;
         this.canDigMoat = canDigMoat;
         this.canClimbLadder = canClimbLadder;
+        imagePath = "/images/soldiers/" + Utils.toCamelCase(getName()) + ".png";
     }
 
     public int getDamage() {
@@ -182,5 +185,14 @@ public class Unit {
 
     public void setPatrollingPoint(Coordinates[] patrollingPoint) {
         this.patrollingPoint = patrollingPoint;
+    }
+
+    public ImageView getUnitsImage() {
+        //TODO: lord picture or not?
+        if (this.getType().equals(UnitType.LORD)) return null;
+        ImageView imageView = new javafx.scene.image.ImageView(new Image(imagePath));
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(70);
+        return imageView;
     }
 }
