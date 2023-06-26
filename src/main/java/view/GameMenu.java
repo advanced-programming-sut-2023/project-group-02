@@ -219,8 +219,8 @@ public class GameMenu {
             content.putString(building.getName());
             Image image = buildingImage.getImage();
             ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(70);
-            imageView.setFitWidth(70);
+            imageView.setFitHeight(TILE_SIZE);
+            imageView.setFitWidth(TILE_SIZE);
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.GREEN);
             content.putImage(imageView.snapshot(params, null));
