@@ -1,7 +1,5 @@
 package models.units;
 
-import models.Building;
-import models.BuildingFactory;
 import utils.Utils;
 
 import java.lang.reflect.Method;
@@ -13,33 +11,33 @@ public class MakeUnitInstances {
             true, true, true);
     }
 
-    public static Unit makeCrossbowmen() {
+    public static Unit makeCrossbowman() {
         return new Unit(70, 75, 55,
-            20, UnitState.STANDING, UnitType.CROSSBOWMEN,
+            20, UnitState.STANDING, UnitType.CROSSBOWMAN,
             true, false, false);
     }
 
-    public static Unit makeSpearmen() {
+    public static Unit makeSpearman() {
         return new Unit(50, 50, 60,
-            8, UnitState.STANDING, UnitType.SPEARMEN,
+            8, UnitState.STANDING, UnitType.SPEARMAN,
             false, true, true);
     }
 
-    public static Unit makePikemen() {
+    public static Unit makePikeman() {
         return new Unit(76, 77, 60,
-            20, UnitState.STANDING, UnitType.PIKEMEN,
+            20, UnitState.STANDING, UnitType.PIKEMAN,
             false, true, false);
     }
 
-    public static Unit makeMacemen() {
+    public static Unit makeMaceman() {
         return new Unit(75, 70, 85,
-            20, UnitState.STANDING, UnitType.MACEMEN,
+            20, UnitState.STANDING, UnitType.MACEMAN,
             false, true, true);
     }
 
-    public static Unit makeSwordsmen() {
+    public static Unit makeSwordsman() {
         return new Unit(94, 94, 40,
-            40, UnitState.STANDING, UnitType.SWORDSMEN,
+            40, UnitState.STANDING, UnitType.SWORDSMAN,
             false, false, false);
     }
 
@@ -55,9 +53,9 @@ public class MakeUnitInstances {
             false, false, false);
     }
 
-    public static Unit makeLaddermen() {
+    public static Unit makeLadderman() {
         return new Unit(0, 30, 90,
-            4, UnitState.STANDING, UnitType.LADDERMEN,
+            4, UnitState.STANDING, UnitType.LADDERMAN,
             false, false, false);
     }
 
@@ -79,39 +77,39 @@ public class MakeUnitInstances {
             true, false, false);
     }
 
-    public static Unit makeSlaves() {
+    public static Unit makeSlave() {
         return new Unit(10, 20, 90,
-            5, UnitState.STANDING, UnitType.SLAVES,
+            5, UnitState.STANDING, UnitType.SLAVE,
             false, true, false);
     }
 
-    public static Unit makeSlingers() {
+    public static Unit makeSlinger() {
         return new Unit(36, 20, 90,
-            12, UnitState.STANDING, UnitType.SLINGERS,
+            12, UnitState.STANDING, UnitType.SLINGER,
             true, false, false);
     }
 
-    public static Unit makeAssassins() {
+    public static Unit makeAssassin() {
         return new Unit(76, 73, 67,
-            60, UnitState.STANDING, UnitType.ASSASSINS,
+            60, UnitState.STANDING, UnitType.ASSASSIN,
             false, false, false);
     }
 
-    public static Unit makeHorseArchers() {
+    public static Unit makeHorseArcher() {
         return new Unit(50, 55, 95,
-            80, UnitState.STANDING, UnitType.HORSE_ARCHERS,
+            80, UnitState.STANDING, UnitType.HORSE_ARCHER,
             true, false, false);
     }
 
-    public static Unit makeArabianSwordsmen() {
+    public static Unit makeArabianSwordsman() {
         return new Unit(88, 88, 40,
-            80, UnitState.STANDING, UnitType.ARABIAN_SWORDSMEN,
+            80, UnitState.STANDING, UnitType.ARABIAN_SWORDSMAN,
             false, false, false);
     }
 
-    public static Unit makeFireThrowers() {
+    public static Unit makeFireThrower() {
         return new Unit(84, 60, 60,
-            100, UnitState.STANDING, UnitType.FIRE_THROWERS,
+            100, UnitState.STANDING, UnitType.FIRE_THROWER,
             true, false, false);
     }
 

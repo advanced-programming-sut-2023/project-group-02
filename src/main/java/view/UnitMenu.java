@@ -1,15 +1,12 @@
 package view;
 
-import models.units.Unit;
 import models.units.UnitState;
 import models.units.UnitType;
 import utils.Parser;
 import utils.Utils;
 import view.enums.UnitMenuMessages;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 import controllers.UnitMenuController;
 
@@ -126,7 +123,7 @@ public class UnitMenu {
             System.out.println("Please import valid numbers in x and y field!");
             return;
         }
-        if (!UnitMenuController.selectedUnitsType().equals(UnitType.LADDERMEN)) {
+        if (!UnitMenuController.selectedUnitsType().equals(UnitType.LADDERMAN)) {
             System.out.println("Selected unit cannot drop ladders!");
             return;
         }
