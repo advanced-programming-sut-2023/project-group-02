@@ -116,6 +116,9 @@ public class GameMenu {
         gridPane.setOnMouseDragged(event -> {
             handleMouseDragged(event, rootPane);
         });
+        gridPane.setOnMouseClicked(event -> {
+            handleMouseClicked(event, rootPane);
+        });
 
         rootPane.setFocusTraversable(true);
         rootPane.requestFocus();
@@ -234,10 +237,10 @@ public class GameMenu {
     private void handleMousePressed(MouseEvent event, Pane rootPane) {
         if (!event.isPrimaryButtonDown())
             return;
-        for (CellWrapper tile : selectedTiles) {
-            tile.setStroke(Color.TRANSPARENT);
+
+        if (selectedTiles.size() > 1) {
+            clearSelection();
         }
-        selectedTiles.clear();
         selectionStart = new Point2D(event.getX(), event.getY());
     }
 
@@ -256,13 +259,60 @@ public class GameMenu {
             if (!(node instanceof CellWrapper tile))
                 continue;
             if (tile.getBoundsInParent().intersects(minX, minY, maxX - minX, maxY - minY)) {
-                tile.setStroke(Color.WHITE);
-                selectedTiles.add(tile);
+                selectTile(tile);
             } else {
-                tile.setStroke(Color.TRANSPARENT);
-                selectedTiles.remove(tile);
+                unselectTile(tile);
             }
         }
+    }
+
+    private void handleMouseClicked(MouseEvent event, Pane scrollPane) {
+        if (selectedTiles.size() > 1) {
+            handleSelection();
+            return;
+        }
+
+        if (selectedTiles.size() == 1) {
+            clearSelection();
+            return;
+        }
+        if (selectedTiles.size() > 0) {
+            return;
+        }
+
+        Point2D currentPoint = new Point2D(event.getX(), event.getY());
+        for (Node node : gridPane.getChildren()) {
+            if (!(node instanceof CellWrapper tile))
+                continue;
+            if (tile.getBoundsInParent().contains(currentPoint)) {
+                selectTile(tile);
+                handleSelection();
+                break;
+            }
+        }
+    }
+
+    private void selectTile(CellWrapper tile) {
+        tile.setSelected(true);
+        if (!selectedTiles.contains(tile))
+            selectedTiles.add(tile);
+    }
+
+    private void unselectTile(CellWrapper tile) {
+        tile.setSelected(false);
+        selectedTiles.remove(tile);
+    }
+
+    private void clearSelection() {
+        for (CellWrapper tile : selectedTiles) {
+            tile.setSelected(false);
+        }
+        selectedTiles.clear();
+    }
+
+    private void handleSelection() {
+        // TODO
+        System.out.println("selected count:" + selectedTiles.size());
     }
 
     public void run(Scanner scanner) {

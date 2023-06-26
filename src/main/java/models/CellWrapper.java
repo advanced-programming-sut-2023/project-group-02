@@ -13,6 +13,7 @@ public class CellWrapper extends StackPane {
     private static final int squareSize = 70;
     private final Cell cell;
     private Rectangle rectangle;
+    private boolean isSelected = false;
 
     public CellWrapper(Cell cell) {
         super();
@@ -28,8 +29,17 @@ public class CellWrapper extends StackPane {
         getChildren().add(rectangle);
     }
 
-    public void setStroke(Paint paint) {
-        rectangle.setStroke(paint);
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+        if (isSelected) {
+            rectangle.setStroke(Color.WHITE);
+        } else {
+            rectangle.setStroke(Color.TRANSPARENT);
+        }
     }
 
     public static int getSquareSize() {
