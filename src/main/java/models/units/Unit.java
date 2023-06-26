@@ -190,7 +190,8 @@ public class Unit {
     public ImageView getUnitsImage() {
         //TODO: lord picture or not?
         if (this.getType().equals(UnitType.LORD)) return null;
-        ImageView imageView = new javafx.scene.image.ImageView(new Image(imagePath));
+        String url = getClass().getResource(imagePath).toExternalForm();
+        ImageView imageView = new javafx.scene.image.ImageView(new Image(url));
         imageView.setFitWidth(70);
         imageView.setFitHeight(70);
         return imageView;
