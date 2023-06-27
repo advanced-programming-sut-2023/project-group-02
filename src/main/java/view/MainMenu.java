@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.User;
 import utils.Graphics;
+import view.pregame.PreGameMenu;
 
 import java.util.Objects;
 
@@ -95,8 +96,7 @@ public class MainMenu {
 
         Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
         enterGameMenu.setOnAction(event -> {
-            Main.setScene(new GameMenu().getPane());
-            Main.getStage().setFullScreen(true);
+            Main.setScene(new PreGameMenu().getPane());
         });
 
         Button scoreBoard = makeButton(buttons, "ScoreBoard");

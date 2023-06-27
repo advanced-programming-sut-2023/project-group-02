@@ -1,5 +1,6 @@
 package view.pregame;
 
+import controllers.GameMenuController;
 import controllers.SignUpMenuController;
 import controllers.UserController;
 import javafx.scene.control.Alert;
@@ -8,6 +9,8 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
+import models.Game;
+import models.Map;
 import models.User;
 import utils.Graphics;
 import utils.Utils;
@@ -21,7 +24,7 @@ import java.util.Objects;
 
 public class InitGameMenu {
     private final Text numberOfTurnsText = new Text("Number of turns: ");
-    private final TextField numberField = new TextField();
+    private final TextField numberOfTurnsField = new TextField();
     private final Text mapWidthText = new Text("Map width: ");
     private final TextField mapWidthField = new TextField();
     private final Text mapHeightText = new Text("Map height: ");
@@ -70,7 +73,7 @@ public class InitGameMenu {
                 initPlayersFields(pane, 0);
                 return;
             }
-            if (!Utils.isInteger(newValue) || newValue.length() > 1 || Integer.parseInt(newValue) > 8) {
+            if (!Utils.isInteger(newValue) || newValue.length() > 1 || Integer.parseInt(newValue) > 8 || Integer.parseInt(newValue) < 2) {
                 numberOfPlayersField.setText(oldValue);
                 return;
             }
@@ -88,6 +91,7 @@ public class InitGameMenu {
             }
             return;
         }
+        playersUsernamesFields[0].setText(UserController.getCurrentUser().getUsername());
         usernames.setVisible(true);
         for (int i = 0; i < numberOfFields; i++) {
             playersUsernamesFields[i].setVisible(true);
@@ -98,11 +102,12 @@ public class InitGameMenu {
         numberOfTurnsText.setLayoutX(100);
         numberOfTurnsText.setLayoutY(120);
         numberOfTurnsText.getStyleClass().add("title2");
-        numberField.setLayoutX(320);
-        numberField.setLayoutY(100);
-        numberField.setMaxWidth(45);
-        Graphics.forceTextFieldsAcceptNumbersOnly(numberField, 3);
-        pane.getChildren().addAll(numberOfTurnsText, numberField);
+        numberOfTurnsField.setLayoutX(320);
+        numberOfTurnsField.setLayoutY(100);
+        numberOfTurnsField.setMaxWidth(45);
+        numberOfTurnsField.setText("5");
+        Graphics.forceTextFieldsAcceptNumbersOnly(numberOfTurnsField, 3);
+        pane.getChildren().addAll(numberOfTurnsText, numberOfTurnsField);
     }
 
     private void initMapSizeFields(Pane pane) {
@@ -119,6 +124,8 @@ public class InitGameMenu {
         mapHeightField.setLayoutX(320);
         mapHeightField.setLayoutY(180);
         mapHeightField.setMaxWidth(45);
+        mapWidthField.setText("100");
+        mapHeightField.setText("100");
         Graphics.forceTextFieldsAcceptNumbersOnly(mapWidthField, 3);
         Graphics.forceTextFieldsAcceptNumbersOnly(mapHeightField, 3);
 
@@ -131,13 +138,13 @@ public class InitGameMenu {
         confirm.setLayoutY(350);
         confirm.getStyleClass().add("title2-with-hover");
         confirm.setOnMouseClicked(event -> {
-            //TODO complete this
-            if (numberField.getText().isEmpty() || mapWidthField.getText().isEmpty() || mapHeightField.getText().isEmpty() || numberOfPlayersField.getText().isEmpty()) {
+            if (numberOfTurnsField.getText().isEmpty() || mapWidthField.getText().isEmpty() || mapHeightField.getText().isEmpty() || numberOfPlayersField.getText().isEmpty()) {
                 new Alert(Alert.AlertType.ERROR, "Some fields are empty").showAndWait();
                 return;
             }
             if (!checkAndAddAllUsernames()) return;
-
+            GameMenuController.setCurrentGame(new Game(new ArrayList<>(), Integer.parseInt(numberOfTurnsField.getText()),
+                new Map(Integer.parseInt(mapWidthField.getText()), Integer.parseInt(mapHeightField.getText()))));
             Main.setScene(new GameMenu().getPane());
             Main.getStage().setFullScreen(true);
         });

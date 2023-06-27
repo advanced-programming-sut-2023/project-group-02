@@ -35,15 +35,15 @@ public class GameMenu {
     private GridPane gridPane;
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
-            int offsetY) {
+                           int offsetY) {
         gridPane.getChildren().clear();
 
         for (int row = fromRow; row <= toRow && row < map.getHeight(); row++) {
             for (int col = fromCol; col <= toCol && col < map.getWidth(); col++) {
                 CellWrapper cellWrapper;
                 if ((cellWrapper = CellWrapper.findCellWrapperWithXAndY(GameMenuController.getCurrentGameCellWrappers()
-                    , col,row)) == null) {
-                    cellWrapper = new CellWrapper(map.findCellWithXAndY(col,row));
+                    , col, row)) == null) {
+                    cellWrapper = new CellWrapper(map.findCellWithXAndY(col, row));
                     GameMenuController.getCurrentGameCellWrappers().add(cellWrapper);
                 }
 
@@ -89,6 +89,7 @@ public class GameMenu {
     public Pane getPane() {
         Game game = GameMenuController.getCurrentGame();
         if (game == null) {
+            System.out.println("game is null");
             // TODO: remove this
             game = new Game(new ArrayList<>(), 0, new Map(50, 50));
             GameMenuController.setCurrentGame(game);
@@ -213,8 +214,12 @@ public class GameMenu {
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
                 buildingsHBox.getChildren().add(buildingImage);
-                buildingImage.setOnMouseClicked(event -> {rootPane.requestFocus();});
-                buildingImage.setOnMouseDragged(event -> {rootPane.requestFocus();});
+                buildingImage.setOnMouseClicked(event -> {
+                    rootPane.requestFocus();
+                });
+                buildingImage.setOnMouseDragged(event -> {
+                    rootPane.requestFocus();
+                });
                 handleDropBuilding(building, buildingImage);
             }
         }
@@ -223,8 +228,12 @@ public class GameMenu {
         buildingsScrollPane.setMaxHeight(120);
         buildingsScrollPane.setTranslateX(340);
         buildingsScrollPane.setTranslateY(80);
-        buildingsScrollPane.setOnMouseClicked(event -> {rootPane.requestFocus();});
-        buildingsScrollPane.setOnMouseDragged(event -> {rootPane.requestFocus();});
+        buildingsScrollPane.setOnMouseClicked(event -> {
+            rootPane.requestFocus();
+        });
+        buildingsScrollPane.setOnMouseDragged(event -> {
+            rootPane.requestFocus();
+        });
         rootPane.requestFocus();
         hBox.getChildren().add(buildingsScrollPane);
         return hBox;
