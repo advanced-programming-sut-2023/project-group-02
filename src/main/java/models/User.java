@@ -13,7 +13,6 @@ public class User {
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
     private int highScore;
-    private ArrayList<Trade> usersNewTrades = new ArrayList<>();
     private String avatarPath;
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
@@ -95,10 +94,6 @@ public class User {
 
     public boolean passwordEquals(String password) {
         return encrypt(password).equals(this.passwordHash);
-    }
-
-    public ArrayList<Trade> getUsersNewTrades() {
-        return usersNewTrades;
     }
 
     @Override

@@ -1,6 +1,12 @@
 package models;
 
 public class Trade {
+    enum TradeState {
+        ACCEPTED,
+        REJECTED,
+        NOT_SEEN,
+        NOT_ANSWERED,
+    }
     public static int nowId = 1;
     private final int id;
     private final Object resourceType;
@@ -8,11 +14,11 @@ public class Trade {
     private final int price;
     private final String requesterMessage;
     private String acceptorMessage;
-    private final User requester;
-    private User receptionist;
-    private boolean isSeen = false;
+    private final Government requester;
+    private final Government receptionist;
+    TradeState state = TradeState.NOT_SEEN;
 
-    public Trade(User requester, User receptionist, Object resourceType, int amount, int price, String requesterMessage) {
+    public Trade(Government requester, Government receptionist, Object resourceType, int amount, int price, String requesterMessage) {
         this.requester = requester;
         this.receptionist = receptionist;
         this.resourceType = resourceType;
@@ -23,11 +29,11 @@ public class Trade {
         nowId++;
     }
 
-    public User getRequester() {
+    public Government getRequester() {
         return requester;
     }
 
-    public User getReceptionist() {
+    public Government getReceptionist() {
         return receptionist;
     }
 
@@ -51,30 +57,11 @@ public class Trade {
         return price;
     }
 
-    public boolean isAccepted() {
-        return receptionist != null;
+    public TradeState getState() {
+        return state;
     }
 
-    public boolean isSeen() {
-        return isSeen;
-    }
-
-    public void setSeen(boolean seen) {
-        isSeen = seen;
-    }
-
-    @Override
-    public String toString() {
-        String answer = id + ". Requester: " + requester.getUsername();
-        if (isAccepted()) answer += " - Acceptor: " + receptionist.getUsername();
-        if (resourceType instanceof Material) answer += "\nResourceType: " + ((Material) resourceType).getName();
-        else if (resourceType instanceof Food) answer += "\nResourceType: " + ((Food) resourceType).getName();
-        else if (resourceType instanceof MartialEquipment) answer += "\nResourceType: " + ((MartialEquipment) resourceType).getName();
-        answer += " Amount: " + amount + " Price: " + price +
-        "\nRequester Message: " + requesterMessage;
-        if (receptionist != null)
-            answer += "\nAcceptor Message: " + acceptorMessage;
-
-        return answer;
+    public void setState(TradeState state) {
+        this.state = state;
     }
 }

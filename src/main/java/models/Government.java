@@ -26,7 +26,8 @@ public class Government {
     private int fearRate = 0;
     private static final int MIN_FEAR_RATE = -5;
     private static final int MAX_FEAR_RATE = 5;
-
+    private ArrayList<Trade> allSentTrades = new ArrayList<>();
+    private ArrayList<Trade> inboxOfTrades = new ArrayList<>();
     private boolean isLordAlive = true;
 
     public Government(User user, Colors color) {
@@ -36,6 +37,14 @@ public class Government {
 
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    public ArrayList<Trade> getAllSentTrades() {
+        return allSentTrades;
+    }
+
+    public ArrayList<Trade> getInboxOfTrades() {
+        return inboxOfTrades;
     }
 
     public User getUser() {
