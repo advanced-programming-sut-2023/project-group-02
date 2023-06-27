@@ -3,28 +3,26 @@ package view;
 import controllers.GameMenuController;
 import controllers.ItemsController;
 import controllers.TradeMenuController;
-import controllers.UserController;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.Government;
 import models.Trade;
 import models.User;
 import utils.Graphics;
+import view.enums.GameMenuMessages;
 import view.enums.TradeMenuMessages;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class TradeMenu {
@@ -45,6 +43,8 @@ public class TradeMenu {
 
     TextArea messageField = new TextArea();
     TradeType tradeType = TradeType.UNKNOWN;
+    VBox tradeDetailBox;
+    TextArea decideMessageField;
 
     public HBox getPane() {
         initializePane();
@@ -131,7 +131,18 @@ public class TradeMenu {
     }
 
     private void initializeInboxPane() {
+        VBox allInboxTrades = new VBox();
+        Government currentGovernment = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
 
+        for (int i = currentGovernment.getInboxOfTrades().size() - 1; i >= 0; i--) {
+            Trade trade = currentGovernment.getInboxOfTrades().get(i);
+            allInboxTrades.getChildren().add(makeInboxTradesHBox(trade));
+        }
+
+        allInboxTrades.setTranslateX(200);
+        allInboxTrades.setTranslateY(20);
+        allInboxTrades.setSpacing(20);
+        tradeMenuPane.getChildren().add(allInboxTrades);
     }
 
     private void getSentPane() {
@@ -140,18 +151,18 @@ public class TradeMenu {
     }
 
     private void initializeSentPane() {
-        VBox allInboxTrades = new VBox();
+        VBox allSentTrades = new VBox();
         Government currentGovernment = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
 
-        for (int i = currentGovernment.getInboxOfTrades().size() - 1; i >= 0; i--) {
-            Trade trade = currentGovernment.getInboxOfTrades().get(i);
-            allInboxTrades.getChildren().add(makeTradesHBox(trade));
+        for (int i = currentGovernment.getAllSentTrades().size() - 1; i >= 0; i--) {
+            Trade trade = currentGovernment.getAllSentTrades().get(i);
+            allSentTrades.getChildren().add(makeSentTradesHBox(trade));
         }
 
-        allInboxTrades.setTranslateX(200);
-        allInboxTrades.setTranslateY(20);
-        allInboxTrades.setSpacing(20);
-        tradeMenuPane.getChildren().add(allInboxTrades);
+        allSentTrades.setTranslateX(200);
+        allSentTrades.setTranslateY(20);
+        allSentTrades.setSpacing(20);
+        tradeMenuPane.getChildren().add(allSentTrades);
     }
 
 
@@ -248,6 +259,7 @@ public class TradeMenu {
     private VBox makePlayersVBox() {
         VBox playersVBox = new VBox();
         for (User player : GameMenuController.getCurrentGame().getPlayers()) {
+            //TODO: uncomment it
 //            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
                 playersVBox.getChildren().add(makeOnePlayerHBox(player,playersVBox));
         }
@@ -308,7 +320,7 @@ public class TradeMenu {
         Graphics.showMessagePopup(finalMessage);
     }
 
-    private HBox makeTradesHBox(Trade trade) {
+    private HBox makeSentTradesHBox(Trade trade) {
         Text tradeId = new Text(trade.getId() + " ");
         tradeId.getStyleClass().add("title3");
 
@@ -336,8 +348,8 @@ public class TradeMenu {
         }
 
         tradeStateImage.setOnMouseClicked(event -> {
-            if (!trade.getAcceptorMessage().equals("") && trade.getAcceptorMessage() != null) {
-                Graphics.showMessagePopup(trade.getAcceptorMessage());
+            if (!trade.getDeciderMessage().equals("") && trade.getDeciderMessage() != null) {
+                Graphics.showMessagePopup(trade.getDeciderMessage());
             }
         });
 
@@ -345,5 +357,108 @@ public class TradeMenu {
         tradeHBox.getStyleClass().add("hbox1");
         tradeHBox.setSpacing(30);
         return tradeHBox;
+    }
+
+    private HBox makeInboxTradesHBox(Trade trade) {
+        Text tradeId = new Text(trade.getId() + " ");
+        tradeId.getStyleClass().add("title3");
+
+        ImageView avatar = GameMenuController.findUserWithGovernment(trade.getRequester()).getAvatar();
+        avatar.setFitHeight(30);
+        avatar.setFitWidth(30);
+
+        Text usernameText = new Text(GameMenuController.findUserWithGovernment(trade.getRequester()).getUsername());
+        if (trade.getState().equals(Trade.TradeState.NOT_SEEN)) {
+            usernameText.setFont(new Font("Arial",20));
+            usernameText.setFill(Color.YELLOW);
+        }
+        else usernameText.getStyleClass().add("title3");
+
+        ImageView itemImage = ItemsController.getItemsImage(trade.getResourceType());
+        itemImage.setFitWidth(31);
+        itemImage.setFitHeight(31);
+
+        Text itemAmountText = new Text(trade.getAmount() + " ");
+        itemAmountText.getStyleClass().add("title3");
+
+        ImageView tradeStateImage = new ImageView();
+        tradeStateImage.setFitHeight(31);
+        tradeStateImage.setFitWidth(31);
+        if (trade.getState().equals(Trade.TradeState.REJECTED)) {
+            tradeStateImage.setImage(new Image(getClass().getResource("/images/others/cross.jpg").toExternalForm()));
+        } else if (trade.getState().equals(Trade.TradeState.ACCEPTED)) {
+            tradeStateImage.setImage(new Image(getClass().getResource("/images/others/check.jpg").toExternalForm()));
+        }
+
+        HBox tradeHBox = new HBox(tradeId,avatar,usernameText,itemImage,itemAmountText,tradeStateImage);
+        tradeHBox.getStyleClass().add("hbox1");
+        tradeHBox.setOnMouseClicked(event -> {
+            if (trade.getState().equals(Trade.TradeState.NOT_SEEN) || trade.getState().equals(Trade.TradeState.NOT_ANSWERED)) {
+                tradeDetailBox = makeDetailBox(trade);
+                tradeMenuPane.getChildren().add(tradeDetailBox);
+            }
+        });
+
+        tradeHBox.setSpacing(30);
+        return tradeHBox;
+    }
+
+    private VBox makeDetailBox(Trade trade) {
+        Text resourceAndAmount = new Text(ItemsController.getItemName(trade.getResourceType()) + " " + trade.getAmount());
+        resourceAndAmount.getStyleClass().add("title3");
+        Text message = new Text("Message:\n" + trade.getRequesterMessage());
+        message.getStyleClass().add("title3");
+        message.maxWidth(300);
+
+        Button acceptButton = new Button("Accept");
+        acceptButton.getStyleClass().add("button1");
+        acceptButton.setOnAction(event -> {
+            acceptTrade(trade);
+            getInboxPane();
+        });
+
+        Button rejectButton = new Button("Reject");
+        rejectButton.getStyleClass().add("button1");
+        rejectButton.setOnAction(event -> {
+            rejectTrade(trade);
+            getInboxPane();
+        });
+
+        Button ignoreButton = new Button("Ignore");
+        ignoreButton.getStyleClass().add("button1");
+        ignoreButton.setOnAction(event -> {
+            ignoreTrade(trade);
+            getInboxPane();
+        });
+
+        HBox buttons = new HBox(acceptButton,rejectButton,ignoreButton);
+        buttons.setSpacing(10);
+
+        decideMessageField = new TextArea();
+        decideMessageField.setPromptText("Message:");
+        decideMessageField.setMaxWidth(300);
+
+        VBox vBox = new VBox(resourceAndAmount,message,buttons,decideMessageField);
+        vBox.setTranslateX(250);
+        vBox.setTranslateY(300);
+        vBox.setSpacing(10);
+        return vBox;
+    }
+
+
+    private void acceptTrade(Trade trade) {
+        TradeMenuMessages message = TradeMenuController.acceptTrade(trade,decideMessageField.getText());
+        Graphics.showMessagePopup(message.getMessage());
+        if (message.equals(TradeMenuMessages.ACCEPTED))
+            trade.setState(Trade.TradeState.ACCEPTED);
+    }
+
+    private void rejectTrade(Trade trade) {
+        trade.setState(Trade.TradeState.REJECTED);
+        trade.setDeciderMessage(decideMessageField.getText());
+    }
+
+    private void ignoreTrade(Trade trade) {
+        trade.setState(Trade.TradeState.NOT_ANSWERED);
     }
 }

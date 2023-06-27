@@ -45,16 +45,11 @@ public class TradeMenuController {
         return TradeMenuMessages.REQUEST_IS_MADE;
     }
 
-    public static TradeMenuMessages acceptTrade(int id, String message) {
-        Trade trade;
-        if ((trade = findTradeById(id)) == null)
-            return TradeMenuMessages.ID_DOESNT_EXIST;
+    public static TradeMenuMessages acceptTrade(Trade trade, String message) {
         if (GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(trade.getResourceType()) < trade.getAmount())
             return TradeMenuMessages.NOT_ENOUGH_MATERIAL;
-        if (trade.getRequester().equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
-            return TradeMenuMessages.CANT_ACCEPT_YOUR_TRADE;
 
-        trade.setAcceptorMessage(message);
+        trade.setDeciderMessage(message);
         tradeDone(trade);
         return TradeMenuMessages.ACCEPTED;
     }

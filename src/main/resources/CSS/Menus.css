@@ -156,6 +156,10 @@
     -fx-padding: 10px;
 }
 
+.hbox1:hover {
+    -fx-background-color: black;
+}
+
 .title3 {
     -fx-fill: white;
     -fx-font-size: 16px;

@@ -13,7 +13,7 @@ public class Trade {
     private final int amount;
     private final int price;
     private final String requesterMessage;
-    private String acceptorMessage;
+    private String deciderMessage;
     private final Government requester;
     private final Government receptionist;
     TradeState state = TradeState.NOT_SEEN;
@@ -41,16 +41,16 @@ public class Trade {
         return resourceType;
     }
 
-    public void setAcceptorMessage(String acceptorMessage) {
-        this.acceptorMessage = acceptorMessage;
+    public void setDeciderMessage(String deciderMessage) {
+        this.deciderMessage = deciderMessage;
     }
 
     public String getRequesterMessage() {
         return requesterMessage;
     }
 
-    public String getAcceptorMessage() {
-        return acceptorMessage;
+    public String getDeciderMessage() {
+        return deciderMessage;
     }
 
     public int getId() {
