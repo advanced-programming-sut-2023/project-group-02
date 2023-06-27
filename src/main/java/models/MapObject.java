@@ -1,5 +1,6 @@
 package models;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public abstract class MapObject {
@@ -42,10 +43,10 @@ public abstract class MapObject {
     }
 
     public ImageView getImage() {
-        if (this instanceof Building) return ((Building) this).getBuildingImage();
-        else {
-            //TODO when tree and rocks are added
-        }
-        return null;
+        String url = getClass().getResource(imagePath).toExternalForm();
+        ImageView imageView = new ImageView(new Image(url));
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(70);
+        return imageView;
     }
 }

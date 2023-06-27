@@ -108,7 +108,32 @@ public class GameMenuController {
         if (building instanceof PlainBuilding && !government.hasEnoughWorkerForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         }
-        currentGame.addObject(building, x, y);
+        currentGame.addObject(building, x, y, true);
+        //TODO fix this after map initialization
+        government.recruitPeople(building.getWorkerCount(), building);
+        if (useMaterials)
+            government.reduceMaterialsForBuilding(building);
+        else if (building instanceof PlainBuilding)
+            ((PlainBuilding) building).addPeople(((PlainBuilding) building).getMaxPeople());
+
+        return GameMenuMessages.DONE_SUCCESSFULLY;
+    }
+
+    public static GameMenuMessages dropBuilding(int x, int y, Building building, boolean useMaterials) {
+        if (!Validation.areCoordinatesValid(x, y)) {
+            return GameMenuMessages.INVALID_PLACE;
+        }
+        if (currentGame.getMap().findCellWithXAndY(x, y).isOccupied()) {
+            return GameMenuMessages.FULL_CELL;
+        }
+        Government government = currentGame.getPlayersGovernment(getCurrentGame().getCurrentPlayer());
+        if (useMaterials && !government.hasEnoughMaterialsForBuilding(building)) {
+            return GameMenuMessages.NOT_ENOUGH_MATERIALS;
+        }
+        if (building instanceof PlainBuilding && !government.hasEnoughWorkerForBuilding(building)) {
+            return GameMenuMessages.NOT_ENOUGH_PEOPLE;
+        }
+        currentGame.addObject(building, x, y, true);
         //TODO fix this after map initialization
         government.recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
@@ -195,7 +220,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
 
         //TODO handle the textures in which we cant drop rock
-        currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y);
+        currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y, false);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -208,7 +233,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop tree
-        currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y);
+        currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y, false);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 

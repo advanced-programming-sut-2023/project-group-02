@@ -7,6 +7,7 @@ public class Tree extends MapObject {
         this.type = type;
         this.name = type.getTreeName();
         this.owner = null;
+        this.imagePath = "/images/plants/" + type.getTreeNameForPath() + ".png";
     }
 
     public TreeType getType() {

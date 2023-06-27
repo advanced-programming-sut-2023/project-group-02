@@ -27,6 +27,7 @@ import java.util.Scanner;
 
 public class GameMenu {
     private boolean isGameOver = false;
+    private boolean isPreGame = false;
     private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
 
@@ -48,6 +49,10 @@ public class GameMenu {
                     GameMenuController.getCurrentGameCellWrappers().add(cellWrapper);
                 }
 
+                if (cellWrapper.getObject() != null) {
+                    cellWrapper.getChildren().add(cellWrapper.getObject().getImage());
+                }
+                
                 cellWrapper.setOnDragOver(event -> {
                     if (event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -57,10 +62,9 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
+                    finalCellWrapper.dropObject(db.getString(), db.getImage(), isPreGame);
                     event.setDropCompleted(true);
                     event.consume();
-                    //TODO fix this part
                 });
 
                 GridPane.setColumnIndex(cellWrapper, col - fromCol);
@@ -89,6 +93,7 @@ public class GameMenu {
     }
 
     public Pane getPane(boolean isPreGame) {
+        this.isPreGame = isPreGame;
         Game game = GameMenuController.getCurrentGame();
         if (game == null) {
             System.out.println("game is null");
@@ -183,10 +188,7 @@ public class GameMenu {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             String name = clipboard.getString();
             if (name != null) {
-                Building building = BuildingFactory.makeBuilding(name);
-                if (building != null) {
-                    cellWrapper.setObject(building);
-                }
+                cellWrapper.dropObject(name, clipboard.getImage(), isPreGame);
             }
         }
     }
@@ -241,6 +243,17 @@ public class GameMenu {
                 rootPane.requestFocus();
             });
             handleDropItems(treeType.getTreeName(), treeImage);
+        }
+        for (Directions directions : Directions.values()) {
+            ImageView rockImage = new Rock(directions).getImageView();
+            itemsHBox.getChildren().add(rockImage);
+            rockImage.setOnMouseClicked(event -> {
+                rootPane.requestFocus();
+            });
+            rockImage.setOnMouseDragged(event -> {
+                rootPane.requestFocus();
+            });
+            handleDropItems(directions.name().toLowerCase(), rockImage);
         }
     }
 

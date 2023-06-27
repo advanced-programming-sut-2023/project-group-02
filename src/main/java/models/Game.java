@@ -1,6 +1,7 @@
 package models;
 
 import controllers.GameMenuController;
+import controllers.UserController;
 import models.units.Unit;
 import models.units.UnitState;
 import models.units.UnitType;
@@ -27,7 +28,7 @@ public class Game {
         this.governments = governments;
         this.numberOfTurns = numberOfTurns;
         this.map = map;
-        GameMenuController.getAllMadeCellWrappers().put(this,new ArrayList<>());
+        GameMenuController.getAllMadeCellWrappers().put(this, new ArrayList<>());
     }
 
     public void addGovernment(Government government) {
@@ -48,8 +49,11 @@ public class Game {
         return getPlayersGovernment(getCurrentPlayer());
     }
 
-    public void addObject(MapObject object, int x, int y) {
-        addObject(object, getCurrentPlayer(), x, y);
+    public void addObject(MapObject object, int x, int y, boolean hasOwner) {
+        if (hasOwner)
+            addObject(object, getCurrentPlayer(), x, y);
+        else
+            addObject(object, UserController.getCurrentUser(), x, y);
     }
 
     public void addObject(MapObject object, User owner, int x, int y) {
