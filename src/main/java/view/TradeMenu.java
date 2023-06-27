@@ -259,8 +259,7 @@ public class TradeMenu {
     private VBox makePlayersVBox() {
         VBox playersVBox = new VBox();
         for (User player : GameMenuController.getCurrentGame().getPlayers()) {
-            //TODO: uncomment it
-//            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
                 playersVBox.getChildren().add(makeOnePlayerHBox(player,playersVBox));
         }
         playersVBox.setSpacing(10);
