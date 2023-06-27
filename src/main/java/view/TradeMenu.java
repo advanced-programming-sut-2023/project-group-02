@@ -4,6 +4,7 @@ import controllers.GameMenuController;
 import controllers.ItemsController;
 import controllers.TradeMenuController;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -12,11 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import models.Colors;
 import models.User;
 import utils.Graphics;
 import view.enums.TradeMenuMessages;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class TradeMenu {
@@ -47,7 +51,7 @@ public class TradeMenu {
     private void initializePane() {
         tradeMenuPane.getChildren().clear();
         selectedItem = null;
-        tradeMenuPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/main-menu.jpg"))));
+        tradeMenuPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/trade-menu.jpg"))));
         tradeMenuPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
 
         Button newTradeButton = new Button("Request New Trade");
@@ -109,10 +113,11 @@ public class TradeMenu {
         VBox pricingVBox = makePricingVBox();
         pricingVBox.setTranslateX(260);
         VBox messageAndConfirmVBox = makeMessageAndConfirmVBox();
+        messageAndConfirmVBox.setTranslateX(150);
         VBox mainVBox = new VBox(itemsVBox,selectedVBox,pricingVBox,messageAndConfirmVBox);
         VBox vBoxOfPlayers = makePlayersVBox();
         mainVBox.setSpacing(70);
-        tradeMenuPane.getChildren().add(mainVBox);
+        tradeMenuPane.getChildren().addAll(mainVBox,vBoxOfPlayers);
     }
 
 
@@ -213,10 +218,11 @@ public class TradeMenu {
         messageField.setPrefColumnCount(10);
         messageField.setPrefRowCount(3);
         messageField.setTranslateY(-20);
+        messageField.setMaxWidth(500);
         Button confirmButton = new Button("Confirm");
         confirmButton.getStyleClass().add("button1");
-        confirmButton.setTranslateX(200);
-        confirmButton.setMaxWidth(30);
+        confirmButton.setMaxWidth(20);
+        confirmButton.setTranslateX(50);
         confirmButton.setOnAction(event -> makeTheTrade());
 
         VBox vBox = new VBox(messageField,confirmButton);
@@ -227,13 +233,15 @@ public class TradeMenu {
     private VBox makePlayersVBox() {
         VBox playersVBox = new VBox();
         for (User player : GameMenuController.getCurrentGame().getPlayers()) {
-            playersVBox.getChildren().add(makeOnePlayerHBox(player));
+            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+                playersVBox.getChildren().add(makeOnePlayerHBox(player,playersVBox));
         }
         playersVBox.setSpacing(10);
+        playersVBox.setTranslateY(10);
         return playersVBox;
     }
 
-    private HBox makeOnePlayerHBox(User player) {
+    private HBox makeOnePlayerHBox(User player, VBox playersVBox) {
         ImageView avatar = player.getAvatar();
         avatar.setFitWidth(50);
         avatar.setFitHeight(50);
@@ -244,10 +252,28 @@ public class TradeMenu {
         HBox onePlayer = new HBox(avatar,username);
         onePlayer.setOnMouseClicked(event -> {
             selectedUser = player;
+            for (Text text : getAllUsernamesText(playersVBox)) {
+                text.setStroke(Color.WHITE);
+            }
+            username.setStroke(Color.RED);
         });
         onePlayer.setSpacing(10);
         return onePlayer;
     }
+
+    private ArrayList<Text> getAllUsernamesText(VBox vBox) {
+        ArrayList<Text> allUsernameText = new ArrayList<>();
+        for (Node child : vBox.getChildren()) {
+            if (child instanceof HBox) {
+                for (Node node : ((HBox) child).getChildren()) {
+                    if (node instanceof Text)
+                        allUsernameText.add((Text) node);
+                }
+            }
+        }
+        return allUsernameText;
+    }
+
     private void makeTheTrade() {
         String finalMessage = "";
         if (tradeType.equals(TradeType.UNKNOWN)) {
@@ -255,21 +281,15 @@ public class TradeMenu {
         } else if (tradeType.equals(TradeType.REQUEST) && priceTextField.getText().equals("")) {
             finalMessage = "Please fill all the fields!";
         } else {
-            TradeMenuMessages message = TradeMenuController.tradeRequest(selectedUser, selectedItem, selectedAmount,
+            TradeMenuMessages message;
+            if (tradeType.equals(TradeType.DONATE))
+                message = TradeMenuController.tradeRequest(selectedUser, selectedItem, selectedAmount,
+                    "0", messageField.getText());
+            else message = TradeMenuController.tradeRequest(selectedUser, selectedItem, selectedAmount,
                 priceTextField.getText(), messageField.getText());
+
             finalMessage = message.getMessage();
-            if (message.equals(TradeMenuMessages.ACCEPTED)) reset();
         }
         Graphics.showMessagePopup(finalMessage);
-    }
-
-    private void reset() {
-        selectedItemImage = new ImageView();
-        selectedUser = null;
-        selectedItem = null;
-        selectedAmount = 0;
-        selectedItemName = new Text();
-        messageField.setText("");
-        priceTextField.setText("");
     }
 }

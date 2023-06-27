@@ -1,10 +1,11 @@
 package view.enums;
 
 public enum TradeMenuMessages {
-    INVALID_RESOURCE("Please enter name of a valid resource!"),
+    INVALID_RESOURCE("Choose the item you want please!"),
     NOT_ENOUGH_MONEY("You don't have enough money!"),
     NOT_ENOUGH_MATERIAL("You don't have enough material!"),
     ALREADY_ACCEPTED("This trade is already accepted!"),
+    NULL_RECEPTIONIST("Choose the user you want to trade with please!"),
     ID_DOESNT_EXIST("This id doesn't exist!"),
     INVALID_PRICE("Please import a valid price!"),
     INVALID_AMOUNT("Please import a valid amount!"),

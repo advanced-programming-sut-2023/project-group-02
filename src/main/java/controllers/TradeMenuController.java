@@ -20,26 +20,20 @@ public class TradeMenuController {
         return null;
     }
 
-    public static String showAllTrades() {
-        if (allTrades.size() == 0) return "There are no trades yet!";
-        StringBuilder answer = new StringBuilder();
-        for (Trade trade : allTrades) {
-            answer.append(trade.toString()).append("\n");
-        }
-        return answer.toString().trim();
-    }
-
     public static TradeMenuMessages tradeRequest(User receptionist ,Object item, int amount, String priceStr, String message) {
         if (!Utils.isInteger(priceStr)) return TradeMenuMessages.INVALID_PRICE;
         int price = Integer.parseInt(priceStr);
 
+        if (item == null)
+            return TradeMenuMessages.INVALID_RESOURCE;
         if (amount < 0)
             return TradeMenuMessages.INVALID_AMOUNT;
         if (price < 0)
             return TradeMenuMessages.INVALID_PRICE;
-
         if (price > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD))
             return TradeMenuMessages.NOT_ENOUGH_MONEY;
+        if (receptionist == null)
+            return TradeMenuMessages.NULL_RECEPTIONIST;
 
         Government requesterGovernment = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
         Government receptionistGovernment = GameMenuController.getCurrentGame().getPlayersGovernment(receptionist);
