@@ -96,8 +96,7 @@ public class MainMenu {
 
         Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
         enterGameMenu.setOnAction(event -> {
-            Main.setScene(new GameMenu().getPane());
-            Main.getStage().setFullScreen(true);
+            Main.setScene(new PreGameMenu().getPane());
         });
 
         Button scoreBoard = makeButton(buttons, "ScoreBoard");
