@@ -1,6 +1,8 @@
 package models;
 
+import controllers.GameMenuController;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -81,6 +83,24 @@ public class CellWrapper extends StackPane {
         } else {
             getChildren().removeIf(node -> node instanceof ImageView);
             cell.setObject(null);
+        }
+    }
+
+    public void dropObject(String objectName, Image objectImage, boolean isPreGame) {
+        Building building = null;
+        if (Directions.getDirectionsLowerCase().contains(objectName))
+            GameMenuController.dropRock(cell.getX(), cell.getY(), objectName);
+        else if (TreeType.getTreeNamesList().contains(objectName))
+            GameMenuController.dropTree(cell.getX(), cell.getY(), objectName);
+        else if ((building = BuildingFactory.makeBuilding(objectName)) != null)
+            GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
+        else
+            return;
+        ImageView imageView = cell.getObject().getImage();
+        if (imageView != null) {
+            imageView.setFitWidth(squareSize);
+            imageView.setFitHeight(squareSize);
+            getChildren().add(imageView);
         }
     }
 
