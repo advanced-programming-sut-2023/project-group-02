@@ -59,6 +59,7 @@ public class GameMenu {
                     finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
                     event.setDropCompleted(true);
                     event.consume();
+                    System.out.println(map.findCellWithXAndY(1, 1));
                 });
 
                 GridPane.setColumnIndex(cellWrapper, col - fromCol);
@@ -635,7 +636,7 @@ public class GameMenu {
         int x = Integer.parseInt(parser.get("x"));
         int y = Integer.parseInt(parser.get("y"));
         String type = parser.get("type");
-        GameMenuMessages message = GameMenuController.dropBuilding(x, y, type, useMaterials);
+        GameMenuMessages message = GameMenuController.dropBuilding(x, y, player, type, useMaterials);
         System.out.println(message.getMessage());
     }
 

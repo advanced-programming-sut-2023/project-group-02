@@ -8,29 +8,25 @@ import javafx.scene.paint.Paint;
 public enum Texture {
     EARTH("earth", Colors.RED, "tiles/Tiles/Plain1.jpg"),
     EARTH_WITH_GRAVEL("earth with gravel", Colors.CYAN, "tiles/Tiles/Plain3.jpg"),
-    SLATE("slate",Colors.BLACK),
-    ROCK("rock",Colors.BLACK),
-    IRON("iron",Colors.PURPLE),
+    SLATE("slate", Colors.BLACK, "tiles/slate.jpg"),
+    ROCK("rock", Colors.BLACK, "tiles/rocky.jpg"),
+    IRON("iron", Colors.PURPLE, "tiles/iron.jpg"),
     GRASS("grass", Colors.GREEN, "tiles/tile/grass_tile.jpg"),
-    MEADOW("meadow",Colors.YELLOW),
-    DENSE_MEADOW("dense meadow",Colors.YELLOW),
+    MEADOW("meadow", Colors.YELLOW, "tiles/meadow.jpg"),
+    DENSE_MEADOW("dense meadow", Colors.YELLOW, "tiles/dense_meadow.jpg"),
     SEA("sea", Colors.BLUE, "tiles/tile/sea_tile.jpg"),
-    BEACH("beach",Colors.YELLOW), //units cant pass
-    OIL("oil",Colors.RED),
+    BEACH("beach", Colors.YELLOW, "tiles/beach.jpg"), //units cant pass
+    OIL("oil", Colors.RED, "tiles/oil.jpg"),
     SHALLOW_WATER("shallow water", Colors.BLUE, "tiles/tile/gulf_tile.jpg"), // units can pass
-    PLAIN("plain",Colors.GREEN), //kills units
+    PLAIN("plain", Colors.GREEN, "tiles/plain.jpg"), //kills units
     ;
 
     private final String name;
     private final Colors color;
     private final String path;
 
-    private final static Texture[] allTextures = {EARTH,EARTH_WITH_GRAVEL,SLATE,ROCK,IRON,GRASS,MEADOW,DENSE_MEADOW
-    ,SEA,BEACH,OIL,SHALLOW_WATER,PLAIN};
-
-    Texture(String name, Colors color) {
-        this(name, color, null);
-    }
+    private final static Texture[] allTextures = {EARTH, EARTH_WITH_GRAVEL, SLATE, ROCK, IRON, GRASS, MEADOW, DENSE_MEADOW
+        , SEA, BEACH, OIL, SHALLOW_WATER, PLAIN};
 
     Texture(String name, Colors color, String path) {
         this.name = name;

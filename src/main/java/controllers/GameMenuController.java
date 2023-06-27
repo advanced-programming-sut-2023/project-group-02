@@ -20,7 +20,7 @@ import java.util.Scanner;
 
 public class GameMenuController {
     private static Game currentGame;
-    private static HashMap<Game,ArrayList<CellWrapper>> allMadeCellWrappers = new HashMap<>();
+    private static HashMap<Game, ArrayList<CellWrapper>> allMadeCellWrappers = new HashMap<>();
     private static HashMap<User, Game> savedGames = new HashMap<>();
 
     public static void saveGame() {
@@ -109,6 +109,7 @@ public class GameMenuController {
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         }
         currentGame.addObject(building, x, y);
+        //TODO fix this after map initialization
         government.recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
             government.reduceMaterialsForBuilding(building);
@@ -116,10 +117,6 @@ public class GameMenuController {
             ((PlainBuilding) building).addPeople(((PlainBuilding) building).getMaxPeople());
 
         return GameMenuMessages.DONE_SUCCESSFULLY;
-    }
-
-    public static GameMenuMessages dropBuilding(int x, int y, String buildingName, boolean useMaterials) {
-        return dropBuilding(x, y, currentGame.getCurrentPlayer(), buildingName, useMaterials);
     }
 
     public static GameMenuMessages selectBuilding(int x, int y) {
@@ -156,8 +153,9 @@ public class GameMenuController {
 
         if (!Validation.areCoordinatesValid(x, y))
             return GameMenuMessages.INVALID_PLACE;
-        if ((texture = Texture.findTextureWithName(textureType)) == null)
+        if ((texture = Texture.findTextureWithName(textureType)) == null) {
             return GameMenuMessages.INVALID_TEXTURE;
+        }
         if ((cell = currentGame.getMap().findCellWithXAndY(x, y)).isOccupied())
             return GameMenuMessages.FULL_CELL;
         if (cell.getTexture().equals(texture))
