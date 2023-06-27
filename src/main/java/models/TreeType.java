@@ -34,11 +34,11 @@ public enum TreeType {
     }
 
     public Paint getPaint() {
-        return new ImagePattern(new Image(TreeType.class.getResource("/images/plants/" + path).toExternalForm()));
+        return new ImagePattern(new Image(getClass().getResource("/images/plants/" + path).toExternalForm()));
     }
 
     public ImageView getImageView() {
-        ImageView imageView = new ImageView(new Image(TreeType.class.getResource("/images/plants/" + path).toExternalForm()));
+        ImageView imageView = new ImageView(new Image(getClass().getResource("/images/plants/" + path).toExternalForm()));
         imageView.setFitHeight(70);
         imageView.setFitWidth(70);
         return imageView;

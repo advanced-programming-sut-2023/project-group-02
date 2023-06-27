@@ -21,6 +21,7 @@ import utils.Utils;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Scanner;
 
