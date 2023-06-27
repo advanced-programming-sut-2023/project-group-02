@@ -3,6 +3,7 @@ package controllers;
 import models.Material;
 import models.Trade;
 import models.User;
+import utils.Utils;
 import view.enums.TradeMenuMessages;
 
 import java.util.ArrayList;
@@ -27,18 +28,19 @@ public class TradeMenuController {
         return answer.toString().trim();
     }
 
-    public static TradeMenuMessages tradeRequest(String resourceType, int amount, int price, String message) {
-        Object item;
-        if ((item = ItemsController.findItemWithName(resourceType)) == null)
-            return TradeMenuMessages.INVALID_RESOURCE;
+    public static TradeMenuMessages tradeRequest(User receptionist ,Object item, int amount, String priceStr, String message) {
+        if (!Utils.isInteger(priceStr)) return TradeMenuMessages.INVALID_PRICE;
+        int price = Integer.parseInt(priceStr);
+
         if (amount < 0)
             return TradeMenuMessages.INVALID_AMOUNT;
         if (price < 0)
             return TradeMenuMessages.INVALID_PRICE;
+
         if (price > GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD))
             return TradeMenuMessages.NOT_ENOUGH_MONEY;
 
-//        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(),item,amount,price,message));
+        allTrades.add(new Trade(GameMenuController.getCurrentGame().getCurrentPlayer(), receptionist,item,amount,price,message));
         return TradeMenuMessages.REQUEST_IS_MADE;
     }
 
