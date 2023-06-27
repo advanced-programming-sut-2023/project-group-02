@@ -275,6 +275,14 @@ public class GameMenuController {
         }
     }
 
+    public static User findUserWithGovernment(Government government) {
+        for (User player : currentGame.getPlayers()) {
+            if (currentGame.getPlayersGovernment(player).equals(government))
+                return player;
+        }
+        return null;
+    }
+
     public static void nextTurn(GameMenu gameMenu) {
         currentGame.nextTurn(gameMenu);
     }

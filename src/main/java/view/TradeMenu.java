@@ -3,24 +3,28 @@ package view;
 import controllers.GameMenuController;
 import controllers.ItemsController;
 import controllers.TradeMenuController;
+import controllers.UserController;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import models.Colors;
+import models.Government;
+import models.Trade;
 import models.User;
 import utils.Graphics;
 import view.enums.TradeMenuMessages;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class TradeMenu {
@@ -127,7 +131,7 @@ public class TradeMenu {
     }
 
     private void initializeInboxPane() {
-        tradeMenuPane.getChildren().add(new Button("impolite person"));
+
     }
 
     private void getSentPane() {
@@ -136,7 +140,18 @@ public class TradeMenu {
     }
 
     private void initializeSentPane() {
+        VBox allInboxTrades = new VBox();
+        Government currentGovernment = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
 
+        for (int i = currentGovernment.getInboxOfTrades().size() - 1; i >= 0; i--) {
+            Trade trade = currentGovernment.getInboxOfTrades().get(i);
+            allInboxTrades.getChildren().add(makeTradesHBox(trade));
+        }
+
+        allInboxTrades.setTranslateX(200);
+        allInboxTrades.setTranslateY(20);
+        allInboxTrades.setSpacing(20);
+        tradeMenuPane.getChildren().add(allInboxTrades);
     }
 
 
@@ -233,7 +248,7 @@ public class TradeMenu {
     private VBox makePlayersVBox() {
         VBox playersVBox = new VBox();
         for (User player : GameMenuController.getCurrentGame().getPlayers()) {
-            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+//            if (!player.equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
                 playersVBox.getChildren().add(makeOnePlayerHBox(player,playersVBox));
         }
         playersVBox.setSpacing(10);
@@ -291,5 +306,44 @@ public class TradeMenu {
             finalMessage = message.getMessage();
         }
         Graphics.showMessagePopup(finalMessage);
+    }
+
+    private HBox makeTradesHBox(Trade trade) {
+        Text tradeId = new Text(trade.getId() + " ");
+        tradeId.getStyleClass().add("title3");
+
+        ImageView avatar = GameMenuController.findUserWithGovernment(trade.getReceptionist()).getAvatar();
+        avatar.setFitHeight(30);
+        avatar.setFitWidth(30);
+
+        Text usernameText = new Text(GameMenuController.findUserWithGovernment(trade.getReceptionist()).getUsername());
+        usernameText.getStyleClass().add("title3");
+
+        ImageView itemImage = ItemsController.getItemsImage(trade.getResourceType());
+        itemImage.setFitWidth(30);
+        itemImage.setFitHeight(30);
+
+        Text itemAmountText = new Text(trade.getAmount() + " ");
+        itemAmountText.getStyleClass().add("title3");
+
+        ImageView tradeStateImage = new ImageView();
+        tradeStateImage.setFitHeight(30);
+        tradeStateImage.setFitWidth(30);
+        if (trade.getState().equals(Trade.TradeState.REJECTED)) {
+            tradeStateImage.setImage(new Image(getClass().getResource("/images/others/cross.jpg").toExternalForm()));
+        } else if (trade.getState().equals(Trade.TradeState.ACCEPTED)) {
+            tradeStateImage.setImage(new Image(getClass().getResource("/images/others/check.jpg").toExternalForm()));
+        }
+
+        tradeStateImage.setOnMouseClicked(event -> {
+            if (!trade.getAcceptorMessage().equals("") && trade.getAcceptorMessage() != null) {
+                Graphics.showMessagePopup(trade.getAcceptorMessage());
+            }
+        });
+
+        HBox tradeHBox = new HBox(tradeId,avatar,usernameText,itemImage,itemAmountText,tradeStateImage);
+        tradeHBox.getStyleClass().add("hbox1");
+        tradeHBox.setSpacing(30);
+        return tradeHBox;
     }
 }

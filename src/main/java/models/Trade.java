@@ -1,7 +1,7 @@
 package models;
 
 public class Trade {
-    enum TradeState {
+    public enum TradeState {
         ACCEPTED,
         REJECTED,
         NOT_SEEN,
@@ -43,6 +43,14 @@ public class Trade {
 
     public void setAcceptorMessage(String acceptorMessage) {
         this.acceptorMessage = acceptorMessage;
+    }
+
+    public String getRequesterMessage() {
+        return requesterMessage;
+    }
+
+    public String getAcceptorMessage() {
+        return acceptorMessage;
     }
 
     public int getId() {
