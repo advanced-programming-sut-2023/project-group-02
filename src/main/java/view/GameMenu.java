@@ -163,7 +163,14 @@ public class GameMenu {
 
         HBox bottomMenuHBox = makeDefaultBottomMenuHBox(isPreGame);
         rootPane.getChildren().add(bottomMenuHBox);
+        doPreGameProcess(isPreGame);
         return rootPane;
+    }
+
+    private void doPreGameProcess(boolean isPreGame) {
+        if (!isPreGame)
+            return;
+        //TODO complete this method
     }
 
     private void paste() {
@@ -223,7 +230,17 @@ public class GameMenu {
     }
 
     private void addTreesAndRocksToHBox(HBox itemsHBox) {
-        
+        for (TreeType treeType : TreeType.values()) {
+            ImageView treeImage = treeType.getImageView();
+            itemsHBox.getChildren().add(treeImage);
+            treeImage.setOnMouseClicked(event -> {
+                rootPane.requestFocus();
+            });
+            treeImage.setOnMouseDragged(event -> {
+                rootPane.requestFocus();
+            });
+            handleDropItems(treeType.getTreeName(), treeImage);
+        }
     }
 
     private void addBuildingsToHBox(HBox buildingsHBox) {
@@ -237,7 +254,7 @@ public class GameMenu {
                 buildingImage.setOnMouseDragged(event -> {
                     rootPane.requestFocus();
                 });
-                handleDropBuilding(building, buildingImage);
+                handleDropItems(building.getName(), buildingImage);
             }
         }
     }
@@ -268,12 +285,12 @@ public class GameMenu {
         rootPane.getChildren().add(hBox);
     }
 
-    private void handleDropBuilding(Building building, ImageView buildingImage) {
-        buildingImage.setOnDragDetected(event -> {
-            Dragboard db = buildingImage.startDragAndDrop(TransferMode.COPY);
+    private void handleDropItems(String itemName, ImageView itemImage) {
+        itemImage.setOnDragDetected(event -> {
+            Dragboard db = itemImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
-            content.putString(building.getName());
-            Image image = buildingImage.getImage();
+            content.putString(itemName);
+            Image image = itemImage.getImage();
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(TILE_SIZE);
             imageView.setFitWidth(TILE_SIZE);
@@ -284,7 +301,7 @@ public class GameMenu {
             event.consume();
         });
 
-        buildingImage.setOnDragDone(Event::consume);
+        itemImage.setOnDragDone(Event::consume);
     }
 
     private void handleMousePressed(MouseEvent event, Pane rootPane) {

@@ -47,9 +47,6 @@ public enum Texture {
     }
 
     public Paint getPaint() {
-        if (path == null) {
-            return Color.RED; // TODO
-        }
         return new ImagePattern(new Image(getClass().getResource("/images/" + path).toExternalForm()));
     }
 

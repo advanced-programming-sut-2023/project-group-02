@@ -1,16 +1,24 @@
 package models;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+
 public enum TreeType {
-    DESERT_SHRUB("desert shrub"),
-    CHERRY_PALM("cherry palm"),
-    OLIVE_TREE("olive tree"),
-    COCONUT_PALM("coconut palm"),
-    DATES_PALM("dates palm");
+    DESERT_SHRUB("desert shrub", "shrub.png"),
+    CHERRY_PALM("cherry palm", "cherry_palm.png"),
+    OLIVE_TREE("olive tree", "olive.png"),
+    COCONUT_PALM("coconut palm", "coconut_palm.png"),
+    DATES_PALM("dates palm", "dates_palm.png");
 
     private final String treeName;
+    private final String path;
 
-    TreeType(String treeName) {
+    TreeType(String treeName, String path) {
         this.treeName = treeName;
+        this.path = path;
     }
 
     public String getTreeName() {
@@ -23,5 +31,16 @@ public enum TreeType {
                 return tree;
         }
         return null;
+    }
+
+    public Paint getPaint() {
+        return new ImagePattern(new Image(TreeType.class.getResource("/images/plants/" + path).toExternalForm()));
+    }
+
+    public ImageView getImageView() {
+        ImageView imageView = new ImageView(new Image(TreeType.class.getResource("/images/plants/" + path).toExternalForm()));
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(70);
+        return imageView;
     }
 }
