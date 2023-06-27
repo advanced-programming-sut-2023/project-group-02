@@ -52,7 +52,7 @@ public class GameMenu {
                 if (cellWrapper.getObject() != null) {
                     cellWrapper.getChildren().add(cellWrapper.getObject().getImage());
                 }
-                
+
                 cellWrapper.setOnDragOver(event -> {
                     if (event.getDragboard().hasImage()) {
                         event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -287,16 +287,6 @@ public class GameMenu {
         });
         rootPane.requestFocus();
         return itemsScrollPane;
-    }
-
-    private void makeShopMenu() {
-        rootPane.getChildren().removeIf(child -> child instanceof HBox);
-        HBox hBox = makeBaseOfBottomMenu();
-        HBox shopHBox = new HBox();
-        shopHBox.setMaxHeight(120);
-        shopHBox.setTranslateY(22);
-        shopHBox.setSpacing(10);
-        rootPane.getChildren().add(hBox);
     }
 
     private void handleDropItems(String itemName, ImageView itemImage) {
