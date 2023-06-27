@@ -59,7 +59,7 @@ public class GameMenu {
                     finalCellWrapper.setObject(BuildingFactory.makeBuilding(db.getString()));
                     event.setDropCompleted(true);
                     event.consume();
-                    System.out.println(map.findCellWithXAndY(1, 1));
+                    //TODO fix this part
                 });
 
                 GridPane.setColumnIndex(cellWrapper, col - fromCol);
@@ -87,7 +87,7 @@ public class GameMenu {
         renderMap(map, fromRow, toRow, fromCol, toCol, offsetX, offsetY);
     }
 
-    public Pane getPane() {
+    public Pane getPane(boolean isPreGame) {
         Game game = GameMenuController.getCurrentGame();
         if (game == null) {
             System.out.println("game is null");
@@ -161,7 +161,7 @@ public class GameMenu {
             }
         });
 
-        HBox bottomMenuHBox = makeDefaultBottomMenuHBox();
+        HBox bottomMenuHBox = makeDefaultBottomMenuHBox(isPreGame);
         rootPane.getChildren().add(bottomMenuHBox);
         return rootPane;
     }
@@ -196,7 +196,7 @@ public class GameMenu {
         }
     }
 
-    private HBox makeBaseOfBottomMenu() {
+    public HBox makeBaseOfBottomMenu() {
         HBox hBox = new HBox();
         hBox.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/game-images/bottomMenu.png"))));
         hBox.setTranslateY(670);
@@ -205,12 +205,28 @@ public class GameMenu {
         return hBox;
     }
 
-    private HBox makeDefaultBottomMenuHBox() {
+    private HBox makeDefaultBottomMenuHBox(boolean isPreGame) {
         HBox hBox = makeBaseOfBottomMenu();
-        HBox buildingsHBox = new HBox();
-        buildingsHBox.setMaxHeight(120);
-        buildingsHBox.setTranslateY(22);
-        buildingsHBox.setSpacing(10);
+        HBox itemsHBox = new HBox();
+        itemsHBox.setMaxHeight(120);
+        itemsHBox.setTranslateY(22);
+        itemsHBox.setSpacing(10);
+
+        if (!isPreGame)
+            addBuildingsToHBox(itemsHBox);
+        else
+            addTreesAndRocksToHBox(itemsHBox);
+
+        ScrollPane itemsScrollPane = getItemsScrollPane(itemsHBox);
+        hBox.getChildren().add(itemsScrollPane);
+        return hBox;
+    }
+
+    private void addTreesAndRocksToHBox(HBox itemsHBox) {
+        
+    }
+
+    private void addBuildingsToHBox(HBox buildingsHBox) {
         ImageView buildingImage;
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
@@ -224,20 +240,22 @@ public class GameMenu {
                 handleDropBuilding(building, buildingImage);
             }
         }
-        ScrollPane buildingsScrollPane = new ScrollPane(buildingsHBox);
-        buildingsScrollPane.setPrefWidth(550);
-        buildingsScrollPane.setMaxHeight(120);
-        buildingsScrollPane.setTranslateX(340);
-        buildingsScrollPane.setTranslateY(80);
-        buildingsScrollPane.setOnMouseClicked(event -> {
+    }
+
+    private ScrollPane getItemsScrollPane(HBox itemsHBox) {
+        ScrollPane itemsScrollPane = new ScrollPane(itemsHBox);
+        itemsScrollPane.setPrefWidth(550);
+        itemsScrollPane.setMaxHeight(120);
+        itemsScrollPane.setTranslateX(340);
+        itemsScrollPane.setTranslateY(80);
+        itemsScrollPane.setOnMouseClicked(event -> {
             rootPane.requestFocus();
         });
-        buildingsScrollPane.setOnMouseDragged(event -> {
+        itemsScrollPane.setOnMouseDragged(event -> {
             rootPane.requestFocus();
         });
         rootPane.requestFocus();
-        hBox.getChildren().add(buildingsScrollPane);
-        return hBox;
+        return itemsScrollPane;
     }
 
     private void makeShopMenu() {
@@ -348,6 +366,10 @@ public class GameMenu {
     private void handleSelection() {
         // TODO
         System.out.println("selected count:" + selectedTiles.size());
+    }
+
+    public GridPane getGridPane() {
+        return gridPane;
     }
 
     public void run(Scanner scanner) {
