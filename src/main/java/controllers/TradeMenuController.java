@@ -40,7 +40,7 @@ public class TradeMenuController {
         Trade newTrade = new Trade(requesterGovernment,receptionistGovernment,item,amount,price,message);
         allTrades.add(newTrade);
         requesterGovernment.getAllSentTrades().add(newTrade);
-        requesterGovernment.getInboxOfTrades().add(newTrade);
+        receptionistGovernment.getInboxOfTrades().add(newTrade);
 
         return TradeMenuMessages.REQUEST_IS_MADE;
     }
