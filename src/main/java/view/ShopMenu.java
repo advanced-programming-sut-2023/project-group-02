@@ -20,8 +20,8 @@ import java.util.Objects;
 public class ShopMenu {
     HBox operateHBox = new HBox();
     VBox coinsLeft = new VBox();
-    Text itemsLeft;
-    Text coinsLeftText;
+    Text itemsLeft = new Text();
+    Text coinsLeftText = new Text();
 
     public Pane getPane() {
         Pane shopPane = new Pane();
@@ -32,7 +32,7 @@ public class ShopMenu {
     private void initPane(Pane pane) {
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/shop-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
-        pane.getChildren().addAll(makeMainVBox(),makeBackButton(),(coinsLeft = makeCoinsLeftBox()));
+        pane.getChildren().addAll(makeMainVBox(),makeBackButton(),(coinsLeft = makeCoinsLeftBox()),makeEnterTradeMenuButton());
         coinsLeftText.textProperty().addListener((observable, oldValue, newValue) -> coinsLeftText.setText(coinsLeftText.getText()));
     }
 
@@ -51,9 +51,9 @@ public class ShopMenu {
     }
 
     private VBox makeMainVBox() {
-        HBox shelf1 = makeShelfHBox(0,4);
+        HBox shelf1 = makeShelfHBox("material");
         shelf1.setTranslateX(150);
-        VBox mainVBox = new VBox(shelf1,makeShelfHBox(4,12),makeShelfHBox(12,20),operateHBox);
+        VBox mainVBox = new VBox(shelf1,makeShelfHBox("food"),makeShelfHBox("martialEquipment"),operateHBox);
         operateHBox.idProperty().addListener((observable,oldValue,newValue) -> {
             updateOperateHBox(ItemsController.findItemWithName(newValue));
         });
@@ -71,6 +71,7 @@ public class ShopMenu {
         operateHBox.setId(ItemsController.getItemName(item));
 
         ImageView image = ItemsController.getItemsImage(item);
+//        itemsLeft = new Text("10");
         itemsLeft = new Text(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
         itemsLeft.getStyleClass().add("title1");
         VBox imageAndAmountLeft = new VBox(image,itemsLeft);
@@ -86,6 +87,8 @@ public class ShopMenu {
         Button sellButton = new Button("Sell " + ItemsController.getItemSellPrice(item));
         sellButton.getStyleClass().add("button1");
         sellButton.setOnAction(event -> {
+//            itemsLeft.setText("20");
+//            coinsLeftText.setText("13");
             itemsLeft.setText(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
             coinsLeftText.setText(" " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD));
             ShopMenuMessages message = ShopMenuController.sellItem(item,1);
@@ -96,6 +99,8 @@ public class ShopMenu {
         Button buyButton = new Button("Buy " + ItemsController.getItemBuyPrice(item));
         buyButton.getStyleClass().add("button1");
         buyButton.setOnAction(event -> {
+//            itemsLeft.setText("15");
+//            coinsLeftText.setText("5");
             itemsLeft.setText(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
             coinsLeftText.setText(" " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD));
             ShopMenuMessages message = ShopMenuController.buyItem(item,1);
@@ -107,10 +112,9 @@ public class ShopMenu {
         return sellAndBuyBox;
     }
 
-    private HBox makeShelfHBox(int start, int end) {
+    private HBox makeShelfHBox(String itemType) {
         HBox shelf = new HBox();
-        for (int i = start; i < end; i++) {
-            Object item = ItemsController.getImagedItems().get(i);
+        for (Object item : ItemsController.getImagedItemsWithType(itemType)) {
             ImageView itemImage = ItemsController.getItemsImage(item);
             itemImage.setOnMouseClicked(event -> operateHBox.idProperty().set(ItemsController.getItemName(item)));
             shelf.getChildren().add(itemImage);
@@ -129,5 +133,17 @@ public class ShopMenu {
             Main.getStage().setFullScreen(true);
         });
         return backButton;
+    }
+
+    private Button makeEnterTradeMenuButton() {
+        Button enterTradeMenuButton = new Button("Enter Trade Menu");
+        enterTradeMenuButton.getStyleClass().add("button1");
+        enterTradeMenuButton.setTranslateX(20);
+        enterTradeMenuButton.setTranslateY(0.95 * Main.getStage().getHeight());
+        enterTradeMenuButton.setOnAction(event -> {
+            Main.getStage().setScene(new Scene(new TradeMenu().getPane()));
+            Main.getStage().setFullScreen(true);
+        });
+        return enterTradeMenuButton;
     }
 }
