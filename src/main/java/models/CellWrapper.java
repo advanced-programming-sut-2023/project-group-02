@@ -152,16 +152,18 @@ public class CellWrapper extends StackPane {
 
     private String getTooltipText() {
         StringBuilder tooltipText = new StringBuilder();
-        tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
         if (getObject() != null) {
             MapObject object = getObject();
             if (object instanceof Building building) {
                 tooltipText.append("Building: ");
+                tooltipText.append(object.getName()).append("\n");
+                tooltipText.append("Owner: " + building.getOwner().getUsername()).append("\n");
             } else {
                 tooltipText.append("Object: ");
+                tooltipText.append(object.getName()).append("\n");
             }
-            tooltipText.append(object.getName()).append("\n");
         }
+        tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
         // TODO: show unit info
         return tooltipText.toString();
     }

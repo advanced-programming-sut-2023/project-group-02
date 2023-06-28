@@ -10,6 +10,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -18,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.*;
 import models.Map;
 import utils.Graphics;
@@ -372,6 +374,10 @@ public class GameMenu {
     private void addTreesAndRocksToHBox(HBox itemsHBox) {
         for (TreeType treeType : TreeType.values()) {
             ImageView treeImage = treeType.getImageView();
+            Tooltip tooltip = new Tooltip(treeType.getTreeName());
+            tooltip.setShowDelay(Duration.ZERO);
+            Tooltip.install(treeImage, tooltip);
+
             itemsHBox.getChildren().add(treeImage);
             treeImage.setOnMouseClicked(event -> {
                 rootPane.requestFocus();
@@ -383,6 +389,10 @@ public class GameMenu {
         }
         for (Directions directions : Directions.values()) {
             ImageView rockImage = new Rock(directions).getImageView();
+            Tooltip tooltip = new Tooltip("Rock - " + directions.name().toLowerCase());
+            tooltip.setShowDelay(Duration.ZERO);
+            Tooltip.install(rockImage, tooltip);
+
             itemsHBox.getChildren().add(rockImage);
             rockImage.setOnMouseClicked(event -> {
                 rootPane.requestFocus();
@@ -398,6 +408,10 @@ public class GameMenu {
         ImageView buildingImage;
         for (Building building : BuildingFactory.getAllBuildings()) {
             if ((buildingImage = building.getBuildingImage()) != null) {
+                Tooltip tooltip = new Tooltip(building.getName());
+                tooltip.setShowDelay(Duration.ZERO);
+                Tooltip.install(buildingImage, tooltip);
+
                 buildingsHBox.getChildren().add(buildingImage);
                 buildingImage.setOnMouseClicked(event -> {
                     rootPane.requestFocus();
