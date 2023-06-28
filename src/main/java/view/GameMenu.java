@@ -202,6 +202,7 @@ public class GameMenu {
     }
 
     private synchronized void setTextureForSelectedTiles(String textureName) {
+        ArrayList<CellWrapper> selectedTiles = this.selectedTiles;
         for (CellWrapper cellWrapper : selectedTiles) {
             GameMenuController.setTexture(cellWrapper.getSquareX(), cellWrapper.getSquareY(), textureName);
         }
@@ -221,6 +222,7 @@ public class GameMenu {
     }
 
     private synchronized void clearSelectedCells(boolean clearTexturesAndUpdate) {
+        ArrayList<CellWrapper> selectedTiles = this.selectedTiles;
         for (CellWrapper cellWrapper : selectedTiles) {
             if (cellWrapper.getObject() != null) {
                 System.out.println("cell cleared" + cellWrapper.getSquareX());

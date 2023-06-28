@@ -8,6 +8,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import utils.Graphics;
+import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,16 @@ public class CellWrapper extends StackPane {
         rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(Color.TRANSPARENT);
         getChildren().add(rectangle);
+
+        if (cell.getObject() != null) {
+            ImageView imageView = cell.getObject().getImage();
+            if (imageView != null) {
+                imageView.setFitWidth(squareSize);
+                imageView.setFitHeight(squareSize);
+                getChildren().add(imageView);
+            }
+        }
+
 
         Tooltip tooltip = new Tooltip();
         tooltip.setOnShowing(event -> {
@@ -88,11 +100,15 @@ public class CellWrapper extends StackPane {
 
     public void dropObject(String objectName, Image objectImage, boolean isPreGame) {
         Building building = null;
-        if (Directions.getDirectionsLowerCase().contains(objectName))
-            GameMenuController.dropRock(cell.getX(), cell.getY(), objectName);
-        else if (TreeType.getTreeNamesList().contains(objectName))
-            GameMenuController.dropTree(cell.getX(), cell.getY(), objectName);
-        else if ((building = BuildingFactory.makeBuilding(objectName)) != null)
+        if (Directions.getDirectionsLowerCase().contains(objectName)) {
+            GameMenuMessages message = GameMenuController.dropRock(cell.getX(), cell.getY(), objectName);
+            if (message != GameMenuMessages.DONE_SUCCESSFULLY)
+                Graphics.showMessagePopup(message.getMessage());
+        } else if (TreeType.getTreeNamesList().contains(objectName)) {
+            GameMenuMessages message = GameMenuController.dropTree(cell.getX(), cell.getY(), objectName);
+            if (message != GameMenuMessages.DONE_SUCCESSFULLY)
+                Graphics.showMessagePopup(message.getMessage());
+        } else if ((building = BuildingFactory.makeBuilding(objectName)) != null)
             GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
         else
             return;
