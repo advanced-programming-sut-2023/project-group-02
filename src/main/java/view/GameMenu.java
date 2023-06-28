@@ -2,17 +2,18 @@ package view;
 
 import controllers.*;
 import javafx.event.Event;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import models.*;
 import utils.Graphics;
@@ -30,7 +31,7 @@ public class GameMenu {
     private boolean isPreGame = false;
     private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
-
+    private ChoiceBox<String> textureChoiceBox;
     private final int TILE_SIZE = CellWrapper.getSquareSize();
     private int scrollX = 0, scrollY = 0;
     private Pane rootPane;
@@ -176,7 +177,72 @@ public class GameMenu {
     private void doPreGameProcess(boolean isPreGame) {
         if (!isPreGame)
             return;
-        //TODO complete this method
+        Button nextButton = makeNextButton();
+        Button clearButton = makeClearButton();
+        textureChoiceBox = makeTextureChoiceBox();
+        rootPane.getChildren().addAll(nextButton, clearButton, textureChoiceBox);
+    }
+
+    private ChoiceBox<String> makeTextureChoiceBox() {
+        ChoiceBox<String> textureChoiceBox = new ChoiceBox<>();
+        textureChoiceBox.setLayoutX(200);
+        textureChoiceBox.setLayoutY(50);
+        textureChoiceBox.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        for (Texture texture : Texture.values()) {
+            textureChoiceBox.getItems().add(texture.getName());
+        }
+        textureChoiceBox.setValue("earth");
+        textureChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (selectedTiles.isEmpty())
+                return;
+            clearSelectedCells(false);
+            setTextureForSelectedTiles(newValue);
+        });
+        return textureChoiceBox;
+    }
+
+    private synchronized void setTextureForSelectedTiles(String textureName) {
+        for (CellWrapper cellWrapper : selectedTiles) {
+            GameMenuController.setTexture(cellWrapper.getSquareX(), cellWrapper.getSquareY(), textureName);
+        }
+        GameMenuController.updateCellWrappers(selectedTiles);
+        renderMapFromScrollPosition(GameMenuController.getCurrentGame().getMap(), rootPane);
+    }
+
+    private Button makeClearButton() {
+        Button clear = new Button("Clear");
+        clear.setLayoutX(1000);
+        clear.setLayoutY(50);
+        clear.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        clear.setOnMouseClicked(event -> {
+            clearSelectedCells(true);
+        });
+        return clear;
+    }
+
+    private synchronized void clearSelectedCells(boolean clearTexturesAndUpdate) {
+        for (CellWrapper cellWrapper : selectedTiles) {
+            if (cellWrapper.getObject() != null) {
+                System.out.println("cell cleared" + cellWrapper.getSquareX());
+                GameMenuController.clearBlock(cellWrapper.getSquareX(), cellWrapper.getSquareY());
+            }
+        }
+        if (clearTexturesAndUpdate) {
+            setTextureForSelectedTiles("earth");
+            GameMenuController.updateCellWrappers(selectedTiles);
+        }
+        renderMapFromScrollPosition(GameMenuController.getCurrentGame().getMap(), rootPane);
+    }
+
+    private Button makeNextButton() {
+        Button next = new Button("Next");
+        next.setLayoutX(1100);
+        next.setLayoutY(50);
+        next.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        next.setOnMouseClicked(event -> {
+            //TODO complete this
+        });
+        return next;
     }
 
     private void paste() {

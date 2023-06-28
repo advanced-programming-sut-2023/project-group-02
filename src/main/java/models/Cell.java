@@ -78,7 +78,8 @@ public class Cell {
     }
 
     public boolean isOccupied() {
-        if (texture.equals(Texture.ROCK) || texture.equals(Texture.SEA) || texture.equals(Texture.DENSE_MEADOW)) return true;
+        if (texture.equals(Texture.ROCK) || texture.equals(Texture.SEA) || texture.equals(Texture.DENSE_MEADOW))
+            return true;
         return object != null;
     }
 
@@ -87,9 +88,9 @@ public class Cell {
     }
 
     public boolean isPassable() {
-        Texture[] notPassableTextures = {Texture.SEA,Texture.ROCK,Texture.PLAIN};
-        String[] notPassableObjectsNames = {"Short Wall", "Tall Wall","Pitch Ditch","Square Tower","Circle Tower",
-        "Perimeter Tower","Defense Turret"};
+        Texture[] notPassableTextures = {Texture.SEA, Texture.ROCK, Texture.PLAIN};
+        String[] notPassableObjectsNames = {"Short Wall", "Tall Wall", "Pitch Ditch", "Square Tower", "Circle Tower",
+            "Perimeter Tower", "Defense Turret"};
         for (Texture texture1 : notPassableTextures) {
             if (texture1.equals(texture)) return false;
         }
@@ -116,7 +117,7 @@ public class Cell {
     }
 
     public boolean canDigTunnel() {
-        String[] cantDigObjectsName = {"Pitch Ditch","Square Tower","Circle Tower"};
+        String[] cantDigObjectsName = {"Pitch Ditch", "Square Tower", "Circle Tower"};
         for (String s : cantDigObjectsName) {
             if (object != null && s.equals(object.getName()))
                 return false;

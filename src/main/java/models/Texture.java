@@ -6,18 +6,18 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 
 public enum Texture {
-    EARTH("earth", Colors.RED, "tiles/Tiles/Plain1.jpg"),
-    EARTH_WITH_GRAVEL("earth with gravel", Colors.CYAN, "tiles/Tiles/Plain3.jpg"),
+    EARTH("earth", Colors.RED, "tiles/earth.jpg"),
+    EARTH_WITH_GRAVEL("earth with gravel", Colors.CYAN, "tiles/earth_with_gravel.jpg"),
     SLATE("slate", Colors.BLACK, "tiles/slate.jpg"),
     ROCK("rock", Colors.BLACK, "tiles/rocky.jpg"),
     IRON("iron", Colors.PURPLE, "tiles/iron.jpg"),
-    GRASS("grass", Colors.GREEN, "tiles/tile/grass_tile.jpg"),
-    MEADOW("meadow", Colors.YELLOW, "tiles/meadow.jpg"),
+    GRASS("grass", Colors.GREEN, "tiles/grass.jpg"),
+    MEADOW("meadow", Colors.YELLOW, "tiles/meadow.png"),
     DENSE_MEADOW("dense meadow", Colors.YELLOW, "tiles/dense_meadow.jpg"),
-    SEA("sea", Colors.BLUE, "tiles/tile/sea_tile.jpg"),
+    SEA("sea", Colors.BLUE, "tiles/sea.jpg"),
     BEACH("beach", Colors.YELLOW, "tiles/beach.jpg"), //units cant pass
     OIL("oil", Colors.RED, "tiles/oil.jpg"),
-    SHALLOW_WATER("shallow water", Colors.BLUE, "tiles/tile/gulf_tile.jpg"), // units can pass
+    SHALLOW_WATER("shallow water", Colors.BLUE, "tiles/gulf.jpg"), // units can pass
     PLAIN("plain", Colors.GREEN, "tiles/plain.jpg"), //kills units
     ;
 

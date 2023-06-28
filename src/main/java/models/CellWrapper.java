@@ -70,21 +70,21 @@ public class CellWrapper extends StackPane {
         return cell.getObject();
     }
 
-    public void setObject(MapObject mapObject) {
-        cell.setObject(mapObject);
-        if (mapObject != null) {
-            ImageView imageView = mapObject.getImage();
-            if (imageView != null) {
-                imageView.setFitWidth(squareSize);
-                imageView.setFitHeight(squareSize);
-                getChildren().add(imageView);
-            }
-            cell.setObject(mapObject);
-        } else {
-            getChildren().removeIf(node -> node instanceof ImageView);
-            cell.setObject(null);
-        }
-    }
+//    public void setObject(MapObject mapObject) {
+//        cell.setObject(mapObject);
+//        if (mapObject != null) {
+//            ImageView imageView = mapObject.getImage();
+//            if (imageView != null) {
+//                imageView.setFitWidth(squareSize);
+//                imageView.setFitHeight(squareSize);
+//                getChildren().add(imageView);
+//            }
+//            cell.setObject(mapObject);
+//        } else {
+//            getChildren().removeIf(node -> node instanceof ImageView);
+//            cell.setObject(null);
+//        }
+//    }
 
     public void dropObject(String objectName, Image objectImage, boolean isPreGame) {
         Building building = null;

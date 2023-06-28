@@ -50,6 +50,17 @@ public class GameMenuController {
         return allMadeCellWrappers.get(currentGame);
     }
 
+    public static void updateCellWrappers(ArrayList<CellWrapper> cellWrappersToBeUpdated) {
+        ArrayList<CellWrapper> cellWrappers = allMadeCellWrappers.get(currentGame);
+        for (int i = cellWrappers.size() - 1; i >= 0; i--) {
+            if (!cellWrappersToBeUpdated.contains(cellWrappers.get(i)))
+                continue;
+            CellWrapper cellWrapper = cellWrappers.get(i);
+            cellWrappers.remove(i);
+            cellWrappers.add(new CellWrapper(currentGame.getMap().findCellWithXAndY(cellWrapper.getSquareX(), cellWrapper.getSquareY())));
+        }
+    }
+
     public static void setCurrentGame(Game currentGame) {
         GameMenuController.currentGame = currentGame;
         saveGame();
