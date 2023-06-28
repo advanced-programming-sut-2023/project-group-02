@@ -175,7 +175,17 @@ public class Government {
         this.popularity = popularity;
     }
 
+    private int findSickCellsCount() {
+        int count = 0;
+        for (int x = 0; x < map.getWidth(); x++)
+            for (int y = 0; y < map.getHeight(); y++)
+                if (map.findCellWithXAndY(x, y).hasSickness())
+                    count++;
+        return count;
+    }
+
     public void updatePopularity() {
+        popularity -= findSickCellsCount() / 15;
         popularity += foodRate * 4;
         popularity += switch (taxRate) {
             case -3 -> 7;

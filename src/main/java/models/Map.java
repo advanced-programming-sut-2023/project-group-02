@@ -1,7 +1,7 @@
 package models;
 
-import models.buildings.InventoryBuilding;
 import models.units.Unit;
+import models.units.UnitType;
 import utils.Utils;
 import utils.Validation;
 
@@ -61,6 +61,12 @@ public class Map {
         Coordinates prev = locateUnit(unit);
         findUnitsWithXAndY(prev.x, prev.y).remove(unit);
         findUnitsWithXAndY(x, y).add(unit);
+
+        Cell destination = findCellWithXAndY(x, y);
+        if (unit.getType() == UnitType.LORD && destination.hasSickness()) {
+            // A blessing from the lord
+            destination.setHasSickness(false);
+        }
     }
 
     public void addObject(MapObject object, int x, int y) {

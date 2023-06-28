@@ -3,17 +3,15 @@ package models;
 import models.units.Unit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class Cell {
     private Texture texture;
     private MapObject object; // a building, a tree, a rock, ...
     private ArrayList<Unit> units;
     private boolean hasLadder;
+    private boolean hasSickness = false;
     private int x;
     private int y;
-
 
     public Cell(Texture texture, int x, int y) {
         this.texture = texture;
@@ -131,6 +129,14 @@ public class Cell {
 
     public boolean hasLadder() {
         return hasLadder;
+    }
+
+    public boolean hasSickness() {
+        return hasSickness;
+    }
+
+    public void setHasSickness(boolean hasSickness) {
+        this.hasSickness = hasSickness;
     }
 
     @Override

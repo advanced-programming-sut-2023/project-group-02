@@ -12,6 +12,7 @@ import view.MainMenu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Game {
     private final ArrayList<Government> governments;
@@ -189,7 +190,21 @@ public class Game {
         this.startingPoints = newStartingPoints;
     }
 
+    private void initiateSickness() {
+        Random random = new Random();
+        int regionWidth = (int) Math.floor(0.5 * map.getWidth() * Math.pow(random.nextDouble(), 2));
+        int regionHeight = (int) Math.floor(0.5 * map.getHeight() * Math.pow(random.nextDouble(), 2));
+        int regionX = random.nextInt(map.getWidth() - regionWidth);
+        int regionY = random.nextInt(map.getHeight() - regionHeight);
+        for (int x = regionX; x < regionX + regionWidth; x++) {
+            for (int y = regionY; y < regionY + regionHeight; y++) {
+                map.findCellWithXAndY(x, y).setHasSickness(true);
+            }
+        }
+    }
+
     public void nextMonth() {
+        initiateSickness();
         for (Government government : governments) {
             government.updatePopularity();
             government.collectTax();

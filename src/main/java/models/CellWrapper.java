@@ -18,6 +18,7 @@ public class CellWrapper extends StackPane {
     private final Cell cell;
     private Rectangle rectangle;
     private boolean isSelected = false;
+    private Rectangle sicknessOverlay;
 
     public CellWrapper(Cell cell) {
         super();
@@ -32,6 +33,10 @@ public class CellWrapper extends StackPane {
         rectangle.setStroke(Color.TRANSPARENT);
         getChildren().add(rectangle);
 
+        sicknessOverlay = new Rectangle(squareSize, squareSize);
+        sicknessOverlay.setFill(Color.rgb(50, 150, 20, 0.4));
+        sicknessOverlay.setVisible(cell.hasSickness());
+
         if (cell.getObject() != null) {
             ImageView imageView = cell.getObject().getImage();
             if (imageView != null) {
@@ -40,7 +45,6 @@ public class CellWrapper extends StackPane {
                 getChildren().add(imageView);
             }
         }
-
 
         Tooltip tooltip = new Tooltip();
         tooltip.setOnShowing(event -> {
@@ -112,6 +116,7 @@ public class CellWrapper extends StackPane {
             GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
         else
             return;
+
         if (cell.getObject() != null) {
             ImageView imageView = cell.getObject().getImage();
             if (imageView != null) {
