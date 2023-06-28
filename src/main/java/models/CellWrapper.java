@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import utils.Graphics;
+import utils.Parser;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
@@ -125,6 +126,20 @@ public class CellWrapper extends StackPane {
                 getChildren().add(imageView);
             }
         }
+    }
+
+    public boolean dropSmallStone(User player) {
+        Building building = BuildingFactory.makeBuilding("small stone gate");
+        GameMenuMessages message = GameMenuController.dropSmallStoneGate(player, new Parser("-x " + cell.getX() + " -y " + cell.getY()));
+        if (message != GameMenuMessages.DONE_SUCCESSFULLY) {
+            Graphics.showMessagePopup(message.getMessage());
+            return false;
+        }
+        ArrayList<CellWrapper> cellWrappers = new ArrayList<>();
+        cellWrappers.add(this);
+        cellWrappers.add(findCellWrapperWithXAndY(GameMenuController.getCurrentGameCellWrappers(), cell.getX() + 1, cell.getY()));
+        GameMenuController.updateCellWrappers(cellWrappers);
+        return true;
     }
 
     public static CellWrapper findCellWrapperWithXAndY(ArrayList<CellWrapper> cellWrappers, int x, int y) {

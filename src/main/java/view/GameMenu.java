@@ -265,7 +265,6 @@ public class GameMenu {
         bottomHBox.setVisible(false);
         ArrayList<Colors> availableColors = new ArrayList<>(EnumSet.allOf(Colors.class));
         initAPlayer(players.get(0), availableColors);
-        GameMenuController.saveGame();
         // TODO start game
     }
 
@@ -288,7 +287,8 @@ public class GameMenu {
                 availableColors.remove(availableColors.get(tmp));
                 rootPane.getChildren().removeAll(colors);
                 rootPane.getChildren().remove(text);
-                initPlayersBuildings(player, availableColors);
+                initPlayersBuilding(player, availableColors);
+                event.consume();
             });
         }
         rootPane.getChildren().addAll(colors);
@@ -296,8 +296,24 @@ public class GameMenu {
         text.requestFocus();
     }
 
-    private void initPlayersBuildings(User player, ArrayList<Colors> availableColors) {
-        initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
+    private void initPlayersBuilding(User player, ArrayList<Colors> availableColors) {
+        Graphics.showMessagePopup("choose where you want to drop your small stone gate.");
+        rootPane.setOnMouseClicked(event -> {
+            Point2D currentPoint = new Point2D(event.getX(), event.getY());
+            for (Node node : gridPane.getChildren()) {
+                if (!(node instanceof CellWrapper tile))
+                    continue;
+                if (tile.getBoundsInParent().contains(currentPoint)) {
+                    if (tile.dropSmallStone(player)) {
+                        initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
+                        renderMapFromScrollPosition(GameMenuController.getCurrentGame().getMap(), rootPane);
+                    }
+                    break;
+                }
+            }
+            event.consume();
+        });
+        rootPane.requestFocus();
     }
 
     private void paste() {
