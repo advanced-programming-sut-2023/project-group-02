@@ -112,11 +112,13 @@ public class CellWrapper extends StackPane {
             GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
         else
             return;
-        ImageView imageView = cell.getObject().getImage();
-        if (imageView != null) {
-            imageView.setFitWidth(squareSize);
-            imageView.setFitHeight(squareSize);
-            getChildren().add(imageView);
+        if (cell.getObject() != null) {
+            ImageView imageView = cell.getObject().getImage();
+            if (imageView != null) {
+                imageView.setFitWidth(squareSize);
+                imageView.setFitHeight(squareSize);
+                getChildren().add(imageView);
+            }
         }
     }
 
