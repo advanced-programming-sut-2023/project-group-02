@@ -192,8 +192,7 @@ public class GameMenuController {
         if ((texture = Texture.findTextureWithName(textureType)) == null) {
             return GameMenuMessages.INVALID_TEXTURE;
         }
-        if ((cell = currentGame.getMap().findCellWithXAndY(x, y)).isOccupied())
-            return GameMenuMessages.FULL_CELL;
+        cell = currentGame.getMap().findCellWithXAndY(x, y);
         if (cell.getTexture().equals(texture))
             return GameMenuMessages.SAME_CELL;
 

@@ -76,7 +76,8 @@ public class Cell {
     }
 
     public boolean isOccupied() {
-        if (texture.equals(Texture.ROCK) || texture.equals(Texture.SEA) || texture.equals(Texture.DENSE_MEADOW))
+        if (texture.equals(Texture.ROCK) || texture.equals(Texture.SEA) ||
+            texture.equals(Texture.OIL) || texture.equals(Texture.IRON))
             return true;
         return object != null;
     }

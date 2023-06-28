@@ -129,7 +129,7 @@ public class ShopMenu {
         backButton.setTranslateX(20);
         backButton.setTranslateY(20);
         backButton.setOnAction(event -> {
-            Main.getStage().setScene(new Scene(new GameMenu().getPane(false)));
+            Main.getStage().setScene(new Scene(new GameMenu().getPane(false, null)));
             Main.getStage().setFullScreen(true);
         });
         return backButton;

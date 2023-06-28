@@ -43,7 +43,7 @@ public class PreGameMenu {
 
     private void loadGame(Button button) {
         if (GameMenuController.loadGame()) {
-            Main.setScene(new GameMenu().getPane(false));
+            Main.setScene(new GameMenu().getPane(false, null));
         } else {
             Graphics.showMessagePopup("There is no saved game!");
             button.setCancelButton(true);

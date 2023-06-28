@@ -145,7 +145,7 @@ public class InitGameMenu {
             if (!checkAndAddAllUsernames()) return;
             GameMenuController.setCurrentGame(new Game(new ArrayList<>(), Integer.parseInt(numberOfTurnsField.getText()),
                 new Map(Integer.parseInt(mapWidthField.getText()), Integer.parseInt(mapHeightField.getText()))));
-            Main.setScene(new GameMenu().getPane(true));
+            Main.setScene(new GameMenu().getPane(true, players));
             Main.getStage().setFullScreen(true);
         });
         pane.getChildren().add(confirm);

@@ -15,27 +15,32 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import models.*;
+import models.Map;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
 import view.enums.GameMenuMessages;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameMenu {
     private boolean isGameOver = false;
     private boolean isPreGame = false;
+    private ArrayList<User> players;
     private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
     private ChoiceBox<String> textureChoiceBox;
+    private Button clearButton;
+    private Button nextButton;
     private final int TILE_SIZE = CellWrapper.getSquareSize();
     private int scrollX = 0, scrollY = 0;
     private Pane rootPane;
     private GridPane gridPane;
+    private HBox bottomHBox;
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
                            int offsetY) {
@@ -93,7 +98,9 @@ public class GameMenu {
         renderMap(map, fromRow, toRow, fromCol, toCol, offsetX, offsetY);
     }
 
-    public Pane getPane(boolean isPreGame) {
+    public Pane getPane(boolean isPreGame, ArrayList<User> players) {
+        if (players != null)
+            this.players = players;
         this.isPreGame = isPreGame;
         Game game = GameMenuController.getCurrentGame();
         if (game == null) {
@@ -110,6 +117,7 @@ public class GameMenu {
         rootPane = new Pane(gridPane);
         gridPane.setLayoutX(0);
         gridPane.setLayoutY(0);
+        rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
 
         gridPane.setOnMousePressed(event -> {
             handleMousePressed(event, rootPane);
@@ -168,8 +176,8 @@ public class GameMenu {
             }
         });
 
-        HBox bottomMenuHBox = makeDefaultBottomMenuHBox(isPreGame);
-        rootPane.getChildren().add(bottomMenuHBox);
+        bottomHBox = makeDefaultBottomMenuHBox(isPreGame);
+        rootPane.getChildren().add(bottomHBox);
         doPreGameProcess(isPreGame);
         return rootPane;
     }
@@ -177,17 +185,18 @@ public class GameMenu {
     private void doPreGameProcess(boolean isPreGame) {
         if (!isPreGame)
             return;
-        Button nextButton = makeNextButton();
-        Button clearButton = makeClearButton();
+        nextButton = makeNextButton();
+        clearButton = makeClearButton();
         textureChoiceBox = makeTextureChoiceBox();
         rootPane.getChildren().addAll(nextButton, clearButton, textureChoiceBox);
     }
 
     private ChoiceBox<String> makeTextureChoiceBox() {
         ChoiceBox<String> textureChoiceBox = new ChoiceBox<>();
-        textureChoiceBox.setLayoutX(200);
+        textureChoiceBox.setLayoutX(100);
         textureChoiceBox.setLayoutY(50);
-        textureChoiceBox.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        textureChoiceBox.setPrefSize(100, 50);
+        textureChoiceBox.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
         for (Texture texture : Texture.values()) {
             textureChoiceBox.getItems().add(texture.getName());
         }
@@ -212,9 +221,10 @@ public class GameMenu {
 
     private Button makeClearButton() {
         Button clear = new Button("Clear");
-        clear.setLayoutX(1000);
+        clear.setLayoutX(250);
         clear.setLayoutY(50);
-        clear.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        clear.setPrefSize(100, 50);
+        clear.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
         clear.setOnMouseClicked(event -> {
             clearSelectedCells(true);
         });
@@ -225,7 +235,6 @@ public class GameMenu {
         ArrayList<CellWrapper> selectedTiles = this.selectedTiles;
         for (CellWrapper cellWrapper : selectedTiles) {
             if (cellWrapper.getObject() != null) {
-                System.out.println("cell cleared" + cellWrapper.getSquareX());
                 GameMenuController.clearBlock(cellWrapper.getSquareX(), cellWrapper.getSquareY());
             }
         }
@@ -238,13 +247,57 @@ public class GameMenu {
 
     private Button makeNextButton() {
         Button next = new Button("Next");
-        next.setLayoutX(1100);
+        next.setLayoutX(1400);
         next.setLayoutY(50);
-        next.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        next.setPrefSize(100, 50);
+        next.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
         next.setOnMouseClicked(event -> {
-            //TODO complete this
+            initPlayers();
         });
         return next;
+    }
+
+    private void initPlayers() {
+        if (players == null)
+            throw new RuntimeException("players is null");
+        rootPane.getChildren().removeAll(nextButton, clearButton, textureChoiceBox);
+        bottomHBox.getChildren().clear();
+        bottomHBox.setVisible(false);
+        ArrayList<Colors> availableColors = new ArrayList<>(EnumSet.allOf(Colors.class));
+        initAPlayer(players.get(0), availableColors);
+        GameMenuController.saveGame();
+        // TODO start game
+    }
+
+    private synchronized void initAPlayer(User player, ArrayList<Colors> availableColors) {
+        Text text = new Text("Player " + (player.getUsername()) + " choose your color");
+        text.getStyleClass().add("text-title");
+        text.setLayoutX(200);
+        text.setLayoutY(200);
+        Text[] colors = new Text[availableColors.size()];
+        for (int i = 0; i < availableColors.size(); i++) {
+            colors[i] = new Text(availableColors.get(i).toString());
+            colors[i].setFill(availableColors.get(i).getPaint());
+            colors[i].setLayoutX(200);
+            colors[i].setLayoutY(250 + i * 40);
+            colors[i].setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+            colors[i].getStyleClass().add("colors");
+            int tmp = i;
+            colors[i].setOnMouseClicked(event -> {
+                GameMenuController.addPlayerToGame(player, availableColors.get(tmp));
+                availableColors.remove(availableColors.get(tmp));
+                rootPane.getChildren().removeAll(colors);
+                rootPane.getChildren().remove(text);
+                initPlayersBuildings(player, availableColors);
+            });
+        }
+        rootPane.getChildren().addAll(colors);
+        rootPane.getChildren().add(text);
+        text.requestFocus();
+    }
+
+    private void initPlayersBuildings(User player, ArrayList<Colors> availableColors) {
+        initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
     }
 
     private void paste() {
@@ -284,7 +337,7 @@ public class GameMenu {
     }
 
     private HBox makeDefaultBottomMenuHBox(boolean isPreGame) {
-        HBox hBox = makeBaseOfBottomMenu();
+        bottomHBox = makeBaseOfBottomMenu();
         HBox itemsHBox = new HBox();
         itemsHBox.setMaxHeight(120);
         itemsHBox.setTranslateY(22);
@@ -296,8 +349,8 @@ public class GameMenu {
             addTreesAndRocksToHBox(itemsHBox);
 
         ScrollPane itemsScrollPane = getItemsScrollPane(itemsHBox);
-        hBox.getChildren().add(itemsScrollPane);
-        return hBox;
+        bottomHBox.getChildren().add(itemsScrollPane);
+        return bottomHBox;
     }
 
     private void addTreesAndRocksToHBox(HBox itemsHBox) {

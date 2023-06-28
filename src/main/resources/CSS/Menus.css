@@ -166,3 +166,11 @@
     -fx-font-weight: bold;
 }
 
+.colors {
+}
+
+.colors:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 5, 3, 0, 1);
+}
+
+

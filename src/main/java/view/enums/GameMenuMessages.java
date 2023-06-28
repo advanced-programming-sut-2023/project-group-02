@@ -6,7 +6,7 @@ public enum GameMenuMessages {
     INVALID_RATE("invalid rate"),
     INVALID_BUILDING_NAME("invalid building name"),
     INVALID_UNIT_NAME("invalid unit name"),
-    FULL_CELL("This cell is full!"),
+    FULL_CELL("Can't drop here! the cell is full or texture is inappropriate."),
     NOT_ENOUGH_MATERIALS("You don't have enough materials for this building!"),
     NOT_ENOUGH_EQUIPMENTS("You don't have enough value of required martial equipments or gold to build this unit"),
     NOT_ENOUGH_PEOPLE("You don't have enough unemployed people"),
