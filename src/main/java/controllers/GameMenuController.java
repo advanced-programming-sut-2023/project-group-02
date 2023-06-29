@@ -269,32 +269,23 @@ public class GameMenuController {
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String type, int count, User player, boolean useEquipments) {
-        Unit unit = MakeUnitInstances.createUnitInstance(type);
-        if (!Validation.areCoordinatesValid(x, y))
-            return GameMenuMessages.INVALID_PLACE;
-        if (count <= 0)
-            return GameMenuMessages.INVALID_NUMBER;
-        if (unit == null)
-            return GameMenuMessages.INVALID_UNIT_NAME;
+    public static GameMenuMessages makeUnit(Unit unit, int count, User player) {
         Government currentPlayersGovernment = currentGame.getPlayersGovernment(player);
         if (currentPlayersGovernment.numberOfUnemployed() < count)
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
-        if (useEquipments && !currentPlayersGovernment.hasEnoughEquipmentsForUnit(type, count))
+        if (!currentPlayersGovernment.hasEnoughEquipmentsForUnit(unit.getName(), count))
             return GameMenuMessages.NOT_ENOUGH_EQUIPMENTS;
         currentPlayersGovernment.recruitPeople(count, currentPlayersGovernment.getSmallStone());
-        // we assume that units working place is small stone gate.
-        for (int i = 0; i < count; i++) {
-            unit = MakeUnitInstances.createUnitInstance(type);
-            currentGame.addUnit(unit, player, x, y);
-        }
-        if (useEquipments)
-            reduceEquipmentForUnit(type, currentPlayersGovernment, count);
+        reduceEquipmentForUnit(unit.getName(), currentPlayersGovernment, count);
+        UnitMenuController.makeUnits(unit,count);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
-    public static GameMenuMessages dropUnit(int x, int y, String type, int count, boolean useEquipments) {
-        return dropUnit(x, y, type, count, currentGame.getCurrentPlayer(), useEquipments);
+    public static GameMenuMessages dropUnit(int x, int y, Unit unit, int count, User player) {
+        for (int i = 0; i < count; i++) {
+            currentGame.addUnit(unit, player, x, y);
+        }
+        return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
     private static void reduceEquipmentForUnit(String type, Government government, int numberOfUnits) {
