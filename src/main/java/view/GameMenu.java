@@ -2,7 +2,6 @@ package view;
 
 import controllers.*;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -24,6 +23,7 @@ import javafx.stage.Popup;
 import javafx.stage.Window;
 import javafx.util.Duration;
 import models.*;
+import models.Cell;
 import models.Map;
 import utils.Graphics;
 import utils.Parser;
@@ -160,8 +160,7 @@ public class GameMenu {
                 scrollY = Math.min(scrollY + TILE_SIZE / 2, map.getHeight() * TILE_SIZE - (int) rootPane.getHeight());
                 renderMapFromScrollPosition(map, rootPane);
             } else if (event.getCode() == KeyCode.S) {
-                Main.getStage().setScene(new Scene(new ShopMenu().getPane()));
-                Main.getStage().setFullScreen(true);
+                goToShopMenu();
             } else if (event.getCode() == KeyCode.C && event.isShortcutDown()) {
                 copy();
             } else if (event.getCode() == KeyCode.V && event.isShortcutDown()) {
@@ -201,6 +200,11 @@ public class GameMenu {
         doPreGameProcess(isPreGame);
         addNextTurnButton(isPreGame);
         return rootPane;
+    }
+
+    private void goToShopMenu() {
+        Main.getStage().setScene(new Scene(new ShopMenu().getPane()));
+        Main.getStage().setFullScreen(true);
     }
 
     private void doPreGameProcess(boolean isPreGame) {
@@ -761,8 +765,21 @@ public class GameMenu {
     }
 
     private void handleSelection() {
-        // TODO
-        System.out.println("selected count:" + selectedTiles.size());
+        if (selectedTiles.size() == 1) {
+            handleSingleSelection(selectedTiles.get(0));
+        } else {
+            // TODO
+        }
+    }
+
+    private void handleSingleSelection(CellWrapper cellWrapper) {
+        Cell cell = cellWrapper.getCell();
+        MapObject mapObject = cell.getObject();
+        if (!isPreGame && mapObject != null && mapObject instanceof Building building) {
+            if (building.getName().equalsIgnoreCase("shop")) {
+                goToShopMenu();
+            }
+        }
     }
 
     public GridPane getGridPane() {
