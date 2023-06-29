@@ -50,6 +50,8 @@ public class GameMenu {
     private HBox bottomHBox;
     private VBox governmentVBox;
     private Text popularityText = new Text();
+    private ScrollPane itemsScrollPane;
+    private boolean showBuildingsBar = false;
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
                            int offsetY) {
@@ -118,12 +120,6 @@ public class GameMenu {
         if (game == null) {
             System.out.println("game is null");
             // TODO: remove this
-//            Government one = new Government(UserController.findUserWithUsername("Hamed"),Colors.BLUE);
-//            Government two = new Government(UserController.findUserWithUsername("Mahmood"),Colors.RED);
-//            Map three = new Map(50,50);
-//            one.setMap(three);
-//            two.setMap(three);
-//            game = new Game(new ArrayList<>(List.of(one,two)), 3, three);
             game = new Game(new ArrayList<>(), 0, new Map(50, 50));
             GameMenuController.setCurrentGame(game);
         }
@@ -573,14 +569,31 @@ public class GameMenu {
         itemsHBox.setTranslateY(22);
         itemsHBox.setSpacing(10);
 
-        if (!addTreesAndRocks)
-            addBuildingsToHBox(itemsHBox);
-        else
+        if (addTreesAndRocks)
             addTreesAndRocksToHBox(itemsHBox);
+        else if (isPreGame)
+            addBuildingsToHBox(itemsHBox);
 
-        ScrollPane itemsScrollPane = getItemsScrollPane(itemsHBox);
+        itemsScrollPane = getItemsScrollPane(itemsHBox);
         bottomHBox.getChildren().add(itemsScrollPane);
+        if (!isPreGame) bottomHBox.getChildren().add(makeShowBuildingButton());
+
         return bottomHBox;
+    }
+
+    private Circle makeShowBuildingButton() {
+        Circle showBuildingButton = new Circle(20);
+        showBuildingButton.setFill(new ImagePattern(new Image(getClass().getResource("/images/buttons/buildings.png").toExternalForm())));
+        showBuildingButton.setOnMouseClicked(event -> {
+            if (showBuildingsBar) bottomHBox.getChildren().remove(itemsScrollPane);
+            else {
+                bottomHBox.getChildren().add(itemsScrollPane);
+                showBuildingsBar = true;
+            }
+        });
+        showBuildingButton.setTranslateY(120);
+        showBuildingButton.setTranslateX(300);
+        return showBuildingButton;
     }
 
     private void addTreesAndRocksToHBox(HBox itemsHBox) {
