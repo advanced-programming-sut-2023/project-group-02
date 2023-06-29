@@ -341,6 +341,7 @@ public class GameMenu {
     }
 
     private void initPlayersBuildings(User player, ArrayList<Colors> availableColors) {
+        Graphics.showMessagePopup("Now you can drop building with no cost.");
         bottomHBox = makeDefaultBottomMenuHBox(false);
         rootPane.getChildren().add(bottomHBox);
         bottomHBox.setVisible(true);

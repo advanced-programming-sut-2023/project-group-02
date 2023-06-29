@@ -119,7 +119,7 @@ public class GameMenuController {
         if (building instanceof PlainBuilding && !government.hasEnoughWorkerForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         }
-        currentGame.addObject(building, x, y, true);
+        currentGame.addObject(building, x, y, player);
         //TODO fix this after map initialization
         government.recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
@@ -144,7 +144,7 @@ public class GameMenuController {
         if (building instanceof PlainBuilding && !government.hasEnoughWorkerForBuilding(building)) {
             return GameMenuMessages.NOT_ENOUGH_PEOPLE;
         }
-        currentGame.addObject(building, x, y, true);
+        currentGame.addObject(building, x, y, getCurrentGame().getCurrentPlayer());
         //TODO fix this after map initialization
         government.recruitPeople(building.getWorkerCount(), building);
         if (useMaterials)
@@ -230,7 +230,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
 
         //TODO handle the textures in which we cant drop rock
-        currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y, false);
+        currentGame.addObject(new Rock(Directions.getDirectionWithName(direction)), x, y, null);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 
@@ -243,7 +243,7 @@ public class GameMenuController {
             return GameMenuMessages.FULL_CELL;
 
         // TODO handle the textures in which we cant drop tree
-        currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y, false);
+        currentGame.addObject(new Tree(TreeType.getTreeTypeWithName(treeName)), x, y, null);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 

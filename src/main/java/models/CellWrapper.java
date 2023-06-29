@@ -114,9 +114,10 @@ public class CellWrapper extends StackPane {
             if (message != GameMenuMessages.DONE_SUCCESSFULLY)
                 Graphics.showMessagePopup(message.getMessage());
         } else if ((building = BuildingFactory.makeBuilding(objectName)) != null)
-            if (owner != null)
+            if (owner != null) {
                 GameMenuController.dropBuilding(cell.getX(), cell.getY(), owner, objectName, !isPreGame);
-            else
+                System.out.println("building dropped owner is " + owner.getUsername());
+            } else
                 GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
         else
             return;
