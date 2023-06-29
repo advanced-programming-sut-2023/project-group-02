@@ -18,22 +18,22 @@ import view.enums.ShopMenuMessages;
 import java.util.Objects;
 
 public class ShopMenu {
+    Pane shopPane;
     HBox operateHBox = new HBox();
     VBox coinsLeft = new VBox();
     Text itemsLeft = new Text();
     Text coinsLeftText = new Text();
 
     public Pane getPane() {
-        Pane shopPane = new Pane();
-        initPane(shopPane);
+        shopPane = new Pane();
+        initPane();
         return shopPane;
     }
 
-    private void initPane(Pane pane) {
-        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/shop-menu.jpg"))));
-        pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
-        pane.getChildren().addAll(makeMainVBox(), makeBackButton(), (coinsLeft = makeCoinsLeftBox()), makeEnterTradeMenuButton());
-        coinsLeftText.textProperty().addListener((observable, oldValue, newValue) -> coinsLeftText.setText(coinsLeftText.getText()));
+    private void initPane() {
+        shopPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/shop-menu.jpg"))));
+        shopPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
+        shopPane.getChildren().addAll(makeMainVBox(), makeBackButton(), (coinsLeft = makeCoinsLeftBox()), makeEnterTradeMenuButton());
     }
 
     private VBox makeCoinsLeftBox() {
@@ -71,7 +71,6 @@ public class ShopMenu {
         operateHBox.setId(ItemsController.getItemName(item));
 
         ImageView image = ItemsController.getItemsImage(item);
-//        itemsLeft = new Text("10");
         itemsLeft = new Text(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
         itemsLeft.getStyleClass().add("title1");
         VBox imageAndAmountLeft = new VBox(image, itemsLeft);
@@ -87,25 +86,23 @@ public class ShopMenu {
         Button sellButton = new Button("Sell " + ItemsController.getItemSellPrice(item));
         sellButton.getStyleClass().add("button1");
         sellButton.setOnAction(event -> {
-//            itemsLeft.setText("20");
-//            coinsLeftText.setText("13");
             itemsLeft.setText(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
             coinsLeftText.setText(" " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD));
             ShopMenuMessages message = ShopMenuController.sellItem(item, 1);
             Graphics.showMessagePopup(message.getMessage());
             updateOperateHBox(item);
+            initPane();
         });
 
         Button buyButton = new Button("Buy " + ItemsController.getItemBuyPrice(item));
         buyButton.getStyleClass().add("button1");
         buyButton.setOnAction(event -> {
-//            itemsLeft.setText("15");
-//            coinsLeftText.setText("5");
             itemsLeft.setText(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(item) + " ");
             coinsLeftText.setText(" " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getItemAmount(Material.GOLD));
             ShopMenuMessages message = ShopMenuController.buyItem(item, 1);
             Graphics.showMessagePopup(message.getMessage());
             updateOperateHBox(item);
+            initPane();
         });
         sellAndBuyBox.getChildren().addAll(buyButton, sellButton);
 
