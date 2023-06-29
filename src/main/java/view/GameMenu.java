@@ -2,6 +2,7 @@ package view;
 
 import controllers.*;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -34,6 +35,8 @@ public class GameMenu {
     private boolean isGameOver = false;
     private boolean isPreGame = false;
     private ArrayList<User> players;
+
+    private User currentPlayer = null;
     private final ArrayList<CellWrapper> selectedTiles = new ArrayList<>();
     private Point2D selectionStart;
     private ChoiceBox<String> textureChoiceBox;
@@ -73,7 +76,7 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    finalCellWrapper.dropObject(db.getString(), db.getImage(), isPreGame);
+                    finalCellWrapper.dropObject(db.getString(), db.getImage(), isPreGame, currentPlayer);
                     event.setDropCompleted(true);
                     event.consume();
                 });
@@ -203,6 +206,9 @@ public class GameMenu {
         if (!isPreGame)
             return;
         nextButton = makeNextButton();
+        nextButton.setOnMouseClicked(event -> {
+            initPlayers();
+        });
         clearButton = makeClearButton();
         textureChoiceBox = makeTextureChoiceBox();
 
@@ -269,9 +275,6 @@ public class GameMenu {
         next.setLayoutY(50);
         next.setPrefSize(100, 50);
         next.setBackground(new Background(new BackgroundFill(Color.rgb(175, 85, 85, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
-        next.setOnMouseClicked(event -> {
-            initPlayers();
-        });
         return next;
     }
 
@@ -287,6 +290,7 @@ public class GameMenu {
     }
 
     private synchronized void initAPlayer(User player, ArrayList<Colors> availableColors) {
+        currentPlayer = player;
         Text text = new Text("Player " + (player.getUsername()) + " choose your color");
         text.getStyleClass().add("text-title");
         text.setLayoutX(200);
@@ -305,7 +309,7 @@ public class GameMenu {
                 availableColors.remove(availableColors.get(tmp));
                 rootPane.getChildren().removeAll(colors);
                 rootPane.getChildren().remove(text);
-                initPlayersBuilding(player, availableColors);
+                initPlayersSmallStone(player, availableColors);
                 event.consume();
             });
         }
@@ -314,7 +318,7 @@ public class GameMenu {
         text.requestFocus();
     }
 
-    private void initPlayersBuilding(User player, ArrayList<Colors> availableColors) {
+    private void initPlayersSmallStone(User player, ArrayList<Colors> availableColors) {
         Graphics.showMessagePopup("choose where you want to drop your small stone gate.");
         rootPane.setOnMouseClicked(event -> {
             Point2D currentPoint = new Point2D(event.getX(), event.getY());
@@ -323,8 +327,10 @@ public class GameMenu {
                     continue;
                 if (tile.getBoundsInParent().contains(currentPoint)) {
                     if (tile.dropSmallStone(player)) {
-                        initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
+                        rootPane.setOnMouseClicked(event2 -> {
+                        });
                         renderMapFromScrollPosition(GameMenuController.getCurrentGame().getMap(), rootPane);
+                        initPlayersBuildings(player, availableColors);
                     }
                     break;
                 }
@@ -332,6 +338,24 @@ public class GameMenu {
             event.consume();
         });
         rootPane.requestFocus();
+    }
+
+    private void initPlayersBuildings(User player, ArrayList<Colors> availableColors) {
+        bottomHBox = makeDefaultBottomMenuHBox(false);
+        rootPane.getChildren().add(bottomHBox);
+        bottomHBox.setVisible(true);
+        Button nextButton = makeNextButton();
+        nextButton.setOnMouseClicked(mouseEvent -> {
+            if (players.indexOf(player) + 1 < players.size())
+                initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
+            else {
+                GameMenuController.saveGame();
+                Main.setScene(new GameMenu().getPane(false, null));
+                Main.getStage().setFullScreen(true);
+            }
+            rootPane.getChildren().remove(nextButton);
+        });
+        rootPane.getChildren().add(nextButton);
     }
 
     private void makeEnterGovernmentButton() {
@@ -494,9 +518,9 @@ public class GameMenu {
         CellWrapper cellWrapper = selectedTiles.get(0);
         if (cellWrapper.getObject() == null) {
             Clipboard clipboard = Clipboard.getSystemClipboard();
-            String name = clipboard.getString();
-            if (name != null) {
-                cellWrapper.dropObject(name, clipboard.getImage(), isPreGame);
+            String content[] = clipboard.getString().split("/");
+            if (content[0] != null) {
+                cellWrapper.dropObject(content[0], clipboard.getImage(), isPreGame, UserController.findUserWithUsername(content[1]));
             }
         }
     }
@@ -509,7 +533,7 @@ public class GameMenu {
         if (cellWrapper.getObject() instanceof Building building) {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
-            content.putString(building.getName());
+            content.putString(building.getName() + "/" + building.getOwner());
             clipboard.setContent(content);
         }
     }
@@ -523,14 +547,14 @@ public class GameMenu {
         return hBox;
     }
 
-    private HBox makeDefaultBottomMenuHBox(boolean isPreGame) {
+    private HBox makeDefaultBottomMenuHBox(boolean addTreesAndRocks) {
         bottomHBox = makeBaseOfBottomMenu();
         HBox itemsHBox = new HBox();
         itemsHBox.setMaxHeight(120);
         itemsHBox.setTranslateY(22);
         itemsHBox.setSpacing(10);
 
-        if (!isPreGame)
+        if (!addTreesAndRocks)
             addBuildingsToHBox(itemsHBox);
         else
             addTreesAndRocksToHBox(itemsHBox);

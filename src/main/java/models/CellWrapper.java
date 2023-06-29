@@ -103,7 +103,7 @@ public class CellWrapper extends StackPane {
 //        }
 //    }
 
-    public void dropObject(String objectName, Image objectImage, boolean isPreGame) {
+    public void dropObject(String objectName, Image objectImage, boolean isPreGame, User owner) {
         Building building = null;
         if (Directions.getDirectionsLowerCase().contains(objectName)) {
             GameMenuMessages message = GameMenuController.dropRock(cell.getX(), cell.getY(), objectName);
@@ -114,7 +114,10 @@ public class CellWrapper extends StackPane {
             if (message != GameMenuMessages.DONE_SUCCESSFULLY)
                 Graphics.showMessagePopup(message.getMessage());
         } else if ((building = BuildingFactory.makeBuilding(objectName)) != null)
-            GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
+            if (owner != null)
+                GameMenuController.dropBuilding(cell.getX(), cell.getY(), owner, objectName, !isPreGame);
+            else
+                GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
         else
             return;
 
