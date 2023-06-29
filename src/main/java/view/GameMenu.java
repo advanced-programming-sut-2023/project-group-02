@@ -574,31 +574,15 @@ public class GameMenu {
         itemsHBox.setTranslateY(22);
         itemsHBox.setSpacing(10);
 
-        if (addTreesAndRocks)
-            addTreesAndRocksToHBox(itemsHBox);
-        else if (isPreGame)
+        if (!addTreesAndRocks)
             addBuildingsToHBox(itemsHBox);
+        else
+            addTreesAndRocksToHBox(itemsHBox);
 
         itemsScrollPane = getItemsScrollPane(itemsHBox);
         bottomHBox.getChildren().add(itemsScrollPane);
-        if (!isPreGame) bottomHBox.getChildren().add(makeShowBuildingButton());
 
         return bottomHBox;
-    }
-
-    private Circle makeShowBuildingButton() {
-        Circle showBuildingButton = new Circle(20);
-        showBuildingButton.setFill(new ImagePattern(new Image(getClass().getResource("/images/buttons/buildings.png").toExternalForm())));
-        showBuildingButton.setOnMouseClicked(event -> {
-            if (showBuildingsBar) bottomHBox.getChildren().remove(itemsScrollPane);
-            else {
-                bottomHBox.getChildren().add(itemsScrollPane);
-                showBuildingsBar = true;
-            }
-        });
-        showBuildingButton.setTranslateY(120);
-        showBuildingButton.setTranslateX(300);
-        return showBuildingButton;
     }
 
     private void addTreesAndRocksToHBox(HBox itemsHBox) {
