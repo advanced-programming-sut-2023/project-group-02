@@ -337,6 +337,15 @@ public class GameMenu {
         text.requestFocus();
     }
 
+    private void addInitialMaterial() {
+        for (Government government : GameMenuController.getCurrentGame().getGovernments()) {
+            government.increaseItem(Material.GOLD, 50);
+            government.increaseItem(Material.STONE, 50);
+            government.increaseItem(Material.WOOD, 50);
+            government.increaseItem(Material.IRON, 50);
+        }
+    }
+
     private void initPlayersSmallStone(User player, ArrayList<Colors> availableColors) {
         Graphics.showMessagePopup("choose where you want to drop your small stone gate.");
         rootPane.setOnMouseClicked(event -> {
@@ -370,6 +379,7 @@ public class GameMenu {
                 initAPlayer(players.get(players.indexOf(player) + 1), availableColors);
             else {
                 GameMenuController.saveGame();
+                addInitialMaterial();
                 Main.setScene(new GameMenu().getPane(false, null));
                 Main.getStage().setFullScreen(true);
             }
