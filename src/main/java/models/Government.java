@@ -31,7 +31,7 @@ public class Government {
     private static final int MAX_FEAR_RATE = 5;
     private final ArrayList<Trade> allSentTrades = new ArrayList<>();
     private final ArrayList<Trade> inboxOfTrades = new ArrayList<>();
-    private HashMap<Unit,Integer> amountOfUnits;
+    private HashMap<String,Integer> amountOfUnits;
     private boolean isLordAlive = true;
 
     public Government(User user, Colors color) {
@@ -43,11 +43,11 @@ public class Government {
     private void initializeAmountOfUnits() {
         amountOfUnits = new HashMap<>();
         for (Unit unit : MakeUnitInstances.getAllUnits()) {
-            amountOfUnits.put(unit,0);
+            amountOfUnits.put(unit.getName(),0);
         }
     }
 
-    public HashMap<Unit, Integer> getAmountOfUnits() {
+    public HashMap<String, Integer> getAmountOfUnits() {
         return amountOfUnits;
     }
 

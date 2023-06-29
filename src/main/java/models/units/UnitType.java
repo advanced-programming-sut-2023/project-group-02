@@ -24,7 +24,7 @@ public enum UnitType {
     SLINGER("Slinger", "Mercenary Post", 12),
     ASSASSIN("Assassin", "Mercenary Post", 60),
     HORSE_ARCHER("Horse Archer", "Mercenary Post", 80),
-    ARABIAN_SWORDSMAN("Arabian Swordman", "Mercenary Post", 80),
+    ARABIAN_SWORDSMAN("Arabian Swordsman", "Mercenary Post", 80),
     FIRE_THROWER("Fire Thrower", "Mercenary Post", 100),
     LORD("Lord", null, 0);
 

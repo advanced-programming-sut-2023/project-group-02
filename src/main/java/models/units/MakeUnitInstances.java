@@ -1,5 +1,6 @@
 package models.units;
 
+import com.google.gson.annotations.Until;
 import models.Building;
 import utils.Utils;
 
@@ -147,9 +148,8 @@ public class MakeUnitInstances {
         for (Method method : methods) {
             if (method.getParameterCount() == 0 && Unit.class.isAssignableFrom(method.getReturnType())) {
                 try {
-                    Building building = (Building) method.invoke(null);
                     Unit unit = (Unit) method.invoke(null);
-                    if (unit != null) {
+                    if (unit != null && !unit.getName().equals("Lord")) {
                         allUnits.add(unit);
                     }
                 } catch (Exception e) {
@@ -158,5 +158,13 @@ public class MakeUnitInstances {
             }
         }
         return allUnits;
+    }
+
+    public static ArrayList<Unit> getUnitsBasedOfType(String placeToMake) {
+        ArrayList<Unit> units = new ArrayList<>();
+        for (Unit unit : getAllUnits()) {
+            if (unit.getType().getWhereCanBeTrained() != null && unit.getType().getWhereCanBeTrained().equals(placeToMake))  units.add(unit);
+        }
+        return units;
     }
 }

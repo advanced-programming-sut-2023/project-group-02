@@ -15,6 +15,8 @@ import utils.PathFinder;
 import utils.Validation;
 import view.enums.UnitMenuMessages;
 
+import javax.swing.text.html.ImageView;
+
 public class UnitMenuController {
     private static ArrayList<Unit> selectedUnits;
     private static int unitsX;
@@ -25,23 +27,23 @@ public class UnitMenuController {
         return selectedUnits;
     }
 
-    private static HashMap<Unit,Integer> allUnitsLeftForCurrentPlayer() {
+    public static HashMap<String,Integer> allUnitsLeftForCurrentPlayer() {
         Government government = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
         return government.getAmountOfUnits();
     }
 
-    private static int getAmountOfUnitLeft(Unit unit) {
-        return allUnitsLeftForCurrentPlayer().get(unit);
+    public static int getAmountOfUnitLeft(Unit unit) {
+        return allUnitsLeftForCurrentPlayer().get(unit.getName());
     }
 
-    private static void useUnits(Unit unit,int amount) {
-        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit);
-        allUnitsLeftForCurrentPlayer().put(unit,currentAmount-amount);
+    public static void useUnits(Unit unit,int amount) {
+        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit.getName());
+        allUnitsLeftForCurrentPlayer().put(unit.getName(),currentAmount-amount);
     }
 
-    private static void makeUnits(Unit unit, int amount) {
-        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit);
-        allUnitsLeftForCurrentPlayer().put(unit,currentAmount+amount);
+    public static void makeUnits(Unit unit, int amount) {
+        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit.getName());
+        allUnitsLeftForCurrentPlayer().put(unit.getName(),currentAmount+amount);
     }
 
     public static int getUnitsX() {

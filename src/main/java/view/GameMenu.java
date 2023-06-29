@@ -25,6 +25,8 @@ import javafx.util.Duration;
 import models.*;
 import models.Cell;
 import models.Map;
+import models.units.MakeUnitInstances;
+import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
@@ -196,6 +198,8 @@ public class GameMenu {
             makeEnterGovernmentButton();
         }
         popularityText.textProperty().addListener((observable, oldValue, newValue) -> popularityText.setText(popularityText.getText()));
+
+        itemsScrollPane.contentProperty().addListener((observable, oldValue, newValue) -> itemsScrollPane.setContent(itemsScrollPane.getContent()));
 
         rootPane.getChildren().add(bottomHBox);
         doPreGameProcess(isPreGame);
@@ -651,7 +655,7 @@ public class GameMenu {
     private ScrollPane getItemsScrollPane(HBox itemsHBox) {
         ScrollPane itemsScrollPane = new ScrollPane(itemsHBox);
         itemsScrollPane.setPrefWidth(550);
-        itemsScrollPane.setMaxHeight(120);
+        itemsScrollPane.setMaxHeight(130);
         itemsScrollPane.setTranslateX(340);
         itemsScrollPane.setTranslateY(80);
         itemsScrollPane.setOnMouseClicked(event -> {
@@ -773,8 +777,47 @@ public class GameMenu {
         if (!isPreGame && mapObject != null && mapObject instanceof Building building) {
             if (building.getName().equalsIgnoreCase("shop")) {
                 goToShopMenu();
+            } else if (building.getName().equalsIgnoreCase("Barrack")) {
+                addUnitsHBox("Barrack");
+            } else if (building.getName().equalsIgnoreCase("Mercenary Post")) {
+                addUnitsHBox("Mercenary Post");
+            } else if (building.getName().equalsIgnoreCase("Engineer Guild")) {
+                addUnitsHBox("Engineer Guild");
             }
         }
+    }
+
+    private void addUnitsHBox(String type) {
+        ArrayList<Unit> units = MakeUnitInstances.getUnitsBasedOfType(type);
+        HBox unitsHBox = new HBox();
+        for (Unit unit : units) {
+            unitsHBox.getChildren().add(getUnitVBox(unit));
+        }
+        unitsHBox.setSpacing(10);
+        itemsScrollPane.setContent(unitsHBox);
+    }
+
+    private VBox getUnitVBox(Unit unit) {
+        ImageView unitImage = unit.getImage();
+        unitImage.setFitHeight(50);
+        unitImage.setFitWidth(50);
+        Tooltip tooltip = new Tooltip(unit.getName());
+        tooltip.setShowDelay(Duration.ZERO);
+        Tooltip.install(unitImage,tooltip);
+        unitImage.setOnMouseClicked(event -> {
+
+        });
+        //TODO : the work of drag and drop
+
+        Slider unitsToUse = new Slider(0,UnitMenuController.getAmountOfUnitLeft(unit),0);
+        fixSliders(unitsToUse);
+
+        Text amountOfUnitsLeft = new Text( "All: " + UnitMenuController.getAmountOfUnitLeft(unit));
+
+        VBox vBox = new VBox(unitImage,unitsToUse,amountOfUnitsLeft);
+        vBox.setSpacing(3);
+        vBox.setAlignment(Pos.CENTER);
+        return vBox;
     }
 
     public GridPane getGridPane() {
