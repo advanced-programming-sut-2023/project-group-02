@@ -275,159 +275,6 @@ public class GameMenu {
         return next;
     }
 
-    private void makeEnterGovernmentButton() {
-        Circle enterGovernmentThings = new Circle(10);
-        enterGovernmentThings.setFill(Color.WHITE);
-        ImageView image = new ImageView(new Image(getClass().getResource("/images/buttons/government.png").toExternalForm()));
-
-        enterGovernmentThings.setFill(new ImagePattern(image.getImage()));
-        enterGovernmentThings.setTranslateX(430);
-        enterGovernmentThings.setTranslateY(120);
-        enterGovernmentThings.setOnMouseClicked(event -> {
-            makeGovernmentVBox();
-        });
-        bottomHBox.getChildren().add(enterGovernmentThings);
-    }
-
-    private void makeGovernmentVBox() {
-        Text foodRateText = new Text("Food Rate:");
-        Slider foodRateSlider = new Slider(-2,2,GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
-        foodRateSlider.setStyle("-fx-background-color: linear-gradient(to right, red 0%, yellow 50%, green 100%);");
-
-        Text taxRateText = new Text("Tax Rate:");
-        Slider taxRateSlider = new Slider(-3,8,GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
-        taxRateSlider.setStyle("-fx-background-color: linear-gradient(to right, green 0%, yellow 50%, red 100%);");
-
-        Text fearRateText = new Text("Fear Rate:");
-        Slider fearRateSlider = new Slider(-5,5,GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate());
-        fearRateSlider.setStyle("-fx-background-color: linear-gradient(to right, green 0%, yellow 50%, red 100%);");
-
-        fixTexts(foodRateText,taxRateText,fearRateText);
-        fixSliders(foodRateSlider,taxRateSlider,fearRateSlider);
-
-        ImageView done = new ImageView(new Image(getClass().getResource("/images/others/check.jpg").toExternalForm()));
-        done.setFitWidth(20);
-        done.setFitHeight(20);
-        done.setOnMouseClicked(event -> {
-            GameMenuController.setFoodRate((int) foodRateSlider.getValue());
-            GameMenuController.setTaxRate((int) taxRateSlider.getValue());
-            GameMenuController.setFearRate((int) fearRateSlider.getValue());
-            rootPane.getChildren().remove(governmentVBox);
-        });
-
-        governmentVBox = new VBox(foodRateText,foodRateSlider,taxRateText,taxRateSlider,fearRateText,fearRateSlider,done);
-        governmentVBox.setTranslateX(0);
-        governmentVBox.setTranslateY(100);
-        governmentVBox.setSpacing(20);
-        governmentVBox.setPrefWidth(400);
-        governmentVBox.setPadding(new Insets(10));
-        governmentVBox.setAlignment(Pos.CENTER);
-        governmentVBox.setBackground(new Background(new BackgroundFill(Color.BEIGE,null,null)));
-        rootPane.getChildren().add(governmentVBox);
-    }
-
-    private void fixTexts(Text... texts) {
-        for (Text text : texts) {
-            text.setFont(new Font("Arial",20));
-        }
-    }
-
-    private void fixSliders(Slider... sliders) {
-        for (Slider slider : sliders) {
-            slider.setShowTickMarks(true);
-            slider.setShowTickLabels(true);
-            slider.setBlockIncrement(1);
-            slider.setMajorTickUnit(1);
-            slider.setMinorTickCount(0);
-            slider.setSnapToTicks(true);
-            slider.setShowTickLabels(true);
-            slider.setShowTickMarks(true);
-        }
-    }
-
-    private void makePopularityBox() {
-        popularityText = new Text(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity() + "");
-        popularityText.setFont(new Font("Arial",20));
-        popularityText.setTranslateY(120);
-        popularityText.setTranslateX(400);
-
-        Circle circle = new Circle(20);
-        ImageView image = new ImageView(new Image(getClass().getResource("/images/buttons/info.png").toExternalForm()));
-        circle.setFill(new ImagePattern(image.getImage()));
-        circle.setTranslateX(370);
-        circle.setTranslateY(140);
-        circle.setOnMouseClicked(event -> {
-            popularityFactorsVBox();
-        });
-
-        bottomHBox.getChildren().addAll(popularityText,circle);
-    }
-
-    private void popularityFactorsVBox() {
-        VBox mainVBox = new VBox(makePopularityHBox("Food Rate"),makePopularityHBox("Tax Rate"),
-            makePopularityHBox("Fear Rate"));
-        mainVBox.setSpacing(40);
-        mainVBox.setAlignment(Pos.CENTER);
-        mainVBox.setPadding(new Insets(10));
-        makePopularityPopup(mainVBox);
-    }
-
-    private void makePopularityPopup(VBox vBox) {
-        Popup popup = new Popup();
-        popup.getContent().add(vBox);
-        popup.setAutoHide(true);
-        vBox.setBackground(new Background(new BackgroundFill(Color.BEIGE,null,null)));
-        vBox.setPrefWidth(300);
-        popup.show(Main.getStage());
-    }
-
-    private HBox makePopularityHBox(String parameter) {
-        ImageView happyFace = new ImageView(new Image(getClass().getResource("/images/others/happy.png").toExternalForm()));
-        ImageView normalFace = new ImageView(new Image(getClass().getResource("/images/others/normal.png").toExternalForm()));
-        ImageView sadFace = new ImageView(new Image(getClass().getResource("/images/others/sad.png").toExternalForm()));
-        happyFace.setFitWidth(30);
-        happyFace.setFitHeight(30);
-        normalFace.setFitWidth(30);
-        normalFace.setFitHeight(30);
-        sadFace.setFitWidth(30);
-        sadFace.setFitHeight(30);
-
-        int rate = 0;
-        ImageView imageView;
-        int goodThing = 0;
-
-        switch (parameter) {
-            case "Food Rate" -> {
-                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate();
-                goodThing = 1;
-            }
-            case "Tax Rate" -> {
-                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate();
-                goodThing = -1;
-            }
-            case "Fear Rate" -> {
-                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate();
-                goodThing = -1;
-            }
-        }
-
-        if (rate * goodThing > 0) imageView = happyFace;
-        else if (rate * goodThing == 0) imageView = normalFace;
-        else imageView = sadFace;
-
-        Text text = new Text(rate + "");
-        text.setFont(new Font("Arial",20));
-        text.setFill(Color.BROWN);
-
-        Text parameterText = new Text(parameter);
-        parameterText.setFont(new Font("Arial",20));
-        parameterText.setFill(Color.BROWN);
-
-        HBox hBox = new HBox(text,imageView,parameterText);
-        hBox.setSpacing(30);
-        return hBox;
-    }
-
     private void initPlayers() {
         if (players == null)
             throw new RuntimeException("players is null");
@@ -485,6 +332,159 @@ public class GameMenu {
             event.consume();
         });
         rootPane.requestFocus();
+    }
+
+    private void makeEnterGovernmentButton() {
+        Circle enterGovernmentThings = new Circle(10);
+        enterGovernmentThings.setFill(Color.WHITE);
+        ImageView image = new ImageView(new Image(getClass().getResource("/images/buttons/government.png").toExternalForm()));
+
+        enterGovernmentThings.setFill(new ImagePattern(image.getImage()));
+        enterGovernmentThings.setTranslateX(430);
+        enterGovernmentThings.setTranslateY(120);
+        enterGovernmentThings.setOnMouseClicked(event -> {
+            makeGovernmentVBox();
+        });
+        bottomHBox.getChildren().add(enterGovernmentThings);
+    }
+
+    private void makeGovernmentVBox() {
+        Text foodRateText = new Text("Food Rate:");
+        Slider foodRateSlider = new Slider(-2, 2, GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
+        foodRateSlider.setStyle("-fx-background-color: linear-gradient(to right, red 0%, yellow 50%, green 100%);");
+
+        Text taxRateText = new Text("Tax Rate:");
+        Slider taxRateSlider = new Slider(-3, 8, GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
+        taxRateSlider.setStyle("-fx-background-color: linear-gradient(to right, green 0%, yellow 50%, red 100%);");
+
+        Text fearRateText = new Text("Fear Rate:");
+        Slider fearRateSlider = new Slider(-5, 5, GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate());
+        fearRateSlider.setStyle("-fx-background-color: linear-gradient(to right, green 0%, yellow 50%, red 100%);");
+
+        fixTexts(foodRateText, taxRateText, fearRateText);
+        fixSliders(foodRateSlider, taxRateSlider, fearRateSlider);
+
+        ImageView done = new ImageView(new Image(getClass().getResource("/images/others/check.jpg").toExternalForm()));
+        done.setFitWidth(20);
+        done.setFitHeight(20);
+        done.setOnMouseClicked(event -> {
+            GameMenuController.setFoodRate((int) foodRateSlider.getValue());
+            GameMenuController.setTaxRate((int) taxRateSlider.getValue());
+            GameMenuController.setFearRate((int) fearRateSlider.getValue());
+            rootPane.getChildren().remove(governmentVBox);
+        });
+
+        governmentVBox = new VBox(foodRateText, foodRateSlider, taxRateText, taxRateSlider, fearRateText, fearRateSlider, done);
+        governmentVBox.setTranslateX(0);
+        governmentVBox.setTranslateY(100);
+        governmentVBox.setSpacing(20);
+        governmentVBox.setPrefWidth(400);
+        governmentVBox.setPadding(new Insets(10));
+        governmentVBox.setAlignment(Pos.CENTER);
+        governmentVBox.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        rootPane.getChildren().add(governmentVBox);
+    }
+
+    private void fixTexts(Text... texts) {
+        for (Text text : texts) {
+            text.setFont(new Font("Arial", 20));
+        }
+    }
+
+    private void fixSliders(Slider... sliders) {
+        for (Slider slider : sliders) {
+            slider.setShowTickMarks(true);
+            slider.setShowTickLabels(true);
+            slider.setBlockIncrement(1);
+            slider.setMajorTickUnit(1);
+            slider.setMinorTickCount(0);
+            slider.setSnapToTicks(true);
+            slider.setShowTickLabels(true);
+            slider.setShowTickMarks(true);
+        }
+    }
+
+    private void makePopularityBox() {
+        popularityText = new Text(GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity() + "");
+        popularityText.setFont(new Font("Arial", 20));
+        popularityText.setTranslateY(120);
+        popularityText.setTranslateX(400);
+
+        Circle circle = new Circle(20);
+        ImageView image = new ImageView(new Image(getClass().getResource("/images/buttons/info.png").toExternalForm()));
+        circle.setFill(new ImagePattern(image.getImage()));
+        circle.setTranslateX(370);
+        circle.setTranslateY(140);
+        circle.setOnMouseClicked(event -> {
+            popularityFactorsVBox();
+        });
+
+        bottomHBox.getChildren().addAll(popularityText, circle);
+    }
+
+    private void popularityFactorsVBox() {
+        VBox mainVBox = new VBox(makePopularityHBox("Food Rate"), makePopularityHBox("Tax Rate"),
+            makePopularityHBox("Fear Rate"));
+        mainVBox.setSpacing(40);
+        mainVBox.setAlignment(Pos.CENTER);
+        mainVBox.setPadding(new Insets(10));
+        makePopularityPopup(mainVBox);
+    }
+
+    private void makePopularityPopup(VBox vBox) {
+        Popup popup = new Popup();
+        popup.getContent().add(vBox);
+        popup.setAutoHide(true);
+        vBox.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        vBox.setPrefWidth(300);
+        popup.show(Main.getStage());
+    }
+
+    private HBox makePopularityHBox(String parameter) {
+        ImageView happyFace = new ImageView(new Image(getClass().getResource("/images/others/happy.png").toExternalForm()));
+        ImageView normalFace = new ImageView(new Image(getClass().getResource("/images/others/normal.png").toExternalForm()));
+        ImageView sadFace = new ImageView(new Image(getClass().getResource("/images/others/sad.png").toExternalForm()));
+        happyFace.setFitWidth(30);
+        happyFace.setFitHeight(30);
+        normalFace.setFitWidth(30);
+        normalFace.setFitHeight(30);
+        sadFace.setFitWidth(30);
+        sadFace.setFitHeight(30);
+
+        int rate = 0;
+        ImageView imageView;
+        int goodThing = 0;
+
+        switch (parameter) {
+            case "Food Rate" -> {
+                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate();
+                goodThing = 1;
+            }
+            case "Tax Rate" -> {
+                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate();
+                goodThing = -1;
+            }
+            case "Fear Rate" -> {
+                rate = GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFearRate();
+                goodThing = -1;
+            }
+        }
+
+        if (rate * goodThing > 0) imageView = happyFace;
+        else if (rate * goodThing == 0) imageView = normalFace;
+        else imageView = sadFace;
+
+        Text text = new Text(rate + "");
+        text.setFont(new Font("Arial", 20));
+        text.setFill(Color.BROWN);
+
+        Text parameterText = new Text(parameter);
+        parameterText.setFont(new Font("Arial", 20));
+        parameterText.setFill(Color.BROWN);
+
+        HBox hBox = new HBox(text, imageView, parameterText);
+        hBox.setSpacing(30);
+        return hBox;
     }
 
     private void paste() {
