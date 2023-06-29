@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import models.*;
 import models.Map;
@@ -93,11 +94,14 @@ public class GameMenu {
     }
 
     private void renderMapFromScrollPosition(Map map, Pane rootPane) {
+        Window window = rootPane.getScene().getWindow();
+        if (window == null)
+            return;
+        int windowWidth = (int) window.getWidth();
+        int windowHeight = (int) window.getHeight();
+
         int offsetX = scrollX % TILE_SIZE;
         int offsetY = scrollY % TILE_SIZE;
-
-        int windowWidth = (int) rootPane.getScene().getWindow().getWidth();
-        int windowHeight = (int) rootPane.getScene().getWindow().getHeight();
 
         int fromRow = (int) (scrollY / gridPane.getHeight() * map.getHeight());
         int toRow = fromRow + (int) (windowHeight / TILE_SIZE);
