@@ -223,6 +223,8 @@ public class GameMenu {
         nextTurn.setText("Next Turn");
         nextTurn.setOnMouseClicked(mouseEvent -> {
             nextTurn();
+            nextTurn.setFocusTraversable(false);
+            mouseEvent.consume();
         });
         rootPane.getChildren().add(nextTurn);
     }
@@ -1148,15 +1150,15 @@ public class GameMenu {
 
     void nextTurn() {
         GameMenuController.nextTurn(this);
-        printNowPlaying();
     }
 
-    private void printNowPlaying() {
+    public void printNowPlaying() {
         Graphics.showMessagePopup("Now playing: @" + GameMenuController.getCurrentGame().getCurrentPlayer().getUsername());
     }
 
     public void endGame(User winner) {
-        System.out.println("Game over!\nUser " + winner.getUsername() + " is the winner of the game!");
         isGameOver = true;
+        Main.setScene(new MainMenu().getPane());
+        Graphics.showMessagePopup("Game over!\nUser " + winner.getUsername() + " is the winner of the game!");
     }
 }

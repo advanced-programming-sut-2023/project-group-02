@@ -125,9 +125,10 @@ public class Game {
             nextMonth();
         }
 
-        if (isGameOver()) {
+        if (isGameOver())
             gameMenu.endGame(findWinner());
-        }
+        else
+            gameMenu.printNowPlaying();
     }
 
     private void deleteDeadTroops() {
