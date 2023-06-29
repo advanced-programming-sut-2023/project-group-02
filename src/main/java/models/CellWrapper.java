@@ -8,11 +8,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
 import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CellWrapper extends StackPane {
     private static final int squareSize = 70;
@@ -46,6 +49,7 @@ public class CellWrapper extends StackPane {
                 getChildren().add(imageView);
             }
         }
+        addUnitsImages();
 
         Tooltip tooltip = new Tooltip();
         tooltip.setOnShowing(event -> {
@@ -123,15 +127,9 @@ public class CellWrapper extends StackPane {
                 Graphics.showMessagePopup(message.getMessage());
         } else
             return;
-
-        if (cell.getObject() != null) {
-            ImageView imageView = cell.getObject().getImage();
-            if (imageView != null) {
-                imageView.setFitWidth(squareSize);
-                imageView.setFitHeight(squareSize);
-                getChildren().add(imageView);
-            }
-        }
+        ArrayList<CellWrapper> thisCellWrapper = new ArrayList<>();
+        thisCellWrapper.add(this);
+        GameMenuController.updateCellWrappers(thisCellWrapper);
     }
 
     public boolean dropSmallStone(User player) {
@@ -172,5 +170,15 @@ public class CellWrapper extends StackPane {
         tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
         // TODO: show unit info
         return tooltipText.toString();
+    }
+
+    public void addUnitsImages() {
+        if (cell.getUnits() != null && !cell.getUnits().isEmpty()) {
+            for (Unit unit : cell.getUnits()) {
+                if (this.getChildren().contains(unit.getImage()))
+                    this.getChildren().remove(unit.getImage());
+                this.getChildren().add(unit.getImage());
+            }
+        }
     }
 }

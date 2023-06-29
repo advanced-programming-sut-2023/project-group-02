@@ -6,8 +6,10 @@ import javafx.scene.image.ImageView;
 import models.Coordinates;
 import models.Map;
 import models.User;
+import utils.Graphics;
 import utils.Utils;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Unit {
@@ -28,6 +30,7 @@ public class Unit {
     private boolean hasMoved = false;
     private Coordinates[] patrollingPoint = new Coordinates[2];
     private String imagePath;
+    private final ImageView image;
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
@@ -42,6 +45,24 @@ public class Unit {
         this.canDigMoat = canDigMoat;
         this.canClimbLadder = canClimbLadder;
         imagePath = "/images/soldiers/" + Utils.toCamelCase(getName()) + ".png";
+        image = createImage();
+    }
+
+    private ImageView createImage() {
+        ImageView imageView = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
+        imageView.setFitWidth(30);
+        imageView.setFitHeight(30);
+        imageView.setX(Math.random() * 20 + 30);
+        imageView.setY(Math.random() * 20 + 30);
+        if (this.type == UnitType.LORD) {
+            imageView.setFitWidth(45);
+            imageView.setFitHeight(45);
+        }
+        return imageView;
+    }
+
+    public ImageView getImage() {
+        return image;
     }
 
     public int getDamage() {

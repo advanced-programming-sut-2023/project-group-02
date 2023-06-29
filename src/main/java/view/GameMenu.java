@@ -69,6 +69,7 @@ public class GameMenu {
                 if (cellWrapper.getObject() != null) {
                     cellWrapper.getChildren().add(cellWrapper.getObject().getImage());
                 }
+                cellWrapper.addUnitsImages();
 
                 cellWrapper.setOnDragOver(event -> {
                     if (event.getDragboard().hasImage()) {
