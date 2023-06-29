@@ -4,10 +4,13 @@ import models.buildings.InventoryBuilding;
 import models.buildings.LimitedProductionBuilding;
 import models.buildings.PlainBuilding;
 import models.buildings.ProductionBuilding;
+import models.units.MakeUnitInstances;
+import models.units.Unit;
 import models.units.UnitType;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Government {
@@ -28,11 +31,24 @@ public class Government {
     private static final int MAX_FEAR_RATE = 5;
     private final ArrayList<Trade> allSentTrades = new ArrayList<>();
     private final ArrayList<Trade> inboxOfTrades = new ArrayList<>();
+    private HashMap<Unit,Integer> amountOfUnits;
     private boolean isLordAlive = true;
 
     public Government(User user, Colors color) {
         this.user = user;
         this.color = color;
+        initializeAmountOfUnits();
+    }
+
+    private void initializeAmountOfUnits() {
+        amountOfUnits = new HashMap<>();
+        for (Unit unit : MakeUnitInstances.getAllUnits()) {
+            amountOfUnits.put(unit,0);
+        }
+    }
+
+    public HashMap<Unit, Integer> getAmountOfUnits() {
+        return amountOfUnits;
     }
 
     public void setMap(Map map) {

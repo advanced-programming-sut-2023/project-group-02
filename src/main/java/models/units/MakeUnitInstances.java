@@ -1,8 +1,11 @@
 package models.units;
 
+import models.Building;
 import utils.Utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class MakeUnitInstances {
     public static Unit makeArcher() {
@@ -136,5 +139,24 @@ public class MakeUnitInstances {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Unit> getAllUnits() {
+        ArrayList<Unit> allUnits = new ArrayList<>();
+        Method[] methods = MakeUnitInstances.class.getMethods();
+        for (Method method : methods) {
+            if (method.getParameterCount() == 0 && Unit.class.isAssignableFrom(method.getReturnType())) {
+                try {
+                    Building building = (Building) method.invoke(null);
+                    Unit unit = (Unit) method.invoke(null);
+                    if (unit != null) {
+                        allUnits.add(unit);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return allUnits;
     }
 }

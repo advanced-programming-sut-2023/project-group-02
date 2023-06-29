@@ -1,10 +1,12 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import models.Coordinates;
 import models.Game;
+import models.Government;
 import models.Map;
 import models.units.Unit;
 import models.units.UnitState;
@@ -21,6 +23,25 @@ public class UnitMenuController {
 
     public static ArrayList<Unit> getSelectedUnits() {
         return selectedUnits;
+    }
+
+    private static HashMap<Unit,Integer> allUnitsLeftForCurrentPlayer() {
+        Government government = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
+        return government.getAmountOfUnits();
+    }
+
+    private static int getAmountOfUnitLeft(Unit unit) {
+        return allUnitsLeftForCurrentPlayer().get(unit);
+    }
+
+    private static void useUnits(Unit unit,int amount) {
+        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit);
+        allUnitsLeftForCurrentPlayer().put(unit,currentAmount-amount);
+    }
+
+    private static void makeUnits(Unit unit, int amount) {
+        int currentAmount = allUnitsLeftForCurrentPlayer().get(unit);
+        allUnitsLeftForCurrentPlayer().put(unit,currentAmount+amount);
     }
 
     public static int getUnitsX() {
