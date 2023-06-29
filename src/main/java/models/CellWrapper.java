@@ -127,9 +127,11 @@ public class CellWrapper extends StackPane {
                 Graphics.showMessagePopup(message.getMessage());
         } else
             return;
-        ArrayList<CellWrapper> thisCellWrapper = new ArrayList<>();
-        thisCellWrapper.add(this);
-        GameMenuController.updateCellWrappers(thisCellWrapper);
+
+        addUnitsImages();
+        if (cell.getObject() != null) {
+            getChildren().add(cell.getObject().getImage());
+        }
     }
 
     public boolean dropSmallStone(User player) {
