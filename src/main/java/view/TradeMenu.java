@@ -403,7 +403,8 @@ public class TradeMenu {
     }
 
     private VBox makeDetailBox(Trade trade) {
-        Text resourceAndAmount = new Text(ItemsController.getItemName(trade.getResourceType()) + " " + trade.getAmount());
+        Text resourceAndAmount = new Text(ItemsController.getItemName(trade.getResourceType()) + " " + trade.getAmount() +
+            " - price: " + trade.getPrice());
         resourceAndAmount.getStyleClass().add("title3");
         Text message = new Text("Message:\n" + trade.getRequesterMessage());
         message.getStyleClass().add("title3");
