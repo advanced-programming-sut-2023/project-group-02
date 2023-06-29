@@ -199,6 +199,7 @@ public class GameMenu {
 
         rootPane.getChildren().add(bottomHBox);
         doPreGameProcess(isPreGame);
+        addNextTurnButton(isPreGame);
         return rootPane;
     }
 
@@ -213,6 +214,17 @@ public class GameMenu {
         textureChoiceBox = makeTextureChoiceBox();
 
         rootPane.getChildren().addAll(nextButton, clearButton, textureChoiceBox);
+    }
+
+    private void addNextTurnButton(boolean isPreGame) {
+        if (isPreGame)
+            return;
+        Button nextTurn = makeNextButton();
+        nextTurn.setText("Next Turn");
+        nextTurn.setOnMouseClicked(mouseEvent -> {
+            nextTurn();
+        });
+        rootPane.getChildren().add(nextTurn);
     }
 
     private ChoiceBox<String> makeTextureChoiceBox() {
@@ -1140,7 +1152,7 @@ public class GameMenu {
     }
 
     private void printNowPlaying() {
-        System.out.println("Now playing: @" + GameMenuController.getCurrentGame().getCurrentPlayer().getUsername());
+        Graphics.showMessagePopup("Now playing: @" + GameMenuController.getCurrentGame().getCurrentPlayer().getUsername());
     }
 
     public void endGame(User winner) {
