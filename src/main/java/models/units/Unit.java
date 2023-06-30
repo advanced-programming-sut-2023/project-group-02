@@ -50,8 +50,8 @@ public class Unit {
 
     private ImageView createImage() {
         ImageView imageView = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(30);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
         imageView.setX(Math.random() * 20 + 30);
         imageView.setY(Math.random() * 20 + 30);
         if (this.type == UnitType.LORD) {
