@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum GameMenuMessages {
     INVALID_INPUT_FORMAT("invalid input format!"),

@@ -3,10 +3,12 @@ package controllers;
 import models.User;
 import utils.PasswordProblem;
 import utils.Validation;
-import view.enums.LoginMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import client.view.enums.LoginMenuMessages;
+
 import java.util.Date;
 
 public class LoginMenuController {

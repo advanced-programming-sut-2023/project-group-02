@@ -12,13 +12,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import view.Main;
-import view.enums.ProfileMenuMessages;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+
+import client.view.Main;
+import client.view.enums.ProfileMenuMessages;
 
 public class Graphics {
     public static Background getBackground(URL url) {

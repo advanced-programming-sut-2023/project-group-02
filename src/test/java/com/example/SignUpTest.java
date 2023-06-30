@@ -2,9 +2,9 @@ package com.example;
 
 import org.junit.jupiter.api.*;
 
+import client.view.enums.SignUpMenuMessages;
 import controllers.*;
 import utils.*;
-import view.enums.SignUpMenuMessages;
 
 import java.util.ArrayList;
 import java.util.List;

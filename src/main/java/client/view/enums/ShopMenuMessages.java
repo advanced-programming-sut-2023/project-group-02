@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum ShopMenuMessages {
     INVALID_NAME("This name is invalid!"),

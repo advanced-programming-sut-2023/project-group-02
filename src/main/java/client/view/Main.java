@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -11,13 +11,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.Graphics;
 import utils.Utils;
-import view.MainMenu;
-import view.SignupMenu;
 
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import client.view.MainMenu;
+import client.view.SignupMenu;
 import controllers.UserController;
 import controllers.database.Database;
 
@@ -66,8 +66,9 @@ public class Main extends Application {
     public static Pane getTitlePane() {
         Pane pane = new Pane();
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(MainMenu.class.getResource(
-            "/images/backgrounds/signup-menu.jpg"))));
-        pane.getStylesheets().add(Objects.requireNonNull(MainMenu.class.getResource("/CSS/Menus.css")).toExternalForm());
+                "/images/backgrounds/signup-menu.jpg"))));
+        pane.getStylesheets()
+                .add(Objects.requireNonNull(MainMenu.class.getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         initTitlePane(pane);
         return pane;

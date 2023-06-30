@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum TradeMenuMessages {
     INVALID_RESOURCE("Choose the item you want please!"),

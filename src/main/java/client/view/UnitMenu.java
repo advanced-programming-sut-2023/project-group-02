@@ -1,13 +1,13 @@
-package view;
+package client.view;
 
 import models.units.UnitState;
 import models.units.UnitType;
 import utils.Parser;
 import utils.Utils;
-import view.enums.UnitMenuMessages;
 
 import java.util.Scanner;
 
+import client.view.enums.UnitMenuMessages;
 import controllers.UnitMenuController;
 
 public class UnitMenu {
@@ -52,19 +52,20 @@ public class UnitMenu {
             return;
         }
         UnitMenuMessages message = UnitMenuController.moveUnit(Integer.parseInt(parser.get("x")),
-            Integer.parseInt(parser.get("y")));
+                Integer.parseInt(parser.get("y")));
         System.out.println(message.getMessage());
     }
 
     void patrolUnit(Parser parser) {
         if (!parser.getFlag("x1") || !parser.getFlag("y1") || !parser.getFlag("x2") || !parser.getFlag("y2")
-            || !Utils.isInteger(parser.get("x1")) || !Utils.isInteger(parser.get("y1"))
-            || !Utils.isInteger(parser.get("x2")) || !Utils.isInteger(parser.get("y2"))) {
+                || !Utils.isInteger(parser.get("x1")) || !Utils.isInteger(parser.get("y1"))
+                || !Utils.isInteger(parser.get("x2")) || !Utils.isInteger(parser.get("y2"))) {
             System.out.println("invalid coordinates");
             return;
         }
-        UnitMenuMessages message = UnitMenuController.patrolUnit(Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1")),
-            Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2")));
+        UnitMenuMessages message = UnitMenuController.patrolUnit(Integer.parseInt(parser.get("x1")),
+                Integer.parseInt(parser.get("y1")),
+                Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2")));
         System.out.println(message.getMessage());
     }
 
@@ -91,7 +92,8 @@ public class UnitMenu {
             System.out.println("Invalid numbers for x and y");
             return;
         }
-        UnitMenuMessages message = UnitMenuController.attack(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), isAerial);
+        UnitMenuMessages message = UnitMenuController.attack(Integer.parseInt(parser.get("x")),
+                Integer.parseInt(parser.get("y")), isAerial);
         System.out.println(message.getMessage());
     }
 

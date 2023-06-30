@@ -4,10 +4,11 @@ import models.Food;
 import models.MartialEquipment;
 import models.Material;
 import utils.Utils;
-import view.enums.ShopMenuMessages;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import client.view.enums.ShopMenuMessages;
 
 public class ShopMenuController {
     public static ShopMenuMessages buyItem(Object item, int amount) {

@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.LoginMenuController;
 import controllers.UserController;
@@ -15,10 +15,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.User;
 import utils.*;
-import view.enums.LoginMenuMessages;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import client.view.enums.LoginMenuMessages;
 
 public class LoginMenu {
     private static User currentUser;

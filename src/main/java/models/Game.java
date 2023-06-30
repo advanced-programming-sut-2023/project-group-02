@@ -6,13 +6,14 @@ import models.units.Unit;
 import models.units.UnitState;
 import models.units.UnitType;
 import utils.PathFinder;
-import view.GameMenu;
-import view.MainMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+
+import client.view.GameMenu;
+import client.view.MainMenu;
 
 public class Game {
     private final ArrayList<Government> governments;

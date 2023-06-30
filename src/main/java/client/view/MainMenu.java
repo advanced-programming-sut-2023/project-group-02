@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.UserController;
 import javafx.scene.control.Button;
@@ -11,9 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.User;
 import utils.Graphics;
-import view.pregame.PreGameMenu;
 
 import java.util.Objects;
+
+import client.view.pregame.PreGameMenu;
 
 public class MainMenu {
     public Pane getPane() {

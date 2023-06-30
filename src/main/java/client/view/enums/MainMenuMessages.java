@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum MainMenuMessages {
     ALREADY_LOGGED_OUT("You aren't in your account right now!"),

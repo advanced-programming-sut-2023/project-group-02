@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.ProfileMenuController;
 import controllers.UserController;
@@ -15,10 +15,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import utils.Graphics;
 import utils.Validation;
-import view.enums.ProfileMenuMessages;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import client.view.enums.ProfileMenuMessages;
 
 public class ProfileMenu {
     public Pane getPane() {

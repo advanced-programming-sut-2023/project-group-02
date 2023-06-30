@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.GameMenuController;
 import controllers.ItemsController;
@@ -13,9 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import models.Material;
 import utils.Graphics;
-import view.enums.ShopMenuMessages;
 
 import java.util.Objects;
+
+import client.view.enums.ShopMenuMessages;
 
 public class ShopMenu {
     Pane shopPane;

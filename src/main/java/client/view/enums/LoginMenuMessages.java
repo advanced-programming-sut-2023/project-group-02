@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum LoginMenuMessages {
     UNMATCHED_USERNAME_PASSWORD("Password is incorrect!"),

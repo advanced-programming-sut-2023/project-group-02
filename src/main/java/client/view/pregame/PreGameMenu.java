@@ -1,4 +1,4 @@
-package view.pregame;
+package client.view.pregame;
 
 import controllers.GameMenuController;
 import javafx.scene.Scene;
@@ -6,12 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import utils.Graphics;
-import view.GameMenu;
-import view.Main;
-import view.MainMenu;
-import view.ProfileMenu;
 
 import java.util.Objects;
+
+import client.view.GameMenu;
+import client.view.Main;
+import client.view.MainMenu;
+import client.view.ProfileMenu;
 
 public class PreGameMenu {
     public Pane getPane() {

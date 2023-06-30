@@ -1,4 +1,4 @@
-package view.pregame;
+package client.view.pregame;
 
 import controllers.GameMenuController;
 import controllers.SignUpMenuController;
@@ -14,13 +14,14 @@ import models.Map;
 import models.User;
 import utils.Graphics;
 import utils.Utils;
-import view.GameMenu;
-import view.Main;
-import view.enums.SignUpMenuMessages;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Objects;
+
+import client.view.GameMenu;
+import client.view.Main;
+import client.view.enums.SignUpMenuMessages;
 
 public class InitGameMenu {
     private final Text numberOfTurnsText = new Text("Number of turns: ");

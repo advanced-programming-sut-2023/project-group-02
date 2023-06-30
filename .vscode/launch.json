@@ -6,9 +6,16 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main",
+            "name": "Client",
             "request": "launch",
-            "mainClass": "project/view.Main",
+            "mainClass": "project/client.view.Main",
+            "projectName": "project"
+        },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "project/server.Main",
             "projectName": "project"
         }
     ]

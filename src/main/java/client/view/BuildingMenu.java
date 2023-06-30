@@ -1,13 +1,14 @@
-package view;
+package client.view;
 
 import controllers.BuildingMenuController;
 import models.Building;
 import utils.Parser;
 import utils.Utils;
-import view.enums.BuildingMenuMessages;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
+
+import client.view.enums.BuildingMenuMessages;
 
 public class BuildingMenu {
     private final Building selectedBuilding;

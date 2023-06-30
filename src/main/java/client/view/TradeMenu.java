@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.GameMenuController;
 import controllers.ItemsController;
@@ -19,11 +19,12 @@ import models.Government;
 import models.Trade;
 import models.User;
 import utils.Graphics;
-import view.enums.GameMenuMessages;
-import view.enums.TradeMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import client.view.enums.GameMenuMessages;
+import client.view.enums.TradeMenuMessages;
 
 public class TradeMenu {
     enum TradeType {

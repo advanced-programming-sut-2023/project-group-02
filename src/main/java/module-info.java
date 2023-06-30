@@ -5,9 +5,10 @@ module project {
     requires jdk.jshell;
     requires java.desktop;
 
-    exports view;
-    exports view.enums;
-    opens view to javafx.fxml;
+    exports client.view;
+    exports client.view.enums;
+
+    opens client.view to javafx.fxml;
     exports models;
     opens models to com.google.gson;
     exports models.units;

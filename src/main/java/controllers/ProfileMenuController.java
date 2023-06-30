@@ -1,8 +1,8 @@
 package controllers;
 
+import client.view.enums.ProfileMenuMessages;
 import models.User;
 import utils.Validation;
-import view.enums.ProfileMenuMessages;
 
 public class ProfileMenuController {
     public static ProfileMenuMessages changeUsername(String newUsername) {

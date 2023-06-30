@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum SignUpMenuMessages {
     EMPTY_USERNAME("Username can't be empty!"),

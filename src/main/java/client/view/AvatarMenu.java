@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.UserController;
 import javafx.scene.control.Button;
@@ -25,7 +25,8 @@ public class AvatarMenu {
     }
 
     private void initializePane(Pane pane) {
-        pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/avatar-menu.jpg"))));
+        pane.setBackground(Graphics
+                .getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/avatar-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
 
@@ -35,10 +36,10 @@ public class AvatarMenu {
 
         Button chooseFileFromPC = makeFileChooser();
 
-        VBox leftVbox = new VBox(makeText("Your Current Avatar"),currentAvatar,
-            makeText("Choose a default avatar"),hBoxOfDefaultAvatars,
-            makeText("Or choose from your PC"),chooseFileFromPC,
-            makeBackButton());
+        VBox leftVbox = new VBox(makeText("Your Current Avatar"), currentAvatar,
+                makeText("Choose a default avatar"), hBoxOfDefaultAvatars,
+                makeText("Or choose from your PC"), chooseFileFromPC,
+                makeBackButton());
         leftVbox.setSpacing(20);
         leftVbox.setTranslateX(10);
         leftVbox.setTranslateY(5);
@@ -51,8 +52,8 @@ public class AvatarMenu {
         scrollPane.setPrefWidth(300);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        VBox rightVbox = new VBox(makeText("You can choose others' avatars!"),scrollPane);
-        HBox generalHBox = new HBox(leftVbox,rightVbox);
+        VBox rightVbox = new VBox(makeText("You can choose others' avatars!"), scrollPane);
+        HBox generalHBox = new HBox(leftVbox, rightVbox);
         generalHBox.setSpacing(40);
         pane.getChildren().add(generalHBox);
     }
@@ -65,7 +66,7 @@ public class AvatarMenu {
             defaultAvatar.setFitWidth(100);
             defaultAvatar.setFitHeight(100);
             defaultAvatar.setOnMouseClicked(event -> {
-                UserController.changeAvatar(UserController.getCurrentUser(),defaultAvatar.getImage().getUrl());
+                UserController.changeAvatar(UserController.getCurrentUser(), defaultAvatar.getImage().getUrl());
                 Main.setScene(getPane());
             });
         }
@@ -77,13 +78,14 @@ public class AvatarMenu {
         button.getStyleClass().add("button1");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png"));
 
         button.setOnAction(event -> {
             File selectedFile = fileChooser.showOpenDialog(Main.getStage());
             if (selectedFile != null) {
                 String imagePath = selectedFile.toURI().toString();
-                UserController.changeAvatar(UserController.getCurrentUser(),imagePath);
+                UserController.changeAvatar(UserController.getCurrentUser(), imagePath);
                 Main.setScene(getPane());
             }
         });
@@ -92,7 +94,7 @@ public class AvatarMenu {
 
     private Text makeText(String content) {
         Text text = new Text(content);
-        text.setFont(new Font("Arial",20));
+        text.setFont(new Font("Arial", 20));
         text.setFill(Color.BLUE);
         return text;
     }
@@ -106,14 +108,15 @@ public class AvatarMenu {
 
     private void makeListOfPlayers(VBox rightVbox) {
         for (User user : UserController.getUsers()) {
-            if (user.equals(UserController.getCurrentUser())) continue;
+            if (user.equals(UserController.getCurrentUser()))
+                continue;
             ImageView avatar = user.getAvatar();
             avatar.setFitHeight(50);
             avatar.setFitWidth(50);
             Text name = new Text(user.getUsername());
             name.getStyleClass().add("button1");
             name.setFill(Color.GOLD);
-            HBox playerHBox = new HBox(avatar,name);
+            HBox playerHBox = new HBox(avatar, name);
             playerHBox.getStyleClass().add("button1");
             playerHBox.setPrefWidth(300);
             playerHBox.setSpacing(5);

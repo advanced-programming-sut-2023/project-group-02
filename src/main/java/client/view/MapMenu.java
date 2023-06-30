@@ -1,14 +1,15 @@
-package view;
+package client.view;
 
 import controllers.GameMenuController;
 import controllers.MapMenuController;
 import models.Map;
 import utils.Parser;
 import utils.Utils;
-import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import client.view.enums.MapMenuMessages;
 
 public class MapMenu {
     MapMenuController mapMenuController;

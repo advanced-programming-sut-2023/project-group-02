@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum UnitMenuMessages {
     WRONG_UNIT("Wrong unit type"),

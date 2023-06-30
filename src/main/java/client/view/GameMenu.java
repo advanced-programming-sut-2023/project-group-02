@@ -1,4 +1,4 @@
-package view;
+package client.view;
 
 import controllers.*;
 import javafx.event.Event;
@@ -30,9 +30,10 @@ import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
-import view.enums.GameMenuMessages;
 
 import java.util.*;
+
+import client.view.enums.GameMenuMessages;
 
 public class GameMenu {
     private boolean isGameOver = false;

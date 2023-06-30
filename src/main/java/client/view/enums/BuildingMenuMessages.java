@@ -1,4 +1,4 @@
-package view.enums;
+package client.view.enums;
 
 public enum BuildingMenuMessages {
     INVALID_TYPE("Invalid type!"),
