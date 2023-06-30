@@ -184,15 +184,14 @@ public class CellWrapper extends StackPane {
 
     public void addUnitsImages() {
         if (cell.getUnits() != null && !cell.getUnits().isEmpty()) {
-            System.out.println("hello im adding units image and this place's coordinates are " + cell.getX() + " " + cell.getY());
+            System.out.println("hello im adding units image and this place's coordinates are " + cell.getX() + " " + cell.getY() + " " + cell.getUnits());
             for (Unit unit : cell.getUnits()) {
+                System.out.println(unit.getImage() + " owner:" + unit.getOwner().getUsername());
                 if (this.getChildren().contains(unit.getImage()))
                     this.getChildren().remove(unit.getImage());
-                ImageView unitImage = new ImageView(unit.getImage().getImage());
-                unitImage.setFitWidth(50);
-                unitImage.setFitHeight(50);
-                this.getChildren().add(unitImage);
+                this.getChildren().add(unit.getImage());
             }
+            System.out.println("from the cell " + cell.getX() + " " + cell.getY() + " the children are " + this.getChildren());
         }
     }
 }
