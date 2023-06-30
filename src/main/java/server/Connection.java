@@ -11,12 +11,15 @@ public class Connection extends Thread {
     private Socket socket;
     private final DataInputStream dataInputStream;
     private final DataOutputStream dataOutputStream;
+    private final CheckUserAvailability checkUserAvailability;
 
     public Connection(Socket socket) throws IOException {
         System.out.println("New connection form: " + socket.getInetAddress() + " : " + socket.getPort());
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        this.checkUserAvailability = new CheckUserAvailability(dataOutputStream, this);
+        checkUserAvailability.start();
     }
 
     @Override
@@ -31,7 +34,12 @@ public class Connection extends Thread {
 
             }
         } catch (IOException e) {
-            System.out.println("Connection " + socket.getInetAddress() + ":" + socket.getPort() + " lost!");
+            checkUserAvailability.userDisconnected();
         }
+    }
+
+    public void userDisconnected() {
+        System.out.println("Player disconnected: " + socket.getInetAddress() + " : " + socket.getPort());
+        //TODO do anything necessary when user becomes offline
     }
 }
