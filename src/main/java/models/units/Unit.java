@@ -11,6 +11,7 @@ import utils.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Unit {
     private User owner;
@@ -31,6 +32,7 @@ public class Unit {
     private Coordinates[] patrollingPoint = new Coordinates[2];
     private String imagePath;
     private final ImageView image;
+    private LinkedList<Coordinates> currentPath;
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
@@ -132,6 +134,14 @@ public class Unit {
     public void setCoordinates(int x, int y) {
         currentX = x;
         currentY = y;
+    }
+
+    public LinkedList<Coordinates> getCurrentPath() {
+        return currentPath;
+    }
+
+    public void setCurrentPath(LinkedList<Coordinates> currentPath) {
+        this.currentPath = currentPath;
     }
 
     public String getName() {

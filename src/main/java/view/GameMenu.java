@@ -32,6 +32,7 @@ import utils.Parser;
 import utils.Utils;
 import view.enums.BuildingMenuMessages;
 import view.enums.GameMenuMessages;
+import view.enums.UnitMenuMessages;
 
 import java.util.*;
 
@@ -768,13 +769,38 @@ public class GameMenu {
         if (selectedTiles.size() == 1) {
             handleSingleSelection(selectedTiles.get(0));
         } else {
-            // TODO
+            handleMultiSelection(selectedTiles);
         }
+    }
+
+    private void handleMultiSelection(ArrayList<CellWrapper> selectedTiles) {
+        HBox finalHBox = new HBox();
+        for (CellWrapper cellWrapper : selectedTiles) {
+            Cell cell = cellWrapper.getCell();
+            if (cell.getObject() != null && cell.getObject() instanceof Building building
+                && cell.getObject().getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+                finalHBox.getChildren().add(makeRepairBuildingVBox(building));
+            if (cell.getUnits().size() != 0 && cell.getUnits().get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
+                System.out.println("hi, im calling from here and it is multi and some units should be added the final hbox is " + finalHBox.getChildren());
+                finalHBox.getChildren().add(makeMoveUnitVBox(cell.getUnits()));
+            }
+        }
+//        for (CellWrapper cellWrapper : selectedTiles) {
+//            Cell cell = cellWrapper.getCell();
+//            if (cell.getUnits().size() != 0 && cell.getUnits().get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
+//                finalHBox.getChildren().add(makeMoveUnitVBox(cell.getUnits()));
+//                System.out.println("hi, im calling from here and it is multi and some units should be added the final hbox is " + finalHBox.getChildren());
+//            }
+//        }
+        finalHBox.setSpacing(10);
+        showBuildingsBar = false;
+        itemsScrollPane.setContent(finalHBox);
     }
 
     private void handleSingleSelection(CellWrapper cellWrapper) {
         Cell cell = cellWrapper.getCell();
         MapObject mapObject = cell.getObject();
+        ArrayList<Unit> units = cell.getUnits();
         if (!isPreGame && mapObject != null && mapObject instanceof Building building &&
             mapObject.getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
             if (building.getName().equalsIgnoreCase("shop")) {
@@ -782,21 +808,33 @@ public class GameMenu {
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
                 addUnitsHBox(building.getName());
                 showBuildingsBar = false;
+            } else if (units.size() != 0) {
+                HBox hBox = new HBox(makeRepairBuildingVBox(building),makeMoveUnitVBox(units));
+                hBox.setSpacing(10);
+                itemsScrollPane.setContent(hBox);
+                showBuildingsBar = false;
             } else {
                 itemsScrollPane.setContent(makeRepairBuildingVBox(building));
+                showBuildingsBar = false;
             }
+            rootPane.requestFocus();
+        } else if (units.size() != 0) {
+            itemsScrollPane.setContent(makeMoveUnitVBox(units));
+            rootPane.requestFocus();
         } else if (!showBuildingsBar) {
             HBox hBox = new HBox();
             hBox.setTranslateY(22);
             hBox.setSpacing(10);
             addBuildingsToHBox(hBox);
             itemsScrollPane.setContent(hBox);
+            rootPane.requestFocus();
         }
     }
 
     private Button makeRepairButton(Building building) {
         Button repairButton = new Button("Repair Building");
         repairButton.getStyleClass().add("button2");
+        repairButton.setMaxWidth(50);
         repairButton.setOnAction(event -> {
             BuildingMenuMessages message = BuildingMenuController.repair(building);
             Graphics.showMessagePopup(message.getMessage());
@@ -806,12 +844,77 @@ public class GameMenu {
 
     private VBox makeRepairBuildingVBox(Building building) {
         Text hitpoint = new Text("hitpoint:" + building.getHitpoint());
-        HBox hBoxOfImageAndHitpoint = new HBox(building.getBuildingImage(),hitpoint);
+        ImageView buildingImage = new ImageView(building.getBuildingImage().getImage());
+        buildingImage.setFitHeight(50);
+        buildingImage.setFitWidth(50);
+        HBox hBoxOfImageAndHitpoint = new HBox(buildingImage,hitpoint);
         VBox vBox = new VBox(hBoxOfImageAndHitpoint,makeRepairButton(building));
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(5));
         vBox.setSpacing(5);
         return vBox;
+    }
+
+    private VBox makeMoveUnitVBox(ArrayList<Unit> units) {
+        System.out.println("from here. do we get here?");
+        if (units.get(0).getUnitsImage() == null) return null;
+        ImageView unitImage = new ImageView(units.get(0).getUnitsImage().getImage());
+        Text countOfUnits = new Text("count: " + units.size());
+        HBox imageAndCount = new HBox(unitImage,countOfUnits);
+        imageAndCount.setSpacing(5);
+        Tooltip tooltip = new Tooltip(units.get(0).getName());
+        tooltip.setShowDelay(Duration.ZERO);
+        Tooltip.install(unitImage,tooltip);
+        TextField countOfMovingUnits = makeTextField("count");
+        TextField destinationX = makeTextField("x");
+        TextField destinationY = makeTextField("y");
+        Button moveButton = new Button("Move");
+        moveButton.getStyleClass().add("button2");
+        moveButton.setMaxWidth(30);
+        HBox textFields = new HBox(countOfMovingUnits,destinationX,destinationY);
+        textFields.setSpacing(2);
+        System.out.println("from another here are we here");
+
+        moveButton.setOnAction(event -> {
+            String[] textFieldReturns = {countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText()};
+            String returnMessage = null;
+            if (!Utils.areIntegers(textFieldReturns)) {
+                returnMessage = "Please import numbers!";
+                Graphics.showMessagePopup(returnMessage);
+                return;
+            }
+            int count = Integer.parseInt(countOfMovingUnits.getText()) , desX = Integer.parseInt(destinationX.getText())
+                , desY = Integer.parseInt(destinationY.getText());
+            if (count > units.size()) {
+                returnMessage = "You dont have enough units!";
+            } else {
+                ArrayList<Unit> unitsToMove = new ArrayList<>();
+                for (int i = 0; i < count; i++) {
+                    unitsToMove.add(units.get(i));
+                }
+                UnitMenuController.setSelectedUnits(unitsToMove);
+                UnitMenuMessages message = UnitMenuController.moveUnit(desX,desY);
+//                for (CellWrapper cellWrapper : GameMenuController.getCurrentGameCellWrappers()) {
+//                    cellWrapper.addUnitsImages();
+//                }
+                returnMessage = message.getMessage();
+            }
+            Graphics.showMessagePopup(returnMessage);
+            rootPane.requestFocus();
+        });
+
+        VBox mainVBox = new VBox(imageAndCount,textFields,moveButton);
+        mainVBox.setSpacing(5);
+        mainVBox.setAlignment(Pos.CENTER);
+        return mainVBox;
+    }
+
+    private TextField makeTextField(String prompt) {
+        TextField textField = new TextField();
+        textField.setPromptText(prompt);
+        textField.setPrefWidth(30);
+        textField.setPrefHeight(30);
+        return textField;
     }
 
     private void addUnitsHBox(String type) {
@@ -827,7 +930,7 @@ public class GameMenu {
     private VBox getUnitVBox(Unit unit) {
         ImageView unitImage = unit.getImage();
         unitImage.setFitHeight(50);
-        unitImage.setFitWidth(50);
+        unitImage.setFitWidth(60);
         Tooltip tooltip = new Tooltip(unit.getName());
         tooltip.setShowDelay(Duration.ZERO);
         Tooltip.install(unitImage,tooltip);

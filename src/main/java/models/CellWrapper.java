@@ -109,7 +109,7 @@ public class CellWrapper extends StackPane {
 //        }
 //    }
 
-    public void dropObject(String objectName, Image objectImage, boolean isPreGame, User owner) {
+    public void dropObject(String objectName, boolean isPreGame, User owner) {
         Building building = null;
         Unit unit = null;
         if (Directions.getDirectionsLowerCase().contains(objectName)) {
@@ -184,10 +184,14 @@ public class CellWrapper extends StackPane {
 
     public void addUnitsImages() {
         if (cell.getUnits() != null && !cell.getUnits().isEmpty()) {
+            System.out.println("hello im adding units image and this place's coordinates are " + cell.getX() + " " + cell.getY());
             for (Unit unit : cell.getUnits()) {
                 if (this.getChildren().contains(unit.getImage()))
                     this.getChildren().remove(unit.getImage());
-                this.getChildren().add(unit.getImage());
+                ImageView unitImage = new ImageView(unit.getImage().getImage());
+                unitImage.setFitWidth(50);
+                unitImage.setFitHeight(50);
+                this.getChildren().add(unitImage);
             }
         }
     }

@@ -63,7 +63,7 @@ public class UnitMenuController {
         unitsY = y;
     }
 
-    private static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
+    public static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
         UnitMenuController.selectedUnits = selectedUnits;
     }
 
@@ -97,6 +97,7 @@ public class UnitMenuController {
         Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, maxDistance));
         for (Unit unit : selectedUnits) {
             unit.setHasMoved(true);
+            unit.setCurrentPath(path);
             map.moveUnit(unit, finalPointForThisTurn.x, finalPointForThisTurn.y);
             if (!finalPointForThisTurn.equals(path.getLast())) {
                 game.scheduleMovement(unit, finalPointForThisTurn.x, finalPointForThisTurn.y, x, y);
