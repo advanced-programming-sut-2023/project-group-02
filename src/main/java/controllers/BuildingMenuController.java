@@ -30,7 +30,8 @@ public class BuildingMenuController {
                     return "This troop can't be trained at this building";
             }
         }
-        return GameMenuController.dropUnit(selectedBuildingX, selectedBuildingY, typeOfUnit, count, true).getMessage();
+//        return GameMenuController.dropUnit(selectedBuildingX, selectedBuildingY, typeOfUnit, count, true).getMessage();
+        return null;
     }
 
     public static BuildingMenuMessages repair(Building building) {

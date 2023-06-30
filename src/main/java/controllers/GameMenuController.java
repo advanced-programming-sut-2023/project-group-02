@@ -282,9 +282,13 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages dropUnit(int x, int y, Unit unit, int count, User player) {
+        if (count == 0)
+            return GameMenuMessages.INVALID_NUMBER;
+
         for (int i = 0; i < count; i++) {
             currentGame.addUnit(unit, player, x, y);
         }
+        UnitMenuController.useUnits(unit,count);
         return GameMenuMessages.DONE_SUCCESSFULLY;
     }
 

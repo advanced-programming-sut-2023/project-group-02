@@ -50,7 +50,7 @@ public class BuildingMenu {
             System.out.println("You can't create unit from this building!");
             return;
         }
-        System.out.println(BuildingMenuController.createUnit(parser.get("-t"), Integer.parseInt(parser.get("-c"))));
+//        System.out.println(BuildingMenuController.createUnit(parser.get("-t"), Integer.parseInt(parser.get("-c"))));
     }
 
     void repair() {

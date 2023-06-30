@@ -53,7 +53,7 @@ public class GameMenu {
     private VBox governmentVBox;
     private Text popularityText = new Text();
     private ScrollPane itemsScrollPane;
-    private boolean showBuildingsBar = false;
+    private boolean showBuildingsBar = true;
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
                            int offsetY) {
@@ -613,7 +613,7 @@ public class GameMenu {
             treeImage.setOnMouseDragged(event -> {
                 rootPane.requestFocus();
             });
-            handleDropItems(treeType.getTreeName(), treeImage);
+            handleDropItems(treeType.getTreeName(), treeImage,TILE_SIZE);
         }
         for (Directions directions : Directions.values()) {
             ImageView rockImage = new Rock(directions).getImageView();
@@ -628,7 +628,7 @@ public class GameMenu {
             rockImage.setOnMouseDragged(event -> {
                 rootPane.requestFocus();
             });
-            handleDropItems(directions.name().toLowerCase(), rockImage);
+            handleDropItems(directions.name().toLowerCase(), rockImage,TILE_SIZE);
         }
     }
 
@@ -647,7 +647,7 @@ public class GameMenu {
                 buildingImage.setOnMouseDragged(event -> {
                     rootPane.requestFocus();
                 });
-                handleDropItems(building.getName(), buildingImage);
+                handleDropItems(building.getName(), buildingImage,TILE_SIZE);
             }
         }
     }
@@ -668,15 +668,15 @@ public class GameMenu {
         return itemsScrollPane;
     }
 
-    private void handleDropItems(String itemName, ImageView itemImage) {
+    private void handleDropItems(String itemName, ImageView itemImage, int size) {
         itemImage.setOnDragDetected(event -> {
             Dragboard db = itemImage.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
             content.putString(itemName);
             Image image = itemImage.getImage();
             ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(TILE_SIZE);
-            imageView.setFitWidth(TILE_SIZE);
+            imageView.setFitHeight(size);
+            imageView.setFitWidth(size);
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.GREEN);
             content.putImage(imageView.snapshot(params, null));
@@ -777,13 +777,22 @@ public class GameMenu {
         if (!isPreGame && mapObject != null && mapObject instanceof Building building) {
             if (building.getName().equalsIgnoreCase("shop")) {
                 goToShopMenu();
-            } else if (building.getName().equalsIgnoreCase("Barrack")) {
-                addUnitsHBox("Barrack");
-            } else if (building.getName().equalsIgnoreCase("Mercenary Post")) {
-                addUnitsHBox("Mercenary Post");
-            } else if (building.getName().equalsIgnoreCase("Engineer Guild")) {
-                addUnitsHBox("Engineer Guild");
+            } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
+                addUnitsHBox(building.getName());
+                showBuildingsBar = false;
+            } else if (!showBuildingsBar) {
+                HBox hBox = new HBox();
+                hBox.setTranslateY(22);
+                hBox.setSpacing(10);
+                addBuildingsToHBox(hBox);
+                itemsScrollPane.setContent(hBox);
             }
+        } else if (!showBuildingsBar) {
+            HBox hBox = new HBox();
+            hBox.setTranslateY(22);
+            hBox.setSpacing(10);
+            addBuildingsToHBox(hBox);
+            itemsScrollPane.setContent(hBox);
         }
     }
 
@@ -810,7 +819,6 @@ public class GameMenu {
             if (!message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) Graphics.showMessagePopup(message.getMessage());
             addUnitsHBox(unit.getType().getWhereCanBeTrained());
         });
-        //TODO : the work of drag and drop
 
         Slider unitsToUse = new Slider(0,UnitMenuController.getAmountOfUnitLeft(unit),0);
         fixSliders(unitsToUse);
@@ -820,6 +828,25 @@ public class GameMenu {
         VBox vBox = new VBox(unitImage,unitsToUse,amountOfUnitsLeft);
         vBox.setSpacing(3);
         vBox.setAlignment(Pos.CENTER);
+
+        unitImage.setOnDragDetected(event -> {
+            UnitMenuController.getDroppingUnitsCount().put(unit.getName(), (int) unitsToUse.getValue());
+            Dragboard db = unitImage.startDragAndDrop(TransferMode.COPY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(unit.getName());
+            Image image = unitImage.getImage();
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            SnapshotParameters params = new SnapshotParameters();
+            params.setFill(Color.GREEN);
+            content.putImage(imageView.snapshot(params, null));
+            db.setContent(content);
+            event.consume();
+        });
+
+        unitImage.setOnDragDone(event -> addUnitsHBox(unit.getType().getWhereCanBeTrained()));
+
         return vBox;
     }
 

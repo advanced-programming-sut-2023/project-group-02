@@ -21,10 +21,14 @@ public class UnitMenuController {
     private static ArrayList<Unit> selectedUnits;
     private static int unitsX;
     private static int unitsY;
-
+    private static HashMap<String,Integer> droppingUnitsCount = new HashMap<>();
 
     public static ArrayList<Unit> getSelectedUnits() {
         return selectedUnits;
+    }
+
+    public static HashMap<String, Integer> getDroppingUnitsCount() {
+        return droppingUnitsCount;
     }
 
     public static HashMap<String,Integer> allUnitsLeftForCurrentPlayer() {

@@ -1,6 +1,7 @@
 package models;
 
 import controllers.GameMenuController;
+import controllers.UnitMenuController;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
@@ -109,6 +111,7 @@ public class CellWrapper extends StackPane {
 
     public void dropObject(String objectName, Image objectImage, boolean isPreGame, User owner) {
         Building building = null;
+        Unit unit = null;
         if (Directions.getDirectionsLowerCase().contains(objectName)) {
             GameMenuMessages message = GameMenuController.dropRock(cell.getX(), cell.getY(), objectName);
             if (message != GameMenuMessages.DONE_SUCCESSFULLY)
@@ -125,8 +128,13 @@ public class CellWrapper extends StackPane {
                 message = GameMenuController.dropBuilding(cell.getX(), cell.getY(), building, !isPreGame);
             if (message != GameMenuMessages.DONE_SUCCESSFULLY)
                 Graphics.showMessagePopup(message.getMessage());
+        } else if ((unit = MakeUnitInstances.createUnitInstance(objectName)) != null) {
+            int amount = UnitMenuController.getDroppingUnitsCount().get(unit.getName());
+            GameMenuMessages message = GameMenuController.dropUnit(cell.getX(), cell.getY(), unit, amount, owner);
+            if (!message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) Graphics.showMessagePopup(message.getMessage());
         } else
             return;
+
 
         addUnitsImages();
         if (cell.getObject() != null) {
