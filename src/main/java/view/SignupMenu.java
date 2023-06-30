@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import controllers.SignUpMenuController;
+import controllers.UserController;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -30,6 +31,7 @@ public class SignupMenu {
     private final Text slogan = new Text("Slogan:");
     private final TextField sloganTextField = new TextField();
     private ToggleButton sloganGenerator = new ToggleButton();
+    private final ChoiceBox<String> famousSlogans = new ChoiceBox<>();
     private final Text signupError = new Text();
     private Captcha captcha;
     private final TextField captchaTextField = new TextField();
@@ -190,12 +192,28 @@ public class SignupMenu {
         sloganTextField.setMinWidth(500);
         sloganTextField.getStyleClass().add("text-field2");
         sloganGenerator = getSloganGenerate();
+        initFamousSlogans(pane);
         ToggleButton sloganToggle = getSloganToggle();
         slogan.setVisible(false);
         sloganTextField.clear();
         sloganTextField.setVisible(false);
         sloganGenerator.setVisible(false);
         pane.getChildren().addAll(slogan, sloganTextField, sloganGenerator, sloganToggle);
+    }
+
+    private void initFamousSlogans(Pane pane) {
+        famousSlogans.getItems().add("Famous Slogans");
+        famousSlogans.getItems().addAll(UserController.findFamousSlogans());
+        famousSlogans.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue != "Famous Slogans") sloganTextField.setText(newValue);
+            famousSlogans.setValue("Famous Slogans");
+        });
+        famousSlogans.setValue("Famous Slogans");
+        famousSlogans.setLayoutX(240);
+        famousSlogans.setLayoutY(285);
+        famousSlogans.setVisible(false);
+        famousSlogans.setMinWidth(500);
+        pane.getChildren().add(famousSlogans);
     }
 
     private ToggleButton getSloganToggle() {
@@ -209,11 +227,13 @@ public class SignupMenu {
                 sloganTextField.clear();
                 sloganTextField.setVisible(false);
                 sloganGenerator.setVisible(false);
+                famousSlogans.setVisible(false);
                 sloganToggle.setLayoutX(70);
             } else {
                 slogan.setVisible(true);
                 sloganTextField.setVisible(true);
                 sloganGenerator.setVisible(true);
+                famousSlogans.setVisible(true);
                 sloganToggle.setLayoutX(40);
             }
         });
