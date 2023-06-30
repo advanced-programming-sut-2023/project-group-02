@@ -205,7 +205,8 @@ public class SignupMenu {
         famousSlogans.getItems().add("Famous Slogans");
         famousSlogans.getItems().addAll(UserController.findFamousSlogans());
         famousSlogans.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue != "Famous Slogans") sloganTextField.setText(newValue);
+            if (newValue != null && !newValue.equals("Famous Slogans"))
+                sloganTextField.setText(newValue);
             famousSlogans.setValue("Famous Slogans");
         });
         famousSlogans.setValue("Famous Slogans");
