@@ -28,11 +28,6 @@ public class Connection extends Thread {
             //TODO check if this ip has made an account and auto login.
             String data = dataInputStream.readUTF();
             Packet packet = new Gson().fromJson(data, Packet.class);
-            if (packet.command.equals("signup")) {
-
-            } else if (packet.command.equals("login")) {
-
-            }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
