@@ -30,6 +30,7 @@ import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
+import view.enums.BuildingMenuMessages;
 import view.enums.GameMenuMessages;
 
 import java.util.*;
@@ -82,7 +83,7 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    finalCellWrapper.dropObject(db.getString(), db.getImage(), isPreGame, currentPlayer);
+                    finalCellWrapper.dropObject(db.getString(), isPreGame, currentPlayer);
                     event.setDropCompleted(true);
                     event.consume();
                 });
@@ -554,7 +555,7 @@ public class GameMenu {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             String content[] = clipboard.getString().split("/");
             if (content[0] != null) {
-                cellWrapper.dropObject(content[0], clipboard.getImage(), isPreGame, UserController.findUserWithUsername(content[1]));
+                cellWrapper.dropObject(content[0], isPreGame, UserController.findUserWithUsername(content[1]));
             }
         }
     }
@@ -781,12 +782,8 @@ public class GameMenu {
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
                 addUnitsHBox(building.getName());
                 showBuildingsBar = false;
-            } else if (!showBuildingsBar) {
-                HBox hBox = new HBox();
-                hBox.setTranslateY(22);
-                hBox.setSpacing(10);
-                addBuildingsToHBox(hBox);
-                itemsScrollPane.setContent(hBox);
+            } else {
+                itemsScrollPane.setContent(makeRepairBuildingVBox(building));
             }
         } else if (!showBuildingsBar) {
             HBox hBox = new HBox();
@@ -795,6 +792,26 @@ public class GameMenu {
             addBuildingsToHBox(hBox);
             itemsScrollPane.setContent(hBox);
         }
+    }
+
+    private Button makeRepairButton(Building building) {
+        Button repairButton = new Button("Repair Building");
+        repairButton.getStyleClass().add("button2");
+        repairButton.setOnAction(event -> {
+            BuildingMenuMessages message = BuildingMenuController.repair(building);
+            Graphics.showMessagePopup(message.getMessage());
+        });
+        return repairButton;
+    }
+
+    private VBox makeRepairBuildingVBox(Building building) {
+        Text hitpoint = new Text("hitpoint:" + building.getHitpoint());
+        HBox hBoxOfImageAndHitpoint = new HBox(building.getBuildingImage(),hitpoint);
+        VBox vBox = new VBox(hBoxOfImageAndHitpoint,makeRepairButton(building));
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(5));
+        vBox.setSpacing(5);
+        return vBox;
     }
 
     private void addUnitsHBox(String type) {
