@@ -1,5 +1,6 @@
 package client.view;
 
+import client.PlayerConnection;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -23,31 +24,34 @@ import controllers.database.Database;
 
 public class Main extends Application {
     private static Stage stage;
+    private static PlayerConnection playerConnection;
 
     public static Stage getStage() {
         return stage;
     }
 
-    public static void main(String[] args) {
-        try {
-            Database.init();
-        } catch (IOException e) {
-        }
-
-        try {
-            Graphics.generateCaptcha(10, 20);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        UserController.loadUsersFromFile();
-        UserController.loadCurrentUserFromFile();
+    public static void main(String[] args) throws IOException {
+        playerConnection = new PlayerConnection("localhost", 8080);
+//        try {
+//            Database.init();
+//        } catch (IOException e) {
+//        }
+//
+//        try {
+//            Graphics.generateCaptcha(10, 20);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        UserController.loadUsersFromFile();
+//        UserController.loadCurrentUserFromFile();
 
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+        playerConnection.tryToAuthenticate();
         Main.stage = stage;
         if (UserController.isAuthorized()) {
             setScene(new MainMenu().getPane());
@@ -66,9 +70,9 @@ public class Main extends Application {
     public static Pane getTitlePane() {
         Pane pane = new Pane();
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(MainMenu.class.getResource(
-                "/images/backgrounds/signup-menu.jpg"))));
+            "/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets()
-                .add(Objects.requireNonNull(MainMenu.class.getResource("/CSS/Menus.css")).toExternalForm());
+            .add(Objects.requireNonNull(MainMenu.class.getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         initTitlePane(pane);
         return pane;
