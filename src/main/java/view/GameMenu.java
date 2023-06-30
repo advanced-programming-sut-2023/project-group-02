@@ -774,7 +774,8 @@ public class GameMenu {
     private void handleSingleSelection(CellWrapper cellWrapper) {
         Cell cell = cellWrapper.getCell();
         MapObject mapObject = cell.getObject();
-        if (!isPreGame && mapObject != null && mapObject instanceof Building building) {
+        if (!isPreGame && mapObject != null && mapObject instanceof Building building &&
+            mapObject.getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
             if (building.getName().equalsIgnoreCase("shop")) {
                 goToShopMenu();
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
@@ -848,10 +849,6 @@ public class GameMenu {
         unitImage.setOnDragDone(event -> addUnitsHBox(unit.getType().getWhereCanBeTrained()));
 
         return vBox;
-    }
-
-    public GridPane getGridPane() {
-        return gridPane;
     }
 
     public void run(Scanner scanner) {
