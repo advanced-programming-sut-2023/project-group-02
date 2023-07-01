@@ -212,7 +212,7 @@ public class Map {
     public Coordinates findEnemyNear(Unit unit, int distance) {
         ArrayList<Coordinates> neighbors = getMoreNeighbors(unit.getCoordinates(), distance);
         for (Coordinates neighbor : neighbors) {
-            if (findCellWithXAndY(neighbor.x, neighbor.y).getUnits().size() > 0) {
+            if (neighbor.x >= 0 && neighbor.y >= 0 && findCellWithXAndY(neighbor.x, neighbor.y).getUnits().size() > 0) {
                 for (Unit enemy : findCellWithXAndY(neighbor.x, neighbor.y).getUnits()) {
                     if (!enemy.getOwner().getUsername().equals(unit.getOwner().getUsername())) {
                         return neighbor;

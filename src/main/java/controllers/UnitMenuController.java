@@ -64,7 +64,7 @@ public class UnitMenuController {
         unitsY = y;
     }
 
-    private static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
+    public static void setSelectedUnits(ArrayList<Unit> selectedUnits) {
         UnitMenuController.selectedUnits = selectedUnits;
     }
 
@@ -98,6 +98,7 @@ public class UnitMenuController {
         Coordinates finalPointForThisTurn = path.get(Math.min(path.size() - 1, maxDistance));
         for (Unit unit : selectedUnits) {
             unit.setHasMoved(true);
+            unit.setCurrentPath(path);
             map.moveUnit(unit, finalPointForThisTurn.x, finalPointForThisTurn.y);
             if (!finalPointForThisTurn.equals(path.getLast())) {
                 game.scheduleMovement(unit, finalPointForThisTurn.x, finalPointForThisTurn.y, x, y);
@@ -134,7 +135,7 @@ public class UnitMenuController {
         Game game = GameMenuController.getCurrentGame();
         Map map = game.getMap();
         for (Unit unit : map.findUnitsWithXAndY(enemiesX, enemiesY)) {
-            if (unit.getOwner().getUsername().equals(selectedUnits.get(0).getOwner().getUsername()))
+            if (!unit.getOwner().getUsername().equals(selectedUnits.get(0).getOwner().getUsername()))
                 unitExists = true;
         }
         if (!unitExists)

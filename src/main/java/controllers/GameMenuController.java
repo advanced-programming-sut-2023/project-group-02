@@ -24,6 +24,15 @@ public class GameMenuController {
     private static HashMap<Game, ArrayList<CellWrapper>> allMadeCellWrappers = new HashMap<>();
     private static HashMap<User, Game> savedGames = new HashMap<>();
 
+    public static CellWrapper findCellWrapperWithXAndYCurrentGame(int x, int y) {
+        ArrayList<CellWrapper> cellWrappersOfGame = allMadeCellWrappers.get(currentGame);
+        for (CellWrapper cellWrapper : cellWrappersOfGame) {
+            if (cellWrapper.getSquareX() == x && cellWrapper.getSquareY() == y)
+                return cellWrapper;
+        }
+        return new CellWrapper(currentGame.getMap().findCellWithXAndY(x,y));
+    }
+
     public static void saveGame() {
         for (User user : currentGame.getPlayers()) {
             savedGames.put(user, currentGame);
@@ -314,5 +323,8 @@ public class GameMenuController {
 
     public static void nextTurn(GameMenu gameMenu) {
         currentGame.nextTurn(gameMenu);
+        for (CellWrapper cellWrapper : getCurrentGameCellWrappers()) {
+            cellWrapper.addUnitsImages();
+        }
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.util.Duration;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Graphics;
@@ -110,7 +111,7 @@ public class CellWrapper extends StackPane {
 //        }
 //    }
 
-    public void dropObject(String objectName, Image objectImage, boolean isPreGame, User owner) {
+    public void dropObject(String objectName, boolean isPreGame, User owner) {
         Building building = null;
         Unit unit = null;
         if (Directions.getDirectionsLowerCase().contains(objectName)) {
@@ -172,24 +173,36 @@ public class CellWrapper extends StackPane {
             if (object instanceof Building building) {
                 tooltipText.append("Building: ");
                 tooltipText.append(object.getName()).append("\n");
-                tooltipText.append("Owner: " + building.getOwner().getUsername()).append("\n");
+                tooltipText.append("Owner: ").append(building.getOwner().getUsername()).append("\n");
             } else {
                 tooltipText.append("Object: ");
                 tooltipText.append(object.getName()).append("\n");
             }
         }
         tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
-        // TODO: show unit info
+        for (User player : GameMenuController.getCurrentGame().getPlayers()) {
+            if (!cell.getPlayersUnit(player).isEmpty()) {
+                Unit symbolUnit = cell.getPlayersUnit(player).get(0);
+                tooltipText.append("Units: ").append(symbolUnit.getName()).append(" ").append(cell.getPlayersUnit(player).size()).append("\n");
+                tooltipText.append(symbolUnit.getState()).append("\n").append(symbolUnit.getOwner().getUsername()).append("\n");
+            }
+        }
+
         return tooltipText.toString();
     }
 
     public void addUnitsImages() {
         if (cell.getUnits() != null && !cell.getUnits().isEmpty()) {
+            System.out.println("adding units image: " + cell.getX() + " " + cell.getY() + " " + cell.getUnits());
             for (Unit unit : cell.getUnits()) {
+                System.out.println(unit.getImage() + " owner:" + unit.getOwner().getUsername());
                 if (this.getChildren().contains(unit.getImage()))
                     this.getChildren().remove(unit.getImage());
-                this.getChildren().add(unit.getImage());
+                System.out.println("\t\tafter removing: " + this.getChildren());
+                ImageView imageView = unit.getImage();
+                this.getChildren().add(imageView);
             }
+            System.out.println("\tend of adding unit image: " + cell.getX() + " " + cell.getY() + " " + this.getChildren());
         }
     }
 }

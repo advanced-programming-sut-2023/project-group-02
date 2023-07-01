@@ -27,9 +27,13 @@ import models.Cell;
 import models.Map;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
+import models.units.UnitState;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
+import client.view.enums.BuildingMenuMessages;
+import client.view.enums.GameMenuMessages;
+import client.view.enums.UnitMenuMessages;
 
 import java.util.*;
 
@@ -55,6 +59,8 @@ public class GameMenu {
     private Text popularityText = new Text();
     private ScrollPane itemsScrollPane;
     private boolean showBuildingsBar = true;
+    private int attackTurns = 0;
+    private Label attackNotification = new Label("Attacking...");
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
                            int offsetY) {
@@ -83,7 +89,9 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    finalCellWrapper.dropObject(db.getString(), db.getImage(), isPreGame, currentPlayer);
+                    if (isPreGame)
+                        finalCellWrapper.dropObject(db.getString(), isPreGame, currentPlayer);
+                    else    finalCellWrapper.dropObject(db.getString(), isPreGame, GameMenuController.getCurrentGame().getCurrentPlayer());
                     event.setDropCompleted(true);
                     event.consume();
                 });
@@ -555,7 +563,7 @@ public class GameMenu {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             String content[] = clipboard.getString().split("/");
             if (content[0] != null) {
-                cellWrapper.dropObject(content[0], clipboard.getImage(), isPreGame, UserController.findUserWithUsername(content[1]));
+                cellWrapper.dropObject(content[0], isPreGame, UserController.findUserWithUsername(content[1]));
             }
         }
     }
@@ -768,13 +776,32 @@ public class GameMenu {
         if (selectedTiles.size() == 1) {
             handleSingleSelection(selectedTiles.get(0));
         } else {
-            // TODO
+            handleMultiSelection(selectedTiles);
         }
+    }
+
+    private void handleMultiSelection(ArrayList<CellWrapper> selectedTiles) {
+        HBox finalHBox = new HBox();
+        for (CellWrapper cellWrapper : selectedTiles) {
+            Cell cell = cellWrapper.getCell();
+            if (cell.getObject() != null && cell.getObject() instanceof Building building
+                && cell.getObject().getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer()))
+                finalHBox.getChildren().add(makeRepairBuildingVBox(building));
+        }
+        for (CellWrapper cellWrapper : selectedTiles) {
+            Cell cell = cellWrapper.getCell();
+            if (cell.getPlayersUnit(GameMenuController.getCurrentGame().getCurrentPlayer()).size() != 0) {
+                finalHBox.getChildren().add(makeMoveUnitVBox(cell.getUnits()));}
+        }
+        finalHBox.setSpacing(10);
+        showBuildingsBar = false;
+        itemsScrollPane.setContent(finalHBox);
     }
 
     private void handleSingleSelection(CellWrapper cellWrapper) {
         Cell cell = cellWrapper.getCell();
         MapObject mapObject = cell.getObject();
+        ArrayList<Unit> units = cell.getPlayersUnit(GameMenuController.getCurrentGame().getCurrentPlayer());
         if (!isPreGame && mapObject != null && mapObject instanceof Building building &&
             mapObject.getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
             if (building.getName().equalsIgnoreCase("shop")) {
@@ -782,20 +809,155 @@ public class GameMenu {
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
                 addUnitsHBox(building.getName());
                 showBuildingsBar = false;
-            } else if (!showBuildingsBar) {
-                HBox hBox = new HBox();
-                hBox.setTranslateY(22);
+            } else if (units.size() != 0) {
+                HBox hBox = new HBox(makeRepairBuildingVBox(building),makeMoveUnitVBox(units));
                 hBox.setSpacing(10);
-                addBuildingsToHBox(hBox);
                 itemsScrollPane.setContent(hBox);
+                showBuildingsBar = false;
+            } else {
+                itemsScrollPane.setContent(makeRepairBuildingVBox(building));
+                showBuildingsBar = false;
             }
+            rootPane.requestFocus();
+        } else if (units.size() != 0) {
+            itemsScrollPane.setContent(makeMoveUnitVBox(units));
+            rootPane.requestFocus();
         } else if (!showBuildingsBar) {
             HBox hBox = new HBox();
             hBox.setTranslateY(22);
             hBox.setSpacing(10);
             addBuildingsToHBox(hBox);
             itemsScrollPane.setContent(hBox);
+            rootPane.requestFocus();
         }
+    }
+
+    private Button makeRepairButton(Building building) {
+        Button repairButton = new Button("Repair Building");
+        repairButton.getStyleClass().add("button3");
+        repairButton.setMaxWidth(50);
+        repairButton.setOnAction(event -> {
+            BuildingMenuMessages message = BuildingMenuController.repair(building);
+            Graphics.showMessagePopup(message.getMessage());
+        });
+        return repairButton;
+    }
+
+    private VBox makeRepairBuildingVBox(Building building) {
+        Text hitpoint = new Text("hitpoint:" + building.getHitpoint());
+        ImageView buildingImage = new ImageView(building.getBuildingImage().getImage());
+        buildingImage.setFitHeight(50);
+        buildingImage.setFitWidth(50);
+        HBox hBoxOfImageAndHitpoint = new HBox(buildingImage,hitpoint);
+        VBox vBox = new VBox(hBoxOfImageAndHitpoint,makeRepairButton(building));
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(5));
+        vBox.setSpacing(5);
+        return vBox;
+    }
+
+    private VBox makeMoveUnitVBox(ArrayList<Unit> units) {
+        if (units.get(0).getUnitsImage() == null) return null;
+        ImageView unitImage = new ImageView(units.get(0).getUnitsImage().getImage());
+        Text countOfUnits = new Text("count: " + units.size());
+
+        Tooltip tooltip = new Tooltip(units.get(0).getName());
+        tooltip.setShowDelay(Duration.ZERO);
+        Tooltip.install(unitImage,tooltip);
+
+        TextField countOfMovingUnits = makeTextField("count");
+        TextField destinationX = makeTextField("x");
+        TextField destinationY = makeTextField("y");
+
+        Button moveButton = new Button("Move");
+        moveButton.getStyleClass().add("button3");
+
+        Button attackButton = new Button("Attack");
+        attackButton.getStyleClass().add("button3");
+
+        Button patrolButton = new Button("Patrol");
+        patrolButton.getStyleClass().add("button3");
+
+        Button setStateButton = new Button("Set State");
+        setStateButton.getStyleClass().add("button3");
+
+        ChoiceBox<UnitState> unitStates = new ChoiceBox<>();
+        unitStates.getItems().addAll(UnitState.STANDING,UnitState.DEFENSIVE,UnitState.OFFENSIVE);
+
+        HBox imageAndCount = new HBox(unitImage,countOfUnits,unitStates);
+        imageAndCount.setSpacing(5);
+
+        HBox textFields = new HBox(countOfMovingUnits,destinationX,destinationY,setStateButton);
+        textFields.setSpacing(2);
+
+        HBox buttons = new HBox(moveButton,attackButton,patrolButton);
+
+        rootPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.M) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),0);
+            else if (event.getCode() == KeyCode.A) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),1);
+            else if (event.getCode() == KeyCode.P) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),2);
+        });
+        moveButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),0));
+        attackButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),1));
+        patrolButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),2));
+        setStateButton.setOnAction(event -> {
+            for (Unit unit : units) {
+                unit.setState(unitStates.getValue());
+            }
+        });
+
+        VBox mainVBox = new VBox(imageAndCount,textFields,buttons);
+        mainVBox.setSpacing(5);
+        mainVBox.setAlignment(Pos.CENTER);
+        mainVBox.setPrefWidth(200);
+        mainVBox.setMaxWidth(200);
+        return mainVBox;
+    }
+
+    private void handleMoveAndAttack(ArrayList<Unit> units, String countStr, String xStr, String yStr, int typeofMove) {
+        String[] textFieldReturns = {countStr,xStr,yStr};
+        String returnMessage = null;
+        if (!Utils.areIntegers(textFieldReturns)) {
+            returnMessage = "Please import numbers!";
+            Graphics.showMessagePopup(returnMessage);
+            return;
+        }
+        int count = Integer.parseInt(countStr) , desX = Integer.parseInt(xStr)
+            , desY = Integer.parseInt(yStr);
+        if (count > units.size()) {
+            returnMessage = "You dont have enough units!";
+        } else {
+            ArrayList<Unit> unitsToOperate = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                unitsToOperate.add(units.get(i));
+            }
+            UnitMenuController.setSelectedUnits(unitsToOperate);
+            UnitMenuMessages message;
+            if (typeofMove == 0)
+                message = UnitMenuController.moveUnit(desX,desY);
+            else if (typeofMove == 1) {
+                message = UnitMenuController.attack(desX, desY, false);
+                attackNotification.setBackground(new Background(new BackgroundFill(Color.RED,null,null)));
+                attackNotification.setTranslateX(5);
+                attackNotification.setTranslateY(100);
+                attackNotification.setFont(new Font("Arial",20));
+                rootPane.getChildren().add(attackNotification);
+                attackTurns++;
+            } else
+                message = UnitMenuController.patrolUnit(units.get(0).getCurrentX(),units.get(0).getCurrentY(),desX,desY);
+
+            returnMessage = message.getMessage();
+        }
+        Graphics.showMessagePopup(returnMessage);
+        rootPane.requestFocus();
+    }
+
+    private TextField makeTextField(String prompt) {
+        TextField textField = new TextField();
+        textField.setPromptText(prompt);
+        textField.setPrefWidth(30);
+        textField.setPrefHeight(30);
+        return textField;
     }
 
     private void addUnitsHBox(String type) {
@@ -811,7 +973,7 @@ public class GameMenu {
     private VBox getUnitVBox(Unit unit) {
         ImageView unitImage = unit.getImage();
         unitImage.setFitHeight(50);
-        unitImage.setFitWidth(50);
+        unitImage.setFitWidth(60);
         Tooltip tooltip = new Tooltip(unit.getName());
         tooltip.setShowDelay(Duration.ZERO);
         Tooltip.install(unitImage,tooltip);
@@ -852,373 +1014,36 @@ public class GameMenu {
         return vBox;
     }
 
-    public void run(Scanner scanner) {
-        while (true) {
-            System.out.print("Do you want to start a new game? (yes or no): ");
-            Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("yes")) {
-                runPreGameMenu(scanner);
-                break;
-            } else if (parser.beginsWith("no")) {
-                loadGame(scanner);
-                break;
-            } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GameMenu");
-            } else {
-                System.out.println("Invalid command!");
-            }
-        }
-    }
-
-    public void runPreGameMenu(Scanner scanner) {
-        int numberOfTurns = setNumberOfTurns(scanner);
-        int mapWidth = setMapWidth(scanner);
-        int mapHeight = setMapHeight(scanner);
-        GameMenuController.setCurrentGame(new Game(new ArrayList<>(), numberOfTurns, new Map(mapWidth, mapHeight)));
-        System.out.println("Now you can initialize map. type next to continue.");
-        while (true) {
-            Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("droprock")) {
-                dropRock(parser);
-            } else if (parser.beginsWith("droptree")) {
-                dropTree(parser);
-            } else if (parser.beginsWith("settexture")) {
-                setTexture(parser);
-            } else if (parser.beginsWith("clear")) {
-                clearBlock(parser);
-            } else if (parser.beginsWith("exit")) {
-                System.out.println("You came back to the main menu!");
-                break;
-            } else if (parser.beginsWith("next")) {
-                initGovernments(scanner);
-                GameMenuController.saveGame();
-                runGameMenu(scanner);
-                break;
-            } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GameMenu");
-            } else {
-                System.out.println("Invalid command!");
-            }
-        }
-    }
-
-    public void runGameMenu(Scanner scanner) {
-        printNowPlaying();
-        while (true) {
-            Parser parser = new Parser(scanner.nextLine());
-            if (parser.beginsWith("drop building")) {
-                dropBuilding(parser, true);
-            } else if (parser.beginsWith("select building")) {
-                selectBuilding(parser, scanner);
-            } else if (parser.beginsWith("show map")) {
-                showMap(parser, scanner);
-            } else if (parser.beginsWith("select unit")) {
-                selectUnit(parser, scanner);
-            } else if (parser.beginsWith("show popularity factors")) {
-                showPopularityFactors();
-            } else if (parser.beginsWith("show popularity")) {
-                showPopularity();
-            } else if (parser.beginsWith("show food list")) {
-                showFoodList();
-            } else if (parser.beginsWith("food rate show")) {
-                showFoodRate();
-            } else if (parser.beginsWith("food rate")) {
-                setFoodRate(parser);
-            } else if (parser.beginsWith("tax rate show")) {
-                showTaxRate();
-            } else if (parser.beginsWith("tax rate")) {
-                setTaxRate(parser);
-            } else if (parser.beginsWith("fear rate")) {
-                setFearRate(parser);
-            } else if (parser.beginsWith("save")) {
-                GameMenuController.saveGame();
-                System.out.println("Game saved successfully!");
-            } else if (parser.beginsWith("next")) {
-                nextTurn();
-            } else if (parser.beginsWith("turns")) {
-                System.out.println("Turns passed: " + GameMenuController.getCurrentGame().getTurnCounter());
-            } else if (parser.beginsWith("exit") || isGameOver) {
-                System.out.println("You came back to the main menu!");
-                break;
-            } else if (parser.beginsWith("show current menu")) {
-                System.out.println("You are at GameMenu");
-            } else {
-                System.out.println("Invalid command!");
-            }
-        }
-    }
-
-    private void initGovernments(Scanner scanner) {
-        System.out.print("Enter the number of governments: ");
-        int numberOfGovernments;
-        while (true) {
-            numberOfGovernments = Utils.getValidInt(scanner);
-            if (numberOfGovernments <= 8)
-                break;
-            System.out.println("The number of governments should be at most 8!");
-        }
-
-        int[] colors = new int[8];
-        for (int i = 0; i < numberOfGovernments; i++) {
-            User player;
-            if (i == 0) {
-                player = UserController.getCurrentUser();
-            } else {
-                while (true) {
-                    System.out.print("Enter the username of player you want to add: ");
-                    String username = scanner.nextLine().trim();
-                    if (!UserController.userWithUsernameExists(username))
-                        System.out.println("user with this username doesn't exist!");
-                    else if (GameMenuController.getCurrentGame().getPlayerByUsername(username) != null)
-                        System.out.println("player is already in game!");
-                    else {
-                        player = UserController.findUserWithUsername(username);
-                        break;
-                    }
-                }
-            }
-            Colors color = pickColor(colors, scanner);
-            GameMenuController.addPlayerToGame(player, color);
-            dropSmallStoneGate(player, scanner);
-        }
-    }
-
-    private void dropSmallStoneGate(User player, Scanner scanner) {
-        System.out.println("select coordinates for this user's small stone gate\nthe format should be \"-x <x> -y <y>\"");
-        while (true) {
-            Parser parser = new Parser(scanner.nextLine());
-            GameMenuMessages message = GameMenuController.dropSmallStoneGate(player, parser);
-            System.out.println(message.getMessage());
-            if (message == GameMenuMessages.DONE_SUCCESSFULLY)
-                break;
-        }
-    }
-
-    private Colors pickColor(int[] colors, Scanner scanner) {
-        System.out.println("Pick a color for this player: ");
-        System.out.println("Blue: 1 | Red: 2 | Yellow: 3 | Green: 4 | Black: 5 | White: 6 | Purple: 7 | Pink: 8");
-        while (true) {
-            int input = Utils.getValidInt(scanner);
-            if (input > 8)
-                System.out.println("Invalid input! number should be at most 8!");
-            else if (colors[input - 1] != 0)
-                System.out.println("This color is already picked!");
-            else {
-                colors[input - 1] = 1;
-                return Colors.values()[input - 1];
-            }
-        }
-    }
-
-    private void loadGame(Scanner scanner) {
-        if (GameMenuController.loadGame()) {
-            System.out.println("game loaded. you can play now.");
-            runGameMenu(scanner);
-        } else {
-            System.out.println("no game is saved! a new game is started.");
-            runPreGameMenu(scanner);
-        }
-    }
-
-    private int setMapHeight(Scanner scanner) {
-        System.out.print("Enter the height of the map: ");
-        return Utils.getValidInt(scanner);
-    }
-
-    private int setMapWidth(Scanner scanner) {
-        System.out.print("Enter the width of the map: ");
-        return Utils.getValidInt(scanner);
-    }
-
-    private int setNumberOfTurns(Scanner scanner) {
-        System.out.print("Enter the number of turns: ");
-        return Utils.getValidInt(scanner);
-    }
-
-    void showMap(Parser parser, Scanner scanner) {
-        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
-            System.out.println("Please import numbers!");
-            return;
-        }
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-
-        GameMenuMessages message = GameMenuController.showMap(x, y);
-        if (message.equals(GameMenuMessages.INVALID_PLACE))
-            System.out.println("The numbers are invalid!");
-        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
-            System.out.println(GameMenuController.getCurrentGame().getMap().printMiniMap(x, y));
-            new MapMenu(x, y).run(scanner);
-        }
-    }
-
-    void showPopularityFactors() {
-        Government gov = GameMenuController.getCurrentGame().getCurrentPlayersGovernment();
-        showFoodRate();
-        System.out.println("Food type count: " + gov.getFoodStock().size());
-        System.out.println(
-            "Fear rate: " + gov.getFearRate());
-        showTaxRate();
-    }
-
-    void showPopularity() {
-        System.out.println(
-            "Popularity: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getPopularity());
-    }
-
-    void showFoodList() {
-        System.out.println("Foods:");
-        for (Food food : GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodStock()) {
-            System.out.println(food.name()); // TODO: use a more human-friendly name
-        }
-    }
-
-    void setFoodRate(Parser parser) {
-        String r = parser.get("r");
-        if (!Utils.isInteger(r)) {
-            System.out.println("Invalid number!");
-            return;
-        }
-        GameMenuMessages message = GameMenuController.setFoodRate(Integer.parseInt(r));
-        System.out.println(message.getMessage());
-    }
-
-    void showFoodRate() {
-        System.out.println(
-            "Food rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getFoodRate());
-    }
-
-    void setTaxRate(Parser parser) {
-        String r = parser.get("r");
-        if (!Utils.isInteger(r)) {
-            System.out.println("Invalid number!");
-            return;
-        }
-        GameMenuMessages message = GameMenuController.setTaxRate(Integer.parseInt(r));
-        System.out.println(message.getMessage());
-    }
-
-    void showTaxRate() {
-        System.out
-            .println("Tax rate: " + GameMenuController.getCurrentGame().getCurrentPlayersGovernment().getTaxRate());
-    }
-
-    void setFearRate(Parser parser) {
-        String r = parser.get("r");
-        if (!Utils.isInteger(r)) {
-            System.out.println("Invalid number!");
-            return;
-        }
-        GameMenuMessages message = GameMenuController.setFearRate(Integer.parseInt(r));
-        System.out.println(message.getMessage());
-    }
-
-    void dropBuilding(User player, Parser parser, boolean useMaterials) {
-        if (!Utils.isInteger(parser.get("x")) || !Utils.isInteger(parser.get("y"))) {
-            System.out.println("Invalid x or y");
-            return;
-        }
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-        String type = parser.get("type");
-        GameMenuMessages message = GameMenuController.dropBuilding(x, y, player, type, useMaterials);
-        System.out.println(message.getMessage());
-    }
-
-    void dropBuilding(Parser parser, boolean useMaterials) {
-        dropBuilding(GameMenuController.getCurrentGame().getCurrentPlayer(), parser, useMaterials);
-    }
-
-    void selectBuilding(Parser parser, Scanner scanner) {
-        String[] strings = {parser.get("x"), parser.get("y")};
-        if (!Utils.areIntegers(strings)) {
-            System.out.println("Please import numbers in x and y field!");
-            return;
-        }
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectBuilding(x, y);
-        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
-            System.out.println("You entered this Building: \"" + BuildingMenuController.getSelectedBuilding().getName() + "\" menu!");
-            new BuildingMenu(BuildingMenuController.getSelectedBuilding()).run(scanner);
-        } else System.out.println(message.getMessage());
-    }
-
-    void selectUnit(Parser parser, Scanner scanner) {
-        String[] strings = {parser.get("y"), parser.get("x")};
-        if (!Utils.areIntegers(strings)) {
-            System.out.println("Please import numbers!");
-            return;
-        }
-        String type = parser.get("t");
-        if (type == null || type.equals("")) {
-            System.out.println("Unit type is required");
-            return;
-        }
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.selectUnit(x, y, type);
-        if (message.equals(GameMenuMessages.DONE_SUCCESSFULLY)) {
-            System.out.println("You entered unit menu!");
-            new UnitMenu().run(scanner);
-        } else System.out.println(message.getMessage());
-    }
-
-    void setTexture(Parser parser) {
-        GameMenuMessages message;
-        if (parser.get("x1") != null) {
-            String[] strings = {parser.get("x1"), parser.get("x2"), parser.get("y1"), parser.get("y2")};
-            if (!Utils.areIntegers(strings)) {
-                System.out.println("Please import the numbers!");
-                return;
-            }
-            message = GameMenuController.setTexture
-                (Integer.parseInt(parser.get("x1")), Integer.parseInt(parser.get("y1"))
-                    , Integer.parseInt(parser.get("x2")), Integer.parseInt(parser.get("y2"))
-                    , parser.get("t"));
-        } else {
-            String[] strings = {parser.get("x"), parser.get("y")};
-            if (!Utils.areIntegers(strings)) {
-                System.out.println("Please import the numbers!");
-                return;
-            }
-            message = GameMenuController.setTexture
-                (Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")), parser.get("t"));
-        }
-        System.out.println(message.getMessage());
-    }
-
-    void clearBlock(Parser parser) {
-        GameMenuMessages messages = GameMenuController.clearBlock(Integer.parseInt(parser.get("x")), Integer.parseInt(parser.get("y")));
-        System.out.println(messages.getMessage());
-    }
-
-    void dropRock(Parser parser) {
-        String[] strings = {parser.get("x"), parser.get("y")};
-        if (!Utils.areIntegers(strings)) {
-            System.out.println("Please import numbers!");
-            return;
-        }
-        int y = Integer.parseInt(parser.get("y"));
-        int x = Integer.parseInt(parser.get("x"));
-        GameMenuMessages message = GameMenuController.dropRock(x, y, parser.get("d"));
-        System.out.println(message.getMessage());
-    }
-
-    void dropTree(Parser parser) {
-        String[] strings = {parser.get("x"), parser.get("y")};
-        if (!Utils.areIntegers(strings)) {
-            System.out.println("Please import numbers!");
-            return;
-        }
-        int x = Integer.parseInt(parser.get("x"));
-        int y = Integer.parseInt(parser.get("y"));
-        GameMenuMessages message = GameMenuController.dropTree(x, y, parser.get("t"));
-        System.out.println(message.getMessage());
-    }
-
     void nextTurn() {
         GameMenuController.nextTurn(this);
+        showNotifications(GameMenuController.getCurrentGame().getCurrentPlayer());
+    }
+
+    private void showNotifications(User player) {
+        int insideNumber = 0;
+        Government government = GameMenuController.getCurrentGame().getPlayersGovernment(player);
+        for (Trade trade : government.getInboxOfTrades()) {
+            if (trade.getState().equals(Trade.TradeState.NOT_SEEN)) {
+                Button tradeButton = new Button("New Trade Request!");
+                tradeButton.getStyleClass().add("button1");
+                tradeButton.setTranslateX(5);
+                tradeButton.setTranslateY(200 + 20*insideNumber);
+                rootPane.getChildren().add(tradeButton);
+                insideNumber++;
+                tradeButton.setOnAction(event -> {
+                    Main.getStage().setScene(new Scene(new TradeMenu().getPane()));
+                    Main.getStage().setFullScreen(true);
+                    rootPane.getChildren().remove(tradeButton);
+                });
+            }
+        }
+        if (attackTurns > 0) {
+            if (attackTurns == GameMenuController.getCurrentGame().getGovernments().size()) {
+                attackTurns = 0;
+                rootPane.getChildren().remove(attackNotification);
+            } else
+                attackTurns++;
+        }
     }
 
     public void printNowPlaying() {

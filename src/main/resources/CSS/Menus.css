@@ -148,6 +148,23 @@
     -fx-background-color: #8B4513;
 }
 
+.button3 {
+    -fx-font-family: "Arial";
+    -fx-font-size: 15px;
+    -fx-background-color: linear-gradient(darkblue, blue);
+    -fx-text-fill: #FFF;
+    -fx-border-color: #70118b;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-pref-width: 100px;
+    -fx-max-width: 200px;
+}
+
+.button2:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 5, 3, 0, 1);
+}
+
 .hbox1 {
     -fx-background-color: #8B0000;
     -fx-border-color: black;

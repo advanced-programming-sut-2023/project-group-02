@@ -1,9 +1,6 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 
@@ -171,5 +168,38 @@ public class UserController {
             }
         });
         return usersSorted;
+    }
+
+    public static ArrayList<String> findFamousSlogans() {
+        HashMap<String, Integer> slogans = new HashMap<>();
+        for (User user : users) {
+            String slogan = user.getSlogan();
+            if (slogan != null && !slogan.isEmpty()) {
+                if (slogans.containsKey(slogan)) {
+                    slogans.put(slogan, slogans.get(slogan) + 1);
+                } else {
+                    slogans.put(slogan, 1);
+                }
+            }
+        }
+        // find top 4 repeated slogans
+        ArrayList<String> topSlogans = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            int max = 0;
+            String maxSlogan = null;
+            for (String slogan : slogans.keySet()) {
+                if (slogans.get(slogan) > max) {
+                    max = slogans.get(slogan);
+                    maxSlogan = slogan;
+                }
+            }
+            if (maxSlogan != null) {
+                topSlogans.add(maxSlogan);
+                slogans.remove(maxSlogan);
+            } else {
+                break;
+            }
+        }
+        return topSlogans;
     }
 }

@@ -11,6 +11,7 @@ import utils.Utils;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Unit {
     private User owner;
@@ -31,6 +32,7 @@ public class Unit {
     private Coordinates[] patrollingPoint = new Coordinates[2];
     private String imagePath;
     private final ImageView image;
+    private LinkedList<Coordinates> currentPath;
 
     public Unit(int damage, int hitpoint, int pace,
                 int price, UnitState state, UnitType type,
@@ -134,6 +136,14 @@ public class Unit {
         currentY = y;
     }
 
+    public LinkedList<Coordinates> getCurrentPath() {
+        return currentPath;
+    }
+
+    public void setCurrentPath(LinkedList<Coordinates> currentPath) {
+        this.currentPath = currentPath;
+    }
+
     public String getName() {
         return type.getName();
     }
@@ -150,9 +160,11 @@ public class Unit {
         else
             neighbours = map.getNeighbors(new Coordinates(currentX, currentY));
         for (Coordinates neighbour : neighbours) {
-            for (Unit unit : map.findUnitsWithXAndY(neighbour.x, neighbour.y))
-                if (!unit.getOwner().getUsername().equals(owner.getUsername()))
-                    unitsInSight.add(unit);
+            if (neighbour.x >= 0 && neighbour.y >= 0) {
+                for (Unit unit : map.findUnitsWithXAndY(neighbour.x, neighbour.y))
+                    if (!unit.getOwner().getUsername().equals(owner.getUsername()))
+                        unitsInSight.add(unit);
+            }
         }
         if (unitsInSight.size() > 0)
             isInBattle = true;
