@@ -57,6 +57,8 @@ public class GameMenu {
     private Text popularityText = new Text();
     private ScrollPane itemsScrollPane;
     private boolean showBuildingsBar = true;
+    private int attackTurns = 0;
+    private Label attackNotification = new Label("Attacking...");
 
     private void renderMap(Map map, int fromRow, int toRow, int fromCol, int toCol, int offsetX,
                            int offsetY) {
@@ -931,9 +933,15 @@ public class GameMenu {
             UnitMenuMessages message;
             if (typeofMove == 0)
                 message = UnitMenuController.moveUnit(desX,desY);
-            else if (typeofMove == 1)
-                message = UnitMenuController.attack(desX,desY,false);
-            else
+            else if (typeofMove == 1) {
+                message = UnitMenuController.attack(desX, desY, false);
+                attackNotification.setBackground(new Background(new BackgroundFill(Color.RED,null,null)));
+                attackNotification.setTranslateX(5);
+                attackNotification.setTranslateY(100);
+                attackNotification.setFont(new Font("Arial",20));
+                rootPane.getChildren().add(attackNotification);
+                attackTurns++;
+            } else
                 message = UnitMenuController.patrolUnit(units.get(0).getCurrentX(),units.get(0).getCurrentY(),desX,desY);
 
             returnMessage = message.getMessage();
@@ -1006,6 +1014,34 @@ public class GameMenu {
 
     void nextTurn() {
         GameMenuController.nextTurn(this);
+        showNotifications(GameMenuController.getCurrentGame().getCurrentPlayer());
+    }
+
+    private void showNotifications(User player) {
+        int insideNumber = 0;
+        Government government = GameMenuController.getCurrentGame().getPlayersGovernment(player);
+        for (Trade trade : government.getInboxOfTrades()) {
+            if (trade.getState().equals(Trade.TradeState.NOT_SEEN)) {
+                Button tradeButton = new Button("New Trade Request!");
+                tradeButton.getStyleClass().add("button1");
+                tradeButton.setTranslateX(5);
+                tradeButton.setTranslateY(200 + 20*insideNumber);
+                rootPane.getChildren().add(tradeButton);
+                insideNumber++;
+                tradeButton.setOnAction(event -> {
+                    Main.getStage().setScene(new Scene(new TradeMenu().getPane()));
+                    Main.getStage().setFullScreen(true);
+                    rootPane.getChildren().remove(tradeButton);
+                });
+            }
+        }
+        if (attackTurns > 0) {
+            if (attackTurns == GameMenuController.getCurrentGame().getGovernments().size()) {
+                attackTurns = 0;
+                rootPane.getChildren().remove(attackNotification);
+            } else
+                attackTurns++;
+        }
     }
 
     public void printNowPlaying() {
