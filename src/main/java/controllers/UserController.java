@@ -25,9 +25,9 @@ public class UserController {
         return currentUser;
     }
 
-    public static boolean isAuthorized() {
-        return currentUser != null;
-    }
+//    public static boolean isAuthorized() {
+//        return currentUser != null;
+//    }
 
     public static User findUserWithId(int id) {
         for (User user : users) {
@@ -60,9 +60,9 @@ public class UserController {
 
     public static void login(User user, boolean stayLoggedIn) {
         currentUser = user;
-        if (stayLoggedIn) {
-            saveCredentials();
-        }
+//        if (stayLoggedIn) {
+//            saveCredentials();
+//        }
     }
 
     public static void signup(User user) {
@@ -84,9 +84,9 @@ public class UserController {
         Database.write("users", usersArray, User[].class);
     }
 
-    private static void saveCredentials() {
-        Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
-    }
+//    private static void saveCredentials() {
+//        Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
+//    }
 
     private static void deleteCredentials() {
         Database.delete("currentUser");
@@ -100,17 +100,17 @@ public class UserController {
         }
     }
 
-    public static void loadCurrentUserFromFile() {
-        UserCredentials credentials = Database.read("currentUser", UserCredentials.class);
-        if (credentials != null) {
-            User user = findUserWithId(credentials.id());
-            if (user != null) {
-                if (user.getPasswordHash().equals(credentials.password())) {
-                    currentUser = user;
-                }
-            }
-        }
-    }
+//    public static void loadCurrentUserFromFile() {
+//        UserCredentials credentials = Database.read("currentUser", UserCredentials.class);
+//        if (credentials != null) {
+//            User user = findUserWithId(credentials.id());
+//            if (user != null) {
+//                if (user.getPasswordHash().equals(credentials.password())) {
+//                    currentUser = user;
+//                }
+//            }
+//        }
+//    }
 
     public static void changeUsername(User user, String username) {
         user.setUsername(username);

@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
+import server.logic.Login;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -44,6 +45,7 @@ public class Connection extends Thread {
     }
 
     private synchronized String userLogin(String username, String password) {
-        return null; //TODO
+        String result = Login.login(username, password).getMessage();
+        return result;
     }
 }

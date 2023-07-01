@@ -2,6 +2,7 @@ package server;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CheckUserAvailability extends Thread {
     private final DataOutputStream dataOutputStream;
@@ -17,7 +18,7 @@ public class CheckUserAvailability extends Thread {
     public synchronized void run() {
         while (true) {
             try {
-                dataOutputStream.writeUTF("salam");
+                dataOutputStream.writeUTF(new Packet((PacketType) null, (ArrayList<String>) null).toJson());
                 wait(2000);
             } catch (IOException e) {
                 userDisconnected();

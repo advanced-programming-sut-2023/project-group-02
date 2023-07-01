@@ -26,7 +26,7 @@ public class Login {
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
-    public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
+    public static LoginMenuMessages login(String username, String password) {
         if (attempts > 0) {
             if (new Date().getTime() - lastAttempt.getTime() > 1000 * attempts * 5) {
                 attempts = 0;

@@ -46,7 +46,7 @@ public class SignupMenu {
 
     private void initPane(Pane pane) {
         pane.setBackground(Graphics
-                .getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
+            .getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         addTitleText(pane);
@@ -125,7 +125,7 @@ public class SignupMenu {
         showPassword.setLayoutX(430);
         showPassword.setLayoutY(140);
         showPassword.setBackground(Graphics
-                .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/show-password.png"))));
+            .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/show-password.png"))));
         showPassword.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             password.set(passwordField.getText());
             passwordError.set(passwordErrors.getText());
@@ -147,12 +147,12 @@ public class SignupMenu {
         generatePassword.setLayoutX(70);
         generatePassword.setLayoutY(140);
         generatePassword.setBackground(Graphics
-                .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
+            .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
         generatePassword.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             passwordField.setText(Randoms.getPassword());
             passwordErrors.setText("");
             new Alert(Alert.AlertType.INFORMATION, "Password generated successfully: " + passwordField.getText())
-                    .showAndWait();
+                .showAndWait();
         });
         generatePassword.setFocusTraversable(false);
         return generatePassword;
@@ -214,7 +214,7 @@ public class SignupMenu {
         sloganToggle.setLayoutX(70);
         sloganToggle.setLayoutY(260);
         sloganToggle.setBackground(
-                Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/slogan.png"))));
+            Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/slogan.png"))));
         sloganToggle.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if (slogan.isVisible()) {
                 slogan.setVisible(false);
@@ -238,7 +238,7 @@ public class SignupMenu {
         toggleButton.setLayoutX(70);
         toggleButton.setLayoutY(260);
         toggleButton.setBackground(Graphics
-                .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
+            .getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/generate-random.png"))));
         toggleButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             sloganTextField.setText(Randoms.getSlogan());
         });
@@ -269,22 +269,22 @@ public class SignupMenu {
         signup.getStyleClass().add("title1-with-hover");
         signup.setOnMouseClicked(event -> {
             if (!usernameErrors.getText().isEmpty() || !passwordErrors.getText().isEmpty()
-                    || !emailErrors.getText().isEmpty()) {
+                || !emailErrors.getText().isEmpty()) {
                 signupError.setText("Please fix the errors.");
             } else if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty()
-                    || nicknameTextField.getText().isEmpty() || emailTextField.getText().isEmpty()
-                    || (slogan.isVisible() && sloganTextField.getText().isEmpty())) {
+                || nicknameTextField.getText().isEmpty() || emailTextField.getText().isEmpty()
+                || (slogan.isVisible() && sloganTextField.getText().isEmpty())) {
                 signupError.setText("Please fill all the fields.");
             } else {
                 SignUpMenuMessages message = SignUpMenuController.initiateSignup(usernameTextField.getText(),
-                        passwordField.getText(), passwordField.getText(), nicknameTextField.getText(),
-                        emailTextField.getText(), sloganTextField.getText());
+                    passwordField.getText(), passwordField.getText(), nicknameTextField.getText(),
+                    emailTextField.getText(), sloganTextField.getText());
                 if (message != null)
                     signupError.setText(message.getMessage());
                 else {
                     signupError.setText("");
                     new Alert(Alert.AlertType.INFORMATION, "information filled successfully. " +
-                            "now you have to set a security question.").showAndWait();
+                        "now you have to set a security question.").showAndWait();
                     Main.setScene(this.getSecurityQuestionPane());
                 }
             }
@@ -312,7 +312,7 @@ public class SignupMenu {
 
     private void initSecurityQuestionPane(Pane pane) {
         pane.setBackground(Graphics
-                .getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
+            .getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/signup-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         Text title = getSecurityQuestionTitle();
@@ -376,7 +376,7 @@ public class SignupMenu {
                 signupError.setText("Captcha is wrong.");
             } else {
                 SignUpMenuController.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(questionBox.getValue()),
-                        answer.getText());
+                    answer.getText());
                 signupError.setText("");
                 new Alert(Alert.AlertType.INFORMATION, "user created successfully").showAndWait();
                 Main.setScene(new MainMenu().getPane());
@@ -406,7 +406,7 @@ public class SignupMenu {
         refresh.setLayoutX(203);
         refresh.setLayoutY(185);
         refresh.setBackground(
-                Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/refresh.png"))));
+            Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/buttons/refresh.png"))));
         refresh.setOnMouseClicked(event -> {
             try {
                 captcha = Graphics.generateCaptcha(100, 180);
@@ -420,63 +420,63 @@ public class SignupMenu {
         pane.getChildren().add(refresh);
     }
 
-    enum State {
-        PASSWORD_CONFIRMATION_NEEDED, SECURITY_QUESTION_NEEDED, CAPTCHA_ANSWER_NEEDED, SIGNUP_SUCCESSFUL, WAITING
-    }
+//    enum State {
+//        PASSWORD_CONFIRMATION_NEEDED, SECURITY_QUESTION_NEEDED, CAPTCHA_ANSWER_NEEDED, SIGNUP_SUCCESSFUL, WAITING
+//    }
+//
+//    private State state = State.WAITING;
 
-    private State state = State.WAITING;
+//    private void createUser(Parser parser) {
+//        if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") || !parser.getFlag("s")
+//                || !parser.getFlag("n")) {
+//            System.out.println("Some fields are empty.");
+//            return;
+//        }
+//        String username = parser.get("u");
+//        ArrayList<String> passwords = parser.getAll("p");
+//        if (passwords.size() == 0) {
+//            System.out.println(SignUpMenuMessages.EMPTY_PASSWORD.getMessage());
+//            return;
+//        }
+//        String password = passwords.get(0);
+//        String passwordConfirmation = passwords.size() >= 2 ? passwords.get(1) : null;
+//        String email = parser.get("email");
+//        String nickname = parser.get("n");
+//        String slogan = parser.get("s");
+//        SignUpMenuMessages message = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
+//                nickname, email, slogan);
+//
+//        if (slogan.equals("random")) {
+//            System.out.println("Your slogan is: " + SignUpMenuController.getSlogan());
+//        }
+//
+//        if (message == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
+//            if (password.equals("random")) {
+//                System.out.println("Your password is: " + SignUpMenuController.getPassword());
+//            }
+//            System.out.println("Please re-enter your password:");
+//            state = State.PASSWORD_CONFIRMATION_NEEDED;
+//            return;
+//        }
+//
+//        if (message == null) {
+//            state = State.SECURITY_QUESTION_NEEDED;
+//            printSecurityQuestions();
+//            return;
+//        }
+//
+//        if (message.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
+//            System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
+//        } else
+//            System.out.println(message.getMessage());
+//    }
 
-    private void createUser(Parser parser) {
-        if (!parser.getFlag("u") || !parser.getFlag("p") || !parser.getFlag("email") || !parser.getFlag("s")
-                || !parser.getFlag("n")) {
-            System.out.println("Some fields are empty.");
-            return;
-        }
-        String username = parser.get("u");
-        ArrayList<String> passwords = parser.getAll("p");
-        if (passwords.size() == 0) {
-            System.out.println(SignUpMenuMessages.EMPTY_PASSWORD.getMessage());
-            return;
-        }
-        String password = passwords.get(0);
-        String passwordConfirmation = passwords.size() >= 2 ? passwords.get(1) : null;
-        String email = parser.get("email");
-        String nickname = parser.get("n");
-        String slogan = parser.get("s");
-        SignUpMenuMessages message = SignUpMenuController.initiateSignup(username, password, passwordConfirmation,
-                nickname, email, slogan);
-
-        if (slogan.equals("random")) {
-            System.out.println("Your slogan is: " + SignUpMenuController.getSlogan());
-        }
-
-        if (message == SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED) {
-            if (password.equals("random")) {
-                System.out.println("Your password is: " + SignUpMenuController.getPassword());
-            }
-            System.out.println("Please re-enter your password:");
-            state = State.PASSWORD_CONFIRMATION_NEEDED;
-            return;
-        }
-
-        if (message == null) {
-            state = State.SECURITY_QUESTION_NEEDED;
-            printSecurityQuestions();
-            return;
-        }
-
-        if (message.equals(SignUpMenuMessages.WEAK_PASSWORD)) {
-            System.out.println(PasswordProblem.showErrors(SignUpMenuController.passwordProblems));
-        } else
-            System.out.println(message.getMessage());
-    }
-
-    private void printSecurityQuestions() {
-        System.out.println("Pick a security question:");
-        for (int i = 0; i < SecurityQuestion.values().length; i++) {
-            System.out.println((i + 1) + ". " + SecurityQuestion.values()[i].fullSentence);
-        }
-    }
+//    private void printSecurityQuestions() {
+//        System.out.println("Pick a security question:");
+//        for (int i = 0; i < SecurityQuestion.values().length; i++) {
+//            System.out.println((i + 1) + ". " + SecurityQuestion.values()[i].fullSentence);
+//        }
+//    }
 
     // private void pickQuestion(Parser parser) {
     // int questionNumber;
@@ -501,14 +501,14 @@ public class SignupMenu {
     // System.out.println(Captcha.showCaptcha());
     // }
 
-    public void confirmPassword(String password) {
-        if (password.equals(SignUpMenuController.getPassword())) {
-            state = State.SECURITY_QUESTION_NEEDED;
-            printSecurityQuestions();
-        } else {
-            System.out.println("Passwords don't match!");
-        }
-    }
+//    public void confirmPassword(String password) {
+//        if (password.equals(SignUpMenuController.getPassword())) {
+//            state = State.SECURITY_QUESTION_NEEDED;
+//            printSecurityQuestions();
+//        } else {
+//            System.out.println("Passwords don't match!");
+//        }
+//    }
 
     // public void captcha(Parser parser) {
     // String userInput = parser.getByIndex(0);

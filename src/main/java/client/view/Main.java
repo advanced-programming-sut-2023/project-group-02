@@ -32,18 +32,18 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         playerConnection = new PlayerConnection("localhost", 8080);
-//        try {
-//            Database.init();
-//        } catch (IOException e) {
-//        }
-//
-//        try {
-//            Graphics.generateCaptcha(10, 20);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        UserController.loadUsersFromFile();
+        try {
+            Database.init();
+        } catch (IOException e) {
+        }
+
+        try {
+            Graphics.generateCaptcha(10, 20);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        UserController.loadUsersFromFile();
 //        UserController.loadCurrentUserFromFile();
 
         launch(args);
@@ -53,11 +53,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         playerConnection.tryToAuthenticate();
         Main.stage = stage;
-        if (UserController.isAuthorized()) {
-            setScene(new MainMenu().getPane());
-        } else {
-            setScene(Main.getTitlePane());
-        }
+//        if (UserController.isAuthorized()) {
+//            setScene(new MainMenu().getPane());
+//        } else {
+        setScene(Main.getTitlePane());
+//        }
     }
 
     public static void setScene(Pane pane) {

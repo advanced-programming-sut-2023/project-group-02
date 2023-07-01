@@ -31,11 +31,19 @@ public class PlayerConnection {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Packet packet = readFromServer();
+        String message = packet.data.get(0);
+        return message;
+    }
+
+    public Packet readFromServer() {
         try {
-            String input = dataInputStream.readUTF();
-            Packet packet = new Gson().fromJson(input, Packet.class);
-            String message = packet.data.get(0);
-            return message;
+            Packet packet;
+            do {
+                String input = dataInputStream.readUTF();
+                packet = new Gson().fromJson(input, Packet.class);
+            } while (packet.PacketType != null);
+            return packet;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
