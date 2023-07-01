@@ -30,7 +30,7 @@ public class Connection extends Thread {
             //TODO check if this ip has made an account and auto login.
             String data = dataInputStream.readUTF();
             Packet packet = new Gson().fromJson(data, Packet.class);
-            if (packet.PacketType == PacketType.LOGIN) {
+            if (packet.packetType == PacketType.LOGIN) {
                 dataOutputStream.writeUTF(new Packet
                     (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
             }
