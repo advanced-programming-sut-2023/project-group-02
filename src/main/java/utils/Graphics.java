@@ -56,7 +56,8 @@ public class Graphics {
     }
 
     public static Captcha generateCaptcha(double layoutX, double layoutY) throws IOException {
-        File randomCaptcha = Randoms.getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha/")));
+        File randomCaptcha = Randoms
+                .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
         Captcha captcha = new Captcha(randomCaptcha.getName().substring(0, 4), layoutX, layoutY);
         return captcha;
     }
