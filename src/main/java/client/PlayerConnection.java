@@ -39,10 +39,14 @@ public class PlayerConnection {
     public Packet readFromServer() {
         try {
             Packet packet;
-            do {
+            while (true) {
                 String input = dataInputStream.readUTF();
-                packet = new Gson().fromJson(input, Packet.class);
-            } while (packet.packetType != PacketType.CHECK_ONLINE);
+                Packet tempPacket = new Gson().fromJson(input, Packet.class);
+                if (tempPacket.packetType != PacketType.CHECK_ONLINE) {
+                    packet = tempPacket;
+                    break;
+                }
+            }
             return packet;
         } catch (IOException e) {
             throw new RuntimeException(e);
