@@ -220,6 +220,7 @@ public class LoginMenu {
             errorText.setText(message);
             refreshCaptcha(pane);
         }
+        System.out.println(Main.getPlayerConnection().getLoggedInUser());
     }
 
     private void refreshCaptcha(Pane pane) {

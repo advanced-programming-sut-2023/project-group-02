@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
+import models.User;
 import server.logic.Login;
 
 import java.io.DataInputStream;
@@ -14,6 +15,7 @@ public class Connection extends Thread {
     private final DataInputStream dataInputStream;
     private final DataOutputStream dataOutputStream;
     private final CheckUserAvailability checkUserAvailability;
+    private User currentLoggedInUser;
 
     public Connection(Socket socket) throws IOException {
         System.out.println("New connection form: " + socket.getInetAddress() + " : " + socket.getPort());
@@ -33,6 +35,8 @@ public class Connection extends Thread {
             if (packet.packetType == PacketType.LOGIN) {
                 dataOutputStream.writeUTF(new Packet
                     (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
+            } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
+                dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
@@ -45,7 +49,15 @@ public class Connection extends Thread {
     }
 
     private synchronized String userLogin(String username, String password) {
-        String result = Login.login(username, password).getMessage();
+        String result = Login.login(username, password, this).getMessage();
         return result;
+    }
+
+    public User getCurrentLoggedInUser() {
+        return currentLoggedInUser;
+    }
+
+    public void setCurrentLoggedInUser(User currentLoggedInUser) {
+        this.currentLoggedInUser = currentLoggedInUser;
     }
 }

@@ -123,6 +123,8 @@ public class ServerUserController {
         return usersSorted;
     }
 
-    public static void login(User userWithUsername) {
+    public static void login(User userWithUsername, Connection connection) {
+        connection.setCurrentLoggedInUser(userWithUsername);
+        userWithUsername.setOnline(true);
     }
 }

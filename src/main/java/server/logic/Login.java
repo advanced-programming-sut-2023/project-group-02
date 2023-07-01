@@ -2,6 +2,7 @@ package server.logic;
 
 import client.view.enums.LoginMenuMessages;
 import models.User;
+import server.Connection;
 import server.ServerUserController;
 import utils.PasswordProblem;
 import utils.Validation;
@@ -14,7 +15,7 @@ public class Login {
     static int attempts = 0;
     static Date lastAttempt;
 
-    static LoginMenuMessages loginWithoutRatelimit(String username, String password) {
+    static LoginMenuMessages loginWithoutRatelimit(String username, String password, Connection connection) {
         if (username == null || password == null)
             return LoginMenuMessages.EMPTY_FIELD;
         if (!ServerUserController.userWithUsernameExists(username))
@@ -22,11 +23,11 @@ public class Login {
         if (!ServerUserController.findUserWithUsername(username).passwordEquals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
 
-        ServerUserController.login(ServerUserController.findUserWithUsername(username));
+        ServerUserController.login(ServerUserController.findUserWithUsername(username), connection);
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
-    public static LoginMenuMessages login(String username, String password) {
+    public static LoginMenuMessages login(String username, String password, Connection connection) {
         if (attempts > 0) {
             if (new Date().getTime() - lastAttempt.getTime() > 1000 * attempts * 5) {
                 attempts = 0;
@@ -35,7 +36,7 @@ public class Login {
                 return LoginMenuMessages.TOO_MANY_REQUESTS;
             }
         }
-        LoginMenuMessages message = loginWithoutRatelimit(username, password);
+        LoginMenuMessages message = loginWithoutRatelimit(username, password, connection);
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
             attempts = 0;
             lastAttempt = null;

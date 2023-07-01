@@ -12,6 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.42.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-junit-jupiter:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-core:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.14.4" level="project" />

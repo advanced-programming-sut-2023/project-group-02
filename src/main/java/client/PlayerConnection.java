@@ -3,6 +3,7 @@ package client;
 import client.view.enums.LoginMenuMessages;
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
+import models.User;
 import server.Packet;
 import server.PacketType;
 
@@ -10,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class PlayerConnection {
     private final DataInputStream dataInputStream;
@@ -51,5 +53,16 @@ public class PlayerConnection {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public User getLoggedInUser() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new ArrayList<>()).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        User user = new Gson().fromJson(packet.data.get(0), User.class);
+        return user;
     }
 }
