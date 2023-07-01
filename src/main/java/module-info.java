@@ -4,6 +4,8 @@ module project {
     requires com.google.gson;
     requires jdk.jshell;
     requires java.desktop;
+    requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
     exports client.view;
     exports client.view.enums;

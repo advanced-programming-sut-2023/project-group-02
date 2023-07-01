@@ -1,14 +1,13 @@
 package server;
 
 
-import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) {
         try {
             Database.init();
+            SqliteDatabase.init();
             ServerUserController.loadUsersFromDatabase();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         new Master(8080);
