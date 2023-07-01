@@ -13,4 +13,5 @@ module project {
     opens models to com.google.gson;
     exports models.units;
     exports models.buildings;
+    exports server;
 }
