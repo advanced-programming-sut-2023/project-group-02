@@ -1,30 +1,18 @@
-package controllers;
+package server;
 
-import java.util.*;
-
-import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import controllers.database.Database;
-import models.SecurityQuestion;
 import models.User;
-import models.UserCredentials;
 
-public class UserController {
+public class ServerUserController {
     private static final ArrayList<User> users = new ArrayList<>();
 
     public static ArrayList<User> getUsers() {
         return users;
     }
-
-    private static User currentUser;
-
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-
-//    public static boolean isAuthorized() {
-//        return currentUser != null;
-//    }
 
     public static User findUserWithId(int id) {
         for (User user : users) {
@@ -55,22 +43,13 @@ public class UserController {
         return false;
     }
 
-    public static void login(User user, boolean stayLoggedIn) {
-        currentUser = user;
-//        if (stayLoggedIn) {
-//            saveCredentials();
-//        }
-    }
-
     public static void signup(User user) {
         users.add(user);
-        login(user, false);
         saveUsers();
     }
 
     public static void logout() {
-        currentUser = null;
-        deleteCredentials();
+        // TODO
     }
 
     private static void saveUsers() {
@@ -81,15 +60,7 @@ public class UserController {
         Database.write("users", usersArray, User[].class);
     }
 
-//    private static void saveCredentials() {
-//        Database.write("currentUser", UserCredentials.of(currentUser), UserCredentials.class);
-//    }
-
-    private static void deleteCredentials() {
-        Database.delete("currentUser");
-    }
-
-    public static void loadUsersFromFile() {
+    public static void loadUsersFromDatabase() {
         User[] fileUsers = Database.read("users", User[].class);
         if (fileUsers != null) {
             for (User user : fileUsers)
@@ -97,32 +68,14 @@ public class UserController {
         }
     }
 
-//    public static void loadCurrentUserFromFile() {
-//        UserCredentials credentials = Database.read("currentUser", UserCredentials.class);
-//        if (credentials != null) {
-//            User user = findUserWithId(credentials.id());
-//            if (user != null) {
-//                if (user.getPasswordHash().equals(credentials.password())) {
-//                    currentUser = user;
-//                }
-//            }
-//        }
-//    }
-
     public static void changeUsername(User user, String username) {
         user.setUsername(username);
         saveUsers();
-        if (user == currentUser) {
-            deleteCredentials();
-        }
     }
 
     public static void changePassword(User user, String password) {
         user.setPassword(password);
         saveUsers();
-        if (user == currentUser) {
-            deleteCredentials();
-        }
     }
 
     public static void changeEmail(User user, String email) {
@@ -170,36 +123,8 @@ public class UserController {
         return usersSorted;
     }
 
-    public static ArrayList<String> findFamousSlogans() {
-        HashMap<String, Integer> slogans = new HashMap<>();
-        for (User user : users) {
-            String slogan = user.getSlogan();
-            if (slogan != null && !slogan.isEmpty()) {
-                if (slogans.containsKey(slogan)) {
-                    slogans.put(slogan, slogans.get(slogan) + 1);
-                } else {
-                    slogans.put(slogan, 1);
-                }
-            }
-        }
-        // find top 4 repeated slogans
-        ArrayList<String> topSlogans = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            int max = 0;
-            String maxSlogan = null;
-            for (String slogan : slogans.keySet()) {
-                if (slogans.get(slogan) > max) {
-                    max = slogans.get(slogan);
-                    maxSlogan = slogan;
-                }
-            }
-            if (maxSlogan != null) {
-                topSlogans.add(maxSlogan);
-                slogans.remove(maxSlogan);
-            } else {
-                break;
-            }
-        }
-        return topSlogans;
+    public static void login(User userWithUsername, Connection connection) {
+        connection.setCurrentLoggedInUser(userWithUsername);
+        userWithUsername.setOnline(true);
     }
 }

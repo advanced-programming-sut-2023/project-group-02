@@ -14,11 +14,12 @@ import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Graphics;
 import utils.Parser;
-import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import client.view.enums.GameMenuMessages;
 
 public class CellWrapper extends StackPane {
     private static final int squareSize = 70;

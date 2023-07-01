@@ -5,9 +5,10 @@ import models.Material;
 import models.Trade;
 import models.User;
 import utils.Utils;
-import view.enums.TradeMenuMessages;
 
 import java.util.ArrayList;
+
+import client.view.enums.TradeMenuMessages;
 
 public class TradeMenuController {
     private static ArrayList<Trade> allTrades = new ArrayList<>();

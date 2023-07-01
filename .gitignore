@@ -163,3 +163,4 @@ buildNumber.properties
 
 # File-based database
 .database/
+*.db

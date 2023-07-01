@@ -12,13 +12,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import view.Main;
-import view.enums.ProfileMenuMessages;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+
+import client.view.Main;
+import client.view.enums.ProfileMenuMessages;
 
 public class Graphics {
     public static Background getBackground(URL url) {
@@ -55,7 +56,8 @@ public class Graphics {
     }
 
     public static Captcha generateCaptcha(double layoutX, double layoutY) throws IOException {
-        File randomCaptcha = Randoms.getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha/")));
+        File randomCaptcha = Randoms
+                .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
         Captcha captcha = new Captcha(randomCaptcha.getName().substring(0, 4), layoutX, layoutY);
         return captcha;
     }

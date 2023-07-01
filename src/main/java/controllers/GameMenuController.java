@@ -8,15 +8,16 @@ import models.units.UnitType;
 import utils.Parser;
 import utils.Utils;
 import utils.Validation;
-import view.BuildingMenu;
-import view.GameMenu;
-import view.UnitMenu;
-import view.enums.GameMenuMessages;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import client.view.BuildingMenu;
+import client.view.GameMenu;
+import client.view.UnitMenu;
+import client.view.enums.GameMenuMessages;
 
 public class GameMenuController {
     private static Game currentGame;

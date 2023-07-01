@@ -4,9 +4,10 @@ import models.Directions;
 import models.Game;
 import models.Map;
 import utils.Validation;
-import view.enums.MapMenuMessages;
 
 import java.util.ArrayList;
+
+import client.view.enums.MapMenuMessages;
 
 public class MapMenuController {
     private int currentX, currentY;

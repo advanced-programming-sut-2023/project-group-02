@@ -13,9 +13,10 @@ import models.units.UnitState;
 import models.units.UnitType;
 import utils.PathFinder;
 import utils.Validation;
-import view.enums.UnitMenuMessages;
 
 import javax.swing.text.html.ImageView;
+
+import client.view.enums.UnitMenuMessages;
 
 public class UnitMenuController {
     private static ArrayList<Unit> selectedUnits;

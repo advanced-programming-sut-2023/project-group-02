@@ -5,10 +5,11 @@ import models.User;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
-import view.enums.ProfileMenuMessages;
-import view.enums.SignUpMenuMessages;
 
 import java.util.ArrayList;
+
+import client.view.enums.ProfileMenuMessages;
+import client.view.enums.SignUpMenuMessages;
 
 public class SignUpMenuController {
     public static ArrayList<PasswordProblem> passwordProblems;

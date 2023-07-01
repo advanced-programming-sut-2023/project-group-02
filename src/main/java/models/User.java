@@ -1,7 +1,5 @@
 package models;
 
-import java.util.ArrayList;
-
 import controllers.UserController;
 import javafx.scene.image.ImageView;
 import utils.Graphics;
@@ -14,6 +12,7 @@ public class User {
     private String securityAnswer;
     private int highScore;
     private String avatarPath;
+    private boolean isOnline = false;
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
             SecurityQuestion securityQuestion, String securityAnswer) {
@@ -138,5 +137,13 @@ public class User {
 
     public int getRank() {
         return UserController.getUsersSorted().indexOf(this) + 1;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 }

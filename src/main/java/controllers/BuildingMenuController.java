@@ -4,9 +4,10 @@ import models.*;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
 import models.units.UnitType;
-import view.enums.BuildingMenuMessages;
 
 import java.util.EnumSet;
+
+import client.view.enums.BuildingMenuMessages;
 
 public class BuildingMenuController {
     private static Building selectedBuilding;
