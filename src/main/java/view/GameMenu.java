@@ -804,7 +804,7 @@ public class GameMenu {
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
                 addUnitsHBox(building.getName());
                 showBuildingsBar = false;
-            } else if (units.size() != 0) {
+            } else if (units.size() != 0 && units.get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
                 HBox hBox = new HBox(makeRepairBuildingVBox(building),makeMoveUnitVBox(units));
                 hBox.setSpacing(10);
                 itemsScrollPane.setContent(hBox);
@@ -814,7 +814,7 @@ public class GameMenu {
                 showBuildingsBar = false;
             }
             rootPane.requestFocus();
-        } else if (units.size() != 0) {
+        } else if (units.size() != 0 && units.get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
             itemsScrollPane.setContent(makeMoveUnitVBox(units));
             rootPane.requestFocus();
         } else if (!showBuildingsBar) {
@@ -829,7 +829,7 @@ public class GameMenu {
 
     private Button makeRepairButton(Building building) {
         Button repairButton = new Button("Repair Building");
-        repairButton.getStyleClass().add("button2");
+        repairButton.getStyleClass().add("button3");
         repairButton.setMaxWidth(50);
         repairButton.setOnAction(event -> {
             BuildingMenuMessages message = BuildingMenuController.repair(building);
@@ -865,19 +865,16 @@ public class GameMenu {
         TextField destinationY = makeTextField("y");
 
         Button moveButton = new Button("Move");
-        moveButton.getStyleClass().add("button2");
-//        moveButton.setMaxWidth(30);
+        moveButton.getStyleClass().add("button3");
 
         Button attackButton = new Button("Attack");
-        attackButton.getStyleClass().add("button2");
-//        attackButton.setMaxWidth(30);
+        attackButton.getStyleClass().add("button3");
 
         Button patrolButton = new Button("Patrol");
-        patrolButton.getStyleClass().add("button2");
+        patrolButton.getStyleClass().add("button3");
 
         Button setStateButton = new Button("Set State");
-        setStateButton.getStyleClass().add("button2");
-        setStateButton.setMaxWidth(30);
+        setStateButton.getStyleClass().add("button3");
 
         ChoiceBox<UnitState> unitStates = new ChoiceBox<>();
         unitStates.getItems().addAll(UnitState.STANDING,UnitState.DEFENSIVE,UnitState.OFFENSIVE);

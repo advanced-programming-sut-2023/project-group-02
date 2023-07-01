@@ -192,7 +192,7 @@ public class CellWrapper extends StackPane {
                     this.getChildren().remove(unit.getImage());
                 System.out.println("\t\tafter removing: " + this.getChildren());
                 ImageView imageView = unit.getImage();
-                Tooltip tooltip = new Tooltip(unit.getState().name());
+                Tooltip tooltip = new Tooltip(unit.getName() + "\n" + unit.getState().name() + "\n" + unit.getOwner().getUsername());
                 tooltip.setShowDelay(Duration.ZERO);
                 Tooltip.install(imageView,tooltip);
                 this.getChildren().add(imageView);
