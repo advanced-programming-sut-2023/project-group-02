@@ -134,7 +134,7 @@ public class UnitMenuController {
         Game game = GameMenuController.getCurrentGame();
         Map map = game.getMap();
         for (Unit unit : map.findUnitsWithXAndY(enemiesX, enemiesY)) {
-            if (unit.getOwner().getUsername().equals(selectedUnits.get(0).getOwner().getUsername()))
+            if (!unit.getOwner().getUsername().equals(selectedUnits.get(0).getOwner().getUsername()))
                 unitExists = true;
         }
         if (!unitExists)

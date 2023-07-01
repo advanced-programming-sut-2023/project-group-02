@@ -179,11 +179,14 @@ public class CellWrapper extends StackPane {
             }
         }
         tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
-        if (!cell.getUnits().isEmpty()) {
-            Unit symbolUnit = cell.getUnits().get(0);
-            tooltipText.append("Units: ").append(symbolUnit.getName()).append(" ").append(cell.getUnits().size()).append("\n");
-            tooltipText.append(symbolUnit.getState()).append("\n").append(symbolUnit.getOwner().getUsername());
+        for (User player : GameMenuController.getCurrentGame().getPlayers()) {
+            if (!cell.getPlayersUnit(player).isEmpty()) {
+                Unit symbolUnit = cell.getPlayersUnit(player).get(0);
+                tooltipText.append("Units: ").append(symbolUnit.getName()).append(" ").append(cell.getPlayersUnit(player).size()).append("\n");
+                tooltipText.append(symbolUnit.getState()).append("\n").append(symbolUnit.getOwner().getUsername()).append("\n");
+            }
         }
+
         return tooltipText.toString();
     }
 

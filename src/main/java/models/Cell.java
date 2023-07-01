@@ -140,6 +140,16 @@ public class Cell {
         this.hasSickness = hasSickness;
     }
 
+    public ArrayList<Unit> getPlayersUnit(User player) {
+        ArrayList<Unit> playersUnit = new ArrayList<>();
+        if (!getUnits().isEmpty()) {
+            for (Unit unit : getUnits()) {
+                if (unit.getOwner().equals(player)) playersUnit.add(unit);
+            }
+        }
+        return playersUnit;
+    }
+
     @Override
     public String toString() {
         String answer = "";

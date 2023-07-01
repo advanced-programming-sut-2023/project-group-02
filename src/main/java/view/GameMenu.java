@@ -786,8 +786,7 @@ public class GameMenu {
         }
         for (CellWrapper cellWrapper : selectedTiles) {
             Cell cell = cellWrapper.getCell();
-            if (cell.getUnits().size() != 0 && cell.getUnits().get(0).getOwner() != null &&
-                cell.getUnits().get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
+            if (cell.getPlayersUnit(GameMenuController.getCurrentGame().getCurrentPlayer()).size() != 0) {
                 finalHBox.getChildren().add(makeMoveUnitVBox(cell.getUnits()));}
         }
         finalHBox.setSpacing(10);
@@ -798,7 +797,7 @@ public class GameMenu {
     private void handleSingleSelection(CellWrapper cellWrapper) {
         Cell cell = cellWrapper.getCell();
         MapObject mapObject = cell.getObject();
-        ArrayList<Unit> units = cell.getUnits();
+        ArrayList<Unit> units = cell.getPlayersUnit(GameMenuController.getCurrentGame().getCurrentPlayer());
         if (!isPreGame && mapObject != null && mapObject instanceof Building building &&
             mapObject.getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
             if (building.getName().equalsIgnoreCase("shop")) {
@@ -806,7 +805,7 @@ public class GameMenu {
             } else if (building.getName().matches("Barrack|Mercenary Post|Engineer Guild")) {
                 addUnitsHBox(building.getName());
                 showBuildingsBar = false;
-            } else if (units.size() != 0 && units.get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
+            } else if (units.size() != 0) {
                 HBox hBox = new HBox(makeRepairBuildingVBox(building),makeMoveUnitVBox(units));
                 hBox.setSpacing(10);
                 itemsScrollPane.setContent(hBox);
@@ -816,7 +815,7 @@ public class GameMenu {
                 showBuildingsBar = false;
             }
             rootPane.requestFocus();
-        } else if (units.size() != 0 && units.get(0).getOwner().equals(GameMenuController.getCurrentGame().getCurrentPlayer())) {
+        } else if (units.size() != 0) {
             itemsScrollPane.setContent(makeMoveUnitVBox(units));
             rootPane.requestFocus();
         } else if (!showBuildingsBar) {
