@@ -106,4 +106,8 @@ public class Main extends Application {
         });
         pane.getChildren().addAll(title, signup, login, exit);
     }
+
+    public static PlayerConnection getPlayerConnection() {
+        return playerConnection;
+    }
 }

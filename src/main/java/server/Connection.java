@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import controllers.LoginMenuController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -28,6 +29,11 @@ public class Connection extends Thread {
             //TODO check if this ip has made an account and auto login.
             String data = dataInputStream.readUTF();
             Packet packet = new Gson().fromJson(data, Packet.class);
+            if (packet.PacketType == PacketType.LOGIN) {
+                dataOutputStream.writeUTF(new Packet
+                    (PacketType.LOGIN, LoginMenuController.login
+                        (packet.data.get(0), packet.data.get(1), false).getMessage()).toJson());
+            }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }

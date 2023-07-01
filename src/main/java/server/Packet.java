@@ -4,23 +4,30 @@ import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Packet implements Serializable {
-    public enum PacketType {
-        SIGNUP, LOGIN, LOGOUT,
+
+    public final PacketType PacketType;
+    public final ArrayList<String> data;
+    public final LocalDateTime time;
+
+    public Packet(PacketType packetType, ArrayList<String> data) {
+        this.PacketType = packetType;
+        this.data = data;
+        this.time = LocalDateTime.now();
     }
 
-    final PacketType PacketType;
-    final String data;
-    final LocalDateTime time;
-
-    public Packet(Packet.PacketType packetType, String data) {
+    public Packet(PacketType packetType, String... data) {
         PacketType = packetType;
-        this.data = data;
-        time = LocalDateTime.now();
+        this.data = new ArrayList<>();
+        this.data.addAll(Arrays.asList(data));
+        this.time = LocalDateTime.now();
     }
 
     public String toJson() {
         return new Gson().toJson(this);
     }
 }
+

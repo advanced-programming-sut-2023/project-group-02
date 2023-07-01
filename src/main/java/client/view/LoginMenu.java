@@ -209,14 +209,15 @@ public class LoginMenu {
             errorText.setText("Captcha is wrong.");
             return;
         }
-        LoginMenuMessages message = LoginMenuController.login(usernameTextField.getText(), passwordField.getText(), true);
-        if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL)) {
+
+        String message = Main.getPlayerConnection().requestLogin(usernameTextField.getText(), passwordField.getText());
+        if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL.getMessage())) {
             Main.getStage().setScene(new Scene(new MainMenu().getPane()));
             Main.getStage().show();
         } else {
             usernameTextField.setText("");
             passwordField.setText("");
-            errorText.setText(message.getMessage());
+            errorText.setText(message);
             refreshCaptcha(pane);
         }
     }
