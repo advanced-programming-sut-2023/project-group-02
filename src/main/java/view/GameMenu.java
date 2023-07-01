@@ -27,6 +27,7 @@ import models.Cell;
 import models.Map;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
+import models.units.UnitState;
 import utils.Graphics;
 import utils.Parser;
 import utils.Utils;
@@ -851,54 +852,92 @@ public class GameMenu {
     }
 
     private VBox makeMoveUnitVBox(ArrayList<Unit> units) {
-        System.out.println("from here. do we get here?");
         if (units.get(0).getUnitsImage() == null) return null;
         ImageView unitImage = new ImageView(units.get(0).getUnitsImage().getImage());
         Text countOfUnits = new Text("count: " + units.size());
-        HBox imageAndCount = new HBox(unitImage,countOfUnits);
-        imageAndCount.setSpacing(5);
+
         Tooltip tooltip = new Tooltip(units.get(0).getName());
         tooltip.setShowDelay(Duration.ZERO);
         Tooltip.install(unitImage,tooltip);
+
         TextField countOfMovingUnits = makeTextField("count");
         TextField destinationX = makeTextField("x");
         TextField destinationY = makeTextField("y");
+
         Button moveButton = new Button("Move");
         moveButton.getStyleClass().add("button2");
-        moveButton.setMaxWidth(30);
-        HBox textFields = new HBox(countOfMovingUnits,destinationX,destinationY);
-        textFields.setSpacing(2);
-        System.out.println("from another here are we here");
+//        moveButton.setMaxWidth(30);
 
-        moveButton.setOnAction(event -> {
-            String[] textFieldReturns = {countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText()};
-            String returnMessage = null;
-            if (!Utils.areIntegers(textFieldReturns)) {
-                returnMessage = "Please import numbers!";
-                Graphics.showMessagePopup(returnMessage);
-                return;
+        Button attackButton = new Button("Attack");
+        attackButton.getStyleClass().add("button2");
+//        attackButton.setMaxWidth(30);
+
+        Button patrolButton = new Button("Patrol");
+        patrolButton.getStyleClass().add("button2");
+
+        Button setStateButton = new Button("Set State");
+        setStateButton.getStyleClass().add("button2");
+        setStateButton.setMaxWidth(30);
+
+        ChoiceBox<UnitState> unitStates = new ChoiceBox<>();
+        unitStates.getItems().addAll(UnitState.STANDING,UnitState.DEFENSIVE,UnitState.OFFENSIVE);
+
+        HBox imageAndCount = new HBox(unitImage,countOfUnits,unitStates);
+        imageAndCount.setSpacing(5);
+
+        HBox textFields = new HBox(countOfMovingUnits,destinationX,destinationY,setStateButton);
+        textFields.setSpacing(2);
+
+        HBox buttons = new HBox(moveButton,attackButton,patrolButton);
+
+
+        moveButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),0));
+        attackButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),1));
+        patrolButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),2));
+        setStateButton.setOnAction(event -> {
+            for (Unit unit : units) {
+                unit.setState(unitStates.getValue());
             }
-            int count = Integer.parseInt(countOfMovingUnits.getText()) , desX = Integer.parseInt(destinationX.getText())
-                , desY = Integer.parseInt(destinationY.getText());
-            if (count > units.size()) {
-                returnMessage = "You dont have enough units!";
-            } else {
-                ArrayList<Unit> unitsToMove = new ArrayList<>();
-                for (int i = 0; i < count; i++) {
-                    unitsToMove.add(units.get(i));
-                }
-                UnitMenuController.setSelectedUnits(unitsToMove);
-                UnitMenuMessages message = UnitMenuController.moveUnit(desX,desY);
-                returnMessage = message.getMessage();
-            }
-            Graphics.showMessagePopup(returnMessage);
-            rootPane.requestFocus();
         });
 
-        VBox mainVBox = new VBox(imageAndCount,textFields,moveButton);
+        VBox mainVBox = new VBox(imageAndCount,textFields,buttons);
         mainVBox.setSpacing(5);
         mainVBox.setAlignment(Pos.CENTER);
+        mainVBox.setPrefWidth(200);
+        mainVBox.setMaxWidth(200);
         return mainVBox;
+    }
+
+    private void handleMoveAndAttack(ArrayList<Unit> units, String countStr, String xStr, String yStr, int typeofMove) {
+        String[] textFieldReturns = {countStr,xStr,yStr};
+        String returnMessage = null;
+        if (!Utils.areIntegers(textFieldReturns)) {
+            returnMessage = "Please import numbers!";
+            Graphics.showMessagePopup(returnMessage);
+            return;
+        }
+        int count = Integer.parseInt(countStr) , desX = Integer.parseInt(xStr)
+            , desY = Integer.parseInt(yStr);
+        if (count > units.size()) {
+            returnMessage = "You dont have enough units!";
+        } else {
+            ArrayList<Unit> unitsToOperate = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                unitsToOperate.add(units.get(i));
+            }
+            UnitMenuController.setSelectedUnits(unitsToOperate);
+            UnitMenuMessages message;
+            if (typeofMove == 0)
+                message = UnitMenuController.moveUnit(desX,desY);
+            else if (typeofMove == 1)
+                message = UnitMenuController.attack(desX,desY,false);
+            else
+                message = UnitMenuController.patrolUnit(units.get(0).getCurrentX(),units.get(0).getCurrentY(),desX,desY);
+
+            returnMessage = message.getMessage();
+        }
+        Graphics.showMessagePopup(returnMessage);
+        rootPane.requestFocus();
     }
 
     private TextField makeTextField(String prompt) {

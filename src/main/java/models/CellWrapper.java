@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.util.Duration;
 import models.units.MakeUnitInstances;
 import models.units.Unit;
 import utils.Graphics;
@@ -184,14 +185,19 @@ public class CellWrapper extends StackPane {
 
     public void addUnitsImages() {
         if (cell.getUnits() != null && !cell.getUnits().isEmpty()) {
-            System.out.println("hello im adding units image and this place's coordinates are " + cell.getX() + " " + cell.getY() + " " + cell.getUnits());
+            System.out.println("adding units image: " + cell.getX() + " " + cell.getY() + " " + cell.getUnits());
             for (Unit unit : cell.getUnits()) {
                 System.out.println(unit.getImage() + " owner:" + unit.getOwner().getUsername());
                 if (this.getChildren().contains(unit.getImage()))
                     this.getChildren().remove(unit.getImage());
-                this.getChildren().add(unit.getImage());
+                System.out.println("\t\tafter removing: " + this.getChildren());
+                ImageView imageView = unit.getImage();
+                Tooltip tooltip = new Tooltip(unit.getState().name());
+                tooltip.setShowDelay(Duration.ZERO);
+                Tooltip.install(imageView,tooltip);
+                this.getChildren().add(imageView);
             }
-            System.out.println("from the cell " + cell.getX() + " " + cell.getY() + " the children are " + this.getChildren());
+            System.out.println("\tend of adding unit image: " + cell.getX() + " " + cell.getY() + " " + this.getChildren());
         }
     }
 }

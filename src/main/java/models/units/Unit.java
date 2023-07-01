@@ -160,9 +160,11 @@ public class Unit {
         else
             neighbours = map.getNeighbors(new Coordinates(currentX, currentY));
         for (Coordinates neighbour : neighbours) {
-            for (Unit unit : map.findUnitsWithXAndY(neighbour.x, neighbour.y))
-                if (!unit.getOwner().getUsername().equals(owner.getUsername()))
-                    unitsInSight.add(unit);
+            if (neighbour.x >= 0 && neighbour.y >= 0) {
+                for (Unit unit : map.findUnitsWithXAndY(neighbour.x, neighbour.y))
+                    if (!unit.getOwner().getUsername().equals(owner.getUsername()))
+                        unitsInSight.add(unit);
+            }
         }
         if (unitsInSight.size() > 0)
             isInBattle = true;
