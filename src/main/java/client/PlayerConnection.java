@@ -55,14 +55,15 @@ public class PlayerConnection {
         }
     }
 
-    public User getLoggedInUser() {
-        try {
-            dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new ArrayList<>()).toJson());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Packet packet = readFromServer();
-        User user = new Gson().fromJson(packet.data.get(0), User.class);
-        return user;
-    }
+//    public User getLoggedInUser() {
+//        try {
+//            dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new ArrayList<>()).toJson());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        Packet packet = readFromServer();
+//        User user = new Gson().fromJson(packet.data.get(0), User.class);
+//        return user;
+//    }
+    // has some bugs
 }
