@@ -887,7 +887,11 @@ public class GameMenu {
 
         HBox buttons = new HBox(moveButton,attackButton,patrolButton);
 
-
+        rootPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.M) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),0);
+            else if (event.getCode() == KeyCode.A) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),1);
+            else if (event.getCode() == KeyCode.P) handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),2);
+        });
         moveButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),0));
         attackButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),1));
         patrolButton.setOnAction(event -> handleMoveAndAttack(units,countOfMovingUnits.getText(),destinationX.getText(),destinationY.getText(),2));

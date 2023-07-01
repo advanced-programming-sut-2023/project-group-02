@@ -172,7 +172,7 @@ public class CellWrapper extends StackPane {
             if (object instanceof Building building) {
                 tooltipText.append("Building: ");
                 tooltipText.append(object.getName()).append("\n");
-                tooltipText.append("Owner: " + building.getOwner().getUsername()).append("\n");
+                tooltipText.append("Owner: ").append(building.getOwner().getUsername()).append("\n");
             } else {
                 tooltipText.append("Object: ");
                 tooltipText.append(object.getName()).append("\n");
