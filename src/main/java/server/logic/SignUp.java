@@ -1,19 +1,17 @@
-package controllers;
+package server.logic;
 
+import client.view.enums.ProfileMenuMessages;
+import client.view.enums.SignUpMenuMessages;
+import controllers.UserController;
 import models.SecurityQuestion;
 import models.User;
-import server.Connection;
-import server.ServerUserController;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
 
 import java.util.ArrayList;
 
-import client.view.enums.ProfileMenuMessages;
-import client.view.enums.SignUpMenuMessages;
-
-public class SignUpMenuController {
+public class SignUp {
     public static ArrayList<PasswordProblem> passwordProblems;
 
     public static ProfileMenuMessages register(String username, String password,
@@ -84,14 +82,14 @@ public class SignUpMenuController {
         return randomSlogan;
     }
 
-    public static void setSecurityQuestion(SecurityQuestion question, String answer, Connection connection) {
+    public static void setSecurityQuestion(SecurityQuestion question, String answer) {
         toBeSignedIn.setSecurityQuestion(question);
         toBeSignedIn.setSecurityAnswer(answer);
-        done(connection);
+        done();
     }
 
-    private static void done(Connection connection) {
-        ServerUserController.signup(toBeSignedIn, connection);
+    private static void done() {
+        UserController.signup(toBeSignedIn);
         reset();
     }
 

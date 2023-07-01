@@ -43,9 +43,10 @@ public class ServerUserController {
         return false;
     }
 
-    public static void signup(User user) {
+    public static void signup(User user, Connection connection) {
         users.add(user);
         saveUsers();
+        connection.setCurrentLoggedInUser(user);
     }
 
     public static void logout() {

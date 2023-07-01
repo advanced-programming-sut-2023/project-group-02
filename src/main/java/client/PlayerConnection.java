@@ -3,6 +3,8 @@ package client;
 import client.view.enums.LoginMenuMessages;
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
+import controllers.SignUpMenuController;
+import models.SecurityQuestion;
 import models.User;
 import server.Packet;
 import server.PacketType;
@@ -38,6 +40,26 @@ public class PlayerConnection {
         return message;
     }
 
+    public String initSignUp(String username, String password, String nickname, String email, String slogan) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, username, password, nickname, email, slogan).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        String message = packet.data.get(0);
+        return message;
+    }
+
+    public void setSecurityQuestion(SecurityQuestion securityQuestion, String answer) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.FINALIZE_SIGNUP, securityQuestion.fullSentence, answer).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public Packet readFromServer() {
         try {
             Packet packet;
@@ -65,5 +87,5 @@ public class PlayerConnection {
 //        User user = new Gson().fromJson(packet.data.get(0), User.class);
 //        return user;
 //    }
-    // has some bugs
+    // TODO this method has bugs
 }
