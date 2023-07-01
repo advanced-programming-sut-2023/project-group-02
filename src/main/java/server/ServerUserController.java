@@ -122,4 +122,7 @@ public class ServerUserController {
         });
         return usersSorted;
     }
+
+    public static void login(User userWithUsername) {
+    }
 }

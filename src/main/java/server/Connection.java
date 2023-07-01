@@ -31,8 +31,7 @@ public class Connection extends Thread {
             Packet packet = new Gson().fromJson(data, Packet.class);
             if (packet.PacketType == PacketType.LOGIN) {
                 dataOutputStream.writeUTF(new Packet
-                    (PacketType.LOGIN, LoginMenuController.login
-                        (packet.data.get(0), packet.data.get(1), false).getMessage()).toJson());
+                    (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
@@ -42,5 +41,9 @@ public class Connection extends Thread {
     public void userDisconnected() {
         System.out.println("Player disconnected: " + socket.getInetAddress() + " : " + socket.getPort());
         //TODO do anything necessary when user becomes offline
+    }
+
+    private synchronized String userLogin(String username, String password) {
+        return null; //TODO
     }
 }
