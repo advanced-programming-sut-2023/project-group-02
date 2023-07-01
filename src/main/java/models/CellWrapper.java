@@ -179,7 +179,11 @@ public class CellWrapper extends StackPane {
             }
         }
         tooltipText.append("Texture: ").append(getCell().getTexture().getName()).append("\n");
-        // TODO: show unit info
+        if (!cell.getUnits().isEmpty()) {
+            Unit symbolUnit = cell.getUnits().get(0);
+            tooltipText.append("Units: ").append(symbolUnit.getName()).append(" ").append(cell.getUnits().size()).append("\n");
+            tooltipText.append(symbolUnit.getState()).append("\n").append(symbolUnit.getOwner().getUsername());
+        }
         return tooltipText.toString();
     }
 
@@ -192,9 +196,6 @@ public class CellWrapper extends StackPane {
                     this.getChildren().remove(unit.getImage());
                 System.out.println("\t\tafter removing: " + this.getChildren());
                 ImageView imageView = unit.getImage();
-                Tooltip tooltip = new Tooltip(unit.getName() + "\n" + unit.getState().name() + "\n" + unit.getOwner().getUsername());
-                tooltip.setShowDelay(Duration.ZERO);
-                Tooltip.install(imageView,tooltip);
                 this.getChildren().add(imageView);
             }
             System.out.println("\tend of adding unit image: " + cell.getX() + " " + cell.getY() + " " + this.getChildren());
