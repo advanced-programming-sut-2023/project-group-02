@@ -85,7 +85,9 @@ public class GameMenu {
                 CellWrapper finalCellWrapper = cellWrapper;
                 cellWrapper.setOnDragDropped(event -> {
                     Dragboard db = event.getDragboard();
-                    finalCellWrapper.dropObject(db.getString(), isPreGame, GameMenuController.getCurrentGame().getCurrentPlayer());
+                    if (isPreGame)
+                        finalCellWrapper.dropObject(db.getString(), isPreGame, currentPlayer);
+                    else    finalCellWrapper.dropObject(db.getString(), isPreGame, GameMenuController.getCurrentGame().getCurrentPlayer());
                     event.setDropCompleted(true);
                     event.consume();
                 });

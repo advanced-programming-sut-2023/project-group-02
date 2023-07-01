@@ -50,8 +50,6 @@ public class Game {
         return getPlayersGovernment(getCurrentPlayer());
     }
 
-
-
     public void addObject(MapObject object, int x, int y, User owner) {
         if (owner != null)
             addObject(object, owner, x, y);
