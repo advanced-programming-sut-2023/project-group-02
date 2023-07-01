@@ -42,7 +42,7 @@ public class PlayerConnection {
             do {
                 String input = dataInputStream.readUTF();
                 packet = new Gson().fromJson(input, Packet.class);
-            } while (packet.PacketType != null);
+            } while (packet.PacketType != PacketType.CHECK_ONLINE);
             return packet;
         } catch (IOException e) {
             throw new RuntimeException(e);

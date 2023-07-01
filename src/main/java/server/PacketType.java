@@ -1,5 +1,5 @@
 package server;
 
 public enum PacketType {
-    SIGNUP, LOGIN, LOGOUT,
+    SIGNUP, LOGIN, LOGOUT, CHECK_ONLINE
 }

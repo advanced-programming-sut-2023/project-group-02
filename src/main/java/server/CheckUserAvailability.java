@@ -18,7 +18,7 @@ public class CheckUserAvailability extends Thread {
     public synchronized void run() {
         while (true) {
             try {
-                dataOutputStream.writeUTF(new Packet((PacketType) null, (ArrayList<String>) null).toJson());
+                dataOutputStream.writeUTF(new Packet(PacketType.CHECK_ONLINE, new ArrayList<>()).toJson());
                 wait(2000);
             } catch (IOException e) {
                 userDisconnected();
