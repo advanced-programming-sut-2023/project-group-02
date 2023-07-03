@@ -15,7 +15,7 @@ public class User {
     private boolean isOnline = false;
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
-            SecurityQuestion securityQuestion, String securityAnswer) {
+                SecurityQuestion securityQuestion, String securityAnswer) {
         this.id = id;
         this.username = username;
         this.passwordHash = encrypt(password);
@@ -24,7 +24,7 @@ public class User {
         this.slogan = slogan;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-        this.setAvatarPath(getDefaultAvatarPath());
+//        this.setAvatarPath(getDefaultAvatarPath());
     }
 
     public String getUsername() {
@@ -98,11 +98,11 @@ public class User {
     @Override
     public String toString() {
         return "Username: " + username + "\n" +
-                "Password: " + passwordHash + "\n" +
-                "Nickname: " + nickname + "\n" +
-                "Email: " + email + "\n" +
-                "Slogan: " + slogan + "\n" +
-                "HighScore: " + highScore + "\n";
+            "Password: " + passwordHash + "\n" +
+            "Nickname: " + nickname + "\n" +
+            "Email: " + email + "\n" +
+            "Slogan: " + slogan + "\n" +
+            "HighScore: " + highScore + "\n";
     }
 
     @Override

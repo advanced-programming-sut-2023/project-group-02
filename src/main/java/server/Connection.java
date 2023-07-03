@@ -1,5 +1,6 @@
 package server;
 
+import client.view.enums.SignUpMenuMessages;
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
 import controllers.SignUpMenuController;
@@ -42,7 +43,7 @@ public class Connection extends Thread {
             } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
                 dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
             } else if (packet.packetType == PacketType.SIGNUP) {
-                dataOutputStream.writeUTF(initSignup(packet.data));
+                dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
             } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {
                 finalizeSignup(packet.data.get(0), packet.data.get(1));
             }
@@ -58,7 +59,8 @@ public class Connection extends Thread {
 
     private synchronized String initSignup(ArrayList<String> data) {
         // if two users attempt to sign up simultaneously we're screwed
-        return SignUp.initiateSignup(data.get(0), data.get(1), data.get(1), data.get(2), data.get(3), data.get(4)).getMessage();
+        String message = SignUp.initiateSignup(data.get(0), data.get(1), data.get(1), data.get(2), data.get(3), data.get(4)).getMessage();
+        return message;
     }
 
     private synchronized void finalizeSignup(String securityQuestion, String answer) {

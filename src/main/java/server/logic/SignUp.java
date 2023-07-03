@@ -71,7 +71,7 @@ public class SignUp {
 
         if (randomPassword != null)
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED;
-        return null;
+        return SignUpMenuMessages.SIGN_UP_SUCCESSFUL;
     }
 
     public static String getPassword() {
