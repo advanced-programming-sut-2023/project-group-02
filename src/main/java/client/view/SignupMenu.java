@@ -300,7 +300,7 @@ public class SignupMenu {
                 String message = Main.getPlayerConnection().initSignUp(usernameTextField.getText(),
                     passwordField.getText(), nicknameTextField.getText(),
                     emailTextField.getText(), sloganTextField.getText());
-                if (message != SignUpMenuMessages.SIGN_UP_SUCCESSFUL.getMessage())
+                if (!message.equals(SignUpMenuMessages.SIGN_UP_SUCCESSFUL.getMessage()))
                     signupError.setText(message);
                 else {
                     signupError.setText("");
