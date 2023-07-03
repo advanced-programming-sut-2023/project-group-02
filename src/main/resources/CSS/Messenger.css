@@ -1,0 +1,19 @@
+.chat-preview-vbox {
+    -fx-background-color: #b27676;
+    -fx-border-color: #4b3030;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 0 10 0;
+}
+
+.chat-preview-vbox:hover {
+    -fx-background-color: #4d3232;
+    -fx-border-color: #4b3030;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 0 10 0;
+}
+
+.chat-preview-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}

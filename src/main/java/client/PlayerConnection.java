@@ -8,6 +8,7 @@ import models.SecurityQuestion;
 import models.User;
 import server.Packet;
 import server.PacketType;
+import server.chat.Chat;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -86,5 +87,9 @@ public class PlayerConnection {
         Packet packet = readFromServer();
         User user = new Gson().fromJson(packet.data.get(0), User.class);
         return user;
+    }
+
+    public ArrayList<Chat> getPlayerChats() {
+        return new ArrayList<>(); //TODO complete this method
     }
 }

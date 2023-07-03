@@ -1,21 +1,32 @@
 package server.chat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import models.User;
 import server.ChatDatabase;
 
-public class  Chat {
+public class Chat {
     public final int id;
     public final ChatType type;
+    private final String name;
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Message> messages = new ArrayList<Message>();
     private int nextMessageId = 1;
 
-    public Chat(ChatType type, ArrayList<User> users) {
+    public Chat(String name, ChatType type, ArrayList<User> users) {
+        this.name = name;
         this.id = ChatDatabase.getChats().size();
         this.type = type;
         this.users = users;
+        ChatDatabase.addChat(this);
+    }
+
+    public Chat(User user1, User user2) {
+        this.id = ChatDatabase.getChats().size();
+        this.type = ChatType.PRIVATE;
+        this.name = user1.getUsername() + " & " + user2.getUsername();
+        this.users = (ArrayList<User>) Arrays.asList(user1, user2);
         ChatDatabase.addChat(this);
     }
 
@@ -48,5 +59,9 @@ public class  Chat {
 
     public int getNextMessageId() {
         return nextMessageId;
+    }
+
+    public String getName() {
+        return name;
     }
 }
