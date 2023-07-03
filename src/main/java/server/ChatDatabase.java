@@ -22,4 +22,9 @@ public class ChatDatabase {
         }
         return userChats;
     }
+
+    public static void addChat(Chat chat) {
+        chats.add(chat);
+        //TODO update database
+    }
 }

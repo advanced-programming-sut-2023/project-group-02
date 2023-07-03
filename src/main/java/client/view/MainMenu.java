@@ -100,6 +100,11 @@ public class MainMenu {
             Main.setScene(new PreGameMenu().getPane());
         });
 
+        Button enterMessenger = makeButton(buttons, "Enter Messenger");
+        enterGameMenu.setOnAction(event -> {
+            Main.setScene(new MessengerMenu().getPane());
+        });
+
         Button scoreBoard = makeButton(buttons, "ScoreBoard");
         scoreBoard.setOnAction(event -> Main.setScene(getScoreBoardPane()));
 

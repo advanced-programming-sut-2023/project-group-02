@@ -16,7 +16,7 @@ public class  Chat {
         this.id = ChatDatabase.getChats().size();
         this.type = type;
         this.users = users;
-        ChatDatabase.getChats().add(this);
+        ChatDatabase.addChat(this);
     }
 
     public ArrayList<User> getUsers() {
