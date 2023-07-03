@@ -101,7 +101,7 @@ public class MainMenu {
         });
 
         Button enterMessenger = makeButton(buttons, "Enter Messenger");
-        enterGameMenu.setOnAction(event -> {
+        enterMessenger.setOnAction(event -> {
             Main.setScene(new MessengerMenu().getPane());
         });
 
