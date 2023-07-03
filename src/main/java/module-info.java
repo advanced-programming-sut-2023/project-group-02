@@ -16,4 +16,5 @@ module project {
     exports models.units;
     exports models.buildings;
     exports server;
+    exports server.chat;
 }

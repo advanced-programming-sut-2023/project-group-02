@@ -1,4 +1,4 @@
-package models.chat;
+package server.chat;
 
 public enum ChatType {
     PRIVATE,

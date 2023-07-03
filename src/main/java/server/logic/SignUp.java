@@ -5,6 +5,8 @@ import client.view.enums.SignUpMenuMessages;
 import controllers.UserController;
 import models.SecurityQuestion;
 import models.User;
+import server.Connection;
+import server.ServerUserController;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
@@ -82,14 +84,14 @@ public class SignUp {
         return randomSlogan;
     }
 
-    public static void setSecurityQuestion(SecurityQuestion question, String answer) {
+    public static void setSecurityQuestion(SecurityQuestion question, String answer, Connection connection) {
         toBeSignedIn.setSecurityQuestion(question);
         toBeSignedIn.setSecurityAnswer(answer);
-        done();
+        done(connection);
     }
 
-    private static void done() {
-        UserController.signup(toBeSignedIn);
+    private static void done(Connection connection) {
+        ServerUserController.signup(toBeSignedIn, connection);
         reset();
     }
 

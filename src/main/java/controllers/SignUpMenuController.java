@@ -87,11 +87,11 @@ public class SignUpMenuController {
     public static void setSecurityQuestion(SecurityQuestion question, String answer, Connection connection) {
         toBeSignedIn.setSecurityQuestion(question);
         toBeSignedIn.setSecurityAnswer(answer);
-        done(connection);
+        done();
     }
 
-    private static void done(Connection connection) {
-        ServerUserController.signup(toBeSignedIn, connection);
+    private static void done() {
+        //TODO this doesnt work. dont use this class
         reset();
     }
 
