@@ -35,18 +35,19 @@ public class Connection extends Thread {
     public synchronized void run() {
         try {
             //TODO check if this ip has made an account and auto login.
-            String data = dataInputStream.readUTF();
-            Packet packet = new Gson().fromJson(data, Packet.class);
-            if (packet.packetType == PacketType.LOGIN) {
-                dataOutputStream.writeUTF(new Packet
-                    (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
-            } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
-                System.out.println(currentLoggedInUser);
-                dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
-            } else if (packet.packetType == PacketType.SIGNUP) {
-                dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
-            } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {
-                finalizeSignup(packet.data.get(0), packet.data.get(1));
+            while (true) {
+                String data = dataInputStream.readUTF();
+                Packet packet = new Gson().fromJson(data, Packet.class);
+                if (packet.packetType == PacketType.LOGIN) {
+                    dataOutputStream.writeUTF(new Packet
+                        (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
+                } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
+                    dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
+                } else if (packet.packetType == PacketType.SIGNUP) {
+                    dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
+                } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {
+                    finalizeSignup(packet.data.get(0), packet.data.get(1));
+                }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
