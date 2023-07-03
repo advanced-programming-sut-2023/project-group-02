@@ -66,7 +66,7 @@ public class Connection extends Thread {
     }
 
     private synchronized void finalizeSignup(String securityQuestion, String answer) {
-        SignUpMenuController.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(securityQuestion), answer, this);
+        SignUp.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(securityQuestion), answer, this);
     }
 
     private synchronized String userLogin(String username, String password) {

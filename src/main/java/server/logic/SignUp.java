@@ -5,6 +5,7 @@ import client.view.enums.SignUpMenuMessages;
 import controllers.UserController;
 import models.SecurityQuestion;
 import models.User;
+import server.Connection;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
@@ -82,9 +83,10 @@ public class SignUp {
         return randomSlogan;
     }
 
-    public static void setSecurityQuestion(SecurityQuestion question, String answer) {
+    public static void setSecurityQuestion(SecurityQuestion question, String answer, Connection connection) {
         toBeSignedIn.setSecurityQuestion(question);
         toBeSignedIn.setSecurityAnswer(answer);
+        connection.setCurrentLoggedInUser(toBeSignedIn);
         done();
     }
 
