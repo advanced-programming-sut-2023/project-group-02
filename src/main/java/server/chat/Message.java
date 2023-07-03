@@ -1,4 +1,4 @@
-package models.chat;
+package server.chat;
 
 import java.util.Date;
 
@@ -9,13 +9,14 @@ public class Message {
     private String text;
     public final User sender;
     public final Chat chat;
-    public final Date sentAt = new Date();
+    public final Date sentAt;
 
-    public Message(int id, String text, User sender, Chat chat) {
-        this.id = id;
+    public Message(String text, User sender, Chat chat) {
+        this.id = chat.getNextMessageId();
         this.text = text;
         this.sender = sender;
         this.chat = chat;
+        sentAt = new Date();
     }
 
     public String getText() {
