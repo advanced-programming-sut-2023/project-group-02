@@ -23,7 +23,7 @@ public class Connection extends Thread {
     private User currentLoggedInUser;
 
     public Connection(Socket socket) throws IOException {
-        System.out.println("New connection form: " + socket.getInetAddress() + " : " + socket.getPort());
+        System.out.println("New connection from: " + socket.getInetAddress() + " : " + socket.getPort());
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -42,6 +42,7 @@ public class Connection extends Thread {
                     (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
             } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
                 dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
+                System.out.println(currentLoggedInUser);
             } else if (packet.packetType == PacketType.SIGNUP) {
                 dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
             } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {

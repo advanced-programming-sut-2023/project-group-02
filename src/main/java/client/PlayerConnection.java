@@ -85,7 +85,6 @@ public class PlayerConnection {
         }
         Packet packet = readFromServer();
         User user = new Gson().fromJson(packet.data.get(0), User.class);
-        System.out.println(user);
         return user;
     }
 }

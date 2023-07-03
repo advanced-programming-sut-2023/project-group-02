@@ -214,7 +214,6 @@ public class LoginMenu {
         if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL.getMessage())) {
             Main.getStage().setScene(new Scene(new MainMenu().getPane()));
             Main.getStage().show();
-            Main.getPlayerConnection().getLoggedInUser();
         } else {
             usernameTextField.setText("");
             passwordField.setText("");
