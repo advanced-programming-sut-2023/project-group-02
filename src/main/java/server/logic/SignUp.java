@@ -6,6 +6,7 @@ import controllers.UserController;
 import models.SecurityQuestion;
 import models.User;
 import server.Connection;
+import server.ServerUserController;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
@@ -86,12 +87,11 @@ public class SignUp {
     public static void setSecurityQuestion(SecurityQuestion question, String answer, Connection connection) {
         toBeSignedIn.setSecurityQuestion(question);
         toBeSignedIn.setSecurityAnswer(answer);
-        connection.setCurrentLoggedInUser(toBeSignedIn);
-        done();
+        done(connection);
     }
 
-    private static void done() {
-        UserController.signup(toBeSignedIn);
+    private static void done(Connection connection) {
+        ServerUserController.signup(toBeSignedIn, connection);
         reset();
     }
 
