@@ -106,6 +106,7 @@ public class MainMenu {
 
         Button logout = makeButton(buttons, "logout");
         logout.setOnAction(event -> {
+            Main.getPlayerConnection().getLoggedInUser();
             logout();
             Main.setScene(Main.getTitlePane());
         });
