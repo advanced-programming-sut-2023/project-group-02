@@ -57,7 +57,6 @@ public class Connection extends Thread {
                 } else if (packet.packetType == PacketType.FIND_USER) {
                     dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
                 } else if (packet.packetType == PacketType.SEND_FRIEND_REQUEST) {
-                    System.out.println("salam");
                     sendFriendRequest(new Gson().fromJson(packet.data.get(0), User.class));
                 }
             }
@@ -69,7 +68,7 @@ public class Connection extends Thread {
     private void sendFriendRequest(User user) {
         if (!user.getReceivedFriendRequests().contains(currentLoggedInUser))
             user.addReceivedFriendRequest(currentLoggedInUser);
-        System.out.println(user);
+        System.out.println(user.getReceivedFriendRequests());
     }
 
     private Packet findUser(String username) {
