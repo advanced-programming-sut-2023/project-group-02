@@ -97,12 +97,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Username: " + username + "\n" +
-            "Password: " + passwordHash + "\n" +
-            "Nickname: " + nickname + "\n" +
-            "Email: " + email + "\n" +
-            "Slogan: " + slogan + "\n" +
-            "HighScore: " + highScore + "\n";
+        return username;
     }
 
     @Override

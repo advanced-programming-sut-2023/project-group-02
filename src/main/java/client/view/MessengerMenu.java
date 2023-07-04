@@ -28,7 +28,7 @@ import java.util.Objects;
 public class MessengerMenu {
     private Pane rootPane;
     private final User currentUser = Main.getPlayerConnection().getLoggedInUser();
-    private ArrayList<Chat> chats = Main.getPlayerConnection().getPlayerChats();
+    private ArrayList<Chat> chats;
     private VBox chatsVBox;
     private VBox makeChatVBox;
     private ArrayList<User> selectedUsers = new ArrayList<>();
@@ -42,6 +42,11 @@ public class MessengerMenu {
     }
 
     private void initPane() {
+        chats = Main.getPlayerConnection().getPlayerChats();
+        System.out.println("im initializing the pane");
+        System.out.println("players chat is " + Main.getPlayerConnection().getPlayerChats());
+        System.out.println("the equal amount is " + chats);
+        rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
         rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Messenger.css")).toExternalForm());
         rootPane.setPrefSize(960, 540);
@@ -72,7 +77,8 @@ public class MessengerMenu {
 
     private void addChats() {
         // i think i should use player chats or ask about it
-        for (Chat chat : ChatDatabase.getChats()) {
+        System.out.println("chats are " + chats);
+        for (Chat chat : chats) {
             chatsVBox.getChildren().add(createChatPreviewVBox(chat));
         }
     }
@@ -87,7 +93,6 @@ public class MessengerMenu {
 
     private void makeMakeChatVBox() {
         VBox chatDetails = new VBox(10);
-        chatDetails.setAlignment(Pos.CENTER);
 
         TextField chatName = new TextField();
         chatName.setPromptText("Name");
@@ -95,23 +100,53 @@ public class MessengerMenu {
 
         ChoiceBox<ChatType> chatType = new ChoiceBox<>();
         chatType.getItems().addAll(ChatType.PRIVATE, ChatType.PUBLIC, ChatType.ROOM);
+        chatType.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals(ChatType.PRIVATE)) chatName.setDisable(true);
+            else chatType.setDisable(false);
+        });
 
         Button makeChat = new Button("Make Chat");
         makeChat.getStyleClass().add("button1");
+        Button cancelButton = new Button("Cancel");
+        cancelButton.getStyleClass().add("button1");
+        HBox buttons = new HBox(10,makeChat,cancelButton);
+
         makeChat.setOnAction(event -> {
-            //TODO : making chat
+            makeChat(chatName,chatType);
+            System.out.println("here after adding it" + Main.getPlayerConnection().getPlayerChats());
+            reset();
+            System.out.println("after reseting");
+            System.out.println(Main.getPlayerConnection().getPlayerChats());
             initPane();
         });
+        cancelButton.setOnAction(event -> reset());
 
         Text addPlayerText = new Text("Add Users:");
         TextField searchPlayers = new TextField();
         searchPlayers.setMaxWidth(200);
         searchPlayers.setPromptText("Search...");
 
-        chatDetails.getChildren().addAll(chatName,chatType,makeChat,addPlayerText,searchPlayers);
+        chatDetails.getChildren().addAll(chatType,chatName,buttons,addPlayerText,searchPlayers);
         searchPlayers.textProperty().addListener((observable, oldValue, newValue) -> searchPlayers(searchPlayers,notFoundText));
 
         makeChatVBox.getChildren().add(chatDetails);
+    }
+
+
+
+    private void makeChat(TextField chatName, ChoiceBox<ChatType> chatType) {
+        if (chatType.getValue() == null || (chatType.getValue() != ChatType.PRIVATE && (chatName.getText() == null || chatName.getText().equals(""))))
+            Graphics.showMessagePopup("Fill all the fields!");
+
+        String name = chatName.getText();
+        ChatType type = chatType.getValue();
+
+        if (type.equals(ChatType.PRIVATE))
+            new Chat(currentUser, selectedUsers.get(selectedUsers.size() - 1));
+        else {
+            selectedUsers.add(currentUser);
+            new Chat(name, type, selectedUsers);
+        }
     }
 
     private void searchPlayers(TextField playersNameTextField, Text notFoundText) {
@@ -119,13 +154,12 @@ public class MessengerMenu {
         String playersName = playersNameTextField.getText();
         User user;
         //TODO : dont use User Controller
-        if ((user = UserController.findUserWithUsername(playersName)) == null) {
+        if ((user = UserController.findUserWithUsername(playersName)) == null || user.equals(currentUser)) {
             makeChatVBox.getChildren().remove(foundPlayer);
             notFoundText.setVisible(true);
             if (!makeChatVBox.getChildren().contains(notFoundText))
                 makeChatVBox.getChildren().add(notFoundText);
         } else {
-            System.out.println("player is found bro");
             makeChatVBox.getChildren().remove(foundPlayer);
             makeChatVBox.getChildren().remove(notFoundText);
             foundPlayer = makePlayersHBox(user);
@@ -140,17 +174,20 @@ public class MessengerMenu {
 
         Text username = new Text(user.getUsername());
         username.setFont(new Font("Arial",20));
-        username.setFill(Color.DARKBLUE);
+        if (selectedUsers.contains(user)) username.setFill(Color.RED);
+        else username.setFill(Color.DARKBLUE);
 
         HBox hBox = new HBox(10,avatar,username);
-        hBox.setOnMouseClicked(event -> selectPlayer(user));
+        hBox.setOnMouseClicked(event -> {
+            selectPlayer(user);
+            username.setFill(Color.RED);
+        });
         return hBox;
     }
 
     private void selectPlayer(User player) {
         selectedUsers.remove(player);
         selectedUsers.add(player);
-        System.out.println("selected players : " + selectedUsers);
     }
 
     private VBox createChatPreviewVBox(Chat chat) {
@@ -185,5 +222,11 @@ public class MessengerMenu {
         backButton.setLayoutX(10);
         backButton.setLayoutY(10);
         return backButton;
+    }
+
+    private void reset() {
+        selectedUsers.clear();
+        makeChatVBox = new VBox();
+        initPane();
     }
 }

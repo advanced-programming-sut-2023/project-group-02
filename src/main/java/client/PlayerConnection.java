@@ -6,6 +6,8 @@ import controllers.LoginMenuController;
 import controllers.SignUpMenuController;
 import models.SecurityQuestion;
 import models.User;
+import server.ChatDatabase;
+import server.Database;
 import server.Packet;
 import server.PacketType;
 import server.chat.Chat;
@@ -90,6 +92,7 @@ public class PlayerConnection {
     }
 
     public ArrayList<Chat> getPlayerChats() {
-        return new ArrayList<>(); //TODO complete this method
+         //TODO complete this method
+        return ChatDatabase.getChatsOfUser(getLoggedInUser());
     }
 }

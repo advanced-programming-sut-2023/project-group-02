@@ -18,6 +18,44 @@
     -fx-text-fill: #ffffff;
 }
 
+.list-cell {
+    -fx-background-color: #b27676;
+    -fx-text-fill: white;
+}
+
+.list-cell:hover {
+    -fx-background-color: #4d3232;
+}
+
+.list-cell:odd {
+    -fx-background-color: #7c5e5e;
+}
+
+.list-cell:even {
+    -fx-background-color: #a88a8a;
+}
+
+.list-cell:selected {
+    -fx-background-color: #4d3232;
+}
+
+.list-view {
+    -fx-background-color: #b27676;
+}
+
+.list-view .scroll-bar {
+    -fx-background-color: #4d3232;
+}
+
+.list-view .scroll-bar-thumb {
+    -fx-background-color: #7c5e5e;
+}
+
+.list-view .scroll-bar-thumb:hover {
+    -fx-background-color: #4d3232;
+}
+
+
 .button1 {
     -fx-font-family: "Arial";
     -fx-font-size: 15px;
