@@ -2,6 +2,7 @@ package client.view;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,9 +45,11 @@ public class FriendsMenu {
         for (User user : currentUser.getReceivedFriendRequests()) {
             friendRequests.getChildren().add(makeFriendRequestField(currentUser, user));
         }
-        friendRequests.setPrefWidth(250);
-        friendRequests.setPrefHeight(350);
-        pane.getChildren().add(friendRequests);
+        ScrollPane scrollPane = new ScrollPane(friendRequests);
+        scrollPane.setPrefWidth(250);
+        scrollPane.setPrefHeight(350);
+        scrollPane.setLayoutY(100);
+        pane.getChildren().add(scrollPane);
     }
 
     private HBox makeFriendRequestField(User currentUser, User user) {
