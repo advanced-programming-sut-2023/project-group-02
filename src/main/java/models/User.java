@@ -106,10 +106,8 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof User) {
-            User otherUser = (User) obj;
-            return this.username == otherUser.username;
-        }
+        if (obj instanceof User)
+            return username.equals(((User) obj).getUsername());
         return false;
     }
 

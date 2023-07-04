@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class ChatMenu {
     private final Chat chat;
-    private User currentUser = Main.getPlayerConnection().getLoggedInUser();
+    private final User currentUser = Main.getPlayerConnection().getLoggedInUser();
     private Pane rootPane;
     private VBox mainVBox = new VBox();
     private VBox chatMessages = new VBox();

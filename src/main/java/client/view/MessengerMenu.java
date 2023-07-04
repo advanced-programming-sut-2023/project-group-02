@@ -23,6 +23,7 @@ import server.chat.ChatType;
 import utils.Graphics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class MessengerMenu {
