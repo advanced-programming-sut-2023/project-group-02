@@ -6,7 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -20,6 +22,7 @@ import java.util.Objects;
 
 import client.view.Main;
 import client.view.enums.ProfileMenuMessages;
+import models.User;
 
 public class Graphics {
     public static Background getBackground(URL url) {
@@ -57,7 +60,7 @@ public class Graphics {
 
     public static Captcha generateCaptcha(double layoutX, double layoutY) throws IOException {
         File randomCaptcha = Randoms
-                .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
+            .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
         Captcha captcha = new Captcha(randomCaptcha.getName().substring(0, 4), layoutX, layoutY);
         return captcha;
     }
@@ -71,5 +74,13 @@ public class Graphics {
                 textField.setText(oldValue);
             }
         });
+    }
+
+    public static void showProfile(Pane currentPane, User currentUser, User userToSearch) {
+        //TODO
+        Pane newPane = new Pane();
+        newPane.setPrefSize(300, 600);
+        newPane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        currentPane.getChildren().add(newPane);
     }
 }

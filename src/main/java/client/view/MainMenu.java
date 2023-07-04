@@ -105,6 +105,11 @@ public class MainMenu {
             Main.setScene(new MessengerMenu().getPane());
         });
 
+        Button friends = makeButton(buttons, "Friends");
+        friends.setOnAction(event -> {
+            Main.setScene(new friendsMenu().getPane());
+        });
+
         Button scoreBoard = makeButton(buttons, "ScoreBoard");
         scoreBoard.setOnAction(event -> Main.setScene(getScoreBoardPane()));
 

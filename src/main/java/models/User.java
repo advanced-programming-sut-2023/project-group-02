@@ -16,6 +16,7 @@ public class User {
     private String avatarPath;
     private boolean isOnline = false;
     private Date lastSeen;
+    private final User[] friends = new User[100];
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
                 SecurityQuestion securityQuestion, String securityAnswer) {
@@ -156,5 +157,18 @@ public class User {
 
     public void setLastSeen(Date lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    public User[] getFriends() {
+        return friends;
+    }
+
+    public void addFriend(User friend) {
+        for (int i = 0; i < friends.length; i++) {
+            if (friends[i] == null) {
+                friends[i] = friend;
+                break;
+            }
+        }
     }
 }

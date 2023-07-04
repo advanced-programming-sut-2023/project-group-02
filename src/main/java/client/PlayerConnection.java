@@ -4,11 +4,13 @@ import client.view.enums.LoginMenuMessages;
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
 import controllers.SignUpMenuController;
+import javafx.scene.layout.Pane;
 import models.SecurityQuestion;
 import models.User;
 import server.Packet;
 import server.PacketType;
 import server.chat.Chat;
+import utils.Graphics;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -99,5 +101,28 @@ public class PlayerConnection {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void searchPlayer(Pane currentPane, String username) {
+        User currentUser = getLoggedInUser();
+        User userToSearch = getUserWithUsername(username);
+        if (userToSearch == null) {
+            Graphics.showMessagePopup("Such user does not exits");
+            return;
+        }
+        Graphics.showProfile(currentPane, currentUser, userToSearch);
+    }
+
+    private User getUserWithUsername(String username) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.FIND_USER, username).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        if (packet.data.get(0).equals(""))
+            return null;
+        User user = new Gson().fromJson(packet.data.get(0), User.class);
+        return user;
     }
 }
