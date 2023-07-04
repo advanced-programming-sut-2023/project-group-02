@@ -1,12 +1,13 @@
 package utils;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -20,6 +21,7 @@ import java.util.Objects;
 
 import client.view.Main;
 import client.view.enums.ProfileMenuMessages;
+import models.User;
 
 public class Graphics {
     public static Background getBackground(URL url) {
@@ -44,7 +46,10 @@ public class Graphics {
     }
 
     public static ImageView getAvatarWithPath(String path) {
-        return new ImageView(new Image(path, 160, 160, false, false));
+        ImageView imageView = new ImageView(new Image(Graphics.class.getResource(path).toExternalForm()));
+        imageView.setFitWidth(120);
+        imageView.setFitHeight(120);
+        return imageView;
     }
 
     public static ImageView[] getDefaultAvatars() {
@@ -57,7 +62,7 @@ public class Graphics {
 
     public static Captcha generateCaptcha(double layoutX, double layoutY) throws IOException {
         File randomCaptcha = Randoms
-                .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
+            .getRandomFileFromDirectory(Objects.requireNonNull(Graphics.class.getResource("/images/captcha")));
         Captcha captcha = new Captcha(randomCaptcha.getName().substring(0, 4), layoutX, layoutY);
         return captcha;
     }
@@ -71,5 +76,89 @@ public class Graphics {
                 textField.setText(oldValue);
             }
         });
+    }
+
+    public static void showProfile(Pane currentPane, User currentUser, User userToSearch) {
+        Pane profilePane = new Pane();
+        profilePane.getStylesheets().add(Objects.requireNonNull(Graphics.class.getResource("/CSS/Menus.css")).toExternalForm());
+        profilePane.setPrefSize(600, 400);
+        profilePane.setLayoutX(180);
+        profilePane.setLayoutY(70);
+        profilePane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        currentPane.getChildren().add(profilePane);
+        profilePane.requestFocus();
+
+        ImageView imageView = new ImageView(new Image(Graphics.class.getResource("/images/buttons/cancel.png").toExternalForm()));
+        imageView.setFitWidth(25);
+        imageView.setFitHeight(25);
+        imageView.setLayoutX(575);
+        imageView.setOnMouseClicked(mouseEvent -> currentPane.getChildren().remove(profilePane));
+        profilePane.getChildren().add(imageView);
+        initProfilePane(currentPane, profilePane, currentUser, userToSearch);
+    }
+
+    private static void initProfilePane(Pane currentPane, Pane profilePane, User currentUser, User userToSearch) {
+        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch));
+        Text friendsText = new Text("List of Friends:");
+        friendsText.getStyleClass().add("title1");
+        friendsText.setLayoutY(100);
+        friendsText.setLayoutX(20);
+        VBox friends = new VBox();
+        friends.setSpacing(5);
+        for (User friend : userToSearch.getFriends()) {
+            friends.getChildren().add(getUserDetails(currentPane, friend));
+        }
+        ScrollPane scrollPane = new ScrollPane(friends);
+        scrollPane.setLayoutY(120);
+        profilePane.getChildren().addAll(friendsText, friends);
+        addFriendRequestFields(profilePane, currentUser, userToSearch);
+    }
+
+    private static void addFriendRequestFields(Pane profilePane, User currentUser, User userToSearch) {
+        if (currentUser.getUsername().equals(userToSearch.getUsername()))
+            return;
+        Text alreadyFriends = new Text("You are friend of this user");
+        alreadyFriends.setLayoutX(400);
+        alreadyFriends.setLayoutY(120);
+        alreadyFriends.getStyleClass().add("title1");
+        profilePane.getChildren().add(alreadyFriends);
+        if (currentUser.getFriends().contains(userToSearch)) {
+            return;
+        } else if (userToSearch.getReceivedFriendRequests().contains(currentUser)) {
+            alreadyFriends.setText("You have sent a friend request");
+            return;
+        }
+        profilePane.getChildren().remove(alreadyFriends);
+        Text requestText = new Text("request friendship");
+        requestText.setLayoutX(300);
+        requestText.setLayoutY(120);
+        requestText.getStyleClass().add("title1-with-hover");
+        ImageView addFriend = new ImageView(new Image(Graphics.class.getResource("/images/Messenger/plus.png").toExternalForm()));
+        addFriend.setLayoutX(270);
+        addFriend.setLayoutY(105);
+        addFriend.setFitWidth(20);
+        addFriend.setFitHeight(20);
+        profilePane.getChildren().addAll(requestText, addFriend);
+    }
+
+    private static HBox getUserDetails(Pane currentPane, User user) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(10);
+        hbox.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        ImageView avatar = user.getAvatar();
+        avatar.setFitHeight(50);
+        avatar.setFitWidth(50);
+        avatar.setLayoutX(15);
+        avatar.setLayoutY(20);
+        Text usernameText = new Text(user.getUsername());
+        usernameText.setLayoutX(75);
+        usernameText.setLayoutY(40);
+        usernameText.getStyleClass().add("title1-with-hover");
+        usernameText.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().searchPlayer(currentPane, user.getUsername());
+        });
+        hbox.getChildren().addAll(avatar, usernameText);
+        return hbox;
     }
 }

@@ -5,6 +5,9 @@ import javafx.scene.image.ImageView;
 import utils.Graphics;
 import utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class User {
     public final int id;
     private String username, passwordHash, nickname, email, slogan;
@@ -13,6 +16,9 @@ public class User {
     private int highScore;
     private String avatarPath;
     private boolean isOnline = false;
+    private Date lastSeen;
+    private final ArrayList<User> friends = new ArrayList<>();
+    private final ArrayList<User> receivedFriendRequests = new ArrayList<>();
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
                 SecurityQuestion securityQuestion, String securityAnswer) {
@@ -24,7 +30,7 @@ public class User {
         this.slogan = slogan;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-//        this.setAvatarPath(getDefaultAvatarPath());
+        this.setAvatarPath("/images/avatars/0.jpg");
     }
 
     public String getUsername() {
@@ -125,11 +131,6 @@ public class User {
         return Graphics.getAvatarWithPath(avatarPath);
     }
 
-    private String getDefaultAvatarPath() {
-        ImageView defaultAvatar = Graphics.getAvatarWithPath(getClass().getResource("/images/avatars/0.jpg").toExternalForm());
-        return defaultAvatar.getImage().getUrl();
-    }
-
     public int getRank() {
         return UserController.getUsersSorted().indexOf(this) + 1;
     }
@@ -140,5 +141,33 @@ public class User {
 
     public void setOnline(boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Date getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public boolean addFriend(User user) {
+        if (friends.size() >= 100)
+            return false;
+        friends.add(user);
+        return true;
+    }
+
+    public ArrayList<User> getReceivedFriendRequests() {
+        return receivedFriendRequests;
+    }
+
+    public void addReceivedFriendRequest(User user) {
+        receivedFriendRequests.add(user);
     }
 }

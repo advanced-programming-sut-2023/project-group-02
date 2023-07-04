@@ -56,7 +56,7 @@ public class Main extends Application {
 //        if (UserController.isAuthorized()) {
 //            setScene(new MainMenu().getPane());
 //        } else {
-        //setScene(Main.getTitlePane());
+//        setScene(Main.getTitlePane());
 //        }
         Main.getPlayerConnection().requestLogin("danial", "Danial01*");
         setScene(new MainMenu().getPane());

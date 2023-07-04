@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Connection extends Thread {
     private Socket socket;
@@ -47,6 +48,10 @@ public class Connection extends Thread {
                     dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
                 } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {
                     finalizeSignup(packet.data.get(0), packet.data.get(1));
+                } else if (packet.packetType == PacketType.LOGOUT) {
+                    userLogout();
+                } else if (packet.packetType == PacketType.FIND_USER) {
+                    dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
                 }
             }
         } catch (IOException e) {
@@ -54,9 +59,24 @@ public class Connection extends Thread {
         }
     }
 
+    private Packet findUser(String username) {
+        User user = ServerUserController.findUserWithUsername(username);
+        if (user == null)
+            return new Packet(PacketType.FIND_USER, "");
+        return new Packet(PacketType.FIND_USER, new Gson().toJson(user));
+    }
+
+    private void userLogout() {
+        if (currentLoggedInUser != null) {
+            currentLoggedInUser.setOnline(false);
+            currentLoggedInUser.setLastSeen(new Date());
+            currentLoggedInUser = null;
+        }
+    }
+
     public void userDisconnected() {
         System.out.println("Player disconnected: " + socket.getInetAddress() + " : " + socket.getPort());
-        //TODO do anything necessary when user becomes offline
+        userLogout();
     }
 
     private synchronized String initSignup(ArrayList<String> data) {
