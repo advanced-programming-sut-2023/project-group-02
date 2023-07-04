@@ -1,6 +1,9 @@
 package client.view;
 
 import controllers.UserController;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -10,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.User;
 import utils.Graphics;
 
@@ -51,8 +55,22 @@ public class MainMenu {
         scrollPane.setPrefWidth(400);
         scrollPane.setPrefHeight(510);
 
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            User[] newScoreboard = Main.getPlayerConnection().getScoreboard();
+            players.getChildren().clear();
+            for (int i = 0; i < newScoreboard.length; i++) {
+                User player = newScoreboard[i];
+                players.getChildren().add(playersInfoInHBox(player, i));
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
         Button backButton = new Button("back");
-        backButton.setOnAction(event -> Main.setScene(getPane()));
+        backButton.setOnAction(event -> {
+            timeline.stop();
+            Main.setScene(getPane());
+        });
         backButton.getStyleClass().add("button1");
         backButton.setTranslateY(5);
         backButton.setTranslateY(500);
@@ -75,7 +93,7 @@ public class MainMenu {
         onlineStatus.setFitWidth(20);
         onlineStatus.setFitHeight(20);
 
-        Text lastSeen = makeTextWithColor(user.getLastSeen().toString(), Color.GREY);
+        Text lastSeen = makeTextWithColor("", Color.GREY);
         if (user.isOnline())
             lastSeen.setText("online");
         else if (user.getLastSeen() != null)
