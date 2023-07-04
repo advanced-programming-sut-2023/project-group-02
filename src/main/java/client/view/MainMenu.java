@@ -30,14 +30,16 @@ public class MainMenu {
     }
 
     private void initScoreBoardPane(Pane pane) {
+        User[] scoreboard = Main.getPlayerConnection().getScoreboard();
+
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/score-board.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
 
         VBox players = new VBox();
         players.setStyle("-fx-background-color: maroon");
-        for (int i = 0; i < UserController.getUsersSorted().size(); i++) {
-            User player = UserController.getUsersSorted().get(i);
+        for (int i = 0; i < scoreboard.length; i++) {
+            User player = scoreboard[i];
             players.getChildren().add(playersInfoInHBox(player));
         }
 

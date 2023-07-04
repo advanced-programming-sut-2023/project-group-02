@@ -84,6 +84,9 @@ public class Connection extends Thread {
                                         ServerUserController.findUserWithUsername(packet.data.get(1))))
                                 .toJson());
                     }
+                    case GET_SCOREBOARD -> {
+                        dataOutputStream.writeUTF(getScoreboard());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -160,5 +163,11 @@ public class Connection extends Thread {
 
     public void setCurrentLoggedInUser(User currentLoggedInUser) {
         this.currentLoggedInUser = currentLoggedInUser;
+    }
+
+    public String getScoreboard() {
+        ArrayList<User> users = ServerUserController.getUsersSorted();
+        Packet packet = new Packet(PacketType.GET_SCOREBOARD, new Gson().toJson(users));
+        return packet.toJson();
     }
 }
