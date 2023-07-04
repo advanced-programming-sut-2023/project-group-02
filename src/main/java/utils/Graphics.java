@@ -126,11 +126,15 @@ public class Graphics {
         alreadyFriends.setLayoutY(120);
         alreadyFriends.getStyleClass().add("title1");
         profilePane.getChildren().add(alreadyFriends);
-        if (currentUser.getFriends().contains(userToSearch)) {
-            alreadyFriends.setText("You are friend of this user");
-            return;
-        } else if (userToSearch.getReceivedFriendRequests().contains(currentUser)) {
-            return;
+        for (User friend : currentUser.getFriends()) {
+            if (friend.getUsername().equals(userToSearch.getUsername())) {
+                alreadyFriends.setText("You are friend of this user");
+                return;
+            }
+        }
+        for (User friend : userToSearch.getReceivedFriendRequests()) {
+            if (friend.getUsername().equals(currentUser.getUsername()))
+                return;
         }
         profilePane.getChildren().remove(alreadyFriends);
         Text requestText = new Text("request friendship");
