@@ -17,3 +17,16 @@
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
+
+.button1 {
+    -fx-font-family: "Arial";
+    -fx-font-size: 15px;
+    -fx-background-color: linear-gradient(purple, rebeccapurple);
+    -fx-text-fill: #FFF;
+    -fx-border-color: #70118b;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-pref-width: 100px;
+    -fx-max-width: 200px;
+}

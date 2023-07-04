@@ -1,6 +1,7 @@
 package client.view;
 
 import javafx.scene.layout.Pane;
+import server.ChatDatabase;
 import server.chat.Chat;
 import utils.Graphics;
 
