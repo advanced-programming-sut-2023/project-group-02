@@ -115,7 +115,7 @@ public class Graphics {
     }
 
     private static void addFriendRequestFields(Pane profilePane, User currentUser, User userToSearch) {
-        if (currentUser.equals(userToSearch))
+        if (currentUser.getUsername().equals(userToSearch.getUsername()))
             return;
         Text alreadyFriends = new Text("You are friend of this user");
         alreadyFriends.setLayoutX(400);
@@ -130,13 +130,13 @@ public class Graphics {
         }
         profilePane.getChildren().remove(alreadyFriends);
         Text requestText = new Text("request friendship");
-        requestText.setLayoutX(400);
+        requestText.setLayoutX(300);
         requestText.setLayoutY(120);
-        requestText.getStyleClass().add("title1");
+        requestText.getStyleClass().add("title1-with-hover");
         ImageView addFriend = new ImageView(new Image(Graphics.class.getResource("/images/Messenger/plus.png").toExternalForm()));
-        addFriend.setLayoutX(450);
-        addFriend.setLayoutX(120);
-        addFriend.setFitHeight(20);
+        addFriend.setLayoutX(270);
+        addFriend.setLayoutY(105);
+        addFriend.setFitWidth(20);
         addFriend.setFitHeight(20);
         profilePane.getChildren().addAll(requestText, addFriend);
     }
