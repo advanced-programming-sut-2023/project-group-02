@@ -112,9 +112,18 @@ public class ChatMenu {
 
         Text date = new Text(message.getDate() + "");
 
+        ImageView sentMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/sentMessage.png").toExternalForm()));
+        ImageView seenMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/seenMessage.png").toExternalForm()));
+
+        //TOdo : add if statement  and listener for the sentOrSeen imageview
+        ImageView sentOrSeen = sentMessage;
+        sentOrSeen.setFitHeight(15);
+        sentOrSeen.setFitWidth(15);
+        sentOrSeen.setTranslateX(-5);
+
         HBox deleteAndEdit;
         if (message.sender.equals(currentUser))
-            deleteAndEdit = new HBox(10,editButton,deleteButton,date);
+            deleteAndEdit = new HBox(10,editButton,deleteButton,date,sentOrSeen);
         else deleteAndEdit = new HBox(date);
 
         VBox verticalMessage = new VBox(10,senderName,messageText,deleteAndEdit);
