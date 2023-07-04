@@ -28,7 +28,7 @@ public class User {
         this.slogan = slogan;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-//        this.setAvatarPath(getDefaultAvatarPath());
+        this.setAvatarPath(getDefaultAvatarPath());
     }
 
     public String getUsername() {
@@ -135,7 +135,7 @@ public class User {
     }
 
     private String getDefaultAvatarPath() {
-        ImageView defaultAvatar = Graphics.getAvatarWithPath(getClass().getResource("/images/avatars/0.jpg").toExternalForm());
+        ImageView defaultAvatar = Graphics.getAvatarWithPath("/images/avatars/0.jpg");
         return defaultAvatar.getImage().getUrl();
     }
 

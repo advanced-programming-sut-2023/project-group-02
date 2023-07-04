@@ -58,7 +58,7 @@ public class Main extends Application {
 //        } else {
         //setScene(Main.getTitlePane());
 //        }
-        Main.getPlayerConnection().requestLogin("danial", "Danial01*");
+//        Main.getPlayerConnection().requestLogin("danial", "Danial01*");
         setScene(new MainMenu().getPane());
         //TODO remove this
     }
