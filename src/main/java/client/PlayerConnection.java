@@ -145,7 +145,7 @@ public class PlayerConnection {
 
     public void sendFriendRequest(User userToSearch) {
         try {
-            dataOutputStream.writeUTF(new Packet(PacketType.SEND_FRIEND_REQUEST, new Gson().toJson(userToSearch)).toJson());
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_FRIEND_REQUEST, userToSearch.getUsername()).toJson());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
