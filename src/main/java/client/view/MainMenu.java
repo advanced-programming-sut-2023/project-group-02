@@ -1,6 +1,7 @@
 package client.view;
 
 import controllers.UserController;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -40,7 +41,7 @@ public class MainMenu {
         players.setStyle("-fx-background-color: maroon");
         for (int i = 0; i < scoreboard.length; i++) {
             User player = scoreboard[i];
-            players.getChildren().add(playersInfoInHBox(player));
+            players.getChildren().add(playersInfoInHBox(player, i));
         }
 
         ScrollPane scrollPane = new ScrollPane(players);
@@ -59,19 +60,33 @@ public class MainMenu {
         pane.getChildren().addAll(scrollPane, backButton);
     }
 
-    private HBox playersInfoInHBox(User user) {
+    private HBox playersInfoInHBox(User user, int index) {
         ImageView avatar = Graphics.getAvatarWithPath(user.getAvatarPath());
         avatar.setFitWidth(30);
         avatar.setFitHeight(30);
 
-        Text rank = makeTextWithColor("" + user.getRank(), Color.GREEN);
+        Text rank = makeTextWithColor("" + (index + 1), Color.GREEN);
         Text username = makeTextWithColor(user.getUsername(), Color.YELLOW);
         Text nickname = makeTextWithColor(user.getNickname(), Color.BLUE);
         Text highScore = makeTextWithColor("" + user.getHighScore(), Color.WHITE);
 
-        HBox hBox = new HBox(rank, avatar, username, nickname, highScore);
+        ImageView onlineStatus = new ImageView(getClass()
+                .getResource("/images/others/" + (user.isOnline() ? "check" : "cross") + ".jpg").toExternalForm());
+        onlineStatus.setFitWidth(20);
+        onlineStatus.setFitHeight(20);
+
+        Text lastSeen = makeTextWithColor(user.getLastSeen().toString(), Color.GREY);
+        if (user.isOnline())
+            lastSeen.setText("online");
+        else if (user.getLastSeen() != null)
+            lastSeen.setText(user.getLastSeen().toString());
+        else
+            lastSeen.setText("never");
+
+        HBox hBox = new HBox(rank, avatar, username, nickname, highScore, onlineStatus, lastSeen);
         hBox.getStyleClass().add("button1");
-        hBox.setSpacing(10);
+        hBox.setSpacing(15);
+        hBox.setAlignment(Pos.CENTER_LEFT);
         return hBox;
     }
 
