@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 
 import java.util.Objects;
 
-public class friendsMenu {
+public class FriendsMenu {
 
     public Pane getPane() {
         Pane pane = new Pane();

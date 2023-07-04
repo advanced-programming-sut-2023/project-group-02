@@ -107,7 +107,7 @@ public class MainMenu {
 
         Button friends = makeButton(buttons, "Friends");
         friends.setOnAction(event -> {
-            Main.setScene(new friendsMenu().getPane());
+            Main.setScene(new FriendsMenu().getPane());
         });
 
         Button scoreBoard = makeButton(buttons, "ScoreBoard");
