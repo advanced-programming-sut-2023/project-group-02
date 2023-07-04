@@ -58,11 +58,36 @@ public class Connection extends Thread {
                     dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
                 } else if (packet.packetType == PacketType.SEND_FRIEND_REQUEST) {
                     sendFriendRequest(packet.data.get(0));
+                } else if (packet.packetType == PacketType.ACCEPT_FRIEND) {
+                    dataOutputStream.writeUTF(new Packet(PacketType.ACCEPT_FRIEND,
+                        acceptFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                            ServerUserController.findUserWithUsername(packet.data.get(1)))).toJson());
+                } else if (packet.packetType == PacketType.REJECT_FRIEND) {
+                    dataOutputStream.writeUTF(new Packet(PacketType.REJECT_FRIEND,
+                        rejectFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                            ServerUserController.findUserWithUsername(packet.data.get(1)))).toJson());
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private String rejectFriendRequest(User accepter, User requester) {
+        accepter.getReceivedFriendRequests().remove(requester);
+        requester.getReceivedFriendRequests().remove(accepter);
+        return "Friend request rejected successfully";
+    }
+
+    private String acceptFriendRequest(User accepter, User requester) {
+        if (accepter.getFriends().size() < 100 && requester.getFriends().size() < 100) {
+            requester.addFriend(accepter);
+            accepter.addFriend(requester);
+            accepter.getReceivedFriendRequests().remove(requester);
+            requester.getReceivedFriendRequests().remove(accepter);
+            return "Friend request accepted successfully";
+        }
+        return "You have reached the maximum number of friends";
     }
 
     private void sendFriendRequest(String username) {

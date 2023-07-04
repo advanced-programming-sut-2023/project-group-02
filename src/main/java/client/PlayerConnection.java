@@ -150,4 +150,24 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
+
+    public void acceptFriendRequest(String username, String username1) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.ACCEPT_FRIEND, username, username1).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Graphics.showMessagePopup(packet.data.get(0));
+    }
+
+    public void rejectFriendRequest(String username, String username1) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.REJECT_FRIEND, username, username1).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Graphics.showMessagePopup(packet.data.get(0));
+    }
 }
