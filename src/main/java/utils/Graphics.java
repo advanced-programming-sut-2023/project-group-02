@@ -1,13 +1,12 @@
 package utils;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -95,14 +94,32 @@ public class Graphics {
         imageView.setLayoutX(575);
         imageView.setOnMouseClicked(mouseEvent -> currentPane.getChildren().remove(profilePane));
         profilePane.getChildren().add(imageView);
-        initProfilePane(profilePane, currentUser, userToSearch);
+        initProfilePane(currentPane, profilePane, currentUser, userToSearch);
     }
 
-    private static void initProfilePane(Pane profilePane, User currentUser, User userToSearch) {
-        addUserDetails(profilePane, userToSearch);
+    private static void initProfilePane(Pane currentPane, Pane profilePane, User currentUser, User userToSearch) {
+        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch));
+        Text friendsText = new Text("List of Friends:");
+        friendsText.getStyleClass().add("title1");
+        friendsText.setLayoutY(100);
+        friendsText.setLayoutX(20);
+        VBox friends = new VBox();
+        friends.setSpacing(5);
+        for (User friend : userToSearch.getFriends()) {
+            if (friend == null)
+                continue;
+            friends.getChildren().add(getUserDetails(currentPane, friend));
+        }
+        ScrollPane scrollPane = new ScrollPane(friends);
+        scrollPane.setLayoutY(120);
+        profilePane.getChildren().addAll(friendsText, friends);
     }
 
-    private static void addUserDetails(Pane profilePane, User user) {
+    private static HBox getUserDetails(Pane currentPane, User user) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(10);
+        hbox.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         ImageView avatar = user.getAvatar();
         avatar.setFitHeight(50);
         avatar.setFitWidth(50);
@@ -111,7 +128,11 @@ public class Graphics {
         Text usernameText = new Text(user.getUsername());
         usernameText.setLayoutX(75);
         usernameText.setLayoutY(40);
-        usernameText.getStyleClass().add("title1");
-        profilePane.getChildren().addAll(avatar, usernameText);
+        usernameText.getStyleClass().add("title1-with-hover");
+        usernameText.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().searchPlayer(currentPane, user.getUsername());
+        });
+        hbox.getChildren().addAll(avatar, usernameText);
+        return hbox;
     }
 }
