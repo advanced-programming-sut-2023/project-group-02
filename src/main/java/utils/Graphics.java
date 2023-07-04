@@ -111,6 +111,34 @@ public class Graphics {
         ScrollPane scrollPane = new ScrollPane(friends);
         scrollPane.setLayoutY(120);
         profilePane.getChildren().addAll(friendsText, friends);
+        addFriendRequestFields(profilePane, currentUser, userToSearch);
+    }
+
+    private static void addFriendRequestFields(Pane profilePane, User currentUser, User userToSearch) {
+        if (currentUser.equals(userToSearch))
+            return;
+        Text alreadyFriends = new Text("You are friend of this user");
+        alreadyFriends.setLayoutX(400);
+        alreadyFriends.setLayoutY(120);
+        alreadyFriends.getStyleClass().add("title1");
+        profilePane.getChildren().add(alreadyFriends);
+        if (currentUser.getFriends().contains(userToSearch)) {
+            return;
+        } else if (userToSearch.getReceivedFriendRequests().contains(currentUser)) {
+            alreadyFriends.setText("You have sent a friend request");
+            return;
+        }
+        profilePane.getChildren().remove(alreadyFriends);
+        Text requestText = new Text("request friendship");
+        requestText.setLayoutX(400);
+        requestText.setLayoutY(120);
+        requestText.getStyleClass().add("title1");
+        ImageView addFriend = new ImageView(new Image(Graphics.class.getResource("/images/Messenger/plus.png").toExternalForm()));
+        addFriend.setLayoutX(450);
+        addFriend.setLayoutX(120);
+        addFriend.setFitHeight(20);
+        addFriend.setFitHeight(20);
+        profilePane.getChildren().addAll(requestText, addFriend);
     }
 
     private static HBox getUserDetails(Pane currentPane, User user) {

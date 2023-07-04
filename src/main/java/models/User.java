@@ -18,6 +18,7 @@ public class User {
     private boolean isOnline = false;
     private Date lastSeen;
     private final ArrayList<User> friends = new ArrayList<>();
+    private final ArrayList<User> receivedFriendRequests = new ArrayList<>();
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
                 SecurityQuestion securityQuestion, String securityAnswer) {
@@ -165,5 +166,13 @@ public class User {
             return false;
         friends.add(user);
         return true;
+    }
+
+    public ArrayList<User> getReceivedFriendRequests() {
+        return receivedFriendRequests;
+    }
+
+    public void addReceivedFriendRequest(User user) {
+        receivedFriendRequests.add(user);
     }
 }
