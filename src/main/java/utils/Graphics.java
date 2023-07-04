@@ -110,15 +110,15 @@ public class Graphics {
     }
 
     private static void initProfilePane(Pane currentPane, Pane profilePane, User currentUser, User userToSearch) {
-        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch));
+        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch.getUsername()));
         Text friendsText = new Text("List of Friends:");
         friendsText.getStyleClass().add("title1");
         friendsText.setLayoutY(100);
         friendsText.setLayoutX(20);
         VBox friends = new VBox();
         friends.setSpacing(5);
-        for (User friend : userToSearch.getFriends()) {
-            friends.getChildren().add(getUserDetails(currentPane, friend));
+        for (String friendUsername : userToSearch.getFriends()) {
+            friends.getChildren().add(getUserDetails(currentPane, friendUsername));
         }
         ScrollPane scrollPane = new ScrollPane(friends);
         scrollPane.setLayoutY(120);
@@ -138,8 +138,8 @@ public class Graphics {
         alreadyFriends.setLayoutY(120);
         alreadyFriends.getStyleClass().add("title1");
         profilePane.getChildren().add(alreadyFriends);
-        for (User friend : currentUser.getFriends()) {
-            if (friend.getUsername().equals(userToSearch.getUsername())) {
+        for (String friendUsername : currentUser.getFriends()) {
+            if (friendUsername.equals(userToSearch.getUsername())) {
                 alreadyFriends.setText("You are friend of this user");
                 return;
             }
@@ -166,22 +166,22 @@ public class Graphics {
         profilePane.getChildren().addAll(requestText, addFriend);
     }
 
-    private static HBox getUserDetails(Pane currentPane, User user) {
+    private static HBox getUserDetails(Pane currentPane, String username) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(10);
         hbox.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-        ImageView avatar = user.getAvatar();
+        ImageView avatar = Graphics.getAvatarWithPath("/images/avatars/0.jpg");
         avatar.setFitHeight(50);
         avatar.setFitWidth(50);
         avatar.setLayoutX(15);
         avatar.setLayoutY(20);
-        Text usernameText = new Text(user.getUsername());
+        Text usernameText = new Text(username);
         usernameText.setLayoutX(75);
         usernameText.setLayoutY(40);
         usernameText.getStyleClass().add("title1-with-hover");
         usernameText.setOnMouseClicked(mouseEvent -> {
-            Main.getPlayerConnection().searchPlayer(currentPane, user.getUsername());
+            Main.getPlayerConnection().searchPlayer(currentPane, username);
         });
         hbox.getChildren().addAll(avatar, usernameText);
         return hbox;
