@@ -23,6 +23,7 @@ import server.chat.ChatType;
 import utils.Graphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -43,22 +44,14 @@ public class MessengerMenu {
     }
 
     private void initPane() {
-//        chats = Main.getPlayerConnection().getPlayerChats();
         chats = ChatDatabase.getChatsOfUser(currentUser);
-        System.out.println("im initializing the pane and current player is " + currentUser);
-        System.out.println("what about this " + ChatDatabase.getChatsOfUser(currentUser));
-        System.out.println("players chat is " + Main.getPlayerConnection().getPlayerChats());
-        System.out.println("the equal amount is " + chats);
+        if (!publicRoomExists(chats)) new Chat("Public Room",ChatType.PUBLIC,UserController.getUsers());
+        chats = ChatDatabase.getChatsOfUser(currentUser);
         rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
         rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Messenger.css")).toExternalForm());
         rootPane.setPrefSize(960, 540);
         addBackButton();
-
-        //TODO : what is it's problem?
-        System.out.println("All users " + ServerUserController.getUsers());
-        new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
-
         initChats();
         initAddChat();
     }
@@ -70,6 +63,7 @@ public class MessengerMenu {
         chatsVBox.setLayoutY(10);
         chatsVBox.setPrefWidth(500);
         chatsVBox.setPrefHeight(440);
+        System.out.println(chats);
         for (Chat chat : chats) {
             chatsVBox.getChildren().add(createChatPreviewVBox(chat));
         }
@@ -85,9 +79,12 @@ public class MessengerMenu {
         rootPane.getChildren().add(makeChatVBox);
     }
 
-    private void makePublicGroup() {
-        System.out.println("All users" + ServerUserController.getUsers());
-        Chat publicGroup = new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
+    private boolean publicRoomExists(ArrayList<Chat> chats) {
+        for (Chat chat : chats) {
+            if (chat.type.equals(ChatType.PUBLIC))
+                return true;
+        }
+        return false;
     }
 
     private void addMakeChatButton() {
@@ -121,7 +118,6 @@ public class MessengerMenu {
         makeChat.setOnAction(event -> {
             makeChat(chatName,chatType);
             reset();
-            System.out.println(Main.getPlayerConnection().getPlayerChats());
             initPane();
         });
         cancelButton.setOnAction(event -> reset());
