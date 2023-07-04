@@ -170,4 +170,15 @@ public class PlayerConnection {
         Packet packet = readFromServer();
         Graphics.showMessagePopup(packet.data.get(0));
     }
+
+    public User[] getScoreboard() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_SCOREBOARD).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        User[] users = new Gson().fromJson(packet.data.get(0), User[].class);
+        return users;
+    }
 }
