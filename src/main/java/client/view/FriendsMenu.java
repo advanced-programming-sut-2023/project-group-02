@@ -1,7 +1,9 @@
 package client.view;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,33 +41,56 @@ public class FriendsMenu {
 
     private void addPendingFriendRequests(Pane pane) {
         User currentUser = Main.getPlayerConnection().getLoggedInUser();
+        addShowMyProfile(pane, currentUser);
         VBox friendRequests = new VBox();
+        friendRequests.setAlignment(Pos.CENTER);
         friendRequests.setSpacing(10);
         for (User user : currentUser.getReceivedFriendRequests()) {
-            friendRequests.getChildren().add(makeFriendRequestField(currentUser, user));
+            friendRequests.getChildren().add(makeFriendRequestField(currentUser, user, pane));
         }
-        friendRequests.setPrefWidth(250);
-        friendRequests.setPrefHeight(350);
-        pane.getChildren().add(friendRequests);
+        ScrollPane scrollPane = new ScrollPane(friendRequests);
+        scrollPane.setPrefWidth(250);
+        scrollPane.setPrefHeight(350);
+        scrollPane.setLayoutY(100);
+        scrollPane.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, null, null)));
+        pane.getChildren().add(scrollPane);
     }
 
-    private HBox makeFriendRequestField(User currentUser, User user) {
+    private void addShowMyProfile(Pane pane, User currentUser) {
+        Text showMyProfile = new Text("Show my profile");
+        showMyProfile.getStyleClass().add("title1-with-hover");
+        showMyProfile.setLayoutX(250);
+        showMyProfile.setLayoutY(100);
+        showMyProfile.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().searchPlayer(pane, currentUser.getUsername());
+        });
+        pane.getChildren().add(showMyProfile);
+    }
+
+    private HBox makeFriendRequestField(User currentUser, User user, Pane pane) {
         HBox requestField = new HBox();
         requestField.setSpacing(10);
         ImageView avatar = user.getAvatar();
+        avatar.setFitWidth(33);
+        avatar.setFitHeight(33);
         Text username = new Text(user.getUsername());
         username.getStyleClass().add("title1-with-hover");
         username.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().searchPlayer(pane, user.getUsername());
         });
         ImageView accept = new ImageView(new Image(getClass().getResource("/images/buttons/accept.png").toExternalForm()));
-        accept.setFitWidth(10);
-        accept.setFitHeight(10);
+        accept.setFitWidth(33);
+        accept.setFitHeight(33);
         ImageView reject = new ImageView(new Image(getClass().getResource("/images/buttons/reject.png").toExternalForm()));
-        reject.setFitHeight(10);
-        reject.setFitWidth(10);
+        reject.setFitHeight(33);
+        reject.setFitWidth(33);
         accept.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().acceptFriendRequest(currentUser.getUsername(), user.getUsername());
+            requestField.setVisible(false);
         });
         reject.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().rejectFriendRequest(currentUser.getUsername(), user.getUsername());
+            requestField.setVisible(false);
         });
         requestField.getChildren().addAll(avatar, username, accept, reject);
         return requestField;

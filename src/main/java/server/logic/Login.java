@@ -49,7 +49,9 @@ public class Login {
     }
 
     public static LoginMenuMessages loginWithCredentials(UserCredentials userCredentials, Connection connection) {
-        ServerUserController.login(ServerUserController.findUserWithId(userCredentials.id()), connection);
+        if (userCredentials == null || ServerUserController.findUserWithUsername(userCredentials.username()) == null)
+            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
+        ServerUserController.login(ServerUserController.findUserWithUsername(userCredentials.username()), connection);
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 

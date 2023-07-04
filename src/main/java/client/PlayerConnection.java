@@ -145,9 +145,40 @@ public class PlayerConnection {
 
     public void sendFriendRequest(User userToSearch) {
         try {
-            dataOutputStream.writeUTF(new Packet(PacketType.SEND_FRIEND_REQUEST, new Gson().toJson(userToSearch)).toJson());
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_FRIEND_REQUEST, userToSearch.getUsername()).toJson());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void acceptFriendRequest(String username, String username1) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.ACCEPT_FRIEND, username, username1).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Graphics.showMessagePopup(packet.data.get(0));
+    }
+
+    public void rejectFriendRequest(String username, String username1) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.REJECT_FRIEND, username, username1).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Graphics.showMessagePopup(packet.data.get(0));
+    }
+
+    public User[] getScoreboard() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_SCOREBOARD).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        User[] users = new Gson().fromJson(packet.data.get(0), User[].class);
+        return users;
     }
 }

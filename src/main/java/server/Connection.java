@@ -36,28 +36,57 @@ public class Connection extends Thread {
     @Override
     public synchronized void run() {
         try {
-            //TODO check if this ip has made an account and auto login.
             while (true) {
                 String data = dataInputStream.readUTF();
                 Packet packet = new Gson().fromJson(data, Packet.class);
-                if (packet.packetType == PacketType.LOGIN_WITH_TOKEN) {
-                    dataOutputStream.writeUTF(
-                            new Packet(PacketType.LOGIN_WITH_TOKEN, userLoginWithToken(packet.data.get(0))).toJson());
-                } else if (packet.packetType == PacketType.LOGIN) {
-                    dataOutputStream.writeUTF(new Packet
-                        (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
-                } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
-                    dataOutputStream.writeUTF(new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser)).toJson());
-                } else if (packet.packetType == PacketType.SIGNUP) {
-                    dataOutputStream.writeUTF(new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
-                } else if (packet.packetType == PacketType.FINALIZE_SIGNUP) {
-                    finalizeSignup(packet.data.get(0), packet.data.get(1));
-                } else if (packet.packetType == PacketType.LOGOUT) {
-                    userLogout();
-                } else if (packet.packetType == PacketType.FIND_USER) {
-                    dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
-                } else if (packet.packetType == PacketType.SEND_FRIEND_REQUEST) {
-                    sendFriendRequest(new Gson().fromJson(packet.data.get(0), User.class));
+
+                switch (packet.packetType) {
+                    case LOGIN_WITH_TOKEN -> {
+                        dataOutputStream.writeUTF(
+                                new Packet(PacketType.LOGIN_WITH_TOKEN, userLoginWithToken(packet.data.get(0)))
+                                        .toJson());
+                    }
+                    case LOGIN -> {
+                        dataOutputStream.writeUTF(
+                                new Packet(PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1)))
+                                        .toJson());
+                    }
+                    case GET_LOGGED_IN_USER -> {
+                        dataOutputStream.writeUTF(
+                                new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser))
+                                        .toJson());
+                    }
+                    case SIGNUP -> {
+                        dataOutputStream.writeUTF(
+                                new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
+                    }
+                    case FINALIZE_SIGNUP -> {
+                        finalizeSignup(packet.data.get(0), packet.data.get(1));
+                    }
+                    case LOGOUT -> {
+                        userLogout();
+                    }
+                    case FIND_USER -> {
+                        dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
+                    }
+                    case SEND_FRIEND_REQUEST -> {
+                        sendFriendRequest(packet.data.get(0));
+                    }
+                    case ACCEPT_FRIEND -> {
+                        dataOutputStream.writeUTF(new Packet(PacketType.ACCEPT_FRIEND,
+                                acceptFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                                        ServerUserController.findUserWithUsername(packet.data.get(1))))
+                                .toJson());
+                    }
+                    case REJECT_FRIEND -> {
+                        dataOutputStream.writeUTF(new Packet(PacketType.REJECT_FRIEND,
+                                rejectFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                                        ServerUserController.findUserWithUsername(packet.data.get(1))))
+                                .toJson());
+                    }
+                    case GET_SCOREBOARD -> {
+                        dataOutputStream.writeUTF(getScoreboard());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -65,7 +94,25 @@ public class Connection extends Thread {
         }
     }
 
-    private void sendFriendRequest(User user) {
+    private String rejectFriendRequest(User accepter, User requester) {
+        accepter.getReceivedFriendRequests().remove(requester);
+        requester.getReceivedFriendRequests().remove(accepter);
+        return "Friend request rejected successfully";
+    }
+
+    private String acceptFriendRequest(User accepter, User requester) {
+        if (accepter.getFriends().size() < 100 && requester.getFriends().size() < 100) {
+            requester.addFriend(accepter);
+            accepter.addFriend(requester);
+            accepter.getReceivedFriendRequests().remove(requester);
+            requester.getReceivedFriendRequests().remove(accepter);
+            return "Friend request accepted successfully";
+        }
+        return "You have reached the maximum number of friends";
+    }
+
+    private void sendFriendRequest(String username) {
+        User user = ServerUserController.findUserWithUsername(username);
         if (!user.getReceivedFriendRequests().contains(currentLoggedInUser))
             user.addReceivedFriendRequest(currentLoggedInUser);
     }
@@ -116,5 +163,11 @@ public class Connection extends Thread {
 
     public void setCurrentLoggedInUser(User currentLoggedInUser) {
         this.currentLoggedInUser = currentLoggedInUser;
+    }
+
+    public String getScoreboard() {
+        ArrayList<User> users = ServerUserController.getUsersSorted();
+        Packet packet = new Packet(PacketType.GET_SCOREBOARD, new Gson().toJson(users));
+        return packet.toJson();
     }
 }

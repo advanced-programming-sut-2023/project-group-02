@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
-    public final int id;
     private String username, passwordHash, nickname, email, slogan;
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
@@ -17,12 +16,11 @@ public class User {
     private String avatarPath;
     private boolean isOnline = false;
     private Date lastSeen;
-    private final ArrayList<User> friends = new ArrayList<>();
+    private final ArrayList<String> friends = new ArrayList<>();
     private final ArrayList<User> receivedFriendRequests = new ArrayList<>();
 
-    public User(int id, String username, String password, String nickname, String email, String slogan,
-                SecurityQuestion securityQuestion, String securityAnswer) {
-        this.id = id;
+    public User(String username, String password, String nickname, String email, String slogan,
+            SecurityQuestion securityQuestion, String securityAnswer) {
         this.username = username;
         this.passwordHash = encrypt(password);
         this.nickname = nickname;
@@ -152,14 +150,14 @@ public class User {
     }
 
 
-    public ArrayList<User> getFriends() {
+    public ArrayList<String> getFriends() {
         return friends;
     }
 
     public boolean addFriend(User user) {
         if (friends.size() >= 100)
             return false;
-        friends.add(user);
+        friends.add(user.getUsername());
         return true;
     }
 

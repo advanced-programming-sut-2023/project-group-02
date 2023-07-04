@@ -69,7 +69,7 @@ public class SignUp {
             password = randomPassword;
         }
 
-        toBeSignedIn = new User(UserController.getNextId(), username, password, nickname, email, slogan, null, slogan);
+        toBeSignedIn = new User(username, password, nickname, email, slogan, null, slogan);
 
         if (randomPassword != null)
             return SignUpMenuMessages.PASSWORD_CONFIRMATION_NEEDED;
