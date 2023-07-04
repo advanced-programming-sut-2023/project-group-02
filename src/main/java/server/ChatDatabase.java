@@ -16,9 +16,7 @@ public class ChatDatabase {
     public static ArrayList<Chat> getChatsOfUser(User user) {
         ArrayList<Chat> userChats = new ArrayList<>();
         for (Chat chat : chats) {
-            System.out.println("is there any chats? " + chat.getName() + " " + chat.getUsers() + " our user in this is " + user);
             if (chat.getUsers().contains(user)) {
-                System.out.println("user in chat is " + user.getUsername());
                 userChats.add(chat);
             }
         }

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -59,10 +60,13 @@ public class ChatMenu {
     }
 
     private void addChatTitle() {
-        Label chatName = new Label(chat.getName() + " " + chat.id);
-        if (chat.type.equals(ChatType.ROOM)) chatName.setText(chatName.getText() + "\n members: " + chat.getUsers().size());
-        chatName.setTextFill(Color.WHITE);
-        chatName.setBackground(new Background(new BackgroundFill(Color.BLUE,null,null)));
+        Label chatName = new Label(chat.getName());
+        if (!chat.type.equals(ChatType.PUBLIC)) chatName.setText(chatName.getText() + "\nid:" + chat.id);
+        if (chat.type.equals(ChatType.ROOM) || chat.type.equals(ChatType.PUBLIC))
+            chatName.setText(chatName.getText() + "\nmembers: " + chat.getUsers().size());
+        chatName.setTextFill(Color.PURPLE);
+        chatName.setFont(new Font("Open Sans",20));
+        chatName.setBackground(new Background(new BackgroundFill(Color.ORANGE,null,null)));
         mainVBox.getChildren().add(chatName);
     }
 
@@ -79,6 +83,7 @@ public class ChatMenu {
     private void makeChatMessagesVBox() {
         chatMessages.setAlignment(Pos.BOTTOM_LEFT);
         chatMessages.setPadding(new Insets(10));
+        chatMessages.setSpacing(10);
         for (Message message : chat.getMessages()) {
             chatMessages.getChildren().add(makeOneMessageVBox(message));
         }
@@ -92,25 +97,20 @@ public class ChatMenu {
             avatarPhoto.setVisible(false);
 
         Text senderName = new Text(message.sender.getUsername());
-        senderName.setFont(new Font("Open Sans",17));
+        senderName.setFont(new Font("Open Sans",14));
         Text messageText = new Text(message.getText());
 
         ImageView editButton = new ImageView(new Image(getClass().getResource("/images/Messenger/edit.png").toExternalForm()));
         editButton.setFitWidth(10);
         editButton.setFitHeight(10);
-        editButton.setOnMouseClicked(event -> {
-            System.out.println("what the fuck");
-            makeEditDialog(message);
-        });
+        editButton.setOnMouseClicked(event -> makeEditDialog(message));
 
         ImageView deleteButton = new ImageView(new Image(getClass().getResource("/images/Messenger/delete.png").toExternalForm()));
         deleteButton.setFitHeight(10);
         deleteButton.setFitWidth(10);
-        deleteButton.setOnMouseClicked(event -> {
-            makeDeleteDialog(message);
-        });
+        deleteButton.setOnMouseClicked(event -> makeDeleteDialog(message));
 
-        Text date = new Text(message.sentAt + "");
+        Text date = new Text(message.getDate() + "");
 
         HBox deleteAndEdit;
         if (message.sender.equals(currentUser))
@@ -124,7 +124,6 @@ public class ChatMenu {
             messageText.setFill(Color.WHITE);
         }
 
-
         HBox wholeMessage = new HBox(4,avatarPhoto,verticalMessage);
         return wholeMessage;
     }
@@ -133,6 +132,7 @@ public class ChatMenu {
         TextField textField = new TextField();
         textField.setPromptText("Message:");
         textField.setPrefWidth(300);
+        Platform.runLater(textField::requestFocus);
 
         ImageView sendButton = new ImageView(new Image(getClass().getResource("/images/Messenger/send.png").toExternalForm()));
         sendButton.setFitWidth(20);
@@ -143,6 +143,16 @@ public class ChatMenu {
             }
             textField.setText("");
             initPane();
+        });
+
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if (textField.getText() != null && !textField.getText().equals("")) {
+                    chat.sendMessage(currentUser,textField.getText());
+                }
+                textField.setText("");
+                initPane();
+            }
         });
 
         HBox bottomBar = new HBox(10,textField,sendButton);
@@ -159,7 +169,6 @@ public class ChatMenu {
     }
 
     private void makeEditDialog(Message message) {
-        System.out.println("it is hitting the edit button");
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Edit Message");
 

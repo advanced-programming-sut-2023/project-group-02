@@ -1,5 +1,6 @@
 package server.chat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import models.User;
@@ -9,7 +10,7 @@ public class Message {
     private String text;
     public final User sender;
     public final Chat chat;
-    public final Date sentAt;
+    private final Date sentAt;
 
     public Message(String text, User sender, Chat chat) {
         System.out.println("start of making message");
@@ -27,5 +28,10 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(sentAt);
     }
 }
