@@ -106,8 +106,6 @@ public class Graphics {
         VBox friends = new VBox();
         friends.setSpacing(5);
         for (User friend : userToSearch.getFriends()) {
-            if (friend == null)
-                continue;
             friends.getChildren().add(getUserDetails(currentPane, friend));
         }
         ScrollPane scrollPane = new ScrollPane(friends);

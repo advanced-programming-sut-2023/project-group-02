@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import utils.Graphics;
 import utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -16,7 +17,7 @@ public class User {
     private String avatarPath;
     private boolean isOnline = false;
     private Date lastSeen;
-    private final User[] friends = new User[100];
+    private final ArrayList<User> friends = new ArrayList<>();
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
                 SecurityQuestion securityQuestion, String securityAnswer) {
@@ -154,16 +155,15 @@ public class User {
         this.lastSeen = lastSeen;
     }
 
-    public User[] getFriends() {
+
+    public ArrayList<User> getFriends() {
         return friends;
     }
 
-    public void addFriend(User friend) {
-        for (int i = 0; i < friends.length; i++) {
-            if (friends[i] == null) {
-                friends[i] = friend;
-                break;
-            }
-        }
+    public boolean addFriend(User user) {
+        if (friends.size() >= 100)
+            return false;
+        friends.add(user);
+        return true;
     }
 }
