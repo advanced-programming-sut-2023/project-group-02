@@ -47,7 +47,7 @@ public class Graphics {
     }
 
     public static ImageView getAvatarWithPath(String path) {
-        return new ImageView(new Image(path, 160, 160, false, false));
+        return new ImageView(new Image(Graphics.class.getResource(path).toExternalForm(), 160, 160, false, false));
     }
 
     public static ImageView[] getDefaultAvatars() {
