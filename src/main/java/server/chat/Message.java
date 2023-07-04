@@ -17,7 +17,6 @@ public class Message {
         this.text = text;
         this.sender = sender;
         this.chat = chat;
-        chat.getMessages().add(this);
         System.out.println("making message " + sender.getUsername() + " " + chat.getMessages());
         sentAt = new Date();
     }

@@ -1,5 +1,6 @@
 package client.view;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -39,6 +40,7 @@ public class ChatMenu {
     private void initPane() {
         rootPane.getChildren().clear();
         mainVBox.getChildren().clear();
+        chatMessages.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
         rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Messenger.css")).toExternalForm());
         rootPane.setPrefSize(960, 540);
@@ -66,15 +68,20 @@ public class ChatMenu {
         ScrollPane scrollPane = new ScrollPane(chatMessages);
         scrollPane.setPrefWidth(500);
         scrollPane.setPrefHeight(400);
-        scrollPane.setVvalue(1);
+        scrollPane.setVvalue(1.0);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         mainVBox.getChildren().add(scrollPane);
     }
 
     private void makeChatMessagesVBox() {
         System.out.println("we have messages right? " + chat.getMessages());
+        chatMessages.setAlignment(Pos.BOTTOM_LEFT);
+        chatMessages.setPadding(new Insets(10));
         for (Message message : chat.getMessages()) {
             chatMessages.getChildren().add(makeOneMessageVBox(message));
         }
+
     }
 
     private VBox makeOneMessageVBox(Message message) {
@@ -94,7 +101,9 @@ public class ChatMenu {
             //TODO : Delete
         });
 
-        HBox deleteAndEdit = new HBox(10,editButton,deleteButton);
+        Text date = new Text(message.sentAt + "");
+
+        HBox deleteAndEdit = new HBox(10,editButton,deleteButton,date);
         VBox wholeMessage = new VBox(10,messageText,deleteAndEdit);
 
         if (!message.sender.equals(currentUser)) {
@@ -115,7 +124,7 @@ public class ChatMenu {
         sendButton.setFitHeight(20);
         sendButton.setOnMouseClicked(event -> {
             if (textField.getText() != null && !textField.getText().equals("")) {
-                new Message(textField.getText(), currentUser, chat);
+                chat.sendMessage(currentUser,textField.getText());
             }
             textField.setText("");
             initPane();
