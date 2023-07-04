@@ -6,17 +6,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.User;
 import server.ChatDatabase;
+import server.Database;
 import server.ServerUserController;
 import server.chat.Chat;
 import server.chat.ChatType;
@@ -42,8 +42,10 @@ public class MessengerMenu {
     }
 
     private void initPane() {
-        chats = Main.getPlayerConnection().getPlayerChats();
-        System.out.println("im initializing the pane");
+//        chats = Main.getPlayerConnection().getPlayerChats();
+        chats = ChatDatabase.getChatsOfUser(currentUser);
+        System.out.println("im initializing the pane and current player is " + currentUser);
+        System.out.println("what about this " + ChatDatabase.getChatsOfUser(currentUser));
         System.out.println("players chat is " + Main.getPlayerConnection().getPlayerChats());
         System.out.println("the equal amount is " + chats);
         rootPane.getChildren().clear();
@@ -51,6 +53,11 @@ public class MessengerMenu {
         rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Messenger.css")).toExternalForm());
         rootPane.setPrefSize(960, 540);
         addBackButton();
+
+//        //TODO : what is it's problem?
+//        System.out.println("All users " + ServerUserController.getUsers());
+//        new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
+
         initChats();
         initAddChat();
     }
@@ -60,9 +67,11 @@ public class MessengerMenu {
         chatsVBox.setSpacing(10);
         chatsVBox.setLayoutX(50);
         chatsVBox.setLayoutY(10);
-        chatsVBox.setPrefWidth(860);
+        chatsVBox.setPrefWidth(500);
         chatsVBox.setPrefHeight(440);
-        addChats();
+        for (Chat chat : chats) {
+            chatsVBox.getChildren().add(createChatPreviewVBox(chat));
+        }
         rootPane.getChildren().add(chatsVBox);
     }
 
@@ -75,12 +84,9 @@ public class MessengerMenu {
         rootPane.getChildren().add(makeChatVBox);
     }
 
-    private void addChats() {
-        // i think i should use player chats or ask about it
-        System.out.println("chats are " + chats);
-        for (Chat chat : chats) {
-            chatsVBox.getChildren().add(createChatPreviewVBox(chat));
-        }
+    private void makePublicGroup() {
+        System.out.println("All users" + ServerUserController.getUsers());
+        Chat publicGroup = new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
     }
 
     private void addMakeChatButton() {
@@ -99,7 +105,7 @@ public class MessengerMenu {
         chatName.setMaxWidth(150);
 
         ChoiceBox<ChatType> chatType = new ChoiceBox<>();
-        chatType.getItems().addAll(ChatType.PRIVATE, ChatType.PUBLIC, ChatType.ROOM);
+        chatType.getItems().addAll(ChatType.PRIVATE, ChatType.ROOM);
         chatType.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals(ChatType.PRIVATE)) chatName.setDisable(true);
             else chatType.setDisable(false);
@@ -113,9 +119,7 @@ public class MessengerMenu {
 
         makeChat.setOnAction(event -> {
             makeChat(chatName,chatType);
-            System.out.println("here after adding it" + Main.getPlayerConnection().getPlayerChats());
             reset();
-            System.out.println("after reseting");
             System.out.println(Main.getPlayerConnection().getPlayerChats());
             initPane();
         });

@@ -12,10 +12,13 @@ public class Message {
     public final Date sentAt;
 
     public Message(String text, User sender, Chat chat) {
+        System.out.println("start of making message");
         this.id = chat.getNextMessageId();
         this.text = text;
         this.sender = sender;
         this.chat = chat;
+        chat.getMessages().add(this);
+        System.out.println("making message " + sender.getUsername() + " " + chat.getMessages());
         sentAt = new Date();
     }
 
