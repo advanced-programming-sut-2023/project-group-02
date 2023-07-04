@@ -50,12 +50,16 @@ public class Chat {
     }
 
     public void editMessage(int messageId, String text) {
-        Message message = messages.get(messageId);
-        message.setText(text);
+        for (Message message : messages) {
+            if (message.id == messageId) message.setText(text);
+        }
     }
 
     public void deleteMessage(int messageId) {
-        messages.remove(messageId);
+        for (int i = messages.size() - 1; i >= 0; i--) {
+            if (messages.get(i).id == messageId)
+                messages.remove(messages.get(i));
+        }
     }
 
     public int getNextMessageId() {

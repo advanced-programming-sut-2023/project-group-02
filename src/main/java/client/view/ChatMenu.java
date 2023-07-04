@@ -1,12 +1,10 @@
 package client.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -22,6 +20,7 @@ import server.chat.Message;
 import utils.Graphics;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class ChatMenu {
     private final Chat chat;
@@ -100,14 +99,15 @@ public class ChatMenu {
         editButton.setFitWidth(10);
         editButton.setFitHeight(10);
         editButton.setOnMouseClicked(event -> {
-            //TODO : Edit
+            System.out.println("what the fuck");
+            makeEditDialog(message);
         });
 
         ImageView deleteButton = new ImageView(new Image(getClass().getResource("/images/Messenger/delete.png").toExternalForm()));
         deleteButton.setFitHeight(10);
         deleteButton.setFitWidth(10);
         deleteButton.setOnMouseClicked(event -> {
-            //TODO : Delete
+            makeDeleteDialog(message);
         });
 
         Text date = new Text(message.sentAt + "");
@@ -156,5 +156,61 @@ public class ChatMenu {
         backButton.getStyleClass().add("button1");
         backButton.setOnAction(event -> Main.getStage().setScene(new Scene(new MessengerMenu().getPane())));
         rootPane.getChildren().add(backButton);
+    }
+
+    private void makeEditDialog(Message message) {
+        System.out.println("it is hitting the edit button");
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Edit Message");
+
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        TextField textField = new TextField(message.getText());
+        dialog.getDialogPane().setContent(textField);
+
+        Platform.runLater(textField::requestFocus);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return textField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(newText -> {
+            if (!newText.isEmpty()) {
+                message.setText(newText);
+                chat.editMessage(message.id,newText);
+                initPane();
+            }
+        });
+    }
+
+    private void makeDeleteDialog(Message message) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Delete Message");
+
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        Text text = new Text("Are you sure?");
+        dialog.getDialogPane().setContent(text);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return "delete";
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(newText -> {
+            chat.deleteMessage(message.id);
+            initPane();
+        });
     }
 }
