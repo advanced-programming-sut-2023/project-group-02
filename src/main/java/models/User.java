@@ -5,6 +5,8 @@ import javafx.scene.image.ImageView;
 import utils.Graphics;
 import utils.Utils;
 
+import java.util.Date;
+
 public class User {
     public final int id;
     private String username, passwordHash, nickname, email, slogan;
@@ -13,6 +15,7 @@ public class User {
     private int highScore;
     private String avatarPath;
     private boolean isOnline = false;
+    private Date lastSeen;
 
     public User(int id, String username, String password, String nickname, String email, String slogan,
                 SecurityQuestion securityQuestion, String securityAnswer) {
@@ -145,5 +148,13 @@ public class User {
 
     public void setOnline(boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Date getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
     }
 }

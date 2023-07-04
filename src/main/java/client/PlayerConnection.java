@@ -92,4 +92,12 @@ public class PlayerConnection {
     public ArrayList<Chat> getPlayerChats() {
         return new ArrayList<>(); //TODO complete this method
     }
+
+    public void logout() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.LOGOUT, new ArrayList<>()).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

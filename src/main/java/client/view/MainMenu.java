@@ -127,5 +127,6 @@ public class MainMenu {
 
     public static void logout() {
         UserController.logout();
+        Main.getPlayerConnection().logout();
     }
 }
