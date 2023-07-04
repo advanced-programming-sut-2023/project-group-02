@@ -14,14 +14,6 @@ public class ServerUserController {
         return users;
     }
 
-    public static User findUserWithId(int id) {
-        for (User user : users) {
-            if (user.id == id)
-                return user;
-        }
-        return null;
-    }
-
     public static User findUserWithUsername(String username) {
         for (User user : users) {
             if (user.getUsername().equals(username))
