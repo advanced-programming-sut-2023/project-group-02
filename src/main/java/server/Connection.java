@@ -52,11 +52,18 @@ public class Connection extends Thread {
                     userLogout();
                 } else if (packet.packetType == PacketType.FIND_USER) {
                     dataOutputStream.writeUTF(findUser(packet.data.get(0)).toJson());
+                } else if (packet.packetType == PacketType.SEND_FRIEND_REQUEST) {
+                    sendFriendRequest(new Gson().fromJson(packet.data.get(0), User.class));
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private void sendFriendRequest(User user) {
+        if (!user.getReceivedFriendRequests().contains(currentLoggedInUser))
+            user.addReceivedFriendRequest(currentLoggedInUser);
     }
 
     private Packet findUser(String username) {

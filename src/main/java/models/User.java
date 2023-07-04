@@ -110,7 +110,7 @@ public class User {
     public boolean equals(Object obj) {
         if (obj instanceof User) {
             User otherUser = (User) obj;
-            return this.id == otherUser.id;
+            return this.username == otherUser.username;
         }
         return false;
     }

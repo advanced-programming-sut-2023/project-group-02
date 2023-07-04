@@ -94,7 +94,7 @@ public class PlayerConnection {
     }
 
     public ArrayList<Chat> getPlayerChats() {
-         //TODO complete this method
+        //TODO complete this method
         return ChatDatabase.getChatsOfUser(getLoggedInUser());
     }
 
@@ -127,5 +127,13 @@ public class PlayerConnection {
             return null;
         User user = new Gson().fromJson(packet.data.get(0), User.class);
         return user;
+    }
+
+    public void sendFriendRequest(User userToSearch) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_FRIEND_REQUEST, new Gson().toJson(userToSearch)).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

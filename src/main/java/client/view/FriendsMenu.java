@@ -1,14 +1,14 @@
 package client.view;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import models.User;
 
 import java.util.Objects;
 
@@ -34,11 +34,41 @@ public class FriendsMenu {
         userSearch.setPrefSize(200, 30);
         pane.getChildren().addAll(userSearchText, userSearch);
         addConfirmAndBack(pane, userSearch);
-        addShowMyProfile(pane);
+        addPendingFriendRequests(pane);
     }
 
-    private void addShowMyProfile(Pane pane) {
-        //TODO
+    private void addPendingFriendRequests(Pane pane) {
+        User currentUser = Main.getPlayerConnection().getLoggedInUser();
+        VBox friendRequests = new VBox();
+        friendRequests.setSpacing(10);
+        for (User user : currentUser.getReceivedFriendRequests()) {
+            friendRequests.getChildren().add(makeFriendRequestField(currentUser, user));
+        }
+        friendRequests.setPrefWidth(250);
+        friendRequests.setPrefHeight(350);
+        pane.getChildren().add(friendRequests);
+    }
+
+    private HBox makeFriendRequestField(User currentUser, User user) {
+        HBox requestField = new HBox();
+        requestField.setSpacing(10);
+        ImageView avatar = user.getAvatar();
+        Text username = new Text(user.getUsername());
+        username.getStyleClass().add("title1-with-hover");
+        username.setOnMouseClicked(mouseEvent -> {
+        });
+        ImageView accept = new ImageView(new Image(getClass().getResource("/images/buttons/accept.png").toExternalForm()));
+        accept.setFitWidth(10);
+        accept.setFitHeight(10);
+        ImageView reject = new ImageView(new Image(getClass().getResource("/images/buttons/reject.png").toExternalForm()));
+        reject.setFitHeight(10);
+        reject.setFitWidth(10);
+        accept.setOnMouseClicked(mouseEvent -> {
+        });
+        reject.setOnMouseClicked(mouseEvent -> {
+        });
+        requestField.getChildren().addAll(avatar, username, accept, reject);
+        return requestField;
     }
 
     private void addConfirmAndBack(Pane pane, TextField username) {

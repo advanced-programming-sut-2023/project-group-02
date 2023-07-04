@@ -110,22 +110,26 @@ public class Graphics {
         }
         ScrollPane scrollPane = new ScrollPane(friends);
         scrollPane.setLayoutY(120);
-        profilePane.getChildren().addAll(friendsText, friends);
+        scrollPane.setLayoutX(20);
+        scrollPane.setPrefWidth(150);
+        scrollPane.setPrefHeight(250);
+
+        profilePane.getChildren().addAll(friendsText, scrollPane);
         addFriendRequestFields(profilePane, currentUser, userToSearch);
     }
 
     private static void addFriendRequestFields(Pane profilePane, User currentUser, User userToSearch) {
         if (currentUser.getUsername().equals(userToSearch.getUsername()))
             return;
-        Text alreadyFriends = new Text("You are friend of this user");
-        alreadyFriends.setLayoutX(400);
+        Text alreadyFriends = new Text("You have sent a friend request");
+        alreadyFriends.setLayoutX(250);
         alreadyFriends.setLayoutY(120);
         alreadyFriends.getStyleClass().add("title1");
         profilePane.getChildren().add(alreadyFriends);
         if (currentUser.getFriends().contains(userToSearch)) {
+            alreadyFriends.setText("You are friend of this user");
             return;
         } else if (userToSearch.getReceivedFriendRequests().contains(currentUser)) {
-            alreadyFriends.setText("You have sent a friend request");
             return;
         }
         profilePane.getChildren().remove(alreadyFriends);
@@ -138,6 +142,11 @@ public class Graphics {
         addFriend.setLayoutY(105);
         addFriend.setFitWidth(20);
         addFriend.setFitHeight(20);
+        requestText.setOnMouseClicked(mouseEvent -> {
+            profilePane.getChildren().removeAll(requestText, addFriend);
+            profilePane.getChildren().add(alreadyFriends);
+            Main.getPlayerConnection().sendFriendRequest(userToSearch);
+        });
         profilePane.getChildren().addAll(requestText, addFriend);
     }
 
