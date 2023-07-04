@@ -16,6 +16,7 @@ import javafx.stage.Popup;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 
@@ -46,7 +47,18 @@ public class Graphics {
     }
 
     public static ImageView getAvatarWithPath(String path) {
-        ImageView imageView = new ImageView(new Image(Graphics.class.getResource(path).toExternalForm()));
+        ImageView imageView = new ImageView();
+
+        try {
+            if (path.startsWith("file:/")) {
+                File file = new File(path.substring(5));
+                imageView.setImage(new Image(file.toURI().toURL().toExternalForm()));
+            } else {
+                imageView.setImage(new Image(Graphics.class.getResource(path).toExternalForm()));
+            }
+        } catch (Exception e) {
+        }
+
         imageView.setFitWidth(120);
         imageView.setFitHeight(120);
         return imageView;
