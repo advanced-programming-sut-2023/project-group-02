@@ -41,6 +41,7 @@ public class FriendsMenu {
 
     private void addPendingFriendRequests(Pane pane) {
         User currentUser = Main.getPlayerConnection().getLoggedInUser();
+        addShowMyProfile(pane, currentUser);
         VBox friendRequests = new VBox();
         friendRequests.setAlignment(Pos.CENTER);
         friendRequests.setSpacing(10);
@@ -53,6 +54,17 @@ public class FriendsMenu {
         scrollPane.setLayoutY(100);
         scrollPane.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE, null, null)));
         pane.getChildren().add(scrollPane);
+    }
+
+    private void addShowMyProfile(Pane pane, User currentUser) {
+        Text showMyProfile = new Text("Show my profile");
+        showMyProfile.getStyleClass().add("title1-with-hover");
+        showMyProfile.setLayoutX(250);
+        showMyProfile.setLayoutY(100);
+        showMyProfile.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().searchPlayer(pane, currentUser.getUsername());
+        });
+        pane.getChildren().add(showMyProfile);
     }
 
     private HBox makeFriendRequestField(User currentUser, User user, Pane pane) {
