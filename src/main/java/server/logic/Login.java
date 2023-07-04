@@ -2,6 +2,7 @@ package server.logic;
 
 import client.view.enums.LoginMenuMessages;
 import models.User;
+import models.UserCredentials;
 import server.Connection;
 import server.ServerUserController;
 import utils.PasswordProblem;
@@ -45,6 +46,11 @@ public class Login {
             lastAttempt = new Date();
         }
         return message;
+    }
+
+    public static LoginMenuMessages loginWithCredentials(UserCredentials userCredentials, Connection connection) {
+        ServerUserController.login(ServerUserController.findUserWithId(userCredentials.id()), connection);
+        return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
     public static LoginMenuMessages setNewPassword(User user, String newPassword) {

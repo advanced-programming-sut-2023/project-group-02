@@ -2,13 +2,13 @@ package client;
 
 import client.view.enums.LoginMenuMessages;
 import com.google.gson.Gson;
-import controllers.LoginMenuController;
-import controllers.SignUpMenuController;
+
+import controllers.database.Database;
 import javafx.scene.layout.Pane;
 import models.SecurityQuestion;
 import models.User;
+import models.UserCredentials;
 import server.ChatDatabase;
-import server.Database;
 import server.Packet;
 import server.PacketType;
 import server.chat.Chat;
@@ -31,7 +31,17 @@ public class PlayerConnection {
     }
 
     public void tryToAuthenticate() {
-        //TODO wait for server to check if this ip has made an account and auto login.
+        try {
+            String token = Database.readRaw("token");
+            if (token == null) {
+                return;
+            }
+            dataOutputStream.writeUTF(new Packet(PacketType.LOGIN_WITH_TOKEN, token).toJson());
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        readFromServer(); // no-op
     }
 
     public String requestLogin(String username, String password) {
@@ -42,6 +52,9 @@ public class PlayerConnection {
         }
         Packet packet = readFromServer();
         String message = packet.data.get(0);
+        if (message.equals(LoginMenuMessages.LOGIN_SUCCESSFUL.getMessage())) {
+            Database.write("token", UserCredentials.of(getLoggedInUser()), UserCredentials.class);
+        }
         return message;
     }
 
@@ -59,10 +72,10 @@ public class PlayerConnection {
     public void setSecurityQuestion(SecurityQuestion securityQuestion, String answer) {
         try {
             dataOutputStream.writeUTF(new Packet(PacketType.FINALIZE_SIGNUP, securityQuestion.fullSentence, answer).toJson());
+            Database.write("token", UserCredentials.of(getLoggedInUser()), UserCredentials.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public Packet readFromServer() {
@@ -101,6 +114,7 @@ public class PlayerConnection {
     public void logout() {
         try {
             dataOutputStream.writeUTF(new Packet(PacketType.LOGOUT, new ArrayList<>()).toJson());
+            Database.delete("token");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

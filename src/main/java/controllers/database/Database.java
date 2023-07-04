@@ -20,27 +20,40 @@ public class Database {
         return Path.of(DATABASE_ROOT, tableName + ".json").normalize();
     }
 
-    public static <T> T read(String tableName, Class<T> classOfT) {
+    public static String readRaw(String tableName) {
         Path path = getTablePath(tableName);
         if (!Files.exists(path)) {
             return null;
         }
         try {
-            return gson.fromJson(Files.readString(path), classOfT);
-        } catch (JsonSyntaxException | IOException e) {
+            return Files.readString(path);
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static <T> void write(String tableName, T value, Class<T> classOfT) {
+    public static <T> T read(String tableName, Class<T> classOfT) {
+        try {
+            return gson.fromJson(readRaw(tableName), classOfT);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void writeRaw(String tableName, String value) {
         Path path = getTablePath(tableName);
         try {
-            Files.write(path, gson.toJson(value).getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
+            Files.write(path, value.getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
                     StandardOpenOption.WRITE, StandardOpenOption.CREATE);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static <T> void write(String tableName, T value, Class<T> classOfT) {
+        writeRaw(tableName, gson.toJson(value, classOfT));
     }
 
     public static void delete(String tableName) {

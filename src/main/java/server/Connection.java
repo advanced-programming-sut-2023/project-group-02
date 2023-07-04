@@ -6,6 +6,7 @@ import controllers.LoginMenuController;
 import controllers.SignUpMenuController;
 import models.SecurityQuestion;
 import models.User;
+import models.UserCredentials;
 import server.logic.Login;
 import server.logic.SignUp;
 
@@ -39,7 +40,10 @@ public class Connection extends Thread {
             while (true) {
                 String data = dataInputStream.readUTF();
                 Packet packet = new Gson().fromJson(data, Packet.class);
-                if (packet.packetType == PacketType.LOGIN) {
+                if (packet.packetType == PacketType.LOGIN_WITH_TOKEN) {
+                    dataOutputStream.writeUTF(
+                            new Packet(PacketType.LOGIN_WITH_TOKEN, userLoginWithToken(packet.data.get(0))).toJson());
+                } else if (packet.packetType == PacketType.LOGIN) {
                     dataOutputStream.writeUTF(new Packet
                         (PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1))).toJson());
                 } else if (packet.packetType == PacketType.GET_LOGGED_IN_USER) {
@@ -99,6 +103,11 @@ public class Connection extends Thread {
     private synchronized String userLogin(String username, String password) {
         String result = Login.login(username, password, this).getMessage();
         return result;
+    }
+
+    private synchronized String userLoginWithToken(String token) {
+        UserCredentials userCredentials = new Gson().fromJson(token, UserCredentials.class);
+        return Login.loginWithCredentials(userCredentials, this).getMessage();
     }
 
     public User getCurrentLoggedInUser() {
