@@ -11,6 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.User;
 import server.chat.Chat;
@@ -75,7 +78,6 @@ public class ChatMenu {
     }
 
     private void makeChatMessagesVBox() {
-        System.out.println("we have messages right? " + chat.getMessages());
         chatMessages.setAlignment(Pos.BOTTOM_LEFT);
         chatMessages.setPadding(new Insets(10));
         for (Message message : chat.getMessages()) {
@@ -84,7 +86,14 @@ public class ChatMenu {
 
     }
 
-    private VBox makeOneMessageVBox(Message message) {
+    private HBox makeOneMessageVBox(Message message) {
+        Circle avatarPhoto = new Circle(20);
+        avatarPhoto.setFill(new ImagePattern(message.sender.getAvatar().getImage()));
+        if (chat.getMessages().indexOf(message) > 0 && chat.getMessages().get(chat.getMessages().indexOf(message)-1).sender.equals(message.sender))
+            avatarPhoto.setVisible(false);
+
+        Text senderName = new Text(message.sender.getUsername());
+        senderName.setFont(new Font("Open Sans",17));
         Text messageText = new Text(message.getText());
 
         ImageView editButton = new ImageView(new Image(getClass().getResource("/images/Messenger/edit.png").toExternalForm()));
@@ -103,14 +112,20 @@ public class ChatMenu {
 
         Text date = new Text(message.sentAt + "");
 
-        HBox deleteAndEdit = new HBox(10,editButton,deleteButton,date);
-        VBox wholeMessage = new VBox(10,messageText,deleteAndEdit);
+        HBox deleteAndEdit;
+        if (message.sender.equals(currentUser))
+            deleteAndEdit = new HBox(10,editButton,deleteButton,date);
+        else deleteAndEdit = new HBox(date);
+
+        VBox verticalMessage = new VBox(10,senderName,messageText,deleteAndEdit);
 
         if (!message.sender.equals(currentUser)) {
-            wholeMessage.setBackground(new Background(new BackgroundFill(Color.CYAN,null,null)));
+            verticalMessage.setBackground(new Background(new BackgroundFill(Color.BLUE,null,null)));
             messageText.setFill(Color.WHITE);
         }
 
+
+        HBox wholeMessage = new HBox(4,avatarPhoto,verticalMessage);
         return wholeMessage;
     }
 

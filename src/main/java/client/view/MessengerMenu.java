@@ -55,9 +55,9 @@ public class MessengerMenu {
         rootPane.setPrefSize(960, 540);
         addBackButton();
 
-//        //TODO : what is it's problem?
-//        System.out.println("All users " + ServerUserController.getUsers());
-//        new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
+        //TODO : what is it's problem?
+        System.out.println("All users " + ServerUserController.getUsers());
+        new Chat("Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
 
         initChats();
         initAddChat();
