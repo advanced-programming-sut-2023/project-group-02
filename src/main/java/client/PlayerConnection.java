@@ -247,6 +247,14 @@ public class PlayerConnection {
         }
     }
 
+    public void makePublicChat() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.MAKE_PUBLIC_CHAT).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void sendMessage(int chatId, String text) {
         try {
             dataOutputStream.writeUTF(new Packet(PacketType.SEND_MESSAGE, String.valueOf(chatId), text).toJson());

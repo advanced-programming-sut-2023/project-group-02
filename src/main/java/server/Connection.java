@@ -295,6 +295,14 @@ public class Connection extends Thread {
         new Chat(ChatDatabase.getNextId(), chatName, ChatType.ROOM, users);
     }
 
+    private void makePublicChat() {
+        for (Chat chat : ChatDatabase.getChats()) {
+            if (chat.type.equals(ChatType.PUBLIC))
+                return;
+        }
+        new Chat(ChatDatabase.getNextId(),"Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
+    }
+
     private void sendMessage(int chatId, String text) {
         Chat chat = ChatDatabase.getChatWithId(chatId);
         if (chat == null)

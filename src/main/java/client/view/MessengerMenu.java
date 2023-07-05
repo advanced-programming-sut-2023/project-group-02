@@ -42,7 +42,7 @@ public class MessengerMenu {
 
     private void initPane() {
         currentChatMenu = null;
-        Main.getPlayerConnection().getPublicChat();
+        Main.getPlayerConnection().makePublicChat();
         chats = Main.getPlayerConnection().getChats();
         rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
