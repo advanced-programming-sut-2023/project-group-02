@@ -155,6 +155,7 @@ public class MessengerMenu {
         if (type.equals(ChatType.PRIVATE)) {
             Main.getPlayerConnection().makePrivateChatWith(selectedUsers.get(selectedUsers.size() - 1));
         } else {
+            selectedUsers.add(currentUser);
             Main.getPlayerConnection().makeGroupChat(name, selectedUsers);
         }
     }

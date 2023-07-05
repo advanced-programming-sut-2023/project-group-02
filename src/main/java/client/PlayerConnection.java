@@ -356,8 +356,28 @@ public class PlayerConnection {
         return users;
     }
 
+    public ArrayList<User> getAllUsers2() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_ALL_USERS).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        try {
+            User[] users = new Gson().fromJson(packet.data.get(0),User[].class);
+            ArrayList<Map> mapsArrayList = new ArrayList<>();
+            ArrayList<User> usersArrayList = new ArrayList<>();
+            for (User user : users) {
+                usersArrayList.add(user);
+            }
+            return usersArrayList;
+        } catch (JsonIOException e) {
+            return null;
+        }
+    }
+
     public User findUserWithUsername(String username) {
-        for (User user : getAllUsers()) {
+        for (User user : getAllUsers2()) {
             if (user.getUsername().equals(username))
                 return user;
         }
