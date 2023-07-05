@@ -197,6 +197,13 @@ public class Connection extends Thread {
     }
 
     private void userLogout() {
+        for (Lobby lobby : Lobby.getLobbies()) {
+            if (lobby.getMembers().contains(currentLoggedInUser)) {
+                lobby.getMembers().remove(currentLoggedInUser);
+                if (lobby.getMembers().size() == 0)
+                    Lobby.getLobbies().remove(lobby);
+            }
+        }
         if (currentLoggedInUser != null) {
             currentLoggedInUser.setOnline(false);
             currentLoggedInUser.setLastSeen(new Date());

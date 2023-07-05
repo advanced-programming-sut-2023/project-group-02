@@ -289,6 +289,5 @@ public class PlayerConnection {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Packet packet = readFromServer();
     }
 }

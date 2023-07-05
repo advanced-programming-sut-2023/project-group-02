@@ -48,7 +48,7 @@ public class JoinLobbiesMenu {
         hBox.setSpacing(15);
         hBox.setPrefSize(300, 50);
         int numberOfActivePlayers = lobby.getMembers().size();
-        Text details = new Text("ID: #" + lobby.getID() + " ____ Players: " + (lobby.getNumberOfPlayers() - numberOfActivePlayers) +
+        Text details = new Text("ID: #" + lobby.getID() + " ____ Players: " + numberOfActivePlayers +
             "/" + lobby.getNumberOfPlayers());
         details.getStyleClass().add("title3");
         Button join = new Button("Join");

@@ -20,11 +20,12 @@ import java.util.Objects;
 public class LobbyMenu {
     private Lobby lobby;
     private Pane pane = new Pane();
+    private Timeline timeline;
 
     public LobbyMenu(Lobby lobby) {
         this.lobby = lobby;
         //update lobbies
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(2000), event -> {
             setLobby(Main.getPlayerConnection().getLobbyWithID(lobby.getID()));
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -45,7 +46,7 @@ public class LobbyMenu {
     private void initPane(Pane pane) {
         Pane profilePane = null;
         for (int i = pane.getChildren().size() - 1; i >= 0; i--) {
-            if (pane.getChildren().get(i) instanceof Pane) {
+            if (pane.getChildren().get(i) instanceof Pane && !(pane.getChildren().get(i) instanceof VBox)) {
                 profilePane = (Pane) pane.getChildren().get(i);
                 break;
             }
@@ -71,15 +72,18 @@ public class LobbyMenu {
         start.setOnMouseClicked(mouseEvent -> {
             if (lobby.getMembers().size() == 1)
                 Graphics.showMessagePopup("There should be at least 2 players to start!");
-            //TODO start game otherwise :)
+            mouseEvent.consume();
         });
         pane.getChildren().add(start);
     }
 
     private void addExitButton(Pane pane) {
         ImageView exit = JoinLobbiesMenu.createBackButton();
-        exit.setOnMouseClicked(mouseEvent -> Main.setScene(new PreGameMenu().getPane()));
-        Main.getPlayerConnection().quitLobby(lobby.getID());
+        exit.setOnMouseClicked(mouseEvent -> {
+            Main.setScene(new PreGameMenu().getPane());
+            Main.getPlayerConnection().quitLobby(lobby.getID());
+            timeline.stop();
+        });
         pane.getChildren().add(exit);
     }
 
