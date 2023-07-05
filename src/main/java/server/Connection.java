@@ -106,6 +106,12 @@ public class Connection extends Thread {
                     case SEND_MESSAGE -> {
                         sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
                     }
+                    case EDIT_MESSAGE -> {
+                        editMessage(Integer.parseInt(packet.data.get(0)),Integer.parseInt(packet.data.get(1)),packet.data.get(2));
+                    }
+                    case DELETE_MESSAGE -> {
+                        deleteMessage(Integer.parseInt(packet.data.get(0)),Integer.parseInt(packet.data.get(1)));
+                    }
                     case GET_LOBBY -> {
                         dataOutputStream.writeUTF(getLobby(packet.data.get(0)).toJson());
                     }
@@ -236,6 +242,20 @@ public class Connection extends Thread {
         if (chat == null)
             return;
         chat.sendMessage(currentLoggedInUser, text);
+        ChatDatabase.save();
+    }
+
+    private void editMessage(int chatId, int messageId, String newText) {
+        Chat chat = ChatDatabase.getChatWithId(chatId);
+        if (chat == null) return;
+        chat.editMessage(messageId,newText);
+        ChatDatabase.save();
+    }
+
+    private void deleteMessage(int chatId, int messageId) {
+        Chat chat = ChatDatabase.getChatWithId(chatId);
+        if (chat == null) return;
+        chat.deleteMessage(messageId);
         ChatDatabase.save();
     }
 }

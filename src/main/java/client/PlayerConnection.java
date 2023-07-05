@@ -242,6 +242,22 @@ public class PlayerConnection {
         }
     }
 
+    public void editMessage(int chatId, int messageId, String newText) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.EDIT_MESSAGE, String.valueOf(chatId), String.valueOf(messageId), newText).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteMessage(int chatId, int messageId) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.DELETE_MESSAGE, String.valueOf(chatId), String.valueOf(messageId)).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Lobby getLobbyWithID(String lobbyID) {
         try {
             dataOutputStream.writeUTF(new Packet(PacketType.GET_LOBBY, lobbyID).toJson());
