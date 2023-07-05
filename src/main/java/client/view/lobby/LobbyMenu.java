@@ -1,5 +1,6 @@
 package client.view.lobby;
 
+import client.view.ChatMenu;
 import client.view.Main;
 import client.view.pregame.PreGameMenu;
 import javafx.animation.Animation;
@@ -58,9 +59,22 @@ public class LobbyMenu {
         addPlayersVBox(pane);
         addExitButton(pane);
         addStartGame(pane);
+        addPublicChatButton(pane);
         addLobbyDetails(pane);
         if (profilePane != null)
             pane.getChildren().add(profilePane);
+    }
+
+    private void addPublicChatButton(Pane pane) {
+        ImageView chat = new ImageView(new Image(getClass().getResource("/images/others/chat.jpg").toExternalForm()));
+        chat.setFitWidth(35);
+        chat.setFitHeight(35);
+        chat.setLayoutX(600);
+        chat.setLayoutY(500);
+        chat.setOnMouseClicked(mouseEvent -> {
+            Main.setScene(new ChatMenu(Main.getPlayerConnection().getPublicChat(), pane).getPane());
+        });
+        pane.getChildren().add(chat);
     }
 
     private void addLobbyDetails(Pane pane) {
