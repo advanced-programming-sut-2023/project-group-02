@@ -100,13 +100,17 @@ public class ChatDatabase {
                 for (User user : chat.getUsers()) {
                     users += user.getUsername() + ",";
                 }
-                users = users.substring(0, users.length() - 1);
+                if (users.length() > 0) {
+                    users = users.substring(0, users.length() - 1);
+                }
 
                 String messages = "";
                 for (Message message : chat.getMessages()) {
                     messages += message.id + ",";
                 }
-                messages = messages.substring(0, messages.length() - 1);
+                if (messages.length() > 0) {
+                    messages = messages.substring(0, messages.length() - 1);
+                }
 
                 statement.executeUpdate("INSERT INTO chats (id, name, type, users, messages, nextMessageId) VALUES ("
                         + chat.id + ", '" + chat.getName() + "', '" + chat.type.toString() + "', '" + users + "', '"
