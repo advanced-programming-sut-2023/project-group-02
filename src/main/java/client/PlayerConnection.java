@@ -355,4 +355,12 @@ public class PlayerConnection {
         }.getType());
         return users;
     }
+
+    public User findUserWithUsername(String username) {
+        for (User user : getAllUsers()) {
+            if (user.getUsername().equals(username))
+                return user;
+        }
+        return null;
+    }
 }

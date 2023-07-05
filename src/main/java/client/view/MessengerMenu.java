@@ -1,6 +1,5 @@
 package client.view;
 
-import controllers.UserController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -42,6 +41,7 @@ public class MessengerMenu {
 
     private void initPane() {
         currentChatMenu = null;
+        Main.getPlayerConnection().makePublicChat();
         Main.getPlayerConnection().makePublicChat();
         chats = Main.getPlayerConnection().getChats();
         rootPane.getChildren().clear();
@@ -164,7 +164,7 @@ public class MessengerMenu {
         String playersName = playersNameTextField.getText();
         User user;
         //TODO : dont use User Controller
-        if ((user = UserController.findUserWithUsername(playersName)) == null || user.equals(currentUser)) {
+        if ((user = Main.getPlayerConnection().findUserWithUsername(playersName)) == null || user.equals(currentUser)) {
             makeChatVBox.getChildren().remove(foundPlayer);
             notFoundText.setVisible(true);
             if (!makeChatVBox.getChildren().contains(notFoundText))
