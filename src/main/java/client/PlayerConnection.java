@@ -265,4 +265,14 @@ public class PlayerConnection {
         }.getType());
         return lobbies;
     }
+
+    public void joinLobby(String id) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.JOIN_LOBBY, id).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+
+    }
 }

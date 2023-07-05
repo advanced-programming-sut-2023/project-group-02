@@ -34,12 +34,13 @@ public class JoinLobbiesMenu {
     private void addLobbiesVBox(Pane pane) {
         VBox vBox = new VBox();
         vBox.setSpacing(15);
-        vBox.setTranslateX(400);
-        vBox.setTranslateY(170);
+        vBox.setLayoutX(320);
+        vBox.setLayoutY(120);
         ArrayList<Lobby> lobbies = Main.getPlayerConnection().getAvailableLobbies();
         for (Lobby lobby : lobbies) {
             vBox.getChildren().add(createLobbyHBox(lobby));
         }
+        pane.getChildren().add(vBox);
     }
 
     private HBox createLobbyHBox(Lobby lobby) {
@@ -47,14 +48,14 @@ public class JoinLobbiesMenu {
         hBox.setSpacing(15);
         hBox.setPrefSize(300, 50);
         int numberOfActivePlayers = lobby.getMembers().size();
-        Text details = new Text(lobby.getID() + " --- " + (lobby.getNumberOfPlayers() - numberOfActivePlayers) +
-            " / " + lobby.getNumberOfPlayers());
+        Text details = new Text("ID: #" + lobby.getID() + " ____ Players: " + (lobby.getNumberOfPlayers() - numberOfActivePlayers) +
+            "/" + lobby.getNumberOfPlayers());
         details.getStyleClass().add("title3");
         Button join = new Button("Join");
         join.setPrefSize(70, 30);
         join.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
         join.setOnMouseClicked(mouseEvent -> {
-            //TODO join lobby
+            Main.getPlayerConnection().joinLobby(lobby.getID());
         });
         hBox.getChildren().addAll(details, join);
         return hBox;

@@ -112,11 +112,27 @@ public class Connection extends Thread {
                     case GET_AVAILABLE_LOBBIES -> {
                         dataOutputStream.writeUTF(getAvailableLobbies().toJson());
                     }
+                    case JOIN_LOBBY -> {
+                        dataOutputStream.writeUTF(joinLobby(packet.data.get(0)).toJson());
+                    }
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private synchronized Packet joinLobby(String id) {
+        Lobby lobby = Lobby.getLobbyWithID(id);
+        if (lobby.getMembers().size() >= lobby.getNumberOfPlayers())
+            return new Packet(PacketType.JOIN_LOBBY_FAIL, "lobby is full");
+        else if (!lobby.isPublic())
+            return new Packet(PacketType.JOIN_LOBBY_FAIL, "lobby became private");
+        else {
+            lobby.addMember(currentLoggedInUser);
+            return new Packet(PacketType.JOIN_LOBBY_SUCCESS, new Gson().toJson(lobby));
+        }
+
     }
 
     private Packet getAvailableLobbies() {

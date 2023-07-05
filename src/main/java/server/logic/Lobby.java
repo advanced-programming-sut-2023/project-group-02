@@ -98,4 +98,8 @@ public class Lobby {
         lobbies.add(lobby);
         return lobby;
     }
+
+    public void addMember(User user) {
+        members.add(user);
+    }
 }
