@@ -4,6 +4,7 @@ import client.view.enums.SignUpMenuMessages;
 import com.google.gson.Gson;
 import controllers.LoginMenuController;
 import controllers.SignUpMenuController;
+import models.Map;
 import models.SecurityQuestion;
 import models.User;
 import models.UserCredentials;
@@ -105,6 +106,12 @@ public class Connection extends Thread {
                     }
                     case SEND_MESSAGE -> {
                         sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
+                    }
+                    case SEND_MAP -> {
+                        sendMap(new Gson().fromJson(packet.data.get(0), Map.class));
+                    }
+                    case GET_MAPS -> {
+                        dataOutputStream.writeUTF(getMaps());
                     }
                     case GET_LOBBY -> {
                         dataOutputStream.writeUTF(getLobby(packet.data.get(0)).toJson());
@@ -282,5 +289,15 @@ public class Connection extends Thread {
             return;
         chat.sendMessage(currentLoggedInUser, text);
         ChatDatabase.save();
+    }
+
+    private void sendMap(Map map) {
+        Database.getSavedMaps().add(map);
+    }
+
+    private String getMaps() {
+        ArrayList<Map> maps = Database.getSavedMaps();
+        Packet packet = new Packet(PacketType.GET_MAPS, new Gson().toJson(maps));
+        return packet.toJson();
     }
 }
