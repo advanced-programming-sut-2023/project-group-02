@@ -17,6 +17,7 @@ import server.ChatDatabase;
 import server.Packet;
 import server.PacketType;
 import server.chat.Chat;
+import server.chat.ChatType;
 import server.logic.Lobby;
 import utils.Graphics;
 
@@ -216,6 +217,13 @@ public class PlayerConnection {
             chatsArrayList.add(chat);
         }
         return chatsArrayList;
+    }
+
+    public Chat getPublicChat() {
+        for (Chat chat : getChats()) {
+            if (chat.type.equals(ChatType.PUBLIC)) return chat;
+        }
+        return null;
     }
 
     public void makePrivateChatWith(User user) {
