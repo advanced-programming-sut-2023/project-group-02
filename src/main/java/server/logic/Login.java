@@ -23,6 +23,8 @@ public class Login {
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
         if (!ServerUserController.findUserWithUsername(username).passwordEquals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
+        if (ServerUserController.findUserWithUsername(username).isOnline())
+            return LoginMenuMessages.USER_ONLINE;
 
         ServerUserController.login(ServerUserController.findUserWithUsername(username), connection);
         return LoginMenuMessages.LOGIN_SUCCESSFUL;

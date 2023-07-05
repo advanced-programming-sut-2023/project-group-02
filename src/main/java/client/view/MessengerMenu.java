@@ -45,7 +45,7 @@ public class MessengerMenu {
 
     private void initPane() {
         chats = ChatDatabase.getChatsOfUser(currentUser);
-        if (!publicRoomExists(chats)) new Chat("Public Room",ChatType.PUBLIC,UserController.getUsers());
+        if (!publicRoomExists(chats)) new Chat("Public Room", ChatType.PUBLIC, UserController.getUsers());
         chats = ChatDatabase.getChatsOfUser(currentUser);
         rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
@@ -113,10 +113,10 @@ public class MessengerMenu {
         makeChat.getStyleClass().add("button1");
         Button cancelButton = new Button("Cancel");
         cancelButton.getStyleClass().add("button1");
-        HBox buttons = new HBox(10,makeChat,cancelButton);
+        HBox buttons = new HBox(10, makeChat, cancelButton);
 
         makeChat.setOnAction(event -> {
-            makeChat(chatName,chatType);
+            makeChat(chatName, chatType);
             reset();
             initPane();
         });
@@ -127,12 +127,11 @@ public class MessengerMenu {
         searchPlayers.setMaxWidth(200);
         searchPlayers.setPromptText("Search...");
 
-        chatDetails.getChildren().addAll(chatType,chatName,buttons,addPlayerText,searchPlayers);
-        searchPlayers.textProperty().addListener((observable, oldValue, newValue) -> searchPlayers(searchPlayers,notFoundText));
+        chatDetails.getChildren().addAll(chatType, chatName, buttons, addPlayerText, searchPlayers);
+        searchPlayers.textProperty().addListener((observable, oldValue, newValue) -> searchPlayers(searchPlayers, notFoundText));
 
         makeChatVBox.getChildren().add(chatDetails);
     }
-
 
 
     private void makeChat(TextField chatName, ChoiceBox<ChatType> chatType) {
@@ -141,7 +140,7 @@ public class MessengerMenu {
 
         String name = chatName.getText();
         ChatType type = chatType.getValue();
-
+        System.out.println(selectedUsers);
         if (type.equals(ChatType.PRIVATE))
             new Chat(currentUser, selectedUsers.get(selectedUsers.size() - 1));
         else {
@@ -174,11 +173,11 @@ public class MessengerMenu {
         avatar.setFitWidth(30);
 
         Text username = new Text(user.getUsername());
-        username.setFont(new Font("Arial",20));
+        username.setFont(new Font("Arial", 20));
         if (selectedUsers.contains(user)) username.setFill(Color.RED);
         else username.setFill(Color.DARKBLUE);
 
-        HBox hBox = new HBox(10,avatar,username);
+        HBox hBox = new HBox(10, avatar, username);
         hBox.setOnMouseClicked(event -> {
             selectPlayer(user);
             username.setFill(Color.RED);

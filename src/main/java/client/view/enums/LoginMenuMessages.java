@@ -7,7 +7,8 @@ public enum LoginMenuMessages {
     LOGIN_SUCCESSFUL("You Logged in successfully!"),
     NEW_PASSWORD_WEAK("Your new password is weak!"),
     PASSWORD_IS_CHANGED("Your password is changed successfully!"),
-    TOO_MANY_REQUESTS("Too many requests! Please try again a few seconds later.");
+    TOO_MANY_REQUESTS("Too many requests! Please try again a few seconds later."),
+    USER_ONLINE("User is already online!");
 
     private final String message;
 
