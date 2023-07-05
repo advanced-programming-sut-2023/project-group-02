@@ -1,5 +1,6 @@
 package client.view.pregame;
 
+import client.view.lobby.joinLobbiesMenu;
 import controllers.GameMenuController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,8 +35,7 @@ public class PreGameMenu {
         startNewGame.setOnAction(event -> Main.setScene(new InitGameMenu().getPane()));
 
         Button loadGameButton = MainMenu.makeButton(buttons, "Join a game");
-        loadGameButton.setOnAction(event -> {
-        }); //TODO load game lobbies
+        loadGameButton.setOnAction(event -> Main.setScene(new joinLobbiesMenu().getPane()));
 
         Button back = MainMenu.makeButton(buttons, "Back");
         back.setOnAction(event -> Main.setScene(new MainMenu().getPane()));

@@ -4,6 +4,7 @@ import client.view.Main;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -34,11 +35,7 @@ public class LobbyMenu {
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
-        Main.setScene(getPane());
-    }
-
-    public LobbyMenu(Lobby lobby, ReceiveLobbyUpdates receiveLobbyUpdates) {
-        this.lobby = lobby;
+        initPane(pane);
     }
 
     public Pane getPane() {
@@ -48,11 +45,20 @@ public class LobbyMenu {
     }
 
     private void initPane(Pane pane) {
+        Pane profilePane = null;
+        for (int i = pane.getChildren().size() - 1; i >= 0; i--) {
+            if (pane.getChildren().get(i) instanceof Pane) {
+                profilePane = (Pane) pane.getChildren().get(i);
+                break;
+            }
+        }
+        pane.getChildren().clear();
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/lobby-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         addPlayersHBox(pane);
-
+        if (profilePane != null)
+            pane.getChildren().add(profilePane);
     }
 
     private void addPlayersHBox(Pane pane) {
