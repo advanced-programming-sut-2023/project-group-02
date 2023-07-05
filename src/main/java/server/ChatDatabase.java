@@ -65,7 +65,7 @@ public class ChatDatabase {
                 // int date = messageRs.getInt("date");
 
                 User sender = ServerUserController.findUserWithUsername(senderUsername);
-                messages.add(new Message(messageId, text, sender, chat, new Date()));
+                messages.add(new Message(messageId, text, sender, new Date()));
             }
         }
     }
@@ -130,7 +130,7 @@ public class ChatDatabase {
                 for (Message message : chat.getMessages()) {
                     statement.executeUpdate("INSERT INTO messages (id, text, senderUsername, chatId, date) VALUES ("
                             + message.id + ", '" + message.getText() + "', '" + message.sender.getUsername()
-                            + "', " + message.chat.id + ", " + message.getDate().getTime() + ")");
+                            + "', " + chat.id + ", " + message.getDate().getTime() + ")");
                 }
             }
         } catch (SQLException e) {

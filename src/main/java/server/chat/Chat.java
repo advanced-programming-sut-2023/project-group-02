@@ -46,7 +46,7 @@ public class Chat {
     }
 
     public synchronized void sendMessage(User sender, String text) {
-        Message message = new Message(nextMessageId, text, sender, this, new Date());
+        Message message = new Message(nextMessageId, text, sender, new Date());
         messages.add(message);
         nextMessageId++;
     }

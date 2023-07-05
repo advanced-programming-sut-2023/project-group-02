@@ -149,6 +149,7 @@ public class ChatMenu {
         sendButton.setOnMouseClicked(event -> {
             if (textField.getText() != null && !textField.getText().equals("")) {
                 chat.sendMessage(currentUser,textField.getText());
+                Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
             }
             textField.setText("");
             initPane();
@@ -158,6 +159,7 @@ public class ChatMenu {
             if (event.getCode() == KeyCode.ENTER) {
                 if (textField.getText() != null && !textField.getText().equals("")) {
                     chat.sendMessage(currentUser,textField.getText());
+                    Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
                 }
                 textField.setText("");
                 initPane();
