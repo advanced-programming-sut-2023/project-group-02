@@ -343,4 +343,16 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<User> getAllUsers() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_ALL_USERS).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        ArrayList<User> users = new Gson().fromJson(packet.data.get(0), new TypeToken<ArrayList<Lobby>>() {
+        }.getType());
+        return users;
+    }
 }
