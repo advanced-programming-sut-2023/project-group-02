@@ -233,4 +233,12 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
+
+    public void sendMessage(int chatId, String text) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_MESSAGE, String.valueOf(chatId), text).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

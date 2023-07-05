@@ -110,7 +110,7 @@ public class ChatMenu {
         deleteButton.setFitWidth(10);
         deleteButton.setOnMouseClicked(event -> makeDeleteDialog(message));
 
-        Text date = new Text(message.getDate() + "");
+        Text date = new Text(message.getFormattedDate() + "");
 
         ImageView sentMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/sentMessage.png").toExternalForm()));
         ImageView seenMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/seenMessage.png").toExternalForm()));
@@ -148,7 +148,8 @@ public class ChatMenu {
         sendButton.setFitHeight(20);
         sendButton.setOnMouseClicked(event -> {
             if (textField.getText() != null && !textField.getText().equals("")) {
-                chat.sendMessage(currentUser,textField.getText());
+                Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
+                chat.sendMessage(currentUser, textField.getText());
             }
             textField.setText("");
             initPane();
@@ -157,6 +158,7 @@ public class ChatMenu {
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 if (textField.getText() != null && !textField.getText().equals("")) {
+                    Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
                     chat.sendMessage(currentUser,textField.getText());
                 }
                 textField.setText("");
