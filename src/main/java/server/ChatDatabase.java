@@ -24,7 +24,7 @@ public class ChatDatabase {
         // each message should contain the following columns:
         // id, text, senderId, chatId
         statement.executeUpdate(
-                "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, text TEXT, senderUsername INTEGER, chatId INTEGER, date INTEGER)");
+                "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, text TEXT, senderUsername TEXT, chatId INTEGER, date INTEGER)");
         statement.executeUpdate(
                 "CREATE TABLE IF NOT EXISTS chats (id INTEGER PRIMARY KEY, name TEXT, type TEXT, users TEXT, messages TEXT, nextMessageId INTEGER)");
 
@@ -51,6 +51,9 @@ public class ChatDatabase {
             ArrayList<Integer> messageIds = new ArrayList<>();
             String[] messageIdsRaw = messagesRaw.split(",");
             for (String messageId : messageIdsRaw) {
+                messageId = messageId.trim();
+                if (messageId.equals(""))
+                    continue;
                 messageIds.add(Integer.parseInt(messageId));
             }
             ArrayList<Message> messages = new ArrayList<>();
@@ -59,8 +62,7 @@ public class ChatDatabase {
 
                 String text = messageRs.getString("text");
                 String senderUsername = messageRs.getString("senderUsername");
-                int date = messageRs.getInt("date");
-                System.out.println(date);
+                // int date = messageRs.getInt("date");
 
                 User sender = ServerUserController.findUserWithUsername(senderUsername);
                 messages.add(new Message(messageId, text, sender, chat, new Date()));
@@ -70,6 +72,14 @@ public class ChatDatabase {
 
     public static ArrayList<Chat> getChats() {
         return chats;
+    }
+
+    public static Chat getChatWithId(int id) {
+        for (Chat chat : chats) {
+            if (chat.id == id)
+                return chat;
+        }
+        return null;
     }
 
     public static ArrayList<Chat> getChatsOfUser(User user) {
@@ -100,13 +110,18 @@ public class ChatDatabase {
                 for (User user : chat.getUsers()) {
                     users += user.getUsername() + ",";
                 }
-                users = users.substring(0, users.length() - 1);
+                if (users.length() > 0)
+                    users = users.substring(0, users.length() - 1);
 
                 String messages = "";
                 for (Message message : chat.getMessages()) {
                     messages += message.id + ",";
                 }
-                messages = messages.substring(0, messages.length() - 1);
+                if (messages.length() > 0)
+                    messages = messages.substring(0, messages.length() - 1);
+
+                statement.executeUpdate("DELETE FROM chats");
+                statement.executeUpdate("DELETE FROM messages");
 
                 statement.executeUpdate("INSERT INTO chats (id, name, type, users, messages, nextMessageId) VALUES ("
                         + chat.id + ", '" + chat.getName() + "', '" + chat.type.toString() + "', '" + users + "', '"
@@ -115,7 +130,7 @@ public class ChatDatabase {
                 for (Message message : chat.getMessages()) {
                     statement.executeUpdate("INSERT INTO messages (id, text, senderUsername, chatId, date) VALUES ("
                             + message.id + ", '" + message.getText() + "', '" + message.sender.getUsername()
-                            + "', " + message.chat.id + ", " + message.getDate() + ")");
+                            + "', " + message.chat.id + ", " + message.getDate().getTime() + ")");
                 }
             }
         } catch (SQLException e) {

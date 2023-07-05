@@ -103,6 +103,9 @@ public class Connection extends Thread {
                     case MAKE_GROUP_CHAT -> {
                         makeGroupChat(packet.data.get(0), packet.data.subList(1, packet.data.size() - 1));
                     }
+                    case SEND_MESSAGE -> {
+                        sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
+                    }
                     case GET_LOBBY -> {
                         dataOutputStream.writeUTF(getLobby(packet.data.get(0)).toJson());
                     }
@@ -226,5 +229,13 @@ public class Connection extends Thread {
                 users.add(user);
         }
         new Chat(ChatDatabase.getNextId(), chatName, ChatType.ROOM, users);
+    }
+
+    private void sendMessage(int chatId, String text) {
+        Chat chat = ChatDatabase.getChatWithId(chatId);
+        if (chat == null)
+            return;
+        chat.sendMessage(currentLoggedInUser, text);
+        ChatDatabase.save();
     }
 }
