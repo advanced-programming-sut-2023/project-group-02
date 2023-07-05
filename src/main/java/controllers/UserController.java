@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.swing.text.DefaultEditorKit.DefaultKeyTypedAction;
 
+import client.view.Main;
 import controllers.database.Database;
 import models.SecurityQuestion;
 import models.User;
@@ -19,20 +20,12 @@ public class UserController {
     private static User currentUser;
 
     public static User getCurrentUser() {
-        return currentUser;
+        return Main.getPlayerConnection().getLoggedInUser();
     }
 
 //    public static boolean isAuthorized() {
 //        return currentUser != null;
 //    }
-
-    public static User findUserWithId(int id) {
-        for (User user : users) {
-            if (user.id == id)
-                return user;
-        }
-        return null;
-    }
 
     public static User findUserWithUsername(String username) {
         for (User user : users) {

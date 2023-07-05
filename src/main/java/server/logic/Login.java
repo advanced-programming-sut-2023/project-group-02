@@ -2,6 +2,7 @@ package server.logic;
 
 import client.view.enums.LoginMenuMessages;
 import models.User;
+import models.UserCredentials;
 import server.Connection;
 import server.ServerUserController;
 import utils.PasswordProblem;
@@ -22,6 +23,8 @@ public class Login {
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
         if (!ServerUserController.findUserWithUsername(username).passwordEquals(password))
             return LoginMenuMessages.UNMATCHED_USERNAME_PASSWORD;
+        if (ServerUserController.findUserWithUsername(username).isOnline())
+            return LoginMenuMessages.USER_ONLINE;
 
         ServerUserController.login(ServerUserController.findUserWithUsername(username), connection);
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
@@ -45,6 +48,15 @@ public class Login {
             lastAttempt = new Date();
         }
         return message;
+    }
+
+    public static LoginMenuMessages loginWithCredentials(UserCredentials userCredentials, Connection connection) {
+        if (userCredentials == null || ServerUserController.findUserWithUsername(userCredentials.username()) == null)
+            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
+        if (ServerUserController.findUserWithUsername(userCredentials.username()).isOnline())
+            return LoginMenuMessages.USER_ONLINE;
+        ServerUserController.login(ServerUserController.findUserWithUsername(userCredentials.username()), connection);
+        return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
     public static LoginMenuMessages setNewPassword(User user, String newPassword) {

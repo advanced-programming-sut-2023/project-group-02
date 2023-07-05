@@ -297,11 +297,11 @@ public class SignupMenu {
                 || (slogan.isVisible() && sloganTextField.getText().isEmpty())) {
                 signupError.setText("Please fill all the fields.");
             } else {
-                SignUpMenuMessages message = SignUpMenuController.initiateSignup(usernameTextField.getText(),
-                    passwordField.getText(), passwordField.getText(), nicknameTextField.getText(),
+                String message = Main.getPlayerConnection().initSignUp(usernameTextField.getText(),
+                    passwordField.getText(), nicknameTextField.getText(),
                     emailTextField.getText(), sloganTextField.getText());
-                if (message != null)
-                    signupError.setText(message.getMessage());
+                if (!message.equals(SignUpMenuMessages.SIGN_UP_SUCCESSFUL.getMessage()))
+                    signupError.setText(message);
                 else {
                     signupError.setText("");
                     new Alert(Alert.AlertType.INFORMATION, "information filled successfully. " +
@@ -396,7 +396,7 @@ public class SignupMenu {
                 pane.getChildren().add(captcha.getCaptchaImage());
                 signupError.setText("Captcha is wrong.");
             } else {
-                SignUpMenuController.setSecurityQuestion(SecurityQuestion.getSecurityQuestion(questionBox.getValue()),
+                Main.getPlayerConnection().setSecurityQuestion(SecurityQuestion.getSecurityQuestion(questionBox.getValue()),
                     answer.getText());
                 signupError.setText("");
                 new Alert(Alert.AlertType.INFORMATION, "user created successfully").showAndWait();

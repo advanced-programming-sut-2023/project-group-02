@@ -44,7 +44,6 @@ public class Main extends Application {
         }
 
         UserController.loadUsersFromFile();
-//        UserController.loadCurrentUserFromFile();
 
         launch(args);
     }
@@ -53,11 +52,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         playerConnection.tryToAuthenticate();
         Main.stage = stage;
-//        if (UserController.isAuthorized()) {
-//            setScene(new MainMenu().getPane());
-//        } else {
-        setScene(Main.getTitlePane());
-//        }
+        if (UserController.getCurrentUser() != null) {
+            setScene(new MainMenu().getPane());
+        } else {
+            setScene(Main.getTitlePane());
+        }
     }
 
     public static void setScene(Pane pane) {

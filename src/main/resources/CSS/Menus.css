@@ -12,6 +12,12 @@
     -fx-stroke-width: 0.6;
 }
 
+.title3 {
+    -fx-font-size: 15px;
+    -fx-font: "Arial";
+    -fx-fill: #EBECB8;
+}
+
 .title1-with-hover {
     -fx-font-size: 25px;
     -fx-font: "Arial";

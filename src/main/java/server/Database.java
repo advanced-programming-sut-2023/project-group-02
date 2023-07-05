@@ -2,15 +2,19 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import models.Map;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 
 public class Database {
     public static final String DATABASE_ROOT = ".database";
     private static Gson gson = new Gson();
+
+    private static final ArrayList<Map> savedMaps = new ArrayList<>();
 
     public static void init() throws IOException {
         Files.createDirectories(Path.of(DATABASE_ROOT));
@@ -53,5 +57,10 @@ public class Database {
             // TODO: how should we handle errors?
             e.printStackTrace();
         }
+    }
+
+    //Just for Test
+    public static ArrayList<Map> getSavedMaps() {
+        return savedMaps;
     }
 }

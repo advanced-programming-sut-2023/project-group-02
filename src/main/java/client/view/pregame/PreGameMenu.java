@@ -1,7 +1,7 @@
 package client.view.pregame;
 
+import client.view.lobby.JoinLobbiesMenu;
 import controllers.GameMenuController;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -12,7 +12,6 @@ import java.util.Objects;
 import client.view.GameMenu;
 import client.view.Main;
 import client.view.MainMenu;
-import client.view.ProfileMenu;
 
 public class PreGameMenu {
     public Pane getPane() {
@@ -30,11 +29,11 @@ public class PreGameMenu {
         buttons.setTranslateX(400);
         buttons.setTranslateY(170);
 
-        Button startNewGame = MainMenu.makeButton(buttons, "Start New Game");
+        Button startNewGame = MainMenu.makeButton(buttons, "Make a new game");
         startNewGame.setOnAction(event -> Main.setScene(new InitGameMenu().getPane()));
 
-        Button loadGameButton = MainMenu.makeButton(buttons, "Load Existing Game");
-        loadGameButton.setOnAction(event -> loadGame(loadGameButton));
+        Button loadGameButton = MainMenu.makeButton(buttons, "Join a game");
+        loadGameButton.setOnAction(event -> Main.setScene(new JoinLobbiesMenu().getPane()));
 
         Button back = MainMenu.makeButton(buttons, "Back");
         back.setOnAction(event -> Main.setScene(new MainMenu().getPane()));

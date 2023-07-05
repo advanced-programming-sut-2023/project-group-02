@@ -13,7 +13,10 @@ module project {
     opens client.view to javafx.fxml;
     exports models;
     opens models to com.google.gson;
+    opens server.chat to com.google.gson;
     exports models.units;
     exports models.buildings;
     exports server;
+    exports server.chat;
+    opens server.logic to com.google.gson;
 }

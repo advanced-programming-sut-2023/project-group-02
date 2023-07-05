@@ -1,17 +1,17 @@
 package client.view.pregame;
 
+import client.view.lobby.LobbyMenu;
 import controllers.GameMenuController;
 import controllers.SignUpMenuController;
 import controllers.UserController;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
 import models.Game;
 import models.Map;
 import models.User;
+import server.logic.Lobby;
 import utils.Graphics;
 import utils.Utils;
 
@@ -26,14 +26,16 @@ import client.view.enums.SignUpMenuMessages;
 public class InitGameMenu {
     private final Text numberOfTurnsText = new Text("Number of turns: ");
     private final TextField numberOfTurnsField = new TextField();
+    private final ChoiceBox<Map> savedMaps = new ChoiceBox<>();
     private final Text mapWidthText = new Text("Map width: ");
     private final TextField mapWidthField = new TextField();
     private final Text mapHeightText = new Text("Map height: ");
     private final TextField mapHeightField = new TextField();
     private final TextField numberOfPlayersField = new TextField();
-    private final Text usernames = new Text(600, 120, "Username of Players");
-    private final TextField[] playersUsernamesFields = new TextField[10];
-    private final ArrayList<User> players = new ArrayList<>();
+    private final CheckBox isPublic = new CheckBox("Public Lobby");
+//    private final Text usernames = new Text(600, 120, "Username of Players");
+//    private final TextField[] playersUsernamesFields = new TextField[10];
+//    private final ArrayList<User> players = new ArrayList<>();
 
     public Pane getPane() {
         Pane initGamePane = new Pane();
@@ -46,23 +48,35 @@ public class InitGameMenu {
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         initNumberOfTurnsFields(pane);
+        initSelectMapChoiceBox(pane);
+        savedMaps.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) pane.getChildren().removeAll(mapWidthText,mapWidthField,mapHeightText,mapHeightField);
+        });
         initMapSizeFields(pane);
         initNumberOfPlayersField(pane);
         addConfirmButton(pane);
         addBackButton(pane);
+        addIsPublic(pane);
+    }
+
+    private void addIsPublic(Pane pane) {
+        isPublic.setLayoutX(320);
+        isPublic.setLayoutY(280);
+        isPublic.setSelected(true);
+        pane.getChildren().add(isPublic);
     }
 
     private void initNumberOfPlayersField(Pane pane) {
-        usernames.setVisible(false);
-        for (int i = 0; i < playersUsernamesFields.length; i++) {
-            TextField playersUsernameField = new TextField();
-            playersUsernameField.setLayoutX(600);
-            playersUsernameField.setLayoutY(150 + 40 * i);
-            playersUsernameField.setVisible(false);
-            playersUsernameField.setMaxWidth(160);
-            playersUsernamesFields[i] = playersUsernameField;
-            pane.getChildren().add(playersUsernamesFields[i]);
-        }
+//        usernames.setVisible(false);
+//        for (int i = 0; i < playersUsernamesFields.length; i++) {
+//            TextField playersUsernameField = new TextField();
+//            playersUsernameField.setLayoutX(600);
+//            playersUsernameField.setLayoutY(150 + 40 * i);
+//            playersUsernameField.setVisible(false);
+//            playersUsernameField.setMaxWidth(160);
+//            playersUsernamesFields[i] = playersUsernameField;
+//            pane.getChildren().add(playersUsernamesFields[i]);
+//        }
 
         Text numberOfPlayersText = new Text(100, 240, "Number of players: ");
         numberOfPlayersText.getStyleClass().add("title2");
@@ -71,37 +85,35 @@ public class InitGameMenu {
         numberOfPlayersField.setMaxWidth(45);
         numberOfPlayersField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.isEmpty()) {
-                initPlayersFields(pane, 0);
                 return;
             }
             if (!Utils.isInteger(newValue) || newValue.length() > 1 || Integer.parseInt(newValue) > 8 || Integer.parseInt(newValue) < 2) {
                 numberOfPlayersField.setText(oldValue);
                 return;
             }
-            initPlayersFields(pane, Integer.parseInt(newValue));
         });
-        pane.getChildren().addAll(usernames, numberOfPlayersText, numberOfPlayersField);
+        pane.getChildren().addAll(numberOfPlayersText, numberOfPlayersField);
     }
 
-    private void initPlayersFields(Pane pane, int numberOfFields) {
-        usernames.getStyleClass().add("title2");
-        if (numberOfFields == 0) {
-            usernames.setVisible(false);
-            for (int i = 0; i < 10; i++) {
-                playersUsernamesFields[i].setVisible(false);
-            }
-            return;
-        }
-        playersUsernamesFields[0].setText(UserController.getCurrentUser().getUsername());
-        usernames.setVisible(true);
-        for (int i = 0; i < numberOfFields; i++) {
-            playersUsernamesFields[i].setVisible(true);
-        }
-    }
+//    private void initPlayersFields(Pane pane, int numberOfFields) {
+//        usernames.getStyleClass().add("title2");
+//        if (numberOfFields == 0) {
+//            usernames.setVisible(false);
+//            for (int i = 0; i < 10; i++) {
+//                playersUsernamesFields[i].setVisible(false);
+//            }
+//            return;
+//        }
+//        playersUsernamesFields[0].setText(UserController.getCurrentUser().getUsername());
+//        usernames.setVisible(true);
+//        for (int i = 0; i < numberOfFields; i++) {
+//            playersUsernamesFields[i].setVisible(true);
+//        }
+//    }
 
     private void initNumberOfTurnsFields(Pane pane) {
         numberOfTurnsText.setLayoutX(100);
-        numberOfTurnsText.setLayoutY(120);
+        numberOfTurnsText.setLayoutY(110);
         numberOfTurnsText.getStyleClass().add("title2");
         numberOfTurnsField.setLayoutX(320);
         numberOfTurnsField.setLayoutY(100);
@@ -109,6 +121,17 @@ public class InitGameMenu {
         numberOfTurnsField.setText("5");
         Graphics.forceTextFieldsAcceptNumbersOnly(numberOfTurnsField, 3);
         pane.getChildren().addAll(numberOfTurnsText, numberOfTurnsField);
+    }
+
+    private void initSelectMapChoiceBox(Pane pane) {
+        ArrayList<Map> allMaps = Main.getPlayerConnection().getMaps();
+        savedMaps.setTranslateX(40);
+        savedMaps.setTranslateY(130);
+        pane.getChildren().add(savedMaps);
+        if (allMaps == null) return;
+        for (Map map : allMaps) {
+            savedMaps.getItems().add(map);
+        }
     }
 
     private void initMapSizeFields(Pane pane) {
@@ -143,33 +166,39 @@ public class InitGameMenu {
                 new Alert(Alert.AlertType.ERROR, "Some fields are empty").showAndWait();
                 return;
             }
-            if (!checkAndAddAllUsernames()) return;
-            GameMenuController.setCurrentGame(new Game(new ArrayList<>(), Integer.parseInt(numberOfTurnsField.getText()),
-                new Map(Integer.parseInt(mapWidthField.getText()), Integer.parseInt(mapHeightField.getText()))));
-            Main.setScene(new GameMenu().getPane(true, players));
-            Main.getStage().setFullScreen(true);
+            Lobby lobby = Main.getPlayerConnection().MakeLobby(mapWidthField.getText(),
+                mapHeightField.getText(), numberOfPlayersField.getText(),
+                numberOfTurnsField.getText(), isPublic.isSelected());
+            if (lobby == null)
+                throw new RuntimeException("lobby making failed");
+            Main.setScene(new LobbyMenu(lobby).getPane());
+//            if (!checkAndAddAllUsernames()) return;
+//            GameMenuController.setCurrentGame(new Game(new ArrayList<>(), Integer.parseInt(numberOfTurnsField.getText()),
+//                new Map(Integer.parseInt(mapWidthField.getText()), Integer.parseInt(mapHeightField.getText()))));
+//            Main.setScene(new GameMenu().getPane(true, players));
+//            Main.getStage().setFullScreen(true);
         });
         pane.getChildren().add(confirm);
     }
 
-    private boolean checkAndAddAllUsernames() {
-        players.clear();
-        for (int i = 0; i < Integer.parseInt(numberOfPlayersField.getText()); i++) {
-            String username = playersUsernamesFields[i].getText();
-            if (username.isEmpty() || !UserController.userWithUsernameExists(username)) {
-                new Alert(Alert.AlertType.ERROR, "Some usernames are not valid").showAndWait();
-                return false;
-            }
-            for (User player2 : players) {
-                if (player2.getUsername().equals(username)) {
-                    new Alert(Alert.AlertType.ERROR, "Some usernames are repeated more than once").showAndWait();
-                    return false;
-                }
-            }
-            players.add(UserController.findUserWithUsername(username));
-        }
-        return true;
-    }
+//    private boolean checkAndAddAllUsernames() {
+//        players.clear();
+//        for (int i = 0; i < Integer.parseInt(numberOfPlayersField.getText()); i++) {
+//            String username = playersUsernamesFields[i].getText();
+//            if (username.isEmpty() || !UserController.userWithUsernameExists(username)) {
+//                new Alert(Alert.AlertType.ERROR, "Some usernames are not valid").showAndWait();
+//                return false;
+//            }
+//            for (User player2 : players) {
+//                if (player2.getUsername().equals(username)) {
+//                    new Alert(Alert.AlertType.ERROR, "Some usernames are repeated more than once").showAndWait();
+//                    return false;
+//                }
+//            }
+//            players.add(UserController.findUserWithUsername(username));
+//        }
+//        return true;
+//    }
 
     private void addBackButton(Pane pane) {
         Text back = new Text("Back");

@@ -5,18 +5,22 @@ import javafx.scene.image.ImageView;
 import utils.Graphics;
 import utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 public class User {
-    public final int id;
     private String username, passwordHash, nickname, email, slogan;
     private SecurityQuestion securityQuestion;
     private String securityAnswer;
     private int highScore;
     private String avatarPath;
     private boolean isOnline = false;
+    private Date lastSeen;
+    private final ArrayList<String> friends = new ArrayList<>();
+    private final ArrayList<User> receivedFriendRequests = new ArrayList<>();
 
-    public User(int id, String username, String password, String nickname, String email, String slogan,
+    public User(String username, String password, String nickname, String email, String slogan,
             SecurityQuestion securityQuestion, String securityAnswer) {
-        this.id = id;
         this.username = username;
         this.passwordHash = encrypt(password);
         this.nickname = nickname;
@@ -24,7 +28,7 @@ public class User {
         this.slogan = slogan;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-        this.setAvatarPath(getDefaultAvatarPath());
+        this.setAvatarPath("/images/avatars/0.jpg");
     }
 
     public String getUsername() {
@@ -97,20 +101,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "Username: " + username + "\n" +
-                "Password: " + passwordHash + "\n" +
-                "Nickname: " + nickname + "\n" +
-                "Email: " + email + "\n" +
-                "Slogan: " + slogan + "\n" +
-                "HighScore: " + highScore + "\n";
+        return username;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof User) {
-            User otherUser = (User) obj;
-            return this.id == otherUser.id;
-        }
+        if (obj instanceof User)
+            return username.equals(((User) obj).getUsername());
         return false;
     }
 
@@ -130,11 +127,6 @@ public class User {
         return Graphics.getAvatarWithPath(avatarPath);
     }
 
-    private String getDefaultAvatarPath() {
-        ImageView defaultAvatar = Graphics.getAvatarWithPath(getClass().getResource("/images/avatars/0.jpg").toExternalForm());
-        return defaultAvatar.getImage().getUrl();
-    }
-
     public int getRank() {
         return UserController.getUsersSorted().indexOf(this) + 1;
     }
@@ -145,5 +137,33 @@ public class User {
 
     public void setOnline(boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Date getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
+    }
+
+
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
+    public boolean addFriend(User user) {
+        if (friends.size() >= 100)
+            return false;
+        friends.add(user.getUsername());
+        return true;
+    }
+
+    public ArrayList<User> getReceivedFriendRequests() {
+        return receivedFriendRequests;
+    }
+
+    public void addReceivedFriendRequest(User user) {
+        receivedFriendRequests.add(user);
     }
 }

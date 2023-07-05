@@ -1,6 +1,10 @@
 package client.view;
 
 import controllers.UserController;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -9,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.User;
 import utils.Graphics;
 
@@ -30,15 +35,17 @@ public class MainMenu {
     }
 
     private void initScoreBoardPane(Pane pane) {
+        User[] scoreboard = Main.getPlayerConnection().getScoreboard();
+
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/score-board.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
 
         VBox players = new VBox();
         players.setStyle("-fx-background-color: maroon");
-        for (int i = 0; i < UserController.getUsersSorted().size(); i++) {
-            User player = UserController.getUsersSorted().get(i);
-            players.getChildren().add(playersInfoInHBox(player));
+        for (int i = 0; i < scoreboard.length; i++) {
+            User player = scoreboard[i];
+            players.getChildren().add(playersInfoInHBox(player, i));
         }
 
         ScrollPane scrollPane = new ScrollPane(players);
@@ -48,8 +55,22 @@ public class MainMenu {
         scrollPane.setPrefWidth(400);
         scrollPane.setPrefHeight(510);
 
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            User[] newScoreboard = Main.getPlayerConnection().getScoreboard();
+            players.getChildren().clear();
+            for (int i = 0; i < newScoreboard.length; i++) {
+                User player = newScoreboard[i];
+                players.getChildren().add(playersInfoInHBox(player, i));
+            }
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
         Button backButton = new Button("back");
-        backButton.setOnAction(event -> Main.setScene(getPane()));
+        backButton.setOnAction(event -> {
+            timeline.stop();
+            Main.setScene(getPane());
+        });
         backButton.getStyleClass().add("button1");
         backButton.setTranslateY(5);
         backButton.setTranslateY(500);
@@ -57,19 +78,33 @@ public class MainMenu {
         pane.getChildren().addAll(scrollPane, backButton);
     }
 
-    private HBox playersInfoInHBox(User user) {
+    private HBox playersInfoInHBox(User user, int index) {
         ImageView avatar = Graphics.getAvatarWithPath(user.getAvatarPath());
         avatar.setFitWidth(30);
         avatar.setFitHeight(30);
 
-        Text rank = makeTextWithColor("" + user.getRank(), Color.GREEN);
+        Text rank = makeTextWithColor("" + (index + 1), Color.GREEN);
         Text username = makeTextWithColor(user.getUsername(), Color.YELLOW);
         Text nickname = makeTextWithColor(user.getNickname(), Color.BLUE);
         Text highScore = makeTextWithColor("" + user.getHighScore(), Color.WHITE);
 
-        HBox hBox = new HBox(rank, avatar, username, nickname, highScore);
+        ImageView onlineStatus = new ImageView(getClass()
+            .getResource("/images/others/" + (user.isOnline() ? "check" : "cross") + ".jpg").toExternalForm());
+        onlineStatus.setFitWidth(20);
+        onlineStatus.setFitHeight(20);
+
+        Text lastSeen = makeTextWithColor("", Color.GREY);
+        if (user.isOnline())
+            lastSeen.setText("online");
+        else if (user.getLastSeen() != null)
+            lastSeen.setText(user.getLastSeen().toString());
+        else
+            lastSeen.setText("never");
+
+        HBox hBox = new HBox(rank, avatar, username, nickname, highScore, onlineStatus, lastSeen);
         hBox.getStyleClass().add("button1");
-        hBox.setSpacing(10);
+        hBox.setSpacing(15);
+        hBox.setAlignment(Pos.CENTER_LEFT);
         return hBox;
     }
 
@@ -95,9 +130,19 @@ public class MainMenu {
             Main.setScene(new ProfileMenu().getPane());
         });
 
-        Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
+        Button enterGameMenu = makeButton(buttons, "Enter Lobby Menu");
         enterGameMenu.setOnAction(event -> {
             Main.setScene(new PreGameMenu().getPane());
+        });
+
+        Button enterMessenger = makeButton(buttons, "Enter Messenger");
+        enterMessenger.setOnAction(event -> {
+            Main.setScene(new MessengerMenu().getPane());
+        });
+
+        Button friends = makeButton(buttons, "Friends");
+        friends.setOnAction(event -> {
+            Main.setScene(new FriendsMenu().getPane());
         });
 
         Button scoreBoard = makeButton(buttons, "ScoreBoard");
@@ -122,5 +167,6 @@ public class MainMenu {
 
     public static void logout() {
         UserController.logout();
+        Main.getPlayerConnection().logout();
     }
 }

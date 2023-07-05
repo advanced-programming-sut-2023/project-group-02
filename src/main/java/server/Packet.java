@@ -11,6 +11,11 @@ public class Packet {
     public final ArrayList<String> data;
     public final Date time = new Date();
 
+    public Packet(PacketType packetType) {
+        this.packetType = packetType;
+        this.data = new ArrayList<>();
+    }
+
     public Packet(PacketType packetType, ArrayList<String> data) {
         this.packetType = packetType;
         this.data = data;
