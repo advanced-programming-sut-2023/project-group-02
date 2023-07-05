@@ -63,7 +63,7 @@ public class LobbyMenu {
     }
 
     private void addExitButton(Pane pane) {
-        ImageView exit = joinLobbiesMenu.createBackButton();
+        ImageView exit = JoinLobbiesMenu.createBackButton();
         exit.setOnMouseClicked(mouseEvent -> Main.setScene(new PreGameMenu().getPane()));
         //TODO remove user from lobby
         pane.getChildren().add(exit);

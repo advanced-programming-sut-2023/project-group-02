@@ -2,7 +2,6 @@ package client.view.lobby;
 
 import client.view.Main;
 import client.view.pregame.PreGameMenu;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
