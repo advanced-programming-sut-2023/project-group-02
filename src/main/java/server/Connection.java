@@ -123,9 +123,10 @@ public class Connection extends Thread {
         ArrayList<Lobby> result = new ArrayList<>();
         for (Lobby lobby : Lobby.getLobbies()) {
             if (lobby.getMembers().size() < lobby.getNumberOfPlayers() && lobby.isPublic()) {
-
+                result.add(lobby);
             }
         }
+        return new Packet(PacketType.GET_AVAILABLE_LOBBIES, new Gson().toJson(result));
     }
 
     private Packet getLobby(String lobbyID) {
