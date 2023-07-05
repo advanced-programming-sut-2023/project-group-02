@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.User;
 import server.logic.Lobby;
@@ -55,14 +56,30 @@ public class LobbyMenu {
         pane.setPrefSize(960, 540);
         addPlayersVBox(pane);
         addExitButton(pane);
+        addStartGame(pane);
         if (profilePane != null)
             pane.getChildren().add(profilePane);
+    }
+
+    private void addStartGame(Pane pane) {
+        if (!Main.getPlayerConnection().getLoggedInUser().equals(lobby.getMembers().get(0)))
+            return;
+        Text start = new Text("Start Now");
+        start.getStyleClass().add("title1-with-hover");
+        start.setLayoutX(820);
+        start.setLayoutY(75);
+        start.setOnMouseClicked(mouseEvent -> {
+            if (lobby.getMembers().size() == 1)
+                Graphics.showMessagePopup("There should be at least 2 players to start!");
+            //TODO start game otherwise :)
+        });
+        pane.getChildren().add(start);
     }
 
     private void addExitButton(Pane pane) {
         ImageView exit = JoinLobbiesMenu.createBackButton();
         exit.setOnMouseClicked(mouseEvent -> Main.setScene(new PreGameMenu().getPane()));
-        //TODO remove user from lobby
+        Main.getPlayerConnection().quitLobby(lobby.getID());
         pane.getChildren().add(exit);
     }
 

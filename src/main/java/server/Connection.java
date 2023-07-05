@@ -115,11 +115,21 @@ public class Connection extends Thread {
                     case JOIN_LOBBY -> {
                         dataOutputStream.writeUTF(joinLobby(packet.data.get(0)).toJson());
                     }
+                    case QUIT_LOBBY -> {
+                        quitLobby(packet.data.get(0));
+                    }
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private void quitLobby(String id) {
+        Lobby lobby = Lobby.getLobbyWithID(id);
+        lobby.getMembers().remove(currentLoggedInUser);
+        if (lobby.getMembers().size() == 0)
+            Lobby.removeLobby(lobby);
     }
 
     private synchronized Packet joinLobby(String id) {

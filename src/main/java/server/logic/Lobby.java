@@ -26,6 +26,10 @@ public class Lobby {
         this.ID = generateID();
     }
 
+    public static void removeLobby(Lobby lobby) {
+        lobbies.remove(lobby);
+    }
+
     public ArrayList<User> getMembers() {
         return members;
     }

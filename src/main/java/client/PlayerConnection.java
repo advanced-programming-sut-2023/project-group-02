@@ -282,4 +282,13 @@ public class PlayerConnection {
         Lobby lobby = new Gson().fromJson(packet.data.get(0), Lobby.class);
         Main.setScene(new LobbyMenu(lobby).getPane());
     }
+
+    public void quitLobby(String id) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.QUIT_LOBBY, id).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+    }
 }
