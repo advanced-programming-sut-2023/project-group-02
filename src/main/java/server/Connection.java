@@ -125,11 +125,19 @@ public class Connection extends Thread {
                     case QUIT_LOBBY -> {
                         quitLobby(packet.data.get(0));
                     }
+                    case CHANGE_ACCESS -> {
+                        changeLobbyAccess(packet.data.get(0));
+                    }
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private void changeLobbyAccess(String id) {
+        Lobby lobby = Lobby.getLobbyWithID(id);
+        lobby.setPublic(!lobby.isPublic());
     }
 
     private void quitLobby(String id) {
@@ -204,6 +212,9 @@ public class Connection extends Thread {
     }
 
     private void userLogout() {
+        if (currentLoggedInUser == null) {
+            return;
+        }
         for (Lobby lobby : Lobby.getLobbies()) {
             if (lobby.getMembers().contains(currentLoggedInUser)) {
                 lobby.getMembers().remove(currentLoggedInUser);
@@ -211,11 +222,9 @@ public class Connection extends Thread {
                     Lobby.getLobbies().remove(lobby);
             }
         }
-        if (currentLoggedInUser != null) {
-            currentLoggedInUser.setOnline(false);
-            currentLoggedInUser.setLastSeen(new Date());
-            currentLoggedInUser = null;
-        }
+        currentLoggedInUser.setOnline(false);
+        currentLoggedInUser.setLastSeen(new Date());
+        currentLoggedInUser = null;
     }
 
     public void userDisconnected() {

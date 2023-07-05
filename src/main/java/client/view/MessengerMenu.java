@@ -211,7 +211,7 @@ public class MessengerMenu {
         chatPreviewVBox.setPrefHeight(50);
         chatPreviewVBox.getStyleClass().add("chat-preview-vbox");
         chatPreviewVBox.setOnMouseClicked(mouseEvent -> {
-            currentChatMenu = new ChatMenu(chat);
+            currentChatMenu = new ChatMenu(chat, null);
             Main.setScene(currentChatMenu.getPane());
         });
         chatPreviewVBox.getChildren().add(createChatPreviewHeader(chat));

@@ -121,7 +121,7 @@ public class ChatMenu {
         deleteButton.setFitWidth(10);
         deleteButton.setOnMouseClicked(event -> makeDeleteDialog(message));
 
-        Text date = new Text(message.getFormattedDate() + "");
+        Text date = new Text(message.getDate() + "");
 
         ImageView sentMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/sentMessage.png").toExternalForm()));
         ImageView seenMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/seenMessage.png").toExternalForm()));
@@ -132,22 +132,10 @@ public class ChatMenu {
         sentOrSeen.setFitWidth(15);
         sentOrSeen.setTranslateX(-5);
 
-        ImageView react = new ImageView();
-        ImageView happyFace = new ImageView(new Image(getClass().getResource("/images/others/happy.png").toExternalForm()));
-        happyFace.setOnMouseClicked(event -> react.setImage(happyFace.getImage()));
-        ImageView normalFace = new ImageView(new Image(getClass().getResource("/images/others/normal.png").toExternalForm()));
-        normalFace.setOnMouseClicked(event -> react.setImage(normalFace.getImage()));
-        ImageView sadFace = new ImageView(new Image(getClass().getResource("/images/others/sad.png").toExternalForm()));
-        sadFace.setOnMouseClicked(event -> react.setImage(sadFace.getImage()));
-        HBox reactions = new HBox(2,happyFace,normalFace,sadFace,react);
-        makeSmall(happyFace,normalFace,sadFace);
-        react.setFitHeight(20);
-        react.setFitWidth(20);
-
         HBox deleteAndEdit;
         if (message.sender.equals(currentUser))
-            deleteAndEdit = new HBox(10,editButton,deleteButton,date,sentOrSeen,reactions);
-        else deleteAndEdit = new HBox(date,reactions);
+            deleteAndEdit = new HBox(10,editButton,deleteButton,date,sentOrSeen);
+        else deleteAndEdit = new HBox(date);
 
         VBox verticalMessage = new VBox(10,senderName,messageText,deleteAndEdit);
 
@@ -158,13 +146,6 @@ public class ChatMenu {
 
         HBox wholeMessage = new HBox(4,avatarPhoto,verticalMessage);
         return wholeMessage;
-    }
-
-    private void makeSmall(ImageView... imageViews) {
-        for (ImageView imageView : imageViews) {
-            imageView.setFitWidth(7);
-            imageView.setFitHeight(7);
-        }
     }
 
     private void addBottomBar() {

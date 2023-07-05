@@ -58,8 +58,29 @@ public class LobbyMenu {
         addPlayersVBox(pane);
         addExitButton(pane);
         addStartGame(pane);
+        addLobbyDetails(pane);
         if (profilePane != null)
             pane.getChildren().add(profilePane);
+    }
+
+    private void addLobbyDetails(Pane pane) {
+        String access = lobby.isPublic() ? "Public" : "Private";
+        Text accessText = new Text(access);
+        accessText.getStyleClass().add("title1");
+        accessText.setLayoutX(510);
+        accessText.setLayoutY(30);
+        Text details = new Text("ID: " + lobby.getID() + " / ");
+        details.getStyleClass().add("title1");
+        details.setLayoutX(380);
+        details.setLayoutY(30);
+        pane.getChildren().addAll(details, accessText);
+        if (!Main.getPlayerConnection().getLoggedInUser().equals(lobby.getMembers().get(0)))
+            return;
+        accessText.getStyleClass().clear();
+        accessText.getStyleClass().add("title1-with-hover");
+        accessText.setOnMouseClicked(mouseEvent -> {
+            Main.getPlayerConnection().changeAccess(lobby.getID());
+        });
     }
 
     private void addStartGame(Pane pane) {

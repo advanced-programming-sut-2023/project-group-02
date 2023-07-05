@@ -295,7 +295,7 @@ public class PlayerConnection {
 
     public void sendMap(Map map) {
         try {
-            dataOutputStream.writeUTF(new Packet(PacketType.SEND_MAP,new Gson().toJson(map)).toJson());
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_MAP, new Gson().toJson(map)).toJson());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -317,6 +317,14 @@ public class PlayerConnection {
             return mapsArrayList;
         } catch (JsonIOException e) {
             return null;
+        }
+    }
+
+    public void changeAccess(String id) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.CHANGE_ACCESS, id).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
