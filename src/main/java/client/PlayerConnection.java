@@ -235,33 +235,9 @@ public class PlayerConnection {
         }
     }
 
-    public void makePublicChat() {
-        try {
-            dataOutputStream.writeUTF(new Packet(PacketType.MAKE_PUBLIC_CHAT).toJson());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void sendMessage(int chatId, String text) {
         try {
             dataOutputStream.writeUTF(new Packet(PacketType.SEND_MESSAGE, String.valueOf(chatId), text).toJson());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void editMessage(int chatId, int messageId, String newText) {
-        try {
-            dataOutputStream.writeUTF(new Packet(PacketType.EDIT_MESSAGE, String.valueOf(chatId), String.valueOf(messageId), newText).toJson());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteMessage(int chatId, int messageId) {
-        try {
-            dataOutputStream.writeUTF(new Packet(PacketType.DELETE_MESSAGE, String.valueOf(chatId), String.valueOf(messageId)).toJson());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

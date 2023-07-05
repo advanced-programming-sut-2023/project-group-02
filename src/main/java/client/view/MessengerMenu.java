@@ -43,7 +43,11 @@ public class MessengerMenu {
     }
 
     private void initPane() {
-        Main.getPlayerConnection().makePublicChat();
+        chats = Main.getPlayerConnection().getChats();
+        if (!publicRoomExists(chats)) {
+            // new Chat(ChatDatabase.getNextId(), "Public Room", ChatType.PUBLIC,
+            // UserController.getUsers());
+        }
         chats = Main.getPlayerConnection().getChats();
         rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
@@ -75,6 +79,14 @@ public class MessengerMenu {
         makeChatVBox.setTranslateX(700);
         addMakeChatButton();
         rootPane.getChildren().add(makeChatVBox);
+    }
+
+    private boolean publicRoomExists(ArrayList<Chat> chats) {
+        for (Chat chat : chats) {
+            if (chat.type.equals(ChatType.PUBLIC))
+                return true;
+        }
+        return false;
     }
 
     private void addMakeChatButton() {

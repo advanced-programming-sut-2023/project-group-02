@@ -103,17 +103,8 @@ public class Connection extends Thread {
                     case MAKE_GROUP_CHAT -> {
                         makeGroupChat(packet.data.get(0), packet.data.subList(1, packet.data.size() - 1));
                     }
-                    case MAKE_PUBLIC_CHAT -> {
-                        makePublicChat();
-                    }
                     case SEND_MESSAGE -> {
                         sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
-                    }
-                    case EDIT_MESSAGE -> {
-                        editMessage(Integer.parseInt(packet.data.get(0)),Integer.parseInt(packet.data.get(1)),packet.data.get(2));
-                    }
-                    case DELETE_MESSAGE -> {
-                        deleteMessage(Integer.parseInt(packet.data.get(0)),Integer.parseInt(packet.data.get(1)));
                     }
                     case GET_LOBBY -> {
                         dataOutputStream.writeUTF(getLobby(packet.data.get(0)).toJson());
@@ -132,10 +123,9 @@ public class Connection extends Thread {
         ArrayList<Lobby> result = new ArrayList<>();
         for (Lobby lobby : Lobby.getLobbies()) {
             if (lobby.getMembers().size() < lobby.getNumberOfPlayers() && lobby.isPublic()) {
-                result.add(lobby);
+
             }
         }
-        return new Packet(PacketType.GET_AVAILABLE_LOBBIES, new Gson().toJson(result));
     }
 
     private Packet getLobby(String lobbyID) {
@@ -253,33 +243,11 @@ public class Connection extends Thread {
         new Chat(ChatDatabase.getNextId(), chatName, ChatType.ROOM, users);
     }
 
-    private void makePublicChat() {
-        for (Chat chat : ChatDatabase.getChats()) {
-            if (chat.type.equals(ChatType.PUBLIC))
-                return;
-        }
-        new Chat(ChatDatabase.getNextId(),"Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
-    }
-
     private void sendMessage(int chatId, String text) {
         Chat chat = ChatDatabase.getChatWithId(chatId);
         if (chat == null)
             return;
         chat.sendMessage(currentLoggedInUser, text);
-        ChatDatabase.save();
-    }
-
-    private void editMessage(int chatId, int messageId, String newText) {
-        Chat chat = ChatDatabase.getChatWithId(chatId);
-        if (chat == null) return;
-        chat.editMessage(messageId,newText);
-        ChatDatabase.save();
-    }
-
-    private void deleteMessage(int chatId, int messageId) {
-        Chat chat = ChatDatabase.getChatWithId(chatId);
-        if (chat == null) return;
-        chat.deleteMessage(messageId);
         ChatDatabase.save();
     }
 }

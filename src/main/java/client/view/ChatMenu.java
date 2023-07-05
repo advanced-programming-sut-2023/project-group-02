@@ -63,7 +63,7 @@ public class ChatMenu {
         Label chatName = new Label(chat.getName());
         if (!chat.type.equals(ChatType.PUBLIC)) chatName.setText(chatName.getText() + "\nid:" + chat.id);
         if (chat.type.equals(ChatType.ROOM) || chat.type.equals(ChatType.PUBLIC))
-            chatName.setText(chatName.getText() + "\tmembers: " + chat.getUsers().size());
+            chatName.setText(chatName.getText() + "\nmembers: " + chat.getUsers().size());
         chatName.setTextFill(Color.PURPLE);
         chatName.setFont(new Font("Open Sans",20));
         chatName.setBackground(new Background(new BackgroundFill(Color.ORANGE,null,null)));
@@ -110,7 +110,7 @@ public class ChatMenu {
         deleteButton.setFitWidth(10);
         deleteButton.setOnMouseClicked(event -> makeDeleteDialog(message));
 
-        Text date = new Text(message.getFormattedDate() + "");
+        Text date = new Text(message.getDate() + "");
 
         ImageView sentMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/sentMessage.png").toExternalForm()));
         ImageView seenMessage = new ImageView(new Image(getClass().getResource("/images/Messenger/seenMessage.png").toExternalForm()));
@@ -204,7 +204,6 @@ public class ChatMenu {
             if (!newText.isEmpty()) {
                 message.setText(newText);
                 chat.editMessage(message.id,newText);
-                Main.getPlayerConnection().editMessage(chat.id, message.id,newText);
                 initPane();
             }
         });
@@ -231,8 +230,6 @@ public class ChatMenu {
 
         result.ifPresent(newText -> {
             chat.deleteMessage(message.id);
-            Main.getPlayerConnection().deleteMessage(chat.id, message.id);
-            //TODO : for server here
             initPane();
         });
     }
