@@ -140,7 +140,6 @@ public class MessengerMenu {
 
         String name = chatName.getText();
         ChatType type = chatType.getValue();
-        System.out.println(selectedUsers);
         if (type.equals(ChatType.PRIVATE))
             new Chat(currentUser, selectedUsers.get(selectedUsers.size() - 1));
         else {
