@@ -17,7 +17,6 @@ public class Chat {
     private int nextMessageId = 1;
 
     public Chat(int id, String name, ChatType type, ArrayList<User> users) {
-        if (type.equals(ChatType.PUBLIC)) System.out.println("public room is been made");
         this.name = name;
         this.id = id;
         this.type = type;

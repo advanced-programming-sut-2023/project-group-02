@@ -103,6 +103,9 @@ public class Connection extends Thread {
                     case MAKE_GROUP_CHAT -> {
                         makeGroupChat(packet.data.get(0), packet.data.subList(1, packet.data.size() - 1));
                     }
+                    case MAKE_PUBLIC_CHAT -> {
+                        makePublicChat();
+                    }
                     case SEND_MESSAGE -> {
                         sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
                     }
@@ -235,6 +238,14 @@ public class Connection extends Thread {
                 users.add(user);
         }
         new Chat(ChatDatabase.getNextId(), chatName, ChatType.ROOM, users);
+    }
+
+    private void makePublicChat() {
+        for (Chat chat : ChatDatabase.getChats()) {
+            if (chat.type.equals(ChatType.PUBLIC))
+                return;
+        }
+        new Chat(ChatDatabase.getNextId(),"Public Room",ChatType.PUBLIC,ServerUserController.getUsers());
     }
 
     private void sendMessage(int chatId, String text) {
