@@ -5,8 +5,11 @@ import client.view.enums.SignUpMenuMessages;
 import controllers.UserController;
 import models.SecurityQuestion;
 import models.User;
+import server.ChatDatabase;
 import server.Connection;
 import server.ServerUserController;
+import server.chat.Chat;
+import server.chat.ChatType;
 import utils.PasswordProblem;
 import utils.Randoms;
 import utils.Validation;
@@ -91,6 +94,9 @@ public class SignUp {
     }
 
     private static void done(Connection connection) {
+        for (Chat chat : ChatDatabase.getChats()) {
+            if (chat.type.equals(ChatType.PUBLIC)) chat.addUser(toBeSignedIn);
+        }
         ServerUserController.signup(toBeSignedIn, connection);
         reset();
     }
