@@ -104,6 +104,9 @@ public class Connection extends Thread {
                     case MAKE_GROUP_CHAT -> {
                         makeGroupChat(packet.data.get(0), packet.data.subList(1, packet.data.size() - 1));
                     }
+                    case MAKE_PUBLIC_CHAT -> {
+                        makePublicChat();
+                    }
                     case SEND_MESSAGE -> {
                         sendMessage(Integer.parseInt(packet.data.get(0)), packet.data.get(1));
                     }
