@@ -18,5 +18,4 @@ module project {
     exports models.buildings;
     exports server;
     exports server.chat;
-    opens server.logic to com.google.gson;
 }
