@@ -215,11 +215,14 @@ public class Connection extends Thread {
         if (currentLoggedInUser == null) {
             return;
         }
-        for (Lobby lobby : Lobby.getLobbies()) {
-            if (lobby.getMembers().contains(currentLoggedInUser)) {
-                lobby.getMembers().remove(currentLoggedInUser);
-                if (lobby.getMembers().size() == 0)
-                    Lobby.getLobbies().remove(lobby);
+        if (Lobby.getLobbies() != null && !Lobby.getLobbies().isEmpty()) {
+            for (int i = Lobby.getLobbies().size()-1 ; i>=0 ; i--) {
+                Lobby lobby = Lobby.getLobbies().get(i);
+                if (lobby.getMembers().contains(currentLoggedInUser)) {
+                    lobby.getMembers().remove(currentLoggedInUser);
+                    if (lobby.getMembers().size() == 0)
+                        Lobby.getLobbies().remove(lobby);
+                }
             }
         }
         currentLoggedInUser.setOnline(false);
