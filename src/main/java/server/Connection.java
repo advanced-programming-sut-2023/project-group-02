@@ -7,6 +7,7 @@ import controllers.SignUpMenuController;
 import models.SecurityQuestion;
 import models.User;
 import models.UserCredentials;
+import server.logic.Lobby;
 import server.logic.Login;
 import server.logic.SignUp;
 
@@ -43,22 +44,22 @@ public class Connection extends Thread {
                 switch (packet.packetType) {
                     case LOGIN_WITH_TOKEN -> {
                         dataOutputStream.writeUTF(
-                                new Packet(PacketType.LOGIN_WITH_TOKEN, userLoginWithToken(packet.data.get(0)))
-                                        .toJson());
+                            new Packet(PacketType.LOGIN_WITH_TOKEN, userLoginWithToken(packet.data.get(0)))
+                                .toJson());
                     }
                     case LOGIN -> {
                         dataOutputStream.writeUTF(
-                                new Packet(PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1)))
-                                        .toJson());
+                            new Packet(PacketType.LOGIN, userLogin(packet.data.get(0), packet.data.get(1)))
+                                .toJson());
                     }
                     case GET_LOGGED_IN_USER -> {
                         dataOutputStream.writeUTF(
-                                new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser))
-                                        .toJson());
+                            new Packet(PacketType.GET_LOGGED_IN_USER, new Gson().toJson(currentLoggedInUser))
+                                .toJson());
                     }
                     case SIGNUP -> {
                         dataOutputStream.writeUTF(
-                                new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
+                            new Packet(PacketType.SIGNUP, initSignup(packet.data)).toJson());
                     }
                     case FINALIZE_SIGNUP -> {
                         finalizeSignup(packet.data.get(0), packet.data.get(1));
@@ -74,24 +75,34 @@ public class Connection extends Thread {
                     }
                     case ACCEPT_FRIEND -> {
                         dataOutputStream.writeUTF(new Packet(PacketType.ACCEPT_FRIEND,
-                                acceptFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
-                                        ServerUserController.findUserWithUsername(packet.data.get(1))))
-                                .toJson());
+                            acceptFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                                ServerUserController.findUserWithUsername(packet.data.get(1))))
+                            .toJson());
                     }
                     case REJECT_FRIEND -> {
                         dataOutputStream.writeUTF(new Packet(PacketType.REJECT_FRIEND,
-                                rejectFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
-                                        ServerUserController.findUserWithUsername(packet.data.get(1))))
-                                .toJson());
+                            rejectFriendRequest(ServerUserController.findUserWithUsername(packet.data.get(0)),
+                                ServerUserController.findUserWithUsername(packet.data.get(1))))
+                            .toJson());
                     }
                     case GET_SCOREBOARD -> {
                         dataOutputStream.writeUTF(getScoreboard());
+                    }
+                    case MAKE_LOBBY -> {
+                        dataOutputStream.writeUTF(makeLobbyPacket(packet).toJson());
                     }
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private Packet makeLobbyPacket(Packet packet) {
+        boolean isPublic = packet.data.get(4).equals("public");
+        Lobby lobby = Lobby.makeLobby(currentLoggedInUser, Integer.parseInt(packet.data.get(0)), Integer.parseInt(packet.data.get(1)),
+            Integer.parseInt(packet.data.get(2)), Integer.parseInt(packet.data.get(3)), isPublic);
+        return new Packet(PacketType.MAKE_LOBBY, new Gson().toJson(lobby));
     }
 
     private String rejectFriendRequest(User accepter, User requester) {

@@ -12,6 +12,7 @@ import server.ChatDatabase;
 import server.Packet;
 import server.PacketType;
 import server.chat.Chat;
+import server.logic.Lobby;
 import utils.Graphics;
 
 import java.io.DataInputStream;
@@ -180,5 +181,20 @@ public class PlayerConnection {
         Packet packet = readFromServer();
         User[] users = new Gson().fromJson(packet.data.get(0), User[].class);
         return users;
+    }
+
+    public Lobby MakeLobby(String mapWidth, String mapHeight, String numberOfPlayers, String numberOfTurns, boolean isPublic) {
+        String isPublicString = isPublic ? "public" : "private";
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.MAKE_LOBBY, mapWidth, mapHeight, numberOfTurns, numberOfPlayers, isPublicString).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Lobby lobby = new Gson().fromJson(packet.data.get(0), Lobby.class);
+        if (lobby == null) {
+            return null;
+        }
+        return lobby;
     }
 }

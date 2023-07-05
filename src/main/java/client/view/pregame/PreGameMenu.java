@@ -30,11 +30,12 @@ public class PreGameMenu {
         buttons.setTranslateX(400);
         buttons.setTranslateY(170);
 
-        Button startNewGame = MainMenu.makeButton(buttons, "Start New Game");
+        Button startNewGame = MainMenu.makeButton(buttons, "Make a new game");
         startNewGame.setOnAction(event -> Main.setScene(new InitGameMenu().getPane()));
 
-        Button loadGameButton = MainMenu.makeButton(buttons, "Load Existing Game");
-        loadGameButton.setOnAction(event -> loadGame(loadGameButton));
+        Button loadGameButton = MainMenu.makeButton(buttons, "Join a game");
+        loadGameButton.setOnAction(event -> {
+        }); //TODO load game lobbies
 
         Button back = MainMenu.makeButton(buttons, "Back");
         back.setOnAction(event -> Main.setScene(new MainMenu().getPane()));
