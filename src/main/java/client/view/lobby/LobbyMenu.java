@@ -1,6 +1,7 @@
 package client.view.lobby;
 
 import client.view.Main;
+import client.view.pregame.PreGameMenu;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -57,8 +58,16 @@ public class LobbyMenu {
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         addPlayersHBox(pane);
+        addExitButton(pane);
         if (profilePane != null)
             pane.getChildren().add(profilePane);
+    }
+
+    private void addExitButton(Pane pane) {
+        ImageView exit = JoinLobbiesMenu.createBackButton();
+        exit.setOnMouseClicked(mouseEvent -> Main.setScene(new PreGameMenu().getPane()));
+        //TODO remove user from lobby
+        pane.getChildren().add(exit);
     }
 
     private void addPlayersHBox(Pane pane) {

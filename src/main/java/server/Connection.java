@@ -118,11 +118,24 @@ public class Connection extends Thread {
                     case GET_LOBBY -> {
                         dataOutputStream.writeUTF(getLobby(packet.data.get(0)).toJson());
                     }
+                    case GET_AVAILABLE_LOBBIES -> {
+                        dataOutputStream.writeUTF(getAvailableLobbies().toJson());
+                    }
                 }
             }
         } catch (IOException e) {
             checkUserAvailability.userDisconnected();
         }
+    }
+
+    private Packet getAvailableLobbies() {
+        ArrayList<Lobby> result = new ArrayList<>();
+        for (Lobby lobby : Lobby.getLobbies()) {
+            if (lobby.getMembers().size() < lobby.getNumberOfPlayers() && lobby.isPublic()) {
+                result.add(lobby);
+            }
+        }
+        return new Packet(PacketType.GET_AVAILABLE_LOBBIES, new Gson().toJson(result));
     }
 
     private Packet getLobby(String lobbyID) {

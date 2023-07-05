@@ -3,6 +3,7 @@ package client;
 import client.view.enums.LoginMenuMessages;
 import com.google.gson.Gson;
 
+import com.google.gson.reflect.TypeToken;
 import controllers.database.Database;
 import javafx.scene.layout.Pane;
 import models.SecurityQuestion;
@@ -275,5 +276,17 @@ public class PlayerConnection {
         Packet packet = readFromServer();
         Lobby lobby = new Gson().fromJson(packet.data.get(0), Lobby.class);
         return lobby;
+    }
+
+    public ArrayList<Lobby> getAvailableLobbies() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_AVAILABLE_LOBBIES).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        ArrayList<Lobby> lobbies = new Gson().fromJson(packet.data.get(0), new TypeToken<ArrayList<Lobby>>() {
+        }.getType());
+        return lobbies;
     }
 }
