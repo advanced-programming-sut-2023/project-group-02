@@ -26,9 +26,52 @@ public class Lobby {
         this.ID = generateID();
     }
 
+    public ArrayList<User> getMembers() {
+        return members;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public int getNumberOfTurns() {
+        return numberOfTurns;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 
     public static ArrayList<Lobby> getLobbies() {
         return lobbies;
+    }
+
+    public static Lobby getLobbyWithID(String ID) {
+        for (Lobby lobby : getLobbies()) {
+            if (lobby.ID.equals(ID))
+                return lobby;
+        }
+        return null;
     }
 
     public static boolean isIDFree(String ID) {

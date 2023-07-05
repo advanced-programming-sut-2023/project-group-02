@@ -49,12 +49,14 @@ public class Chat {
         Message message = new Message(nextMessageId, text, sender, this, new Date());
         messages.add(message);
         nextMessageId++;
+        ChatDatabase.save();
     }
 
     public void editMessage(int messageId, String text) {
         for (Message message : messages) {
             if (message.id == messageId) {
                 message.setText(text);
+                ChatDatabase.save();
                 return;
             }
         }
@@ -64,6 +66,7 @@ public class Chat {
         for (int i = messages.size() - 1; i >= 0; i--) {
             if (messages.get(i).id == messageId) {
                 messages.remove(messages.get(i));
+                ChatDatabase.save();
                 return;
             }
         }

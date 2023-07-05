@@ -110,7 +110,7 @@ public class Graphics {
     }
 
     private static void initProfilePane(Pane currentPane, Pane profilePane, User currentUser, User userToSearch) {
-        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch.getUsername()));
+        profilePane.getChildren().add(getUserDetails(currentPane, userToSearch.getUsername(), null));
         Text friendsText = new Text("List of Friends:");
         friendsText.getStyleClass().add("title1");
         friendsText.setLayoutY(100);
@@ -118,7 +118,7 @@ public class Graphics {
         VBox friends = new VBox();
         friends.setSpacing(5);
         for (String friendUsername : userToSearch.getFriends()) {
-            friends.getChildren().add(getUserDetails(currentPane, friendUsername));
+            friends.getChildren().add(getUserDetails(currentPane, friendUsername, null));
         }
         ScrollPane scrollPane = new ScrollPane(friends);
         scrollPane.setLayoutY(120);
@@ -166,7 +166,7 @@ public class Graphics {
         profilePane.getChildren().addAll(requestText, addFriend);
     }
 
-    private static HBox getUserDetails(Pane currentPane, String username) {
+    public static HBox getUserDetails(Pane currentPane, String username, String nickName) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(10);
@@ -177,6 +177,8 @@ public class Graphics {
         avatar.setLayoutX(15);
         avatar.setLayoutY(20);
         Text usernameText = new Text(username);
+        if (nickName != null && !nickName.isEmpty())
+            usernameText.setText(nickName);
         usernameText.setLayoutX(75);
         usernameText.setLayoutY(40);
         usernameText.getStyleClass().add("title1-with-hover");

@@ -89,7 +89,7 @@ public class MainMenu {
         Text highScore = makeTextWithColor("" + user.getHighScore(), Color.WHITE);
 
         ImageView onlineStatus = new ImageView(getClass()
-                .getResource("/images/others/" + (user.isOnline() ? "check" : "cross") + ".jpg").toExternalForm());
+            .getResource("/images/others/" + (user.isOnline() ? "check" : "cross") + ".jpg").toExternalForm());
         onlineStatus.setFitWidth(20);
         onlineStatus.setFitHeight(20);
 
@@ -130,7 +130,7 @@ public class MainMenu {
             Main.setScene(new ProfileMenu().getPane());
         });
 
-        Button enterGameMenu = makeButton(buttons, "Enter Game Menu");
+        Button enterGameMenu = makeButton(buttons, "Enter Lobby Menu");
         enterGameMenu.setOnAction(event -> {
             Main.setScene(new PreGameMenu().getPane());
         });

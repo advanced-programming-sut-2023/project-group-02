@@ -234,11 +234,14 @@ public class PlayerConnection {
         }
     }
 
-    public void sendMessage(int chatId, String text) {
+    public Lobby getLobbyWithID(String lobbyID) {
         try {
-            dataOutputStream.writeUTF(new Packet(PacketType.SEND_MESSAGE, String.valueOf(chatId), text).toJson());
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_LOBBY, lobbyID).toJson());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Packet packet = readFromServer();
+        Lobby lobby = new Gson().fromJson(packet.data.get(0), Lobby.class);
+        return lobby;
     }
 }

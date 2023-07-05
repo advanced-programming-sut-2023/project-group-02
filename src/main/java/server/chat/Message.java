@@ -30,11 +30,7 @@ public class Message {
         this.text = text;
     }
 
-    public Date getDate() {
-        return sentAt;
-    }
-
-    public String getFormattedDate() {
+    public String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         return formatter.format(sentAt);
     }
