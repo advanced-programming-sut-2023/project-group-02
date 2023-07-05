@@ -2,6 +2,7 @@ package server.chat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import models.User;
@@ -15,17 +16,17 @@ public class Chat {
     private ArrayList<Message> messages = new ArrayList<Message>();
     private int nextMessageId = 1;
 
-    public Chat(String name, ChatType type, ArrayList<User> users) {
+    public Chat(int id, String name, ChatType type, ArrayList<User> users) {
         if (type.equals(ChatType.PUBLIC)) System.out.println("public room is been made");
         this.name = name;
-        this.id = ChatDatabase.getChats().size();
+        this.id = id;
         this.type = type;
         this.users.addAll(users);
         ChatDatabase.addChat(this);
     }
 
-    public Chat(User user1, User user2) {
-        this.id = ChatDatabase.getChats().size();
+    public Chat(int id, User user1, User user2) {
+        this.id = id;
         this.type = ChatType.PRIVATE;
         this.name = user1.getUsername() + " & " + user2.getUsername();
         this.users = new ArrayList<>(List.of(user1,user2));
@@ -45,26 +46,38 @@ public class Chat {
     }
 
     public synchronized void sendMessage(User sender, String text) {
-        Message message = new Message(text, sender, this);
+        Message message = new Message(nextMessageId, text, sender, this, new Date());
         messages.add(message);
         nextMessageId++;
+        ChatDatabase.save();
     }
 
     public void editMessage(int messageId, String text) {
         for (Message message : messages) {
-            if (message.id == messageId) message.setText(text);
+            if (message.id == messageId) {
+                message.setText(text);
+                ChatDatabase.save();
+                return;
+            }
         }
     }
 
     public void deleteMessage(int messageId) {
         for (int i = messages.size() - 1; i >= 0; i--) {
-            if (messages.get(i).id == messageId)
+            if (messages.get(i).id == messageId) {
                 messages.remove(messages.get(i));
+                ChatDatabase.save();
+                return;
+            }
         }
     }
 
     public int getNextMessageId() {
         return nextMessageId;
+    }
+
+    public void setNextMessageId(int nextMessageId) {
+        this.nextMessageId = nextMessageId;
     }
 
     public String getName() {

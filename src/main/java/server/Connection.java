@@ -8,6 +8,8 @@ import models.SecurityQuestion;
 import models.User;
 import models.UserCredentials;
 import server.logic.Lobby;
+import server.chat.Chat;
+import server.chat.ChatType;
 import server.logic.Login;
 import server.logic.SignUp;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Connection extends Thread {
     private Socket socket;
@@ -90,6 +93,15 @@ public class Connection extends Thread {
                     }
                     case MAKE_LOBBY -> {
                         dataOutputStream.writeUTF(makeLobbyPacket(packet).toJson());
+                        }
+                    case GET_CHATS -> {
+                        dataOutputStream.writeUTF(getChats());
+                    }
+                    case MAKE_PRIVATE_CHAT -> {
+                        makePrivateChatWith(packet.data.get(0));
+                    }
+                    case MAKE_GROUP_CHAT -> {
+                        makeGroupChat(packet.data.get(0), packet.data.subList(1, packet.data.size() - 1));
                     }
                 }
             }
@@ -180,5 +192,31 @@ public class Connection extends Thread {
         ArrayList<User> users = ServerUserController.getUsersSorted();
         Packet packet = new Packet(PacketType.GET_SCOREBOARD, new Gson().toJson(users));
         return packet.toJson();
+    }
+
+    public String getChats() {
+        ArrayList<Chat> chats = ChatDatabase.getChatsOfUser(currentLoggedInUser);
+        Packet packet = new Packet(PacketType.GET_CHATS, new Gson().toJson(chats));
+        return packet.toJson();
+    }
+
+    private void makePrivateChatWith(String username) {
+        if (currentLoggedInUser == null)
+            return;
+        User user = ServerUserController.findUserWithUsername(username);
+        if (user == null)
+            return;
+        new Chat(ChatDatabase.getNextId(), currentLoggedInUser, user);
+    }
+
+    private void makeGroupChat(String chatName, List<String> usernames) {
+        ArrayList<User> users = new ArrayList<>();
+        users.add(currentLoggedInUser);
+        for (String username : usernames) {
+            User user = ServerUserController.findUserWithUsername(username);
+            if (user != null)
+                users.add(user);
+        }
+        new Chat(ChatDatabase.getNextId(), chatName, ChatType.ROOM, users);
     }
 }

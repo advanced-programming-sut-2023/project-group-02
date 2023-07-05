@@ -9,6 +9,7 @@ public class Main {
             SqliteDatabase.init();
             ServerUserController.loadUsersFromDatabase();
             UserController.loadUsersFromFile();
+            ChatDatabase.init();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
