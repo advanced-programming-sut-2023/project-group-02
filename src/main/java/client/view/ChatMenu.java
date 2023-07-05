@@ -29,8 +29,10 @@ public class ChatMenu {
     private Pane rootPane;
     private VBox mainVBox = new VBox();
     private VBox chatMessages = new VBox();
+    private final Pane paneToReturnTo;
 
-    public ChatMenu(Chat chat) {
+    public ChatMenu(Chat chat, Pane paneToReturnTo) {
+        this.paneToReturnTo = paneToReturnTo;
         this.chat = chat;
     }
 
@@ -205,7 +207,13 @@ public class ChatMenu {
         backButton.setTranslateX(10);
         backButton.setTranslateY(10);
         backButton.getStyleClass().add("button1");
-        backButton.setOnAction(event -> Main.getStage().setScene(new Scene(new MessengerMenu().getPane())));
+        backButton.setOnAction(event -> {
+            if (paneToReturnTo == null)
+                Main.getStage().setScene(new Scene(new MessengerMenu().getPane()));
+            else
+                Main.setScene(paneToReturnTo);
+        });
+
         rootPane.getChildren().add(backButton);
     }
 
