@@ -128,6 +128,9 @@ public class Connection extends Thread {
                     case CHANGE_ACCESS -> {
                         changeLobbyAccess(packet.data.get(0));
                     }
+                    case GET_ALL_USERS -> {
+                        dataOutputStream.writeUTF(new Packet(PacketType.GET_ALL_USERS, new Gson().toJson(ServerUserController.getUsers())).toJson());
+                    }
                 }
             }
         } catch (IOException e) {
@@ -216,7 +219,7 @@ public class Connection extends Thread {
             return;
         }
         if (Lobby.getLobbies() != null && !Lobby.getLobbies().isEmpty()) {
-            for (int i = Lobby.getLobbies().size()-1 ; i>=0 ; i--) {
+            for (int i = Lobby.getLobbies().size() - 1; i >= 0; i--) {
                 Lobby lobby = Lobby.getLobbies().get(i);
                 if (lobby.getMembers().contains(currentLoggedInUser)) {
                     lobby.getMembers().remove(currentLoggedInUser);
