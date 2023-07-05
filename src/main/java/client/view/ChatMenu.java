@@ -29,8 +29,10 @@ public class ChatMenu {
     private Pane rootPane;
     private VBox mainVBox = new VBox();
     private VBox chatMessages = new VBox();
+    private final Pane paneToReturnTo;
 
-    public ChatMenu(Chat chat) {
+    public ChatMenu(Chat chat, Pane paneToReturnTo) {
+        this.paneToReturnTo = paneToReturnTo;
         this.chat = chat;
     }
 
@@ -76,8 +78,8 @@ public class ChatMenu {
         if (chat.type.equals(ChatType.ROOM) || chat.type.equals(ChatType.PUBLIC))
             chatName.setText(chatName.getText() + "\nmembers: " + chat.getUsers().size());
         chatName.setTextFill(Color.PURPLE);
-        chatName.setFont(new Font("Open Sans",20));
-        chatName.setBackground(new Background(new BackgroundFill(Color.ORANGE,null,null)));
+        chatName.setFont(new Font("Open Sans", 20));
+        chatName.setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
         mainVBox.getChildren().add(chatName);
     }
 
@@ -104,11 +106,11 @@ public class ChatMenu {
     private HBox makeOneMessageVBox(Message message) {
         Circle avatarPhoto = new Circle(20);
         avatarPhoto.setFill(new ImagePattern(message.sender.getAvatar().getImage()));
-        if (chat.getMessages().indexOf(message) > 0 && chat.getMessages().get(chat.getMessages().indexOf(message)-1).sender.equals(message.sender))
+        if (chat.getMessages().indexOf(message) > 0 && chat.getMessages().get(chat.getMessages().indexOf(message) - 1).sender.equals(message.sender))
             avatarPhoto.setVisible(false);
 
         Text senderName = new Text(message.sender.getUsername());
-        senderName.setFont(new Font("Open Sans",14));
+        senderName.setFont(new Font("Open Sans", 14));
         Text messageText = new Text(message.getText());
 
         ImageView editButton = new ImageView(new Image(getClass().getResource("/images/Messenger/edit.png").toExternalForm()));
@@ -134,17 +136,17 @@ public class ChatMenu {
 
         HBox deleteAndEdit;
         if (message.sender.equals(currentUser))
-            deleteAndEdit = new HBox(10,editButton,deleteButton,date,sentOrSeen);
+            deleteAndEdit = new HBox(10, editButton, deleteButton, date, sentOrSeen);
         else deleteAndEdit = new HBox(date);
 
-        VBox verticalMessage = new VBox(10,senderName,messageText,deleteAndEdit);
+        VBox verticalMessage = new VBox(10, senderName, messageText, deleteAndEdit);
 
         if (!message.sender.equals(currentUser)) {
-            verticalMessage.setBackground(new Background(new BackgroundFill(Color.BLUE,null,null)));
+            verticalMessage.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
             messageText.setFill(Color.WHITE);
         }
 
-        HBox wholeMessage = new HBox(4,avatarPhoto,verticalMessage);
+        HBox wholeMessage = new HBox(4, avatarPhoto, verticalMessage);
         return wholeMessage;
     }
 
@@ -159,7 +161,7 @@ public class ChatMenu {
         sendButton.setFitHeight(20);
         sendButton.setOnMouseClicked(event -> {
             if (textField.getText() != null && !textField.getText().equals("")) {
-                chat.sendMessage(currentUser,textField.getText());
+                chat.sendMessage(currentUser, textField.getText());
                 Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
             }
             textField.setText("");
@@ -169,7 +171,7 @@ public class ChatMenu {
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 if (textField.getText() != null && !textField.getText().equals("")) {
-                    chat.sendMessage(currentUser,textField.getText());
+                    chat.sendMessage(currentUser, textField.getText());
                     Main.getPlayerConnection().sendMessage(chat.id, textField.getText());
                 }
                 textField.setText("");
@@ -177,7 +179,7 @@ public class ChatMenu {
             }
         });
 
-        HBox bottomBar = new HBox(10,textField,sendButton);
+        HBox bottomBar = new HBox(10, textField, sendButton);
         mainVBox.getChildren().add(bottomBar);
     }
 
@@ -186,7 +188,12 @@ public class ChatMenu {
         backButton.setTranslateX(10);
         backButton.setTranslateY(10);
         backButton.getStyleClass().add("button1");
-        backButton.setOnAction(event -> Main.getStage().setScene(new Scene(new MessengerMenu().getPane())));
+        backButton.setOnAction(event -> {
+            if (paneToReturnTo == null)
+                Main.getStage().setScene(new Scene(new MessengerMenu().getPane()));
+            else
+                Main.setScene(paneToReturnTo);
+        });
         rootPane.getChildren().add(backButton);
     }
 
@@ -214,7 +221,7 @@ public class ChatMenu {
         result.ifPresent(newText -> {
             if (!newText.isEmpty()) {
                 message.setText(newText);
-                chat.editMessage(message.id,newText);
+                chat.editMessage(message.id, newText);
                 initPane();
             }
         });

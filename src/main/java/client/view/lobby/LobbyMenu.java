@@ -77,7 +77,7 @@ public class LobbyMenu {
         if (!Main.getPlayerConnection().getLoggedInUser().equals(lobby.getMembers().get(0)))
             return;
         accessText.getStyleClass().clear();
-        accessText.getStyleClass().add("style1-with-hover");
+        accessText.getStyleClass().add("title1-with-hover");
         accessText.setOnMouseClicked(mouseEvent -> {
             Main.getPlayerConnection().changeAccess(lobby.getID());
         });
