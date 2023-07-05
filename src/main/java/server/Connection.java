@@ -204,6 +204,9 @@ public class Connection extends Thread {
     }
 
     private void userLogout() {
+        if (currentLoggedInUser == null) {
+            return;
+        }
         for (Lobby lobby : Lobby.getLobbies()) {
             if (lobby.getMembers().contains(currentLoggedInUser)) {
                 lobby.getMembers().remove(currentLoggedInUser);
@@ -211,11 +214,9 @@ public class Connection extends Thread {
                     Lobby.getLobbies().remove(lobby);
             }
         }
-        if (currentLoggedInUser != null) {
-            currentLoggedInUser.setOnline(false);
-            currentLoggedInUser.setLastSeen(new Date());
-            currentLoggedInUser = null;
-        }
+        currentLoggedInUser.setOnline(false);
+        currentLoggedInUser.setLastSeen(new Date());
+        currentLoggedInUser = null;
     }
 
     public void userDisconnected() {
