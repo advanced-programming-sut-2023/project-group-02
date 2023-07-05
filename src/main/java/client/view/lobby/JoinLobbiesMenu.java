@@ -5,6 +5,7 @@ import client.view.pregame.PreGameMenu;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -29,6 +30,11 @@ public class JoinLobbiesMenu {
         pane.setPrefSize(960, 540);
         pane.getChildren().add(createBackButton());
         addLobbiesVBox(pane);
+        pane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.R) {
+                Main.setScene(new JoinLobbiesMenu().getPane());
+            }
+        });
     }
 
     private void addLobbiesVBox(Pane pane) {
