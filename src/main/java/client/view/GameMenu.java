@@ -210,6 +210,16 @@ public class GameMenu {
 
         itemsScrollPane.contentProperty().addListener((observable, oldValue, newValue) -> itemsScrollPane.setContent(itemsScrollPane.getContent()));
 
+        Button saveMapButton = new Button("Save Map");
+        saveMapButton.getStyleClass().add("button2");
+        if (isPreGame) {
+            saveMapButton.setTranslateX(300);
+            saveMapButton.setTranslateY(10);
+            saveMapButton.setOnAction(event -> {
+                Main.getPlayerConnection().sendMap(map);
+            });
+        }
+
         rootPane.getChildren().add(bottomHBox);
         doPreGameProcess(isPreGame);
         addNextTurnButton(isPreGame);

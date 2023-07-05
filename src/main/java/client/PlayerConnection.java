@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import controllers.database.Database;
 import javafx.scene.layout.Pane;
+import models.Map;
 import models.SecurityQuestion;
 import models.User;
 import models.UserCredentials;
@@ -290,5 +291,28 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
         Packet packet = readFromServer();
+    }
+
+    public void sendMap(Map map) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.SEND_MAP,new Gson().toJson(map)).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Map> getMaps() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_MAPS).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Map[] maps = new Gson().fromJson(packet.data.get(0),Map[].class);
+        ArrayList<Map> mapsArrayList = new ArrayList<>();
+        for (Map map : maps) {
+            mapsArrayList.add(map);
+        }
+        return mapsArrayList;
     }
 }
