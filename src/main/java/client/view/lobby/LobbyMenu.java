@@ -7,10 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import models.User;
@@ -56,7 +53,7 @@ public class LobbyMenu {
         pane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/lobby-menu.jpg"))));
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
-        addPlayersHBox(pane);
+        addPlayersVBox(pane);
         addExitButton(pane);
         if (profilePane != null)
             pane.getChildren().add(profilePane);
@@ -69,13 +66,13 @@ public class LobbyMenu {
         pane.getChildren().add(exit);
     }
 
-    private void addPlayersHBox(Pane pane) {
+    private void addPlayersVBox(Pane pane) {
         ImageView star = new ImageView(new Image(getClass().getResource("/images/others/star.png").toExternalForm()));
         star.setFitWidth(15);
         star.setFitHeight(15);
         star.setLayoutX(10);
         star.setLayoutY(50);
-        HBox players = new HBox();
+        VBox players = new VBox();
         players.setSpacing(15);
         players.setLayoutX(30);
         players.setLayoutY(50);

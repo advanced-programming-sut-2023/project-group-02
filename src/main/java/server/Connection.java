@@ -126,13 +126,12 @@ public class Connection extends Thread {
         Lobby lobby = Lobby.getLobbyWithID(id);
         if (lobby.getMembers().size() >= lobby.getNumberOfPlayers())
             return new Packet(PacketType.JOIN_LOBBY_FAIL, "lobby is full");
-        else if (!lobby.isPublic())
+        if (!lobby.isPublic())
             return new Packet(PacketType.JOIN_LOBBY_FAIL, "lobby became private");
-        else {
-            lobby.addMember(currentLoggedInUser);
-            return new Packet(PacketType.JOIN_LOBBY_SUCCESS, new Gson().toJson(lobby));
-        }
-
+        if (lobby.getMembers().contains(currentLoggedInUser))
+            return new Packet(PacketType.JOIN_LOBBY_FAIL, "you are already in this lobby");
+        lobby.addMember(currentLoggedInUser);
+        return new Packet(PacketType.JOIN_LOBBY_SUCCESS, new Gson().toJson(lobby));
     }
 
     private Packet getAvailableLobbies() {
