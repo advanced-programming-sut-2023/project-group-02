@@ -1,6 +1,8 @@
 package client;
 
+import client.view.Main;
 import client.view.enums.LoginMenuMessages;
+import client.view.lobby.LobbyMenu;
 import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
@@ -273,6 +275,11 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
         Packet packet = readFromServer();
-
+        if (packet.packetType == PacketType.JOIN_LOBBY_FAIL) {
+            Graphics.showMessagePopup(packet.data.get(0));
+            return;
+        }
+        Lobby lobby = new Gson().fromJson(packet.data.get(0), Lobby.class);
+        Main.setScene(new LobbyMenu(lobby).getPane());
     }
 }
