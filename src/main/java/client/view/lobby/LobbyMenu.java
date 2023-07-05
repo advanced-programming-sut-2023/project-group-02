@@ -1,6 +1,9 @@
 package client.view.lobby;
 
 import client.view.Main;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -8,6 +11,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import models.User;
 import server.logic.Lobby;
 import utils.Graphics;
@@ -20,8 +24,21 @@ public class LobbyMenu {
 
     public LobbyMenu(Lobby lobby) {
         this.lobby = lobby;
-        ReceiveLobbyUpdates receiveLobbyUpdates = new ReceiveLobbyUpdates(this, lobby.getID());
-        receiveLobbyUpdates.start();
+        //update lobbies
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), event -> {
+            setLobby(Main.getPlayerConnection().getLobbyWithID(lobby.getID()));
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+        Main.setScene(getPane());
+    }
+
+    public LobbyMenu(Lobby lobby, ReceiveLobbyUpdates receiveLobbyUpdates) {
+        this.lobby = lobby;
     }
 
     public Pane getPane() {
@@ -54,10 +71,5 @@ public class LobbyMenu {
             players.getChildren().add(Graphics.getUserDetails(pane, player.getUsername(), player.getNickname()));
         }
         pane.getChildren().addAll(players, star);
-    }
-
-    public void setLobby(Lobby lobby) {
-        this.lobby = lobby;
-        Main.setScene(getPane());
     }
 }

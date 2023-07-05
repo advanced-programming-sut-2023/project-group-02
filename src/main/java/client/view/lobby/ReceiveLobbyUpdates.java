@@ -20,7 +20,6 @@ public class ReceiveLobbyUpdates extends Thread {
             throw new RuntimeException(e);
         }
         Lobby lobby = Main.getPlayerConnection().getLobbyWithID(lobbyID);
-        lobbyMenu.setLobby(lobby);
         System.out.println("updated");
     }
 }
