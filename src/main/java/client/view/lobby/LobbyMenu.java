@@ -5,7 +5,6 @@ import client.view.pregame.PreGameMenu;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -64,7 +63,7 @@ public class LobbyMenu {
     }
 
     private void addExitButton(Pane pane) {
-        ImageView exit = JoinLobbiesMenu.createBackButton();
+        ImageView exit = joinLobbiesMenu.createBackButton();
         exit.setOnMouseClicked(mouseEvent -> Main.setScene(new PreGameMenu().getPane()));
         //TODO remove user from lobby
         pane.getChildren().add(exit);
