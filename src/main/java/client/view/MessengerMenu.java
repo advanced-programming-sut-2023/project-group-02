@@ -1,12 +1,11 @@
 package client.view;
 
 import controllers.UserController;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,17 +13,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.User;
 import server.chat.Chat;
 import server.chat.ChatType;
 import utils.Graphics;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-
-import client.PlayerConnection;
 
 public class MessengerMenu {
     private Pane rootPane;
@@ -33,6 +29,8 @@ public class MessengerMenu {
     private VBox chatsVBox;
     private VBox makeChatVBox;
     private ArrayList<User> selectedUsers = new ArrayList<>();
+    private Timeline timeline;
+    private ChatMenu currentChatMenu;
     HBox foundPlayer;
     Text notFoundText = new Text("Player with this username is not found!");
 
@@ -43,6 +41,7 @@ public class MessengerMenu {
     }
 
     private void initPane() {
+        currentChatMenu = null;
         chats = Main.getPlayerConnection().getChats();
         if (!publicRoomExists(chats)) {
             // new Chat(ChatDatabase.getNextId(), "Public Room", ChatType.PUBLIC,
@@ -56,16 +55,31 @@ public class MessengerMenu {
         addBackButton();
         initChats();
         initAddChat();
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            chats = Main.getPlayerConnection().getChats();
+            if (currentChatMenu != null) {
+                for (Chat chat : chats) {
+                    if (chat.id == currentChatMenu.getChat().id) {
+                        currentChatMenu.setChat(chat);
+                        break;
+                    }
+                }
+            }
+            initChats();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     private void initChats() {
+        rootPane.getChildren().remove(chatsVBox);
         chatsVBox = new VBox();
         chatsVBox.setSpacing(10);
         chatsVBox.setLayoutX(50);
         chatsVBox.setLayoutY(10);
         chatsVBox.setPrefWidth(500);
         chatsVBox.setPrefHeight(440);
-        System.out.println(chats);
         for (Chat chat : chats) {
             chatsVBox.getChildren().add(createChatPreviewVBox(chat));
         }
@@ -197,7 +211,8 @@ public class MessengerMenu {
         chatPreviewVBox.setPrefHeight(50);
         chatPreviewVBox.getStyleClass().add("chat-preview-vbox");
         chatPreviewVBox.setOnMouseClicked(mouseEvent -> {
-            Main.setScene(new ChatMenu(chat).getPane());
+            currentChatMenu = new ChatMenu(chat);
+            Main.setScene(currentChatMenu.getPane());
         });
         chatPreviewVBox.getChildren().add(createChatPreviewHeader(chat));
         return chatPreviewVBox;
@@ -211,7 +226,10 @@ public class MessengerMenu {
 
     private void addBackButton() {
         ImageView backButton = createBackButton();
-        backButton.setOnMouseClicked(mouseEvent -> Main.setScene(new MainMenu().getPane()));
+        backButton.setOnMouseClicked(mouseEvent -> {
+            timeline.stop();
+            Main.setScene(new MainMenu().getPane());
+        });
         rootPane.getChildren().add(backButton);
     }
 

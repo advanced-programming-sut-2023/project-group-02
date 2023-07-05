@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ChatMenu {
-    private final Chat chat;
+    private Chat chat;
     private final User currentUser = Main.getPlayerConnection().getLoggedInUser();
     private Pane rootPane;
     private VBox mainVBox = new VBox();
@@ -32,6 +32,17 @@ public class ChatMenu {
 
     public ChatMenu(Chat chat) {
         this.chat = chat;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat newChat) {
+        if (newChat.id != chat.id)
+            return;
+        this.chat = newChat;
+        makeChatMessagesVBox();
     }
 
     public Pane getPane() {
@@ -81,13 +92,13 @@ public class ChatMenu {
     }
 
     private void makeChatMessagesVBox() {
+        chatMessages.getChildren().clear();
         chatMessages.setAlignment(Pos.BOTTOM_LEFT);
         chatMessages.setPadding(new Insets(10));
         chatMessages.setSpacing(10);
         for (Message message : chat.getMessages()) {
             chatMessages.getChildren().add(makeOneMessageVBox(message));
         }
-
     }
 
     private HBox makeOneMessageVBox(Message message) {
