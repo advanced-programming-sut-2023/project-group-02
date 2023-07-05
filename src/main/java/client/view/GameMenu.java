@@ -218,6 +218,7 @@ public class GameMenu {
             saveMapButton.setOnAction(event -> {
                 Main.getPlayerConnection().sendMap(map);
             });
+            rootPane.getChildren().add(saveMapButton);
         }
 
         rootPane.getChildren().add(bottomHBox);

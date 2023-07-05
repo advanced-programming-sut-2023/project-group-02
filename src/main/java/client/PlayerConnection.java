@@ -5,6 +5,7 @@ import client.view.enums.LoginMenuMessages;
 import client.view.lobby.LobbyMenu;
 import com.google.gson.Gson;
 
+import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import controllers.database.Database;
 import javafx.scene.layout.Pane;
@@ -307,11 +308,15 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
         Packet packet = readFromServer();
-        Map[] maps = new Gson().fromJson(packet.data.get(0),Map[].class);
-        ArrayList<Map> mapsArrayList = new ArrayList<>();
-        for (Map map : maps) {
-            mapsArrayList.add(map);
+        try {
+            Map[] maps = new Gson().fromJson(packet.data.get(0), Map[].class);
+            ArrayList<Map> mapsArrayList = new ArrayList<>();
+            for (Map map : maps) {
+                mapsArrayList.add(map);
+            }
+            return mapsArrayList;
+        } catch (JsonIOException e) {
+            return null;
         }
-        return mapsArrayList;
     }
 }

@@ -4,10 +4,7 @@ import client.view.lobby.LobbyMenu;
 import controllers.GameMenuController;
 import controllers.SignUpMenuController;
 import controllers.UserController;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
@@ -29,6 +26,7 @@ import client.view.enums.SignUpMenuMessages;
 public class InitGameMenu {
     private final Text numberOfTurnsText = new Text("Number of turns: ");
     private final TextField numberOfTurnsField = new TextField();
+    private final ChoiceBox<Map> savedMaps = new ChoiceBox<>();
     private final Text mapWidthText = new Text("Map width: ");
     private final TextField mapWidthField = new TextField();
     private final Text mapHeightText = new Text("Map height: ");
@@ -50,6 +48,10 @@ public class InitGameMenu {
         pane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Menus.css")).toExternalForm());
         pane.setPrefSize(960, 540);
         initNumberOfTurnsFields(pane);
+        initSelectMapChoiceBox(pane);
+        savedMaps.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) pane.getChildren().removeAll(mapWidthText,mapWidthField,mapHeightText,mapHeightField);
+        });
         initMapSizeFields(pane);
         initNumberOfPlayersField(pane);
         addConfirmButton(pane);
@@ -111,7 +113,7 @@ public class InitGameMenu {
 
     private void initNumberOfTurnsFields(Pane pane) {
         numberOfTurnsText.setLayoutX(100);
-        numberOfTurnsText.setLayoutY(120);
+        numberOfTurnsText.setLayoutY(110);
         numberOfTurnsText.getStyleClass().add("title2");
         numberOfTurnsField.setLayoutX(320);
         numberOfTurnsField.setLayoutY(100);
@@ -119,6 +121,17 @@ public class InitGameMenu {
         numberOfTurnsField.setText("5");
         Graphics.forceTextFieldsAcceptNumbersOnly(numberOfTurnsField, 3);
         pane.getChildren().addAll(numberOfTurnsText, numberOfTurnsField);
+    }
+
+    private void initSelectMapChoiceBox(Pane pane) {
+        ArrayList<Map> allMaps = Main.getPlayerConnection().getMaps();
+        savedMaps.setTranslateX(40);
+        savedMaps.setTranslateY(130);
+        pane.getChildren().add(savedMaps);
+        if (allMaps == null) return;
+        for (Map map : allMaps) {
+            savedMaps.getItems().add(map);
+        }
     }
 
     private void initMapSizeFields(Pane pane) {
