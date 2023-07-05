@@ -197,4 +197,40 @@ public class PlayerConnection {
         }
         return lobby;
     }
+
+    public ArrayList<Chat> getChats() {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.GET_CHATS).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Packet packet = readFromServer();
+        Chat[] chats = new Gson().fromJson(packet.data.get(0), Chat[].class);
+        ArrayList<Chat> chatsArrayList = new ArrayList<>();
+        for (Chat chat : chats) {
+            chatsArrayList.add(chat);
+        }
+        return chatsArrayList;
+    }
+
+    public void makePrivateChatWith(User user) {
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.MAKE_PRIVATE_CHAT, user.getUsername()).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void makeGroupChat(String name, ArrayList<User> users) {
+        ArrayList<String> data = new ArrayList<>();
+        data.add(name);
+        for (User user : users) {
+            data.add(user.getUsername());
+        }
+        try {
+            dataOutputStream.writeUTF(new Packet(PacketType.MAKE_GROUP_CHAT, data).toJson());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

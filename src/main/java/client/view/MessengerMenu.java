@@ -15,9 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.User;
-import server.ChatDatabase;
-import server.Database;
-import server.ServerUserController;
 import server.chat.Chat;
 import server.chat.ChatType;
 import utils.Graphics;
@@ -26,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
+
+import client.PlayerConnection;
 
 public class MessengerMenu {
     private Pane rootPane;
@@ -44,9 +43,12 @@ public class MessengerMenu {
     }
 
     private void initPane() {
-        chats = ChatDatabase.getChatsOfUser(currentUser);
-        if (!publicRoomExists(chats)) new Chat("Public Room", ChatType.PUBLIC, UserController.getUsers());
-        chats = ChatDatabase.getChatsOfUser(currentUser);
+        chats = Main.getPlayerConnection().getChats();
+        if (!publicRoomExists(chats)) {
+            // new Chat(ChatDatabase.getNextId(), "Public Room", ChatType.PUBLIC,
+            // UserController.getUsers());
+        }
+        chats = Main.getPlayerConnection().getChats();
         rootPane.getChildren().clear();
         rootPane.setBackground(Graphics.getBackground(Objects.requireNonNull(getClass().getResource("/images/backgrounds/messenger_menu.png"))));
         rootPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/Messenger.css")).toExternalForm());
@@ -140,11 +142,10 @@ public class MessengerMenu {
 
         String name = chatName.getText();
         ChatType type = chatType.getValue();
-        if (type.equals(ChatType.PRIVATE))
-            new Chat(currentUser, selectedUsers.get(selectedUsers.size() - 1));
-        else {
-            selectedUsers.add(currentUser);
-            new Chat(name, type, selectedUsers);
+        if (type.equals(ChatType.PRIVATE)) {
+            Main.getPlayerConnection().makePrivateChatWith(selectedUsers.get(selectedUsers.size() - 1));
+        } else {
+            Main.getPlayerConnection().makeGroupChat(name, selectedUsers);
         }
     }
 
