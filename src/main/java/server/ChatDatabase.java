@@ -68,6 +68,8 @@ public class ChatDatabase {
                 messages.add(new Message(messageId, text, sender, new Date()));
             }
         }
+
+        statement.close();
     }
 
     public static ArrayList<Chat> getChats() {
@@ -133,6 +135,7 @@ public class ChatDatabase {
                             + "', " + chat.id + ", " + message.getDate().getTime() + ")");
                 }
             }
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

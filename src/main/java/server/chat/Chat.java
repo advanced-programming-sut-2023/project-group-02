@@ -28,7 +28,7 @@ public class Chat {
     public Chat(int id, User user1, User user2) {
         this.id = id;
         this.type = ChatType.PRIVATE;
-        this.name = user1.getUsername() + " & " + user2.getUsername();
+        this.name = user1.getUsername() + " and " + user2.getUsername();
         this.users = new ArrayList<>(List.of(user1,user2));
         ChatDatabase.addChat(this);
     }
